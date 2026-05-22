@@ -7,8 +7,8 @@ export default function App() {
 
   return (
     <SafeAreaProvider className='bg-white text-white font-bold'>
-    <LoginScreen />
-    <StatusBar style="auto" />
+      <LoginScreen />
+      <StatusBar style="auto" />
     </SafeAreaProvider>
   );
 }

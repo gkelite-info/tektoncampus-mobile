@@ -3,7 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { Text, TextInput } from 'react-native';
 import './global.css';
-import LoginScreen from '@/(screens)/(auth)/loginScreen';
+import Toast from "react-native-toast-message";
+import RootNavigator from '@/navigation/RootNavigator';
 
 const setDefaultFont = () => {
   const defaultStyle = { fontFamily: 'Jost-Regular' };
@@ -35,7 +36,8 @@ export default function App() {
 
   return (
     <SafeAreaProvider className="bg-white">
-      <LoginScreen />
+      <RootNavigator />
+      <Toast position='top' swipeable />
       <StatusBar style="auto" />
     </SafeAreaProvider>
   );

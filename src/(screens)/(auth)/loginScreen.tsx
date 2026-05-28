@@ -6,7 +6,6 @@ import {
   Image,
   ImageBackground,
   Platform,
-  Pressable,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -28,6 +27,9 @@ import {
   SpinnerGap,
 } from 'phosphor-react-native';
 import { BlurView } from 'expo-blur';
+import { loginUser } from '@/services/auth/login';
+import Toast from 'react-native-toast-message';
+import { useAuthStore } from '@/store/authStore';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const { width: SW, height: SH } = Dimensions.get('window');
@@ -200,24 +202,24 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
   const cardWidth = containerWidth * 1;
 
   const TRANSFORM: Record<string, { tx: number; ty: number; rot: string; sc: number; op: number }> =
-    {
-      center: { tx: 0, ty: 0, rot: '0deg', sc: 1, op: 1 },
-      right: {
-        tx: containerWidth * 0.3,
-        ty: -(containerWidth * 0.1),
-        rot: '25deg',
-        sc: 0.85,
-        op: 0,
-      },
-      left: {
-        tx: -containerWidth * 0.3,
-        ty: -(containerWidth * 0.1),
-        rot: '-25deg',
-        sc: 0.85,
-        op: 0,
-      },
-      hidden: { tx: 0, ty: containerWidth * 0.06, rot: '0deg', sc: 0.75, op: 0 },
-    };
+  {
+    center: { tx: 0, ty: 0, rot: '0deg', sc: 1, op: 1 },
+    right: {
+      tx: containerWidth * 0.3,
+      ty: -(containerWidth * 0.1),
+      rot: '25deg',
+      sc: 0.85,
+      op: 0,
+    },
+    left: {
+      tx: -containerWidth * 0.3,
+      ty: -(containerWidth * 0.1),
+      rot: '-25deg',
+      sc: 0.85,
+      op: 0,
+    },
+    hidden: { tx: 0, ty: containerWidth * 0.06, rot: '0deg', sc: 0.75, op: 0 },
+  };
 
   const { tx, ty, rot, sc, op } = TRANSFORM[position] || TRANSFORM.hidden;
 
@@ -272,6 +274,9 @@ export default function LoginScreen() {
   const [current, setCurrent] = useState(0);
   const [panelState, setPanelState] = useState<'slides' | 'login'>('slides');
   const [carouselW, setCarouselW] = useState(SW);
+  const setUser = useAuthStore(
+    (state) => state.setUser
+  );
 
   // ── Text-slide animation (framer-motion AnimatePresence mode="wait")
   //    initial  { opacity:0, x:60 }
@@ -363,7 +368,7 @@ export default function LoginScreen() {
     };
   }, [advanceSlide]);
 
-  // ─── Panel transitions  (duration-500 ease-in-out)
+ 
   const handleProceed = useCallback(() => {
     setPanelState('login');
     Animated.parallel([
@@ -381,6 +386,7 @@ export default function LoginScreen() {
       }),
     ]).start();
   }, []);
+  
 
   const handleBack = useCallback(() => {
     Animated.parallel([
@@ -399,31 +405,83 @@ export default function LoginScreen() {
     ]).start(() => setPanelState('slides'));
   }, []);
 
-  // ─── Login
-  const handleLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
+  const handleLogin = async () => {
+    try {
+      if (!email.trim()) {
+        Toast.show({
+          type: "info",
+          text1: "Email Required",
+          text2: "Please enter your email address",
+          visibilityTime: 1500,
+          position: "top",
+        });
+
+        return;
+      }
+
+      if (!password.trim()) {
+        Toast.show({
+          type: "info",
+          text1: "Password Required",
+          text2: "Please enter your password",
+          visibilityTime: 1500,
+          position: "top",
+        });
+
+        return;
+      }
+
+      setLoading(true);
+
+      const response = await loginUser(
+        email.trim(),
+        password,
+      );
+
+      if (!response.success) {
+        Toast.show({
+          type: "error",
+          text1: "Login Failed",
+          text2: response.error,
+          visibilityTime: 2000,
+          position: "top",
+        });
+
+        return;
+      }
+
+      if (!response.user) return;
+
+      setUser(response.user);
+
+      Toast.show({
+        type: "success",
+        text1: "Login Successful",
+        text2: `Welcome ${response.user.fullName}`,
+        visibilityTime: 2000,
+        position: "top",
+      });
+
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+        text2: "Please try again later",
+        visibilityTime: 2000,
+        position: "top",
+      });
+    } finally {
       setLoading(false);
-      console.log('Login');
-    }, 1500);
+    }
   };
 
-  // ─── Carousel container width callback
   const onCarouselLayout = useCallback((e: any) => {
     setCarouselW(e.nativeEvent.layout.width);
   }, []);
 
-  // ─────────────────────────────────────────────────────────────────────────
   return (
     <View style={s.root}>
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
-
-      {/* ══════════════════════════════════════════════════════════════════
-          LEFT PANEL  —  Green gradient slides screen
-          Next.js: absolute z-10 w-full h-full
-                   bg-linear-to-b from-[#6AE18B] to-[#B7F3CB]
-                   translate-x-0 / -translate-x-full  transition-transform duration-500
-      ══════════════════════════════════════════════════════════════════ */}
       <Animated.View
         style={[s.panel, { transform: [{ translateX: leftX }] }]}
         pointerEvents={panelState === 'login' ? 'none' : 'auto'}>
@@ -432,11 +490,6 @@ export default function LoginScreen() {
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={s.leftGradient}>
-          {/* ── Logo ─────────────────────────────────────────────────────
-              Next.js: flex flex-col items-center shrink-0
-                       Image: 85x85 rounded-full object-contain
-                       Text:  text-gray-700 text-[11px] font-bold tracking-wide mt-1
-          ──────────────────────────────────────────────────────────────── */}
           <View style={s.logoBlock}>
             <Image
               source={require('../../../assets/login-logo.png')}
@@ -446,11 +499,6 @@ export default function LoginScreen() {
             <Text style={s.logoSubtext}>Powered by GK Elite-Info</Text>
           </View>
 
-          {/* ── Animated heading + para ────────────────────────────────────
-              Next.js: mt-5 w-full overflow-hidden min-h-[95px]
-              AnimatePresence initial{opacity:0,x:60} animate{opacity:1,x:0}
-              exit{opacity:0,x:60} duration 0.5s ease-out-cubic
-          ──────────────────────────────────────────────────────────────── */}
           <View style={s.headingWrapper}>
             <Animated.View
               style={{
@@ -464,11 +512,6 @@ export default function LoginScreen() {
             </Animated.View>
           </View>
 
-          {/* ── Image carousel ────────────────────────────────────────────
-              Next.js: relative w-full flex-1 min-h-[250px] mt-4 mb-4
-                       overflow-hidden flex items-center justify-center
-              Cards: absolute, centered, transition-all duration-[900ms]
-          ──────────────────────────────────────────────────────────────── */}
           <View style={s.carouselContainer} onLayout={onCarouselLayout}>
             {SLIDES.map((slide, idx) => {
               let position: 'center' | 'left' | 'right' | 'hidden' = 'hidden';
@@ -712,7 +755,7 @@ const s = StyleSheet.create({
   logoBlock: {
     alignItems: 'center',
     flexShrink: 0,
-    marginTop: 40,
+    marginTop: 10,
   },
   logoImg: {
     width: 85,

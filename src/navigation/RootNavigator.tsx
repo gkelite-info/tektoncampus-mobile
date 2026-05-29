@@ -5,7 +5,6 @@ import { InitialState, NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "@/(screens)/(auth)/loginScreen";
 import { useAuthStore } from "@/store/authStore";
 import FacultyTabs from "@/tabs/FacultyTabs";
-import StudentTabs from "@/tabs/StudentTabs";
 import ParentTabs from "@/tabs/ParentTabs";
 import { supabase } from "@/lib/supabaseClient";
 import { StudentProvider } from "@/utils/context/student/useStudent";
@@ -30,6 +29,9 @@ async function getUserProfile(authId: string): Promise<AppUser | null> {
 
     return data;
 }
+import StudentDrawerNavigator from "./StudentDrawerNavigator";
+import FacultyDrawerNavigator from "./FacultyDrawerNavigator";
+import ParentDrawerNavigator from "./ParentDrawerNavigator";
 
 export default function RootNavigator() {
     const user = useAuthStore((state) => state.user);
@@ -138,19 +140,19 @@ export default function RootNavigator() {
                 );
             }}
         >
-            {!user ? (
-                <LoginScreen />
-            ) : roleNormalized.includes("faculty") ? (
-                <FacultyTabs />
-            ) : roleNormalized.includes("student") ? (
-                <StudentProvider>
-                    <StudentTabs />
-                </StudentProvider>
-            ) : roleNormalized.includes("parent") ? (
-                <ParentTabs />
-            ) : (
-                <LoginScreen />
-            )}
+           {!user ? (
+    <LoginScreen />
+) : roleNormalized.includes("faculty") ? (
+    <FacultyDrawerNavigator />
+) : roleNormalized.includes("student") ? (
+    <StudentProvider>
+        <StudentDrawerNavigator />
+    </StudentProvider>
+) : roleNormalized.includes("parent") ? (
+    <ParentDrawerNavigator />
+) : (
+    <LoginScreen />
+)}
         </NavigationContainer>
     );
 }

@@ -70,7 +70,7 @@ function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
                     const renderIcon = () => {
                         switch (route.name) {
                             case "Assignments": return <ClipboardText size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
-                            case "Students": return <UsersThree size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
+                            case "Academics": return <UsersThree size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             case "Attendance": return <BookOpen size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             case "Profile": return <User size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             default: return null;

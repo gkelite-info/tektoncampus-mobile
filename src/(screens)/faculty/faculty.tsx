@@ -1,13 +1,13 @@
-import { Text, View } from "react-native";
+import React from "react";
+import { ScrollView, View } from "react-native";
+import FacultyDashLeft from "./dashboard/components/FacultyDashLeft";
 
 export default function FacultyDashboard() {
     return (
-        <>
-            <View className="flex-1 bg-red-300 items-center justify-center">
-                <Text className="font-bold text-4xl text-black">
-                    Faculty Dashboard
-                </Text>
+        <ScrollView className="flex-1 bg-gray-50" showsVerticalScrollIndicator={false}>
+            <View className="flex-col w-full min-h-screen">
+                <FacultyDashLeft />
             </View>
-        </>
-    )
+        </ScrollView>
+    );
 }

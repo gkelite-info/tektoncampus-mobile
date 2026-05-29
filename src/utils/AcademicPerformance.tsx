@@ -1,6 +1,7 @@
+import { fonts } from "@/constants/fonts";
 import { getStudentAcademicPerformance } from "@/lib/helpers/student/AcademicPerformance/calculations";
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, Alert, StyleSheet, Dimensions } from "react-native";
+import { View, Text, ActivityIndicator, Alert } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 
 type AcademicPerformanceDatum = {
@@ -12,7 +13,6 @@ type AcademicPerformanceDatum = {
 interface AcademicPerformanceProps {
     studentId: number | null;
     data?: AcademicPerformanceDatum[];
-    // Fallback localization strings if you don't map next-intl to a native alternate
     translations?: {
         calculating?: string;
         title?: string;
@@ -28,7 +28,6 @@ export default function AcademicPerformance({
     const [data, setData] = useState<AcademicPerformanceDatum[]>(externalData ?? []);
     const [loading, setLoading] = useState(!externalData);
 
-    // Fallback defaults for i18n
     const tTitle = translations?.title || "Academic Performance";
     const tCalculating = translations?.calculating || "Calculating performance...";
     const tFailed = translations?.failed || "Failed to load performance";
@@ -54,37 +53,39 @@ export default function AcademicPerformance({
         loadData();
     }, [studentId, externalData]);
 
-    // Transform Recharts data structure format to match Gifted-Charts stacked requirements
     const chartData = data.map((item) => ({
         value: item.value,
         label: item.subject,
         frontColor: "#A8E089",
         gradientColor: "#9ACC7D",
         showGradient: true,
-        // Setting up the background comparative visual ceiling (the 'full' bar equivalent)
         topLabelComponent: () => (
-            <View style={styles.badgeContainer}>
-                <Text style={styles.badgeText}>{item.value}%</Text>
+            <View className="bg-[#E8F6E2] rounded-md px-1.5 py-0.5 mb-1 self-center">
+                <Text className="text-[#7CD24C] text-[8px]" style={{ fontFamily: fonts.bold }}>
+                    {item.value}%
+                </Text>
             </View>
         ),
     }));
 
     if (loading) {
         return (
-            <View style={styles.loaderContainer}>
+            <View className="h-60 justify-center items-center bg-white rounded-xl shadow-sm border border-gray-100">
                 <ActivityIndicator size="small" color="#9ACC7D" />
-                <Text style={styles.loaderText}>{tCalculating}</Text>
+                <Text className="mt-2.5 text-gray-400 text-sm" style={{ fontFamily: fonts.regular }}>{tCalculating}</Text>
             </View>
         );
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>{tTitle}</Text>
+        <View className="w-full bg-white rounded-xl py-5 px-2.5 shadow-sm border border-gray-100">
+            <View className="flex-row justify-between items-center px-2.5 mb-6">
+                <Text className="text-[17px] text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
+                    {tTitle}
+                </Text>
             </View>
 
-            <View style={styles.chartWrapper}>
+            <View className="items-center justify-center pl-1">
                 <BarChart
                     data={chartData}
                     barWidth={32}
@@ -95,12 +96,11 @@ export default function AcademicPerformance({
                     maxValue={100}
                     yAxisThickness={0}
                     xAxisThickness={1}
-                    xAxisColor="#ccc"
-                    yAxisTextStyle={styles.yAxisText}
-                    xAxisLabelTextStyle={styles.xAxisText}
+                    xAxisColor="#E5E7EB"
+                    yAxisTextStyle={{ fontSize: 10, color: "#888888" }}
+                    xAxisLabelTextStyle={{ fontSize: 9.5, color: "#282828", fontWeight: "600", textAlign: "center" }}
                     yAxisLabelSuffix="%"
                     isAnimated
-                    // Mimics your background ceiling layout block
                     showReferenceLine1
                     referenceLine1Position={100}
                     referenceLine1Config={{
@@ -113,70 +113,3 @@ export default function AcademicPerformance({
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-        backgroundColor: "#ffffff",
-        borderRadius: 12,
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3, // Android shadows box layer
-    },
-    loaderContainer: {
-        height: 240,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderRadius: 12,
-    },
-    loaderText: {
-        marginTop: 10,
-        color: "#888888",
-        fontSize: 14,
-    },
-    header: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 10,
-        marginBottom: 25,
-    },
-    headerTitle: {
-        fontSize: 17,
-        fontWeight: "600",
-        color: "#282828",
-    },
-    chartWrapper: {
-        alignItems: "center",
-        justifyContent: "center",
-        paddingLeft: 5,
-    },
-    yAxisText: {
-        fontSize: 10,
-        color: "#888888",
-    },
-    xAxisText: {
-        fontSize: 9.5,
-        color: "#282828",
-        fontWeight: "600",
-        textAlign: "center",
-    },
-    badgeContainer: {
-        backgroundColor: "#E8F6E2",
-        borderRadius: 10,
-        paddingHorizontal: 5,
-        paddingVertical: 2,
-        marginBottom: 4,
-        alignSelf: "center",
-    },
-    badgeText: {
-        color: "#7CD24C",
-        fontSize: 8,
-        fontWeight: "bold",
-    },
-});

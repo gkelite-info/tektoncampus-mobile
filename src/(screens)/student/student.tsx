@@ -33,6 +33,7 @@ import { fetchStudentFeePlan } from "@/lib/helpers/student/payments/fetchStudent
 import { ValueShimmer } from "@/components/shimmers/valueShimmer";
 import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studentAttendanceActions";
 import { Chalkboard } from "phosphor-react-native";
+import { fonts } from "@/constants/fonts";
 
 const nativeToast = {
     error: (msg: string) => console.log(`Toast Error: ${msg}`),
@@ -361,7 +362,7 @@ export default function StudentHome() {
 
             <View style={tw`bg-white rounded-2xl p-4 shadow-sm`}>
                 <View style={tw`flex-row justify-between items-center mb-3`}>
-                    <Text style={tw`text-[#282828] text-[17px] font-semibold`}>
+                    <Text style={[tw`text-[#282828] text-[17px]`, { fontFamily: fonts.bold }]}>
                         {t("Upcoming Events")}
                     </Text>
                     <TouchableOpacity onPress={handleUpcomingClasses}>
@@ -376,7 +377,7 @@ export default function StudentHome() {
                         </View>
                     ) : lectures.length === 0 ? (
                         <View style={tw`min-h-[50px] items-center justify-center`}>
-                            <Text style={tw`text-[#282828] text-sm`}>
+                            <Text style={[tw`text-[#282828] text-sm`, { fontFamily: fonts.regular }]}>
                                 {t("No events scheduled")}
                             </Text>
                         </View>
@@ -397,7 +398,7 @@ export default function StudentHome() {
                                         onPress={() => handleLinkPress(lec.meetingLink)}
                                         style={tw`absolute right-3 top-1/2 -translate-y-4 bg-[#43C17A] px-3 py-1.5 rounded-md shadow-sm`}
                                     >
-                                        <Text style={tw`text-white text-xs font-medium`}>
+                                        <Text style={[tw`text-white text-xs`, { fontFamily: fonts.medium }]}>
                                             {t("Join")}
                                         </Text>
                                     </TouchableOpacity>

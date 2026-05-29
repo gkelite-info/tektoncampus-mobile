@@ -1,3 +1,5 @@
+import { fonts } from "@/constants/fonts";
+import { CaretRightIcon } from "phosphor-react-native";
 import React, { useState } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 
@@ -88,12 +90,12 @@ export default function SubjectProgressCards({
     return (
         <View className="bg-white h-64 rounded-lg w-full p-4 shadow-sm border border-gray-100 flex-col">
             <View className="flex-row justify-between items-center mb-3">
-                <Text className="text-[#282828] font-semibold text-base">
+                <Text className="text-[#282828] text-base" style={{ fontFamily: fonts.semiBold }}>
                     {t("Subjects Progress", "Subjects Progress")}
                 </Text>
                 {onViewMore && (
                     <TouchableOpacity onPress={onViewMore} activeOpacity={0.6} className="p-1">
-                        <Text className="text-black font-bold text-base">＞</Text>
+                        <Text className="text-black font-bold text-base"><CaretRightIcon size={22} weight="bold" /></Text>
                     </TouchableOpacity>
                 )}
             </View>

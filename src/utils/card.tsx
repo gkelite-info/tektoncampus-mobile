@@ -1,3 +1,4 @@
+import { fonts } from "@/constants/fonts";
 import React, { ReactNode } from "react";
 import { View, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
 
@@ -64,18 +65,18 @@ export default function CardComponent({
 
             <View className="flex-1 justify-center">
                 <View className="flex-row justify-between items-baseline">
-                    <Text className={`font-bold ${isActive ? "text-white" : "text-[#282828]"} ${textSize}`}>
+                    <Text className={`${isActive ? "text-white" : "text-[#282828]"} ${textSize}`} style={{ fontFamily: fonts.bold }}>
                         {value}
                     </Text>
 
                     {totalPercentage !== undefined && (
-                        <Text style={{ color: iconBgColor }} className="text-base font-semibold">
+                        <Text style={{ color: iconBgColor, fontFamily: fonts.semiBold }} className="text-base">
                             {totalPercentage}
                         </Text>
                     )}
                 </View>
 
-                <Text className={`text-base mt-0.5 ${isActive ? "text-white" : "text-[#515151]"} ${textSize}`}>
+                <Text className={`text-lg mt-0.5 ${isActive ? "text-white" : "text-[#515151]"} ${textSize}`} style={{ fontFamily: fonts.regular }}>
                     {label}
                 </Text>
             </View>

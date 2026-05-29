@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 import {
     BookOpen,
@@ -18,7 +19,7 @@ import {
 } from "lucide-react-native";
 
 import { supabase } from "@/lib/supabaseClient";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import UserInfoCard from "@/utils/userInfoCardComp";
 import AcademicPerformance from "@/utils/AcademicPerformance";
 import CardComponent from "@/utils/card";
@@ -53,6 +54,7 @@ export default function StudentHome() {
     const [loadingLectures, setLoadingLectures] = useState(true);
     const [lectures, setLectures] = useState<any[]>([]);
     const navigation = useNavigation<any>();
+    const headerHeight = useHeaderHeight();
 
     const [dueAssignmentsCount, setDueAssignmentsCount] = useState(0);
     const [attendancePercent, setAttendancePercent] = useState<number | null>(null);
@@ -63,7 +65,7 @@ export default function StudentHome() {
     const [subjectsLoading, setSubjectsLoading] = useState(true);
     const { studentId } = useStudent();
 
-    const t = useTranslations("Dashboard.student");
+    const { t } = useTranslation();
 
     useEffect(() => {
         loadUpcomingClasses();
@@ -342,7 +344,7 @@ export default function StudentHome() {
     }
 
     return (
-        <ScrollView style={tw`flex-1 bg-[#f4f5f6]`} contentContainerStyle={tw`p-4 gap-5 pb-30`}>
+        <ScrollView style={tw`flex-1 bg-[#f4f5f6]`} contentContainerStyle={[tw`p-4 gap-5 pb-30`, { paddingTop: headerHeight + 16 }]}>
             <View>
                 <UserInfoCard />
             </View>

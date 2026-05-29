@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, ImageBackground } from "react-native";
 import tw from "twrnc";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { useUser } from "./context/UserContext";
 import { useStudent } from "./context/student/useStudent";
 import Text from "@/components/Text";
@@ -18,7 +18,7 @@ export default function UserInfoCard() {
 
     const { collegeAcademicYear } = useStudent();
 
-    const t = useTranslations("Dashboard.student");
+    const { t } = useTranslation();
 
     const bgBanner = require("../../assets/dashboard-banner-bg.png");
     const femaleAvatar = require("../../assets/female-student.png");

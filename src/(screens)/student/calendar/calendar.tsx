@@ -5,47 +5,17 @@ import {
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
-    Dimensions
 } from "react-native";
-import { CaretCircleRight } from "phosphor-react-native";
-
-interface QuizItem {
-    quizTitle: string;
-    [key: string]: any;
-}
-
-interface FacultyTaskItem {
-    taskTitle: string;
-    [key: string]: any;
-}
-
-const useLocale = () => "en";
-const useTranslations = (namespace: string) => {
-    return (key: string, options?: any) => options?.count !== undefined ? `${options.count} ${key}` : key;
-};
-const useStudent = () => ({ collegeEducationType: "Regular" });
-
-const supabase = {
-    auth: { getUser: async () => ({ data: { user: { id: "123" } } }) },
-    from: (table: string) => ({
-        select: (query: string) => ({
-            eq: (col: string, val: any) => ({
-                eq: (col2: string, val2: any) => ({
-                    gte: (col3: string, val3: any) => ({
-                        lte: (col4: string, val4: any) => Promise.resolve({ data: [] as QuizItem[] }) // Added type cast
-                    })
-                })
-            })
-        })
-    })
-};
-const getUserIdFromAuth = async (id: string) => ({ success: true, userId: "student_123" });
-const fetchStudentContext = async (id: string) => ({
-    collegeEducationId: 1, collegeBranchId: 1, collegeAcademicYearId: 1, collegeSemesterId: 1, collegeSectionsId: 1, collegeId: 1
-});
-const fetchStudentTimetableByDate = async (params: any) => [] as any[];
-const fetchFacultyTasksForStudent = async (params: any) => [] as FacultyTaskItem[]; // Added type cast
-// ---------------------------------------------------------------------------------------
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useTranslation } from "react-i18next";
+import { supabase } from "@/lib/supabaseClient";
+import { useStudent } from "@/utils/context/student/useStudent";
+import { getUserIdFromAuth } from "@/lib/helpers/fetchUserDetails";
+import { fetchStudentContext } from "@/utils/context/student/studentContextAPI";
+import { fetchStudentTimetableByDate } from "@/lib/helpers/profile/calender/fetchStudentTimetable";
+import { fetchFacultyTasksForStudent } from "@/lib/helpers/faculty/facultyTasks";
+import { fonts } from "@/constants/fonts";
 
 function getWeekDays(locale: string) {
     const today = new Date();
@@ -71,52 +41,110 @@ function getWeekDays(locale: string) {
     return days;
 }
 
+interface TimetableEntry {
+    subject?: string;
+    subjectName?: string;
+    startTime?: string;
+    endTime?: string;
+    facultyName?: string;
+    roomNo?: string;
+    [key: string]: any;
+}
+
 interface DayData {
     classCount: number;
     quizCount: number;
     assignmentCount: number;
     discussionCount: number;
-    facultyTasks: FacultyTaskItem[];
-    quizzes: QuizItem[];
+    facultyTasks: any[];
+    quizzes: any[];
+    assignments: any[],
+    timetable: TimetableEntry[];
     focus: string;
     tip: string;
 }
 
-interface CalendarLeftProps {
-    onDateSelect: (date: string) => void;
-    selectedDate: string;
-    setExtraInfo: (info: any) => void;
+function TimetableRow({ entry }: { entry: TimetableEntry }) {
+    const subject = entry.subjectName ?? entry.subject ?? "Class";
+    const time =
+        entry.startTime && entry.endTime
+            ? `${entry.startTime} – ${entry.endTime}`
+            : entry.startTime ?? "";
+    const faculty = entry.facultyName ?? "";
+    const room = entry.roomNo ?? "";
+
+    return (
+        <View
+            className="flex-row items-center bg-white rounded-xl px-3 py-2.5 mb-2"
+            style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.06,
+                shadowRadius: 3,
+                elevation: 2,
+            }}
+        >
+            <View className="w-1 h-full bg-[#43C17A] rounded-full mr-3" />
+
+            <View className="flex-1">
+                <Text className="text-[#282828] font-semibold text-[13px]" numberOfLines={1}>
+                    {subject}
+                </Text>
+                {!!time && (
+                    <Text className="text-[#43C17A] text-[11px] font-medium mt-0.5">
+                        {time}
+                    </Text>
+                )}
+                {(!!faculty || !!room) && (
+                    <Text className="text-gray-400 text-[10px] mt-0.5" numberOfLines={1}>
+                        {[faculty, room].filter(Boolean).join("  ·  ")}
+                    </Text>
+                )}
+            </View>
+        </View>
+    );
 }
 
-const { width } = Dimensions.get("window");
-const isTablet = width >= 768;
+function StatCard({
+    count,
+    label,
+    color,
+    bg,
+}: {
+    count: number;
+    label: string;
+    color: string;
+    bg: string;
+}) {
+    return (
+        <View
+            className="flex-1 rounded-2xl items-center justify-center py-4 mx-1"
+            style={{ backgroundColor: bg }}
+        >
+            <Text style={{ color, fontSize: 28, fontWeight: "700", lineHeight: 32 }}>
+                {count}
+            </Text>
+            <Text
+                style={{ color, fontSize: 11, fontWeight: "600", textAlign: "center", marginTop: 4, fontFamily: fonts.medium }}
+            >
+                {label}
+            </Text>
+        </View>
+    );
+}
 
-export default function CalendarLeft({
-    onDateSelect,
-    selectedDate,
-    setExtraInfo,
-}: CalendarLeftProps) {
-    const locale = useLocale();
-    const t = useTranslations("Calendar.student");
+export default function StudentCalendar() {
+    const { t, i18n } = useTranslation("Calendar.student");
+    const locale = i18n.language;
+    const headerHeight = useHeaderHeight();
 
     const week = useMemo(() => getWeekDays(locale), [locale]);
     const { collegeEducationType } = useStudent();
 
+    const today = new Date().toISOString().split("T")[0];
+    const [selectedDate, setSelectedDate] = useState<string>(today);
     const [weeklyData, setWeeklyData] = useState<Record<string, DayData>>({});
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (weeklyData[selectedDate]) {
-            const data = weeklyData[selectedDate];
-            setExtraInfo({
-                quizzes: data.quizCount,
-                assignments: data.assignmentCount,
-                discussions: data.discussionCount,
-                focus: data.focus,
-                tip: data.tip,
-            });
-        }
-    }, [selectedDate, weeklyData, setExtraInfo]);
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -125,15 +153,42 @@ export default function CalendarLeft({
                 const {
                     data: { user },
                 } = await supabase.auth.getUser();
-                if (!user) return;
+                if (!user) {
+                    console.log("❌ [Calendar] No authenticated user found.");
+                    return;
+                }
 
                 const userResult = await getUserIdFromAuth(user.id);
-                if (!userResult.success || !userResult.userId) return;
+                if (!userResult.success || !userResult.userId) {
+                    console.log("❌ [Calendar] Failed to get userId from auth.", userResult);
+                    return;
+                }
 
                 const studentContext = await fetchStudentContext(userResult.userId);
-                if (!studentContext) return;
+                if (!studentContext) {
+                    console.log("❌ [Calendar] Student Context is empty or failed to load.");
+                    return;
+                }
 
                 const resultsMap: Record<string, DayData> = {};
+                const currentDate = new Date();
+                const todayInt = Number(
+                    `${currentDate.getFullYear()}${String(currentDate.getMonth() + 1).padStart(2, "0")}${String(currentDate.getDate()).padStart(2, "0")}`
+                );
+                const assignmentRes = await supabase
+                    .from("assignments")
+                    .select("*")
+                    .eq("collegeBranchId", studentContext.collegeBranchId)
+                    .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
+                    .eq("collegeSectionsId", studentContext.collegeSectionsId)
+                    .eq("status", "Active")
+                    .eq("is_deleted", false)
+                    .is("deletedAt", null)
+                    .gte("submissionDeadlineInt", todayInt);
+
+                if (assignmentRes.error) {
+                    console.error("Assignments query error:", assignmentRes.error);
+                }
 
                 const promises = week.map(async (day) => {
                     const [classes, quizRes, discRes, facultyTasks] = await Promise.all([
@@ -169,34 +224,34 @@ export default function CalendarLeft({
                         }),
                     ]);
 
-                    const qCount = quizRes.data?.length || 0;
-                    const aCount = facultyTasks?.length || 0;
-                    const dCount = discRes.data?.length || 0;
+                    const qCount = quizRes.data?.length ?? 0;
+                    const aCount = assignmentRes.data?.length ?? 0;
+                    const dCount = discRes.data?.length ?? 0;
 
                     let focus = t("General Revision");
-                    if (aCount > 0 && facultyTasks) {
-                        focus = facultyTasks[0].taskTitle;
-                    } else if (qCount > 0 && quizRes.data) {
-                        focus = quizRes.data[0].quizTitle;
+                    if (aCount > 0 && assignmentRes.data?.[0]) {
+                        focus = assignmentRes.data[0].topicName;
                     }
+                    else if (qCount > 0 && quizRes.data?.[0]) focus = quizRes.data[0].quizTitle;
 
                     let tip = t("Organize your study desk");
-                    const deadlines = [];
+                    const deadlines: string[] = [];
                     if (qCount > 0) deadlines.push(t("Quizzes", { count: qCount }));
                     if (aCount > 0) deadlines.push(t("Assignments", { count: aCount }));
                     if (dCount > 0) deadlines.push(t("Discussions", { count: dCount }));
-
                     if (deadlines.length > 0) {
                         tip = `${t("Check the deadlines for")}: ${deadlines.join(", ")}`;
                     }
 
                     resultsMap[day.fullDate] = {
-                        classCount: classes.length,
+                        classCount: classes?.length ?? 0,
                         quizCount: qCount,
                         assignmentCount: aCount,
                         discussionCount: dCount,
-                        facultyTasks: facultyTasks || [],
-                        quizzes: quizRes.data || [],
+                        facultyTasks: facultyTasks ?? [],
+                        quizzes: quizRes.data ?? [],
+                        assignments: assignmentRes.data ?? [],
+                        timetable: (classes as TimetableEntry[]) ?? [],
                         focus,
                         tip,
                     };
@@ -205,162 +260,179 @@ export default function CalendarLeft({
                 await Promise.all(promises);
                 setWeeklyData(resultsMap);
             } catch (err) {
-                console.error("UI LOAD ERROR:", err);
+                console.error("🚨 CALENDAR LOAD ERROR:", err);
             } finally {
                 setLoading(false);
             }
         };
 
         loadAllData();
-    }, [collegeEducationType, week]);
+    }, [collegeEducationType, week, t]);
 
-    const activeDayIndex = week.findIndex(item => item.fullDate === selectedDate);
-    const activeDayItem = week[activeDayIndex];
+    const activeDayItem = week.find((d) => d.fullDate === selectedDate);
     const activeDayInfo = activeDayItem ? weeklyData[activeDayItem.fullDate] : null;
 
     return (
-        <View className={`bg-white rounded-lg p-3 flex flex-col ${isTablet ? "shadow-md" : "bg-transparent p-0"}`}>
-            <Text className="text-[#282828] font-medium text-base mb-3">
-                {t("Weekly Calendar Overview")}
-            </Text>
+        <SafeAreaView edges={["left", "right", "bottom"]} className="flex-1 bg-[#F5F5F5]">
+            <ScrollView
+                className="flex-1"
+                contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
+                showsVerticalScrollIndicator={false}
+            >
+                <Text className="text-[#282828] text-2xl mb-1" style={{ fontFamily: fonts.bold }}>Calendar</Text>
+                <Text className="text-[#282828] font-semibold text-[15px] mb-3">
+                    Weekly Calendar Overview
+                </Text>
 
-            {/* --- TABLET / LARGER SCREEN VIEW --- */}
-            {isTablet ? (
-                <View className="flex flex-col mt-2">
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 8, gap: 8 }}
+                >
                     {week.map((item, index) => {
                         const isActive = item.fullDate === selectedDate;
-                        const dayInfo = weeklyData[item.fullDate];
-
                         return (
-                            <View
+                            <TouchableOpacity
                                 key={index}
-                                className={`flex-row items-center p-3 rounded-md mt-2 gap-2 border ${isActive ? "bg-[#43C17A] border-[#43C17A]" : "bg-[#FFFFFF] border-[#D4D4D4]"
+                                activeOpacity={0.8}
+                                onPress={() => setSelectedDate(item.fullDate)}
+                                className={`flex-col items-center justify-center h-16 w-16 rounded-xl mx-0.5 ${isActive ? "bg-[#43C17A]" : "bg-[#DCEAE2]"
                                     }`}
+                                style={
+                                    isActive
+                                        ? {
+                                            shadowColor: "#43C17A",
+                                            shadowOffset: { width: 0, height: 4 },
+                                            shadowOpacity: 0.35,
+                                            shadowRadius: 6,
+                                            elevation: 4,
+                                            transform: [{ scale: 1.02 }],
+                                        }
+                                        : undefined
+                                }
                             >
-                                <View
-                                    className={`flex flex-col items-center justify-center h-[73px] w-[73px] rounded-md ${isActive ? "bg-[#FFFFFF]" : "bg-[#D3F1E0]"
+                                <Text
+                                    className={`text-[12px] font-semibold ${isActive ? "text-white" : "text-[#282828]"
                                         }`}
                                 >
-                                    <Text className={`text-xs font-semibold ${isActive ? "text-[#43C17A]" : "text-[#282828]"}`}>
-                                        {item.dayName}
-                                    </Text>
-                                    <Text className={`text-lg font-bold ${isActive ? "text-[#43C17A]" : "text-[#282828]"}`}>
-                                        {item.dateNum}
-                                    </Text>
-                                </View>
-
-                                <View className="flex-1 flex-row justify-between items-center pl-2">
-                                    <View className="flex-1 pr-2">
-                                        <Text className={`text-xs font-medium ${isActive ? "text-white" : "text-[#282828]"}`}>
-                                            📘 {loading || !dayInfo ? "0" : t("Classes", { count: dayInfo.classCount })} · 📝{" "}
-                                            {loading || !dayInfo ? "0" : t("Quizzes", { count: dayInfo.quizCount })}
-                                        </Text>
-                                        <Text className={`text-xs font-medium mt-0.5 ${isActive ? "text-white" : "text-[#282828]"}`}>
-                                            🧾 {loading || !dayInfo ? "0" : t("Assignments", { count: dayInfo.assignmentCount })} · 💬{" "}
-                                            {loading || !dayInfo ? "0" : t("Discussions", { count: dayInfo.discussionCount })}
-                                        </Text>
-                                        <Text className={`text-[12px] mt-1 font-semibold ${isActive ? "text-white" : "text-[#43C17A]"}`}>
-                                            🎯 {t("Focus Area")}:{" "}
-                                            <Text className={isActive ? "text-white" : "text-[#282828] font-normal"}>
-                                                {loading || !dayInfo ? "..." : dayInfo.focus}
-                                            </Text>
-                                        </Text>
-                                        <Text className={`text-[11px] font-normal italic mt-0.5 ${isActive ? "text-white/80" : "text-gray-500"}`}>
-                                            🪄 {t("Tip")}: {loading || !dayInfo ? "..." : dayInfo.tip}
-                                        </Text>
-                                    </View>
-
-                                    {/* Changed onClick to onPress */}
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        onPress={() => onDateSelect(item.fullDate)}
-                                    >
-                                        <CaretCircleRight
-                                            size={28}
-                                            weight="fill"
-                                            color={isActive ? "#FFFFFF" : "#43C17A"}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                                    {item.dayName}
+                                </Text>
+                                <Text
+                                    className={`text-[18px] font-bold ${isActive ? "text-white" : "text-[#282828]"
+                                        }`}
+                                >
+                                    {item.dateNum}
+                                </Text>
+                            </TouchableOpacity>
                         );
                     })}
-                </View>
-            ) : (
-                /* --- MOBILE VIEW --- */
-                <View className="flex flex-col gap-3 w-full">
-                    <View>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ paddingBottom: 8 }}
-                            className="flex-row gap-2 w-full"
-                        >
-                            {week.map((item, index) => {
-                                const isActive = item.fullDate === selectedDate;
+                </ScrollView>
 
-                                return (
-                                    /* Changed onClick to onPress */
-                                    <TouchableOpacity
-                                        key={index}
-                                        activeOpacity={0.8}
-                                        onPress={() => onDateSelect(item.fullDate)}
-                                        className={`flex flex-col items-center justify-center h-16 w-16 rounded-lg mx-1 ${isActive ? "bg-[#43C17A] shadow-md" : "bg-[#DCEAE2]"
-                                            }`}
-                                    >
-                                        <Text className={`text-[12px] font-semibold ${isActive ? "text-white" : "text-[#282828]"}`}>
-                                            {item.dayName}
+                {activeDayItem && (
+                    <View
+                        className="bg-[#43C17A] rounded-2xl p-3 flex-row items-stretch gap-3 mt-3"
+                        style={{
+                            shadowColor: "#43C17A",
+                            shadowOffset: { width: 0, height: 4 },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 8,
+                            elevation: 4,
+                        }}
+                    >
+                        <View className="bg-white rounded-xl flex-col items-center justify-center w-[72px]">
+                            <Text className="text-[#43C17A] font-semibold text-[13px]">
+                                {activeDayItem.dayName}
+                            </Text>
+                            <Text className="text-[#43C17A] font-bold text-[30px] leading-[34px]">
+                                {activeDayItem.dateNum}
+                            </Text>
+                        </View>
+
+                        <View className="flex-1 flex-col justify-center gap-1 pr-2 min-w-0">
+                            {loading ? (
+                                <ActivityIndicator color="#ffffff" size="small" />
+                            ) : (
+                                <>
+                                    <Text numberOfLines={1} className="text-white text-[11px] font-medium leading-4">
+                                        {"📘 "}
+                                        {!activeDayInfo ? "No Classes" : `${activeDayInfo.classCount} Classes`}
+                                        {" · 📝 "}
+                                        {!activeDayInfo ? "No Quizzes" : `${activeDayInfo.quizCount} Quizzes`}
+                                    </Text>
+                                    <Text numberOfLines={1} className="text-white text-[11px] font-medium leading-4">
+                                        {"🧾 "}
+                                        {!activeDayInfo ? "No Assignments" : `${activeDayInfo.assignmentCount} Assignments`}
+                                        {" · 💬 "}
+                                        {!activeDayInfo ? "No Discussions" : `${activeDayInfo.discussionCount} Discussions`}
+                                    </Text>
+                                    <Text numberOfLines={1} className="text-white text-[11px] font-semibold mt-0.5 leading-4">
+                                        {"🎯 Focus Area: "}
+                                        <Text className="font-normal">
+                                            {!activeDayInfo ? "..." : activeDayInfo.focus}
                                         </Text>
-                                        <Text className={`text-[18px] font-bold ${isActive ? "text-white" : "text-[#282828]"}`}>
-                                            {item.dateNum}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </ScrollView>
+                                    </Text>
+                                    <Text numberOfLines={1} className="text-white/90 text-[10px] italic leading-[14px]">
+                                        {"🪄 Tip: "}
+                                        {!activeDayInfo ? "..." : activeDayInfo.tip}
+                                    </Text>
+                                </>
+                            )}
+                        </View>
+                    </View>
+                )}
+
+                <View className="mt-5">
+                    <View className="flex-row items-center gap-3 mb-3">
+                        <View
+                            className="bg-[#1E2A45] rounded-lg items-center justify-center px-3 py-1.5"
+                            style={{ minWidth: 48 }}
+                        >
+                            <Text className="text-white font-bold text-[16px] leading-[18px]">
+                                {activeDayItem?.dateNum ?? ""}
+                            </Text>
+                            <Text className="text-white text-[10px] font-medium">
+                                {activeDayItem?.dayName ?? ""}
+                            </Text>
+                        </View>
+                        <Text className="text-[#282828] font-semibold text-[17px]">
+                            Timetable
+                        </Text>
                     </View>
 
-                    {/* Active Data Block */}
-                    {activeDayItem && (
-                        <View className="bg-[#43C17A] rounded-xl p-3 flex-row items-center gap-3 shadow-md w-full">
-                            <View className="bg-white rounded-lg flex flex-col items-center justify-center w-[72px] h-[72px]">
-                                <Text className="text-[#43C17A] font-semibold text-[13px]">
-                                    {activeDayItem.dayName}
-                                </Text>
-                                <Text className="text-[#43C17A] font-bold text-3xl">
-                                    {activeDayItem.dateNum}
-                                </Text>
-                            </View>
-
-                            <View className="flex-1 flex-col justify-center gap-0.5 pr-2">
-                                {loading ? (
-                                    <ActivityIndicator color="#ffffff" size="small" />
-                                ) : (
-                                    <>
-                                        <Text numberOfLines={1} className="text-white text-[11px] font-medium leading-tight">
-                                            📘 {!activeDayInfo ? "0" : t("Classes", { count: activeDayInfo.classCount })} · 📝{" "}
-                                            {!activeDayInfo ? "0" : t("Quizzes", { count: activeDayInfo.quizCount })}
-                                        </Text>
-                                        <Text numberOfLines={1} className="text-white text-[11px] font-medium leading-tight">
-                                            🧾 {!activeDayInfo ? "0" : t("Assignments", { count: activeDayInfo.assignmentCount })} · 💬{" "}
-                                            {!activeDayInfo ? "0" : t("Discussions", { count: activeDayInfo.discussionCount })}
-                                        </Text>
-                                        <Text numberOfLines={1} className="text-white text-[11px] font-semibold mt-0.5 leading-tight">
-                                            🎯 {t("Focus Area")}:{" "}
-                                            <Text className="font-normal">
-                                                {!activeDayInfo ? "..." : activeDayInfo.focus}
-                                            </Text>
-                                        </Text>
-                                        <Text numberOfLines={1} className="text-white/90 text-[10px] italic leading-tight">
-                                            🪄 {t("Tip")}: {!activeDayInfo ? "..." : activeDayInfo.tip}
-                                        </Text>
-                                    </>
-                                )}
-                            </View>
-                        </View>
+                    {loading ? (
+                        <ActivityIndicator color="#43C17A" size="small" />
+                    ) : !activeDayInfo || activeDayInfo.timetable.length === 0 ? (
+                        <Text className="text-gray-400 text-[13px] text-center py-6" style={{ fontFamily: fonts.regular }}>
+                            No classes scheduled
+                        </Text>
+                    ) : (
+                        activeDayInfo.timetable.map((entry, i) => (
+                            <TimetableRow key={i} entry={entry} />
+                        ))
                     )}
                 </View>
-            )}
-        </View>
+
+                <View className="flex-row bg-white p-2 rounded-xl mt-5 mb-2" style={{ gap: 8 }}>
+                    <StatCard
+                        count={activeDayInfo?.quizCount ?? 0}
+                        label={"Active\nQuizzes"}
+                        color="#E75480"
+                        bg="#FDE8F0"
+                    />
+                    <StatCard
+                        count={activeDayInfo?.assignmentCount ?? 0}
+                        label={"Active\nAssignments"}
+                        color="#5B9BD5"
+                        bg="#E8F1FB"
+                    />
+                    <StatCard
+                        count={activeDayInfo?.discussionCount ?? 0}
+                        label={"Active\nDiscussions"}
+                        color="#9B6EC8"
+                        bg="#F0E8FB"
+                    />
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }

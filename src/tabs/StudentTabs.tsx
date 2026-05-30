@@ -2,6 +2,11 @@ import React from "react";
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions } from "react-native";
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { House, ClipboardText, BookOpen, User, Calendar } from "phosphor-react-native";
+import StudentHome from "@/(screens)/student/student";
+import StudentAssignments from "@/(screens)/student/assignments/assignments";
+import StudentAttendance from "@/(screens)/student/attendance/attendance";
+import Profile from "@/(screens)/Profile/profile";
+import StudentCalendar from "@/(screens)/student/calendar/calendar";
 
 export type StudentTabParamList = {
     Calendar: undefined;
@@ -10,20 +15,6 @@ export type StudentTabParamList = {
     Attendance: undefined;
     Profile: undefined;
 };
-
-import StudentHome from "@/(screens)/student/student";
-import StudentCalendar from "@/(screens)/student/calendar/calendar";
-import StudentAssignments from "@/(screens)/student/assignments/assignments";
-import StudentAttendance from "@/(screens)/student/attendance/attendance";
-import Profile from "@/(screens)/Profile/profile";
-
-function MockScreen({ title }: { title: string }) {
-    return (
-        <View className="flex-1 justify-center items-center bg-[#0F172A]">
-            <Text className="text-white text-lg font-semibold">{title}</Text>
-        </View>
-    );
-}
 
 const Tab = createBottomTabNavigator<StudentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -35,7 +26,6 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             style={{ width: SCREEN_WIDTH, height: 120 }}
         >
             <View className="absolute bottom-0 left-0 right-0 h-[85px] bg-white rounded-t-[15px] flex-row shadow-lg shadow-black/10" />
-
             <View className="flex-row h-[85px] absolute bottom-0 left-0 right-0">
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;

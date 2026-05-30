@@ -26,8 +26,6 @@ import CardComponent from "@/utils/card";
 import MidExams from "./midExams";
 import LectureCard from "@/utils/lectureCard";
 import SubjectProgressCards from "../faculty/utils/subjectProgressCard/subjectProgressCards";
-import { fetchUpcomingClassesForStudent } from "@/lib/helpers/profile/calender/fetchUpcomingClassesForStudent";
-import { fetchStudentContext } from "@/utils/context/student/studentContextAPI";
 import { fetchAssignmentsForStudent } from "@/lib/helpers/student/assignments/assignmentsAPI";
 import { useStudent } from "@/utils/context/student/useStudent";
 import { fetchStudentFeePlan } from "@/lib/helpers/student/payments/fetchStudentFeePlan";

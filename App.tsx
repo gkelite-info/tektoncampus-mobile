@@ -1,16 +1,20 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
+import { LogBox } from 'react-native';
 import './global.css';
 
 import Toast from "react-native-toast-message";
 
 import RootNavigator from '@/navigation/RootNavigator';
 import { UserProvider } from '@/utils/context/UserContext';
-import en from '@/locales/en.json';
 import QueryProvider from '@/providers/QueryProvider';
 
 import './i18n';
+
+LogBox.ignoreLogs([
+  '[Reanimated] Reduced motion setting is enabled on this device.',
+]);
 
 export default function App() {
   const [fontsLoaded] = useFonts({

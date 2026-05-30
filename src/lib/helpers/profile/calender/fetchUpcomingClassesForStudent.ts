@@ -1,11 +1,11 @@
 import { supabase } from "@/lib/supabaseClient";
 
 export async function fetchUpcomingClassesForStudent(filters: {
-    collegeEducationId: number;
-    collegeBranchId: number;
-    collegeAcademicYearId: number;
-    collegeSemesterId: number;
-    collegeSectionId: number;
+    collegeEducationId: number | null;
+    collegeBranchId: number | null;
+    collegeAcademicYearId: number | null;
+    collegeSemesterId: number | null;
+    collegeSectionId: number | null;
 }) {
     const today = new Date().toISOString().split("T")[0];
 

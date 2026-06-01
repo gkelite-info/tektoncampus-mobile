@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Platform } from 'react-native';
 import Animated, { useAnimatedStyle, interpolate, Extrapolation, SharedValue } from 'react-native-reanimated';
 import { useDrawerProgress } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
@@ -36,7 +36,12 @@ export default function AnimatedHamburger() {
 
     return (
         <TouchableOpacity 
-            onPress={() => navigation.toggleDrawer()}
+            onPress={() => {
+                navigation.toggleDrawer();
+                if (Platform.OS === 'web') {
+                    (document.activeElement as HTMLElement)?.blur();
+                }
+            }}
             className="w-11 h-11 justify-center items-center ml-2.5"
             activeOpacity={0.7}
         >

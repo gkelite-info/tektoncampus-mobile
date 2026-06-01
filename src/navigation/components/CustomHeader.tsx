@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,9 +9,11 @@ import EmailModal from '@/components/modals/EmailModal';
 import NotificationsModal from '@/components/modals/NotificationsModal';
 import AnnouncementModal from '@/components/modals/AnnouncementModal';
 import { useUser } from '@/utils/context/UserContext';
+import { supabase } from '@/lib/supabaseClient';
+import { getUnreadNotificationCount } from '@/lib/helpers/notifications/notificationAPI';
 
 export default function CustomHeader() {
-    const { role, identifierId } = useUser();
+    const { role, identifierId, userId } = useUser();
     const displayRole = role || 'Guest';
 
     const [unreadCount, setUnreadCount] = useState(0);
@@ -27,6 +29,36 @@ export default function CustomHeader() {
         tab?: "all" | "inbox" | "sent";
         compose?: boolean;
     }>({});
+
+    useEffect(() => {
+        if (!userId) return;
+
+        async function fetchNotificationCount() {
+            const count = await getUnreadNotificationCount(userId!);
+            setUnreadCount(count);
+        }
+
+        fetchNotificationCount();
+
+        const notificationChannel = supabase
+            .channel("custom-notification-channel")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "notifications" },
+                (payload) => {
+                    const record = (payload.new as any) || (payload.old as any);
+
+                    if (record && Number(record.userId) === Number(userId)) {
+                        setTimeout(() => fetchNotificationCount(), 100);
+                    }
+                },
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(notificationChannel);
+        };
+    }, [userId]);
 
     const insets = useSafeAreaInsets();
 

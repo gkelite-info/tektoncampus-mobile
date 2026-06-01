@@ -35,7 +35,6 @@ export default function ComposeEmailModal({ visible, onClose, collegeId, replyDa
     const [cc, setCc] = useState("");
     const [subject, setSubject] = useState("");
     
-    // Filters
     const [edu, setEdu] = useState("");
     const [branch, setBranch] = useState("");
     const [year, setYear] = useState("");

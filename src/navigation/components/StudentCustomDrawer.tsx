@@ -19,6 +19,8 @@ import {
     Gear,
     SignOut
 } from "phosphor-react-native";
+import { logoutUser } from "@/services/auth/logoutUser";
+import Toast from "react-native-toast-message";
 
 type DrawerItemProps = {
     label: string;
@@ -33,17 +35,15 @@ const DrawerItem = ({ label, icon, isActive, onPress, isLogout }: DrawerItemProp
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={0.7}
-            className={`flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full ${
-                isActive ? "bg-white shadow-sm" : "bg-transparent"
-            } ${isLogout ? "mt-4 border-t border-green-500/30 pt-4" : ""}`}
+            className={`flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full ${isActive ? "bg-white shadow-sm" : "bg-transparent"
+                } ${isLogout ? "mt-4 border-t border-green-500/30 pt-4" : ""}`}
         >
             <View className="mr-4">
                 {icon}
             </View>
             <Text
-                className={`text-base font-semibold ${
-                    isActive ? "text-[#3fbe73]" : isLogout ? "text-[#ef4444]" : "text-white"
-                }`}
+                className={`text-base font-semibold ${isActive ? "text-[#3fbe73]" : isLogout ? "text-[#ef4444]" : "text-white"
+                    }`}
             >
                 {label}
             </Text>
@@ -53,13 +53,36 @@ const DrawerItem = ({ label, icon, isActive, onPress, isLogout }: DrawerItemProp
 
 export default function StudentCustomDrawer(props: DrawerContentComponentProps) {
     const { state, navigation } = props;
-    
+
     const isActive = (routeName: string) => {
         return state.routeNames[state.index] === routeName;
     };
 
     const navigateTo = (routeName: string) => {
         navigation.navigate(routeName);
+    };
+
+    const handleLogout = async () => {
+        const result = await logoutUser();
+
+        if (result.success) {
+            Toast.show({
+                type: 'success',
+                text1: 'Logged Out',
+                text2: 'See you again soon! 👋',
+                position: 'top',
+                visibilityTime: 2000,
+            });
+
+        } else {
+            Toast.show({
+                type: 'error',
+                text1: 'Logout Failed',
+                text2: 'Something went wrong. Please try again.',
+                position: 'bottom',
+                visibilityTime: 4000,
+            });
+        }
     };
 
     return (
@@ -158,16 +181,14 @@ export default function StudentCustomDrawer(props: DrawerContentComponentProps) 
                     isActive={isActive("Settings")}
                     onPress={() => navigateTo("Settings")}
                 />
-                
+
                 <View className="mb-8">
                     <DrawerItem
                         label="Logout"
                         icon={<SignOut size={24} color="#ef4444" weight="bold" />}
                         isActive={false}
                         isLogout={true}
-                        onPress={() => {
-                            console.log("Logout pressed");
-                        }}
+                        onPress={handleLogout}
                     />
                 </View>
             </ScrollView>

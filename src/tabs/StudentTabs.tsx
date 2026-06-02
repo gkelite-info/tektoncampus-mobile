@@ -3,14 +3,14 @@ import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions } fr
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { House, ClipboardText, BookOpen, User, Calendar } from "phosphor-react-native";
 import StudentHome from "@/(screens)/student/student";
-import StudentAssignments from "@/(screens)/student/assignments/assignments";
 import StudentAttendance from "@/(screens)/student/attendance/attendance";
 import Profile from "@/(screens)/Profile/profile";
 import StudentCalendar from "@/(screens)/student/calendar/calendar";
+import StudentAcademics from "@/(screens)/student/academics/academics";
 
 export type StudentTabParamList = {
     Calendar: undefined;
-    Assignments: undefined;
+    Academics: undefined;
     Home: undefined;
     Attendance: undefined;
     Profile: undefined;
@@ -44,7 +44,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
                     const labels: Record<keyof StudentTabParamList, string> = {
                         Calendar: "Calendar",
-                        Assignments: "Academics",
+                        Academics: "Academics",
                         Home: "Home",
                         Attendance: "Attendance",
                         Profile: "Profile",
@@ -57,20 +57,18 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                     const renderIcon = () => {
                         switch (route.name) {
                             case "Calendar": return <Calendar size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
-                            case "Assignments": return <BookOpen size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
+                            case "Academics": return <BookOpen size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             case "Attendance": return <ClipboardText size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             case "Profile": return <User size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             default: return null;
                         }
                     };
 
-                    // --- CENTRAL GREEN HOME BUTTON (NO OPACITY EFFECT ON TAP) ---
                     if (route.name === "Home") {
                         return (
                             <View key={route.key} className="flex-1 items-center justify-center">
                                 <TouchableWithoutFeedback onPress={onPress}>
                                     <View
-                                        /* Adjusted positioning (-top-[24px]) to match the new taller bar height perfectly */
                                         className="absolute -top-[24px] w-[64px] h-[64px] rounded-full bg-[#7BE47B] items-center justify-center border-[5px] border-white"
                                         style={{
                                             shadowColor: "#7BE47B",
@@ -87,7 +85,6 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                         );
                     }
 
-                    // --- STANDARD SIDE NAVIGATION TABS ---
                     return (
                         <TouchableOpacity
                             key={route.key}
@@ -118,7 +115,7 @@ export default function StudentTabs() {
             initialRouteName="Home"
         >
             <Tab.Screen name="Calendar" component={StudentCalendar} />
-            <Tab.Screen name="Assignments" component={StudentAssignments} />
+            <Tab.Screen name="Academics" component={StudentAcademics} />
             <Tab.Screen name="Home" component={StudentHome} />
             <Tab.Screen name="Attendance" component={StudentAttendance} />
             <Tab.Screen name="Profile" component={Profile} />

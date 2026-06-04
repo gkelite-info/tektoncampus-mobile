@@ -87,8 +87,10 @@ export const StudentPerformanceCard = ({ students }: any) => (
     </View>
 );
 
-const LessonCard = ({ lesson }: { lesson: any }) => (
-    <View
+const LessonCard = ({ lesson, onPress }: { lesson: any, onPress?: () => void }) => (
+    <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.7}
         className={`relative flex-row rounded-r-xl rounded-l overflow-hidden min-h-[100px] mb-3 border border-gray-100/50 ${
             lesson.sessionStatus === "Cancel" ? "bg-red-50/50" : "bg-[#eff2f7]"
         }`}
@@ -138,12 +140,12 @@ const LessonCard = ({ lesson }: { lesson: any }) => (
                 </Text>
             </View>
         </View>
-    </View>
+    </TouchableOpacity>
 );
 
 import { ActivityIndicator } from "react-native";
 
-export const UpcomingClasses = ({ lessons, onAddLesson, facultyId, loading }: any) => {
+export const UpcomingClasses = ({ lessons, onAddLesson, onLessonPress, facultyId, loading }: any) => {
     const displayLessons = lessons || [];
     return (
         <View className="bg-white rounded-2xl p-4 shadow-sm w-full mb-4">
@@ -163,7 +165,7 @@ export const UpcomingClasses = ({ lessons, onAddLesson, facultyId, loading }: an
             ) : (
                 <View className="flex-col">
                     {displayLessons.map((lesson: any, index: number) => (
-                        <LessonCard key={lesson.id || index} lesson={lesson} />
+                        <LessonCard key={lesson.id || index} lesson={lesson} onPress={() => onLessonPress && onLessonPress(lesson)} />
                     ))}
                     {displayLessons.length === 0 && (
                         <View className="py-6 items-center justify-center">

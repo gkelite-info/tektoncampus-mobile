@@ -183,3 +183,92 @@ calendar_event_section (
     });
   });
 }
+
+export async function getClassDetails(
+  classId: string,
+): Promise<UpcomingLesson | null> {
+  const eventId = parseInt(classId.split("-")[0]);
+
+  const { data: event, error } = await supabase
+    .from("calendar_event")
+    .select(
+      `
+      calendarEventId,
+      date,
+      fromTime,
+      toTime,
+      roomNo,
+      
+      topicData:college_subject_unit_topics (topicTitle),
+      subjectData:college_subjects (subjectName),
+      
+      calendar_event_section (
+        section:college_sections (collegeSections),
+        branch:college_branch (collegeBranchCode),
+        yearData:college_academic_year (collegeAcademicYear),
+        semester:college_semester (collegeSemester),
+        education:college_education (collegeEducationType)
+      )
+    `,
+    )
+    .eq("calendarEventId", eventId)
+    .single();
+
+  if (error || !event) {
+    console.error("Error fetching details:", error);
+    return null;
+  }
+
+  const sectionsData = event.calendar_event_section || [];
+
+  const departments = Array.from(
+    new Set(
+      sectionsData.map((s: any) => safeGet(s.branch, "collegeBranchCode")),
+    ),
+  ).map((name) => ({ name: name as string }));
+  const semesters = Array.from(
+    new Set(
+      sectionsData.map(
+        (s: any) => `Sem ${safeGet(s.semester, "collegeSemester")}`,
+      ),
+    ),
+  );
+  const sectionNames = Array.from(
+    new Set(
+      sectionsData.map((s: any) => safeGet(s.section, "collegeSections")),
+    ),
+  ).join(", ");
+
+  const firstSection = sectionsData[0];
+  const degree = safeGet(
+    firstSection?.education,
+    "collegeEducationType",
+    "B.Tech",
+  );
+  const yearString = safeGet(firstSection?.yearData, "collegeAcademicYear");
+  const year = parseInt(yearString) || 1;
+
+  const subjectName = safeGet(
+    event.subjectData,
+    "subjectName",
+    "Unknown Subject",
+  );
+
+  const topicTitle = safeGet(event.topicData, "topicTitle");
+  const description = topicTitle || `Class for ${sectionNames}`;
+
+  return {
+    id: event.calendarEventId.toString(),
+    title: subjectName,
+    description: description,
+    fromTime: convertTo12HourFormat(event.fromTime),
+    toTime: convertTo12HourFormat(event.toTime),
+    date: formatDate(event.date),
+    roomNo: event.roomNo,
+    section: sectionNames,
+    semester: semesters as string[],
+    department: departments,
+    degree: degree,
+    year: year,
+  };
+}

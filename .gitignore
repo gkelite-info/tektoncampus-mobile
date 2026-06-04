@@ -9,8 +9,6 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-.env
-
 
 
 ios
@@ -21,3 +19,4 @@ android
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+.env

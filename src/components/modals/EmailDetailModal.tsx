@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Modal, SafeAreaView, useWindowDimensions, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Modal, useWindowDimensions, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { X, Reply, ChevronDown } from 'lucide-react-native';
 import RenderHtml from 'react-native-render-html';
 
@@ -36,14 +37,16 @@ export default function EmailDetailModal({ visible, mail, onClose, onReply }: Pr
         <Modal
             visible={visible}
             animationType="slide"
-            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "fullScreen"}
+            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "overFullScreen"}
+            transparent={Platform.OS === 'android'}
             onRequestClose={onClose}
         >
-            <SafeAreaView className="flex-1 bg-white">
+            <View style={{ flex: 1, backgroundColor: Platform.OS === 'android' ? 'rgba(0,0,0,0.4)' : 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
+                <SafeAreaView style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 24, borderTopRightRadius: 24, overflow: 'hidden' }}>
                 <View className="flex-row items-center justify-between p-4 border-b border-gray-100">
                     <TouchableOpacity
                         onPress={onClose}
-                        className="p-1.5 rounded-full hover:bg-gray-100"
+                        className="p-1.5 rounded-full bg-transparent"
                     >
                         <X size={24} color="#6B7280" />
                     </TouchableOpacity>
@@ -130,6 +133,7 @@ export default function EmailDetailModal({ visible, mail, onClose, onReply }: Pr
                     </View>
                 </ScrollView>
             </SafeAreaView>
+            </View>
         </Modal>
     );
 }

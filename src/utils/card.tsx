@@ -50,11 +50,10 @@ export default function CardComponent({
         <TouchableOpacity
             onPress={handlePress}
             disabled={!isClickable}
-            activeOpacity={0.8}
             style={inlineStyle}
             className={`w-[49%] h-[45%] rounded-lg p-3 flex-row items-center my-1.5 shadow-sm
-        ${isActive ? "bg-[#282828]" : style} 
-        ${isClickable ? "active:opacity-70" : ""}`}
+        ${isActive ? "bg-[#282828]" : style}`}
+            activeOpacity={isClickable ? 0.7 : 1}
         >
             <View
                 style={{ backgroundColor: iconBgColor }}

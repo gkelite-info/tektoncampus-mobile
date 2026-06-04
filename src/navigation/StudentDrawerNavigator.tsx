@@ -1,7 +1,7 @@
-import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import StudentCustomDrawer from "./components/StudentCustomDrawer";
+import React, { useRef, useState } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CustomHeader from "./components/CustomHeader";
+import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
 
 import StudentTabs from "@/tabs/StudentTabs";
 
@@ -16,7 +16,7 @@ import {
     MeetingsScreen,
     MyAttendanceScreen,
     WellbeingScreen,
-    SettingsScreen
+    SettingsScreen,
 } from "@/(screens)/student/mockScreens";
 
 import StudentCalendar from "@/(screens)/student/calendar/calendar";
@@ -41,47 +41,82 @@ export type StudentDrawerParamList = {
     Settings: undefined;
 };
 
-const Drawer = createDrawerNavigator<StudentDrawerParamList>();
+const Stack = createNativeStackNavigator<StudentDrawerParamList>();
+
+const menuItems: RoleSideMenuItem[] = [
+    { name: "StudentTabs", label: "Home" },
+    { name: "Calendar", label: "Calendar" },
+    { name: "Attendance", label: "Attendance" },
+    { name: "Assignments", label: "Assignments" },
+    { name: "Academics", label: "Academics" },
+    { name: "StudentProgress", label: "Student Progress" },
+    { name: "Projects", label: "Projects" },
+    { name: "Placements", label: "Placements" },
+    { name: "LeaveRequests", label: "Leave Requests" },
+    { name: "Club", label: "Club" },
+    { name: "Drive", label: "Drive" },
+    { name: "Meetings", label: "Meetings" },
+    { name: "MyAttendance", label: "My Attendance" },
+    { name: "Wellbeing", label: "Wellbeing" },
+    { name: "Settings", label: "Settings" },
+];
 
 export default function StudentDrawerNavigator() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeRouteName, setActiveRouteName] = useState<keyof StudentDrawerParamList>("StudentTabs");
+    const navigationRef = useRef<any>(null);
+
     return (
-        <Drawer.Navigator
-            drawerContent={(props) => <StudentCustomDrawer {...props} />}
-            screenOptions={{
-                headerShown: true,
-                headerTransparent: true,
-                header: () => <CustomHeader />,
-                drawerType: 'slide',
-                overlayColor: 'transparent',
-                drawerStyle: {
-                    width: '75%',
-                    backgroundColor: 'transparent',
-                },
-            }}
-            initialRouteName="StudentTabs"
-        >
-            <Drawer.Screen
-    name="StudentTabs"
-    component={StudentTabs}
-    options={{
-        drawerItemStyle: { display: "none" },
-    }}
-/>
-            <Drawer.Screen name="Calendar" component={StudentCalendar} />
-            <Drawer.Screen name="Attendance" component={StudentAttendance} />
-            <Drawer.Screen name="Assignments" component={StudentAssignments} />
-            
-            <Drawer.Screen name="Academics" component={AcademicsScreen} />
-            <Drawer.Screen name="StudentProgress" component={StudentProgressScreen} />
-            <Drawer.Screen name="Projects" component={ProjectsScreen} />
-            <Drawer.Screen name="Placements" component={PlacementsScreen} />
-            <Drawer.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
-            <Drawer.Screen name="Club" component={ClubScreen} />
-            <Drawer.Screen name="Drive" component={DriveScreen} />
-            <Drawer.Screen name="Meetings" component={MeetingsScreen} />
-            <Drawer.Screen name="MyAttendance" component={MyAttendanceScreen} />
-            <Drawer.Screen name="Wellbeing" component={WellbeingScreen} />
-            <Drawer.Screen name="Settings" component={SettingsScreen} />
-        </Drawer.Navigator>
+        <>
+            <Stack.Navigator
+                initialRouteName="StudentTabs"
+                screenOptions={({ navigation }) => {
+                    navigationRef.current = navigation;
+
+                    return {
+                        headerShown: true,
+                        headerTransparent: true,
+                        header: () => (
+                            <CustomHeader navigation={{ toggleDrawer: () => setIsMenuOpen(true) }} />
+                        ),
+                    };
+                }}
+                screenListeners={{
+                    state: (event) => {
+                        const route = event.data.state.routes[event.data.state.index];
+                        setActiveRouteName(route.name as keyof StudentDrawerParamList);
+                    },
+                }}
+            >
+                <Stack.Screen name="StudentTabs" component={StudentTabs} />
+                <Stack.Screen name="Calendar" component={StudentCalendar} />
+                <Stack.Screen name="Attendance" component={StudentAttendance} />
+                <Stack.Screen name="Assignments" component={StudentAssignments} />
+                <Stack.Screen name="Academics" component={AcademicsScreen} />
+                <Stack.Screen name="StudentProgress" component={StudentProgressScreen} />
+                <Stack.Screen name="Projects" component={ProjectsScreen} />
+                <Stack.Screen name="Placements" component={PlacementsScreen} />
+                <Stack.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
+                <Stack.Screen name="Club" component={ClubScreen} />
+                <Stack.Screen name="Drive" component={DriveScreen} />
+                <Stack.Screen name="Meetings" component={MeetingsScreen} />
+                <Stack.Screen name="MyAttendance" component={MyAttendanceScreen} />
+                <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
+                <Stack.Screen name="Settings" component={SettingsScreen} />
+            </Stack.Navigator>
+
+            <RoleSideMenu
+                visible={isMenuOpen}
+                activeRouteName={activeRouteName}
+                homeRouteName="StudentTabs"
+                items={menuItems}
+                onClose={() => setIsMenuOpen(false)}
+                onNavigate={(routeName) => {
+                    setIsMenuOpen(false);
+                    setActiveRouteName(routeName as keyof StudentDrawerParamList);
+                    navigationRef.current?.navigate(routeName);
+                }}
+            />
+        </>
     );
 }

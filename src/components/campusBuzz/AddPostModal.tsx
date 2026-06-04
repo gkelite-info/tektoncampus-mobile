@@ -161,7 +161,7 @@ export default function AddPostModal({ visible, onClose, onSuccess, editData }: 
             presentationStyle="pageSheet"
             onRequestClose={!isSubmitting ? onClose : undefined}
         >
-            <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} edges={['top']}>
                 <KeyboardAvoidingView 
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined} 
                     className="flex-1"

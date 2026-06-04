@@ -167,10 +167,12 @@ export default function AnnouncementModal({ visible, onClose, highlightedPostId 
         <Modal 
             visible={visible} 
             animationType="slide" 
-            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "fullScreen"} 
+            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "overFullScreen"}
+            transparent={Platform.OS === 'android'}
             onRequestClose={onClose}
         >
-            <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+            <View style={{ flex: 1, backgroundColor: Platform.OS === 'android' ? 'rgba(0,0,0,0.4)' : 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
+                <SafeAreaView style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 24, borderTopRightRadius: 24, overflow: 'hidden' }} edges={['top']}>
                 <View className="flex-row items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
                     <View className="flex-row items-center gap-2">
                         <Megaphone size={24} weight="fill" color="#43C17A" />
@@ -259,6 +261,7 @@ export default function AnnouncementModal({ visible, onClose, highlightedPostId 
                     onSuccess={() => loadPosts(0, true)}
                 />
             </SafeAreaView>
+            </View>
         </Modal>
     );
 }

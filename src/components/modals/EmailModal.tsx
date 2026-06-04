@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { View, Text, TouchableOpacity, Modal, SafeAreaView, FlatList, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, FlatList, ActivityIndicator, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { X, Plus } from 'lucide-react-native';
 import { EnvelopeSimple } from 'phosphor-react-native';
 import EmailDetailModal, { EmailDetailItem } from './EmailDetailModal';
@@ -208,11 +209,13 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {
         <Modal
             visible={visible}
             animationType="slide"
-            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "fullScreen"}
+            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "overFullScreen"}
+            transparent={Platform.OS === 'android'}
             onRequestClose={onClose}
         >
-            <SafeAreaView className="flex-1 bg-[#F4F4F4]">
-                <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-200 bg-white shadow-sm z-10">
+            <View style={{ flex: 1, backgroundColor: Platform.OS === 'android' ? 'rgba(0,0,0,0.4)' : 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
+                <SafeAreaView style={{ flex: 1, backgroundColor: '#F4F4F4', borderTopLeftRadius: 24, borderTopRightRadius: 24, overflow: 'hidden' }}>
+                <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
                     <View className="flex-row items-center gap-2">
                         <EnvelopeSimple size={24} weight="fill" color="#43C17A" />
                         <Text className="text-[17px] font-bold text-[#282828]">Email</Text>
@@ -228,7 +231,7 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {
                             <Plus size={16} color="#43C17A" />
                             <Text className="text-[13px] font-medium text-[#282828]">Compose</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onClose} className="p-1 rounded-full hover:bg-gray-100">
+                        <TouchableOpacity onPress={onClose} className="p-1 rounded-full bg-transparent">
                             <X size={22} color="#6B7280" />
                         </TouchableOpacity>
                     </View>
@@ -284,14 +287,13 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {
                     )}
                 </View>
             </SafeAreaView>
-
+            </View>
             <EmailDetailModal
                 visible={!!selectedEmail}
                 mail={selectedEmail}
                 onClose={() => setSelectedEmail(null)}
                 onReply={handleReplyClick}
             />
-
             <ComposeEmailModal
                 visible={isComposeOpen}
                 onClose={() => setIsComposeOpen(false)}

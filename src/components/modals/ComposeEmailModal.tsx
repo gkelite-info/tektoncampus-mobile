@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Modal, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Modal, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { X } from 'lucide-react-native';
 import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 import { Picker } from '@react-native-picker/picker';
@@ -26,8 +27,8 @@ type Props = {
 
 export default function ComposeEmailModal({ visible, onClose, collegeId, replyData, onSuccess, initialEmail }: Props) {
     const user = useAuthStore(state => state.user);
-    const fullName = user?.fullName || user?.name || '';
-    const email = user?.email || '';
+    const fullName = user?.fullName || '';
+    const email = (user as any)?.email || '';
     const userId = user?.userId;
 
     const [audience, setAudience] = useState("");
@@ -164,17 +165,19 @@ export default function ComposeEmailModal({ visible, onClose, collegeId, replyDa
         <Modal
             visible={visible}
             animationType="slide"
-            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "fullScreen"}
+            presentationStyle={Platform.OS === 'ios' ? "pageSheet" : "overFullScreen"}
+            transparent={Platform.OS === 'android'}
             onRequestClose={handleClose}
         >
-            <SafeAreaView className="flex-1 bg-white">
+            <View style={{ flex: 1, backgroundColor: Platform.OS === 'android' ? 'rgba(0,0,0,0.4)' : 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
+                <SafeAreaView style={{ flex: 1, backgroundColor: 'white', borderTopLeftRadius: 24, borderTopRightRadius: 24, overflow: 'hidden' }}>
                 <KeyboardAvoidingView 
                     style={{ flex: 1 }} 
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 >
                     <View className="flex-row items-center justify-between p-4 border-b border-gray-100">
                         <Text className="text-[17px] font-semibold text-[#282828]">Compose Email</Text>
-                        <TouchableOpacity onPress={handleClose} className="p-1 rounded-full hover:bg-gray-100">
+                        <TouchableOpacity onPress={handleClose} className="p-1 rounded-full bg-transparent">
                             <X size={24} color="#282828" />
                         </TouchableOpacity>
                     </View>
@@ -278,6 +281,7 @@ export default function ComposeEmailModal({ visible, onClose, collegeId, replyDa
                     </ScrollView>
                 </KeyboardAvoidingView>
             </SafeAreaView>
+            </View>
         </Modal>
     );
 }

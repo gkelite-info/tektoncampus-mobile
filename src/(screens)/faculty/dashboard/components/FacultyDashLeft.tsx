@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, ActivityIndicator } from "react-native";
+import Toast from 'react-native-toast-message';
 import { BookOpen, Chalkboard, ClockAfternoon, UsersThree } from "phosphor-react-native";
 import { useAuthStore } from "@/store/authStore";
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -15,11 +16,18 @@ import {
 
 import { getUpcomingClasses, UpcomingLesson } from "@/lib/helpers/faculty/attendance/getClasses";
 import { getFacultyDashboardStats } from "@/lib/helpers/faculty/dashboard/getFacultyDashboardStats";
+import { handleMissionClassStatus } from "@/lib/helpers/faculty/attendance/attendanceActions";
+import { ClassActionModal } from "./ClassActionModal";
+import { useNavigation } from "@react-navigation/native";
 
 export default function FacultyDashLeft() {
     const user = useAuthStore((state) => state.user);
     const userId = user?.userId;
     const headerHeight = useHeaderHeight();
+    const navigation = useNavigation<any>();
+
+    const [selectedLesson, setSelectedLesson] = useState<UpcomingLesson | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [upcomingClasses, setUpcomingClasses] = useState<UpcomingLesson[]>([]);
     const [isLoadingClasses, setIsLoadingClasses] = useState(true);
@@ -90,6 +98,36 @@ export default function FacultyDashLeft() {
         loadData();
     }, [userId]);
 
+    const handleLessonPress = (lesson: UpcomingLesson) => {
+        setSelectedLesson(lesson);
+        setIsModalOpen(true);
+    };
+
+    const handleAcceptClass = async (classId: string) => {
+        if (!facultyId) return;
+        try {
+            await handleMissionClassStatus(classId, facultyId, "Accepted");
+            setIsModalOpen(false);
+            navigation.navigate("Attendance", { classId: classId });
+            Toast.show({ type: 'success', text1: "Class accepted" });
+            loadData();
+        } catch (error) {
+            Toast.show({ type: 'error', text1: "Failed to accept class" });
+        }
+    };
+
+    const handleCancelClass = async (classId: string, reason: string) => {
+        if (!facultyId) return;
+        try {
+            await handleMissionClassStatus(classId, facultyId, "Cancel", reason);
+            setIsModalOpen(false);
+            Toast.show({ type: 'success', text1: "Class cancelled" });
+            loadData();
+        } catch (error) {
+            Toast.show({ type: 'error', text1: "Failed to cancel class" });
+        }
+    };
+
     const pad = (num: number) => num.toString().padStart(2, "0");
 
     const cardData = [
@@ -134,7 +172,7 @@ export default function FacultyDashLeft() {
     return (
         <ScrollView 
             className="w-full flex-1"
-            contentContainerStyle={{ paddingTop: headerHeight + 16, paddingHorizontal: 16, paddingBottom: 16 }}
+            contentContainerStyle={{ paddingTop: headerHeight + 16, paddingHorizontal: 16, paddingBottom: 160 }}
         >
             <UserInfoCard cardProps={card} />
             
@@ -164,13 +202,22 @@ export default function FacultyDashLeft() {
                     <View className="mt-4">
                         <UpcomingClasses
                             lessons={upcomingClasses}
-                            onAddLesson={() => { }}
+                            onAddLesson={() => navigation.navigate("Calendar")}
+                            onLessonPress={handleLessonPress}
                             facultyId={Number(facultyId)}
                             loading={isLoadingClasses}
                         />
                     </View>
                 </>
             )}
+
+            <ClassActionModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                lesson={selectedLesson} 
+                onAccept={handleAcceptClass} 
+                onCancelClass={handleCancelClass} 
+            />
         </ScrollView>
     );
 }

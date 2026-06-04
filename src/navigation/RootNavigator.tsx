@@ -4,10 +4,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { InitialState, NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "@/(screens)/(auth)/loginScreen";
 import { useAuthStore } from "@/store/authStore";
-import FacultyTabs from "@/tabs/FacultyTabs";
-import ParentTabs from "@/tabs/ParentTabs";
 import { supabase } from "@/lib/supabaseClient";
 import { StudentProvider } from "@/utils/context/student/useStudent";
+import StudentDrawerNavigator from "./StudentDrawerNavigator";
+import FacultyDrawerNavigator from "./FacultyDrawerNavigator";
+import ParentDrawerNavigator from "./ParentDrawerNavigator";
 
 type AppUser = {
     userId: number;
@@ -16,7 +17,22 @@ type AppUser = {
     collegeId: number;
 };
 
-const NAVIGATION_STATE_PREFIX = "tektoncampus:navigation-state";
+const NAVIGATION_STATE_PREFIX = "tektoncampus:navigation-state:v3-stack-sidebar";
+
+function isNavigationStateValidForRole(
+    state: InitialState | undefined,
+    role: string
+) {
+    if (!state?.routes?.length) return false;
+
+    const routeNames = state.routes.map((route) => route.name);
+
+    if (role.includes("faculty")) return routeNames.includes("FacultyTabs");
+    if (role.includes("student")) return routeNames.includes("StudentTabs");
+    if (role.includes("parent")) return routeNames.includes("ParentTabs");
+
+    return false;
+}
 
 async function getUserProfile(authId: string): Promise<AppUser | null> {
     const { data, error } = await supabase
@@ -29,9 +45,6 @@ async function getUserProfile(authId: string): Promise<AppUser | null> {
 
     return data;
 }
-import StudentDrawerNavigator from "./StudentDrawerNavigator";
-import FacultyDrawerNavigator from "./FacultyDrawerNavigator";
-import ParentDrawerNavigator from "./ParentDrawerNavigator";
 
 export default function RootNavigator() {
     const user = useAuthStore((state) => state.user);
@@ -110,7 +123,19 @@ export default function RootNavigator() {
 
             if (!mounted) return;
 
-            setInitialState(savedState ? JSON.parse(savedState) : undefined);
+            try {
+                const parsedState = savedState
+                    ? (JSON.parse(savedState) as InitialState)
+                    : undefined;
+
+                setInitialState(
+                    isNavigationStateValidForRole(parsedState, roleNormalized)
+                        ? parsedState
+                        : undefined
+                );
+            } catch {
+                setInitialState(undefined);
+            }
             setNavigationReady(true);
         };
 
@@ -141,18 +166,18 @@ export default function RootNavigator() {
             }}
         >
            {!user ? (
-    <LoginScreen />
-) : roleNormalized.includes("faculty") ? (
-    <FacultyDrawerNavigator />
-) : roleNormalized.includes("student") ? (
-    <StudentProvider>
-        <StudentDrawerNavigator />
-    </StudentProvider>
-) : roleNormalized.includes("parent") ? (
-    <ParentDrawerNavigator />
-) : (
-    <LoginScreen />
-)}
+                <LoginScreen />
+            ) : roleNormalized.includes("faculty") ? (
+                <FacultyDrawerNavigator />
+            ) : roleNormalized.includes("student") ? (
+                <StudentProvider>
+                    <StudentDrawerNavigator />
+                </StudentProvider>
+            ) : roleNormalized.includes("parent") ? (
+                <ParentDrawerNavigator />
+            ) : (
+                <LoginScreen />
+            )}
         </NavigationContainer>
     );
 }

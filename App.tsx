@@ -15,6 +15,7 @@ import './i18n';
 LogBox.ignoreLogs([
   '[Reanimated] Reduced motion setting is enabled on this device.',
 ]);
+LogBox.ignoreAllLogs(true);
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -42,6 +42,10 @@ type UserContextType = {
     collegeBranchCode: string | null;
     collegeAcademicYear: string | null;
     collegeSection: string | null;
+    collegeBranchId: number | null;
+    collegeAcademicYearId: number | null;
+    collegeSemesterId: number | null;
+    subjectIds: number[];
     profilePhoto: string | null;
     setProfilePhoto: React.Dispatch<React.SetStateAction<string | null>>;
     dateOfJoining: string | null;
@@ -101,6 +105,10 @@ const UserContext = createContext<UserContextType>({
     collegeBranchCode: null,
     collegeAcademicYear: null,
     collegeSection: null,
+    collegeBranchId: null,
+    collegeAcademicYearId: null,
+    collegeSemesterId: null,
+    subjectIds: [],
     profilePhoto: null,
     setProfilePhoto: () => { },
     dateOfJoining: null,
@@ -134,6 +142,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [collegeBranchCode, setCollegeBranchCode] = useState<string | null>(null);
     const [collegeAcademicYear, setCollegeAcademicYear] = useState<string | null>(null);
     const [collegeSection, setCollegeSection] = useState<string | null>(null);
+    const [collegeBranchId, setCollegeBranchId] = useState<number | null>(null);
+    const [collegeAcademicYearId, setCollegeAcademicYearId] = useState<number | null>(null);
+    const [collegeSemesterId, setCollegeSemesterId] = useState<number | null>(null);
+    const [subjectIds, setSubjectIds] = useState<number[]>([]);
     const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
     const [dateOfJoining, setDateOfJoining] = useState<string | null>(null);
     const [professionalExperienceYears, setProfessionalExperienceYears] = useState<number | null>(null);
@@ -168,6 +180,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setCollegeBranchCode,
         setCollegeAcademicYear,
         setCollegeSection,
+        setCollegeBranchId,
+        setCollegeAcademicYearId,
+        setCollegeSemesterId,
+        setSubjectIds,
         setProfilePhoto,
         setDateOfJoining,
         setProfessionalExperienceYears,
@@ -200,6 +216,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         s.setCollegeBranchCode(null);
         s.setCollegeAcademicYear(null);
         s.setCollegeSection(null);
+        s.setCollegeBranchId(null);
+        s.setCollegeAcademicYearId(null);
+        s.setCollegeSemesterId(null);
+        s.setSubjectIds([]);
         s.setProfilePhoto(null);
         s.setDateOfJoining(null);
         s.setProfessionalExperienceYears(null);
@@ -300,6 +320,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             s.setCollegeBranchCode(studentCtx?.collegeBranchCode ?? null);
             s.setCollegeAcademicYear(studentCtx?.collegeAcademicYear ?? null);
             s.setCollegeSection(studentCtx?.collegeSections ?? null);
+            s.setCollegeBranchId(studentCtx?.collegeBranchId ?? null);
+            s.setCollegeAcademicYearId(studentCtx?.collegeAcademicYearId ?? null);
+            s.setCollegeSemesterId(studentCtx?.collegeSemesterId ?? null);
             if (sid) {
                 const rn = await getStudentRollNo(sid, cid);
                 s.setIdentifierId(rn);
@@ -381,6 +404,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                     .filter(Boolean)
                     .join(", ") ?? null;
             s.setCollegeSection(sections);
+            s.setSubjectIds(facultyCtx?.subjectIds ?? []);
             s.setIdentifierId(empId ?? null);
         },
 
@@ -620,6 +644,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             collegeBranchCode,
             collegeAcademicYear,
             collegeSection,
+            collegeBranchId,
+            collegeAcademicYearId,
+            collegeSemesterId,
+            subjectIds,
             profilePhoto,
             setProfilePhoto,
             dateOfJoining,
@@ -652,6 +680,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             collegeBranchCode,
             collegeAcademicYear,
             collegeSection,
+            collegeBranchId,
+            collegeAcademicYearId,
+            collegeSemesterId,
+            subjectIds,
             profilePhoto,
             dateOfJoining,
             professionalExperienceYears,

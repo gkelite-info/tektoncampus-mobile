@@ -9,6 +9,7 @@ import { StudentProvider } from "@/utils/context/student/useStudent";
 import StudentDrawerNavigator from "./StudentDrawerNavigator";
 import FacultyDrawerNavigator from "./FacultyDrawerNavigator";
 import ParentDrawerNavigator from "./ParentDrawerNavigator";
+import { FacultyProvider } from "@/utils/context/faculty/useFaculty";
 
 type AppUser = {
     userId: number;
@@ -168,7 +169,9 @@ export default function RootNavigator() {
            {!user ? (
                 <LoginScreen />
             ) : roleNormalized.includes("faculty") ? (
-                <FacultyDrawerNavigator />
+                <FacultyProvider>
+                    <FacultyDrawerNavigator />
+                </FacultyProvider>
             ) : roleNormalized.includes("student") ? (
                 <StudentProvider>
                     <StudentDrawerNavigator />

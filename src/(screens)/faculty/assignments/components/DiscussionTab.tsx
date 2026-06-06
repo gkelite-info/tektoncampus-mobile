@@ -8,9 +8,11 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 import FacultyDiscussionForm from './FacultyDiscussionForm';
 import AssignmentSkeleton from '../shimmer/AssignmentShimmer';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 
 export default function DiscussionTab() {
   const { t } = useTranslation();
+  const navigation = useNavigation<any>();
   const [activeView, setActiveView] = useState<'active' | 'completed'>('active');
   const [discussions, setDiscussions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -169,7 +171,7 @@ export default function DiscussionTab() {
               discussionView={activeView}
               onEdit={handleEdit}
               onDelete={(id) => setDeleteId(id)}
-              onViewSubmissions={(id) => Toast.show({ type: 'info', text1: 'View submissions functionality to be implemented' })}
+              onViewSubmissions={(id) => navigation.navigate('DiscussionSubmissions', { discussionId: id })}
             />
           ))
         )}

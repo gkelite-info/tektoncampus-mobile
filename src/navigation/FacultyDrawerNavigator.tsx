@@ -6,7 +6,6 @@ import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
 import FacultyTabs from "@/tabs/FacultyTabs";
 
 import {
-    AcademicsScreen,
     StudentProgressScreen,
     ProjectsScreen,
     PlacementsScreen,
@@ -20,9 +19,10 @@ import {
 } from "@/(screens)/student/mockScreens";
 
 import CalendarScreen from "@/(screens)/faculty/calendar/CalendarScreen";
-import FacultyAttendance from "@/(screens)/faculty/attendance/attendance";
-
-import FacultyAssignments from "@/(screens)/faculty/assignments/assignments";
+import AssignmentSubmissions from "@/(screens)/faculty/assignments/submissions/AssignmentSubmissions";
+import QuizSubmissions from "@/(screens)/faculty/assignments/submissions/QuizSubmissions";
+import DiscussionSubmissions from "@/(screens)/faculty/assignments/submissions/DiscussionSubmissions";
+import SubjectDetailsScreen from "@/(screens)/faculty/academics/SubjectDetails";
 
 export type FacultyDrawerParamList = {
     FacultyTabs: undefined;
@@ -40,6 +40,10 @@ export type FacultyDrawerParamList = {
     MyAttendance: undefined;
     Wellbeing: undefined;
     Settings: undefined;
+    AssignmentSubmissions: { assignmentId: string | number };
+    QuizSubmissions: { quizId: string | number };
+    DiscussionSubmissions: { discussionId: string | number };
+    SubjectDetailsScreen: { details: any };
 };
 
 const Stack = createNativeStackNavigator<FacultyDrawerParamList>();
@@ -91,9 +95,6 @@ export default function FacultyDrawerNavigator() {
             >
                 <Stack.Screen name="FacultyTabs" component={FacultyTabs} />
                 <Stack.Screen name="Calendar" component={CalendarScreen} />
-                <Stack.Screen name="Attendance" component={FacultyAttendance} />
-                <Stack.Screen name="Assignments" component={FacultyAssignments} />
-                <Stack.Screen name="Academics" component={AcademicsScreen} />
                 <Stack.Screen name="StudentProgress" component={StudentProgressScreen} />
                 <Stack.Screen name="Projects" component={ProjectsScreen} />
                 <Stack.Screen name="Placements" component={PlacementsScreen} />
@@ -104,6 +105,10 @@ export default function FacultyDrawerNavigator() {
                 <Stack.Screen name="MyAttendance" component={MyAttendanceScreen} />
                 <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
                 <Stack.Screen name="Settings" component={SettingsScreen} />
+                <Stack.Screen name="AssignmentSubmissions" component={AssignmentSubmissions} options={{ headerShown: false }} />
+                <Stack.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />
+                <Stack.Screen name="DiscussionSubmissions" component={DiscussionSubmissions} options={{ headerShown: false }} />
+                <Stack.Screen name="SubjectDetailsScreen" component={SubjectDetailsScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
 
             <RoleSideMenu
@@ -115,7 +120,13 @@ export default function FacultyDrawerNavigator() {
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
                     setActiveRouteName(routeName as keyof FacultyDrawerParamList);
-                    navigationRef.current?.navigate(routeName);
+                    
+                    const tabRoutes = ["Assignments", "Academics", "Attendance", "Profile"];
+                    if (tabRoutes.includes(routeName)) {
+                        navigationRef.current?.navigate("FacultyTabs", { screen: routeName });
+                    } else {
+                        navigationRef.current?.navigate(routeName);
+                    }
                 }}
             />
         </>

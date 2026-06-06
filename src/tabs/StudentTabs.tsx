@@ -4,7 +4,7 @@ import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/b
 import { House, ClipboardText, BookOpen, User, Calendar } from "phosphor-react-native";
 import StudentHome from "@/(screens)/student/student";
 import StudentAttendance from "@/(screens)/student/attendance/attendance";
-import Profile from "@/(screens)/Profile/profile";
+import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import StudentCalendar from "@/(screens)/student/calendar/calendar";
 import StudentAcademics from "@/(screens)/student/academics/academics";
 
@@ -118,7 +118,7 @@ export default function StudentTabs() {
             <Tab.Screen name="Academics" component={StudentAcademics} />
             <Tab.Screen name="Home" component={StudentHome} />
             <Tab.Screen name="Attendance" component={StudentAttendance} />
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Profile" component={ProfileContainer} />
         </Tab.Navigator>
     );
 }

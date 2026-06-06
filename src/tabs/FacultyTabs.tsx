@@ -5,7 +5,7 @@ import { ClipboardText, UsersThree, BookOpen, User, House } from "phosphor-react
 import FacultyDashboard from "@/(screens)/faculty/faculty";
 import FacultyAssignmente from "@/(screens)/faculty/assignments/assignments";
 import FacultyAttendance from "@/(screens)/faculty/attendance/attendance";
-import Profile from "@/(screens)/Profile/profile";
+import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
 // Strict Typescript interface definitions for Faculty Navigation context
@@ -133,7 +133,7 @@ export default function FacultyTabs() {
             <Tab.Screen name="Academics" component={FacultyAcademics} />
             <Tab.Screen name="Dashboard" component={FacultyDashboard} />
             <Tab.Screen name="Attendance" component={FacultyAttendance} />
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Profile" component={ProfileContainer} />
         </Tab.Navigator>
     );
 }

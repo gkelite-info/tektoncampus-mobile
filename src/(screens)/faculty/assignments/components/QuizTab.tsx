@@ -7,12 +7,16 @@ import FacultyQuizCard from './FacultyQuizCard';
 import QuizSkeleton from '../shimmer/QuizShimmer';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import FacultyQuizForm from './FacultyQuizForm';
+import FacultyAddQuizQuestions from './FacultyAddQuizQuestions';
+import FacultyQuizResumeBanner from './FacultyQuizResumeBanner';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 
 const ITEMS_PER_PAGE = 10;
 
 export default function QuizTab() {
   const { t } = useTranslation();
+  const navigation = useNavigation<any>();
   const [activeView, setActiveView] = useState<'Draft' | 'Active' | 'Completed'>('Active');
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -122,6 +126,7 @@ export default function QuizTab() {
 
   const [showForm, setShowForm] = useState(false);
   const [editingQuizId, setEditingQuizId] = useState<number | null>(null);
+  const [addingQuestionsQuizId, setAddingQuestionsQuizId] = useState<number | null>(null);
 
   const handleEdit = (quizId: number) => {
     setEditingQuizId(quizId);
@@ -135,9 +140,25 @@ export default function QuizTab() {
 
   const handleSaveForm = (quizId: number) => {
     setShowForm(false);
-    loadQuizzes(1, activeView);
-    Toast.show({ type: 'info', text1: t('Next step: Add Questions to Quiz ID ') + quizId });
+    setAddingQuestionsQuizId(quizId);
   };
+
+  const handleSaveQuestions = (status: 'Draft' | 'Active') => {
+    setAddingQuestionsQuizId(null);
+    loadQuizzes(1, activeView);
+  };
+
+  if (addingQuestionsQuizId !== null) {
+    return (
+      <View style={{ flex: 1 }}>
+        <FacultyAddQuizQuestions
+          quizId={addingQuestionsQuizId}
+          onBack={() => setAddingQuestionsQuizId(null)}
+          onSaved={handleSaveQuestions}
+        />
+      </View>
+    );
+  }
 
   if (showForm) {
     return (
@@ -170,7 +191,7 @@ export default function QuizTab() {
 
       {['Draft', 'Active'].includes(activeView) && (
         <TouchableOpacity
-          className="bg-[#16284F] rounded-lg py-3 items-center mb-4"
+          className="bg-[#16284F] rounded-lg py-3 items-center mb-4 mx-1"
           onPress={handleAdd}
         >
           <Text className="text-white font-bold">{t('Create Quiz')}</Text>
@@ -178,6 +199,10 @@ export default function QuizTab() {
       )}
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        {activeView === 'Active' && (
+          <FacultyQuizResumeBanner onResume={(quizId) => setAddingQuestionsQuizId(quizId)} />
+        )}
+
         {isLoading && currentPage === 1 ? (
           <View className="mt-4">
             <QuizSkeleton />
@@ -194,7 +219,7 @@ export default function QuizTab() {
               onEdit={activeView === 'Draft' ? handleEdit : undefined}
               onDelete={activeView !== 'Completed' ? () => setDeleteQuizId(quiz.quizId) : undefined}
               onPublish={activeView === 'Draft' ? handlePublishQuiz : undefined}
-              onViewSubmissions={() => Toast.show({ type: 'info', text1: t('View submissions functionality to be implemented') })}
+              onViewSubmissions={(id) => navigation.navigate('QuizSubmissions', { quizId: id })}
             />
           ))
         )}

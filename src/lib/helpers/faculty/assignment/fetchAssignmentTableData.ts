@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 export async function fetchAssignmentTableData(assignmentId: string, page: number = 1, limit: number = 10) {
   const { data: assign, error: assignErr } = await supabase
     .from("assignments")
-    .select("collegeBranchId, marks")
+    .select("*")
     .eq("assignmentId", assignmentId)
     .single();
 
@@ -30,5 +30,5 @@ export async function fetchAssignmentTableData(assignmentId: string, page: numbe
 
   if (submissionError) throw submissionError;
 
-  return { students, submissions, totalCount: totalCount || 0 };
+  return { assign, students, submissions, totalCount: totalCount || 0 };
 }

@@ -1,6 +1,23 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { MotiView, AnimatePresence } from "moti";
+import React, { useEffect, useRef } from "react";
+import { View, Text, LayoutAnimation, Platform, UIManager } from "react-native";
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+import ResumePersonalDetails from "./resume/ResumePersonalDetails";
+import ResumeEducation from "./resume/ResumeEducation";
+import ResumeEmployment from "./resume/ResumeEmployment";
+import ResumeInternships from "./resume/ResumeInternships";
+import ResumeProjects from "./resume/ResumeProjects";
+import ResumeKeySkills from "./resume/ResumeKeySkills";
+import ResumeLanguages from "./resume/ResumeLanguages";
+import ResumeAccomplishments from "./resume/ResumeAccomplishments";
+import ResumeCompetitiveExams from "./resume/ResumeCompetitiveExams";
+import ResumeAcademicAchievements from "./resume/ResumeAcademicAchievements";
+import ResumeProfileSummary from "./resume/ResumeProfileSummary";
+import ResumeTemplates from "./resume/ResumeTemplates";
 
 const DummyScreen = ({ name }: { name: string }) => (
     <View className="flex-1 bg-white items-center justify-center rounded-xl p-4 shadow-sm">
@@ -10,35 +27,39 @@ const DummyScreen = ({ name }: { name: string }) => (
 );
 
 export default function ResumeContentManager({ resumeStepId }: { resumeStepId: number }) {
+    const prevStepRef = useRef(resumeStepId);
+
+    useEffect(() => {
+        if (prevStepRef.current !== resumeStepId) {
+            LayoutAnimation.configureNext(
+                LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+            );
+            prevStepRef.current = resumeStepId;
+        }
+    }, [resumeStepId]);
+
     const renderContent = () => {
         switch (resumeStepId) {
-            case 1: return <DummyScreen name="Personal Details" />;
-            case 2: return <DummyScreen name="Education" />;
-            case 3: return <DummyScreen name="Key Skills" />;
-            case 4: return <DummyScreen name="Languages" />;
-            case 5: return <DummyScreen name="Internships" />;
-            case 6: return <DummyScreen name="Projects" />;
-            case 7: return <DummyScreen name="Accomplishments" />;
-            case 8: return <DummyScreen name="Competitive Exams" />;
-            case 9: return <DummyScreen name="Employment" />;
-            case 10: return <DummyScreen name="Academic Achievements" />;
-            case 11: return <DummyScreen name="Profile Summary" />;
-            default: return <DummyScreen name="Personal Details" />;
+            case 1: return <ResumePersonalDetails />;
+            case 2: return <ResumeEducation />;
+            case 3: return <ResumeKeySkills />;
+            case 4: return <ResumeLanguages />;
+            case 5: return <ResumeInternships />;
+            case 6: return <ResumeProjects />;
+            case 7: return <ResumeAccomplishments />;
+            case 8: return <ResumeCompetitiveExams />;
+            case 9: return <ResumeEmployment />;
+            case 10: return <ResumeAcademicAchievements />;
+            case 11: return <ResumeProfileSummary />;
+            case 12: return <ResumeTemplates />;
+            default: return <ResumePersonalDetails />;
         }
     };
 
     return (
-        <AnimatePresence exitBeforeEnter>
-            <MotiView
-                key={`resume-step-${resumeStepId}`}
-                from={{ opacity: 0, translateX: 10 }}
-                animate={{ opacity: 1, translateX: 0 }}
-                exit={{ opacity: 0, translateX: -10 }}
-                transition={{ type: "timing", duration: 250 }}
-                className="flex-1"
-            >
-                {renderContent()}
-            </MotiView>
-        </AnimatePresence>
+        <View style={{ flex: 1 }}>
+            {renderContent()}
+        </View>
     );
 }
+

@@ -14,7 +14,6 @@ import {
     PencilSimple,
 } from "phosphor-react-native";
 import { useUser } from "@/utils/context/UserContext";
-import { useFaculty } from "@/utils/context/faculty/useFaculty";
 import ConfirmLogoutModal from "@/components/modals/ConfirmLogoutModal";
 import TermsModal from "@/components/modals/TermsModal";
 import SupportModal from "@/components/modals/SupportModal";
@@ -48,8 +47,6 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
         placementEmployeeId,
         wellBeingId,
     } = useUser();
-
-    const { college_branch, faculty_edu_type } = useFaculty();
 
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showTermsModal, setShowTermsModal] = useState(false);
@@ -157,7 +154,7 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
                         )}
                         {role === "Faculty" && (
                             <Text className="text-xs text-[#282828] font-medium mt-1">
-                                {faculty_edu_type || "—"} {college_branch || "—"}
+                                {collegeEducationType || "—"} {collegeBranchCode || "—"}
                             </Text>
                         )}
                         {(role !== "Student" && role !== "Faculty") && (

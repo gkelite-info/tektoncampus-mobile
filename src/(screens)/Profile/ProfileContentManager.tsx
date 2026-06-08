@@ -1,12 +1,16 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, Text, LayoutAnimation, Platform, UIManager } from "react-native";
 import ProfileInfo from "./sections/ProfileInfo";
 import ProfilePersonalDetails from "./sections/ProfilePersonalDetails";
 import ProfileEducation from "./sections/ProfileEducation";
 import ProfileKeySkills from "./sections/ProfileKeySkills";
 import ProfileLanguages from "./sections/ProfileLanguages";
 import ProfileSummary from "./sections/ProfileSummary";
-import { MotiView, AnimatePresence } from "moti";
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 type ProfileContentManagerProps = {
     profileStepId: number;
@@ -14,6 +18,17 @@ type ProfileContentManagerProps = {
 };
 
 export default function ProfileContentManager({ profileStepId, setProfileStepId }: ProfileContentManagerProps) {
+    const prevStepRef = useRef(profileStepId);
+
+    useEffect(() => {
+        if (prevStepRef.current !== profileStepId) {
+            LayoutAnimation.configureNext(
+                LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+            );
+            prevStepRef.current = profileStepId;
+        }
+    }, [profileStepId]);
+
     const renderContent = () => {
         switch (profileStepId) {
             case 1: return <ProfileInfo onNext={() => setProfileStepId(2)} />;
@@ -27,17 +42,9 @@ export default function ProfileContentManager({ profileStepId, setProfileStepId 
     };
 
     return (
-        <AnimatePresence exitBeforeEnter>
-            <MotiView
-                key={`profile-step-${profileStepId}`}
-                from={{ opacity: 0, translateX: 10 }}
-                animate={{ opacity: 1, translateX: 0 }}
-                exit={{ opacity: 0, translateX: -10 }}
-                transition={{ type: "timing", duration: 250 }}
-                className="flex-1"
-            >
-                {renderContent()}
-            </MotiView>
-        </AnimatePresence>
+        <View style={{ flex: 1 }}>
+            {renderContent()}
+        </View>
     );
 }
+

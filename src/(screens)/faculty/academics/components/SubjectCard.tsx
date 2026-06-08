@@ -52,7 +52,8 @@ export default function SubjectCard({ item, onViewDetails }: SubjectCardProps) {
           <View 
             className="absolute top-1/2 -translate-y-1/2 bg-white rounded-full shadow-sm"
             style={{
-              left: percentage >= 100 ? 'calc(100% - 10px)' : `calc(${percentage}% - 5px)`,
+              left: `${percentage}%`,
+              transform: [{ translateX: percentage >= 100 ? -10 : -5 }, { translateY: -5 }],
               height: 10,
               width: 10,
             }}

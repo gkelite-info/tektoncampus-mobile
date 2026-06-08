@@ -5,7 +5,7 @@ import { ChartLineUp, CreditCard, ClipboardText, User, House } from "phosphor-re
 import ParentHomeScreen from "@/(screens)/parent/parent";
 import ParentProgress from "@/(screens)/parent/Progress/progress";
 import ParentPayment from "@/(screens)/parent/Payment/payment";
-import Profile from "@/(screens)/Profile/profile";
+import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import ParentAttendance from "@/(screens)/parent/Attendance/attendance";
 
 // Strict TypeScript navigation route configurations for Parent view context
@@ -138,7 +138,7 @@ export default function ParentTabs() {
             <Tab.Screen name="Payment" component={ParentPayment} />
             <Tab.Screen name="Home" component={ParentHomeScreen} />
             <Tab.Screen name="Attendance" component={ParentAttendance} />
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Profile" component={ProfileContainer} />
         </Tab.Navigator>
     );
-}
+}

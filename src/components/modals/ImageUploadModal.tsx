@@ -45,7 +45,7 @@ export default function ImageUploadModal({ visible, onClose, userId, onUploadSuc
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1], // Square aspect ratio for profile picture
+            aspect: [1, 1],
             quality: 0.8,
             base64: true,
         });
@@ -60,37 +60,32 @@ export default function ImageUploadModal({ visible, onClose, userId, onUploadSuc
             setIsUploading(true);
             const ext = asset.uri.split('.').pop() || 'jpg';
             const fileName = `profile_${userId}_${Date.now()}.${ext}`;
-            const filePath = `profile_photos/${fileName}`;
+            const filePath = `${userId}/${fileName}`;
 
-            // Convert base64 to buffer or array buffer for Supabase
-            if (!asset.base64) throw new Error("Base64 missing");
-            const byteCharacters = atob(asset.base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
+            const response = await fetch(asset.uri);
+            const blob = await response.blob();
 
-            // Upload to Supabase storage (assumes 'avatars' or similar bucket exists, let's use 'users')
-            // Using a generic bucket name, or the user's current bucket. We'll try 'avatars'
+
             const { data, error } = await supabase.storage
-                .from('avatars')
-                .upload(filePath, byteArray, {
+                .from('user_profiles')
+                .upload(filePath, blob, {
                     contentType: `image/${ext === 'png' ? 'png' : 'jpeg'}`,
-                    upsert: true,
+                    upsert: false,
                 });
 
             if (error) throw error;
 
             const { data: { publicUrl } } = supabase.storage
-                .from('avatars')
+                .from('user_profiles')
                 .getPublicUrl(filePath);
 
-            // Update user table
+            const now = new Date().toISOString();
             const { error: updateError } = await supabase
-                .from('users')
-                .update({ profilePhoto: publicUrl })
-                .eq('userId', userId);
+                .from('user_profile')
+                .upsert(
+                    { userId, profileUrl: publicUrl, updatedAt: now, createdAt: now, is_deleted: false },
+                    { onConflict: "userId" }
+                );
 
             if (updateError) throw updateError;
 

@@ -103,7 +103,8 @@ function UnitCard({
              <View 
                 className="absolute top-1/2 -translate-y-1/2 bg-white rounded-full shadow-sm"
                 style={{
-                  left: percentage >= 100 ? 'calc(100% - 8px)' : `calc(${percentage}% - 4px)`,
+                  left: `${percentage}%`,
+                  transform: [{ translateX: percentage >= 100 ? -8 : -4 }, { translateY: -4 }],
                   height: 8,
                   width: 8,
                 }}

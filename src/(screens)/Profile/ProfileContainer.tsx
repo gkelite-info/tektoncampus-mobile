@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, LayoutAnimation, Platform, UIManager } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft } from "phosphor-react-native";
 
@@ -8,11 +8,6 @@ import ResumeSteps, { RESUME_STEP_DATA } from "./components/ResumeSteps";
 import ProfileDashboard from "./ProfileDashboard";
 import ProfileContentManager from "./ProfileContentManager";
 import ResumeContentManager from "./ResumeContentManager";
-
-// Enable LayoutAnimation on Android
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 export default function ProfileContainer() {
     const [showDashboard, setShowDashboard] = useState(true);
@@ -24,23 +19,14 @@ export default function ProfileContainer() {
     const headerHeight = insets.top + 60; // Approximate navigation header height
 
     const handleProfileStepChange = (id: number) => {
-        LayoutAnimation.configureNext(
-            LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
-        );
         setProfileStepId(id);
     };
 
     const handleResumeStepChange = (id: number) => {
-        LayoutAnimation.configureNext(
-            LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
-        );
         setResumeStepId(id);
     };
 
     const handleModeSwitch = (toProfile: boolean) => {
-        LayoutAnimation.configureNext(
-            LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
-        );
         setIsProfileMode(toProfile);
     };
 

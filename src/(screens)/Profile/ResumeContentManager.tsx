@@ -1,10 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, LayoutAnimation, Platform, UIManager } from "react-native";
-
-// Enable LayoutAnimation on Android
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+import React from "react";
+import { View, Text } from "react-native";
 
 import ResumePersonalDetails from "./resume/ResumePersonalDetails";
 import ResumeEducation from "./resume/ResumeEducation";
@@ -27,16 +22,6 @@ const DummyScreen = ({ name }: { name: string }) => (
 );
 
 export default function ResumeContentManager({ resumeStepId }: { resumeStepId: number }) {
-    const prevStepRef = useRef(resumeStepId);
-
-    useEffect(() => {
-        if (prevStepRef.current !== resumeStepId) {
-            LayoutAnimation.configureNext(
-                LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
-            );
-            prevStepRef.current = resumeStepId;
-        }
-    }, [resumeStepId]);
 
     const renderContent = () => {
         switch (resumeStepId) {

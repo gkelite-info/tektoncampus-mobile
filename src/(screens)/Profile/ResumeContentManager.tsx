@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 
 import ResumePersonalDetails from "./resume/ResumePersonalDetails";
@@ -22,28 +22,40 @@ const DummyScreen = ({ name }: { name: string }) => (
 );
 
 export default function ResumeContentManager({ resumeStepId }: { resumeStepId: number }) {
+    const [visitedSteps, setVisitedSteps] = useState<Set<number>>(new Set([1]));
 
-    const renderContent = () => {
-        switch (resumeStepId) {
-            case 1: return <ResumePersonalDetails />;
-            case 2: return <ResumeEducation />;
-            case 3: return <ResumeKeySkills />;
-            case 4: return <ResumeLanguages />;
-            case 5: return <ResumeInternships />;
-            case 6: return <ResumeProjects />;
-            case 7: return <ResumeAccomplishments />;
-            case 8: return <ResumeCompetitiveExams />;
-            case 9: return <ResumeEmployment />;
-            case 10: return <ResumeAcademicAchievements />;
-            case 11: return <ResumeProfileSummary />;
-            case 12: return <ResumeTemplates />;
-            default: return <ResumePersonalDetails />;
-        }
+    useEffect(() => {
+        setVisitedSteps(prev => {
+            if (prev.has(resumeStepId)) return prev;
+            const next = new Set(prev);
+            next.add(resumeStepId);
+            return next;
+        });
+    }, [resumeStepId]);
+
+    const renderStep = (id: number, Component: React.FC<any>, props?: any) => {
+        if (!visitedSteps.has(id)) return null;
+        return (
+            <View key={id} style={{ flex: 1, display: resumeStepId === id ? "flex" : "none" }}>
+                <Component {...props} />
+            </View>
+        );
     };
 
     return (
         <View style={{ flex: 1 }}>
-            {renderContent()}
+            {renderStep(1, ResumePersonalDetails)}
+            {renderStep(2, ResumeEducation)}
+            {renderStep(3, ResumeKeySkills)}
+            {renderStep(4, ResumeLanguages)}
+            {renderStep(5, ResumeInternships)}
+            {renderStep(6, ResumeProjects)}
+            {renderStep(7, ResumeAccomplishments)}
+            {renderStep(8, ResumeCompetitiveExams)}
+            {renderStep(9, ResumeEmployment)}
+            {renderStep(10, ResumeAcademicAchievements)}
+            {renderStep(11, ResumeProfileSummary)}
+            {renderStep(12, ResumeTemplates)}
         </View>
     );
 }

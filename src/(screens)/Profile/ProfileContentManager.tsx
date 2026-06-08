@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import ProfileInfo from "./sections/ProfileInfo";
 import ProfilePersonalDetails from "./sections/ProfilePersonalDetails";
@@ -13,22 +13,34 @@ type ProfileContentManagerProps = {
 };
 
 export default function ProfileContentManager({ profileStepId, setProfileStepId }: ProfileContentManagerProps) {
+    const [visitedSteps, setVisitedSteps] = useState<Set<number>>(new Set([1]));
 
-    const renderContent = () => {
-        switch (profileStepId) {
-            case 1: return <ProfileInfo onNext={() => setProfileStepId(2)} />;
-            case 2: return <ProfilePersonalDetails />;
-            case 3: return <ProfileEducation />;
-            case 4: return <ProfileKeySkills />;
-            case 5: return <ProfileLanguages />;
-            case 6: return <ProfileSummary />;
-            default: return <ProfileInfo onNext={() => setProfileStepId(2)} />;
-        }
+    useEffect(() => {
+        setVisitedSteps(prev => {
+            if (prev.has(profileStepId)) return prev;
+            const next = new Set(prev);
+            next.add(profileStepId);
+            return next;
+        });
+    }, [profileStepId]);
+
+    const renderStep = (id: number, Component: React.FC<any>, props?: any) => {
+        if (!visitedSteps.has(id)) return null;
+        return (
+            <View key={id} style={{ flex: 1, display: profileStepId === id ? "flex" : "none" }}>
+                <Component {...props} />
+            </View>
+        );
     };
 
     return (
         <View style={{ flex: 1 }}>
-            {renderContent()}
+            {renderStep(1, ProfileInfo, { onNext: () => setProfileStepId(2) })}
+            {renderStep(2, ProfilePersonalDetails)}
+            {renderStep(3, ProfileEducation)}
+            {renderStep(4, ProfileKeySkills)}
+            {renderStep(5, ProfileLanguages)}
+            {renderStep(6, ProfileSummary)}
         </View>
     );
 }

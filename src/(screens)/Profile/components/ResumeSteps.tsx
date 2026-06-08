@@ -21,6 +21,7 @@ export const RESUME_STEP_DATA: ResumeStepItem[] = [
     { id: 9,  title: "Employment",            query: "employment" },
     { id: 10, title: "Academic Achievements", query: "academic-achievements" },
     { id: 11, title: "Profile Summary",       query: "profile-summary" },
+    { id: 12, title: "Export Resume",         query: "export-resume" },
 ];
 
 interface ResumeStepsProps {

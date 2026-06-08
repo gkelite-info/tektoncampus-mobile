@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, LayoutAnimation, Platform, UIManager } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft } from "phosphor-react-native";
-import { NavigationContainer, NavigationIndependentTree } from "@react-navigation/native";
 
 import ProfileSteps from "./components/ProfileSteps";
 import ResumeSteps, { RESUME_STEP_DATA } from "./components/ResumeSteps";
 import ProfileDashboard from "./ProfileDashboard";
 import ProfileContentManager from "./ProfileContentManager";
 import ResumeContentManager from "./ResumeContentManager";
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 export default function ProfileContainer() {
     const [showDashboard, setShowDashboard] = useState(true);
@@ -18,6 +22,27 @@ export default function ProfileContainer() {
 
     const insets = useSafeAreaInsets();
     const headerHeight = insets.top + 60; // Approximate navigation header height
+
+    const handleProfileStepChange = (id: number) => {
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+        );
+        setProfileStepId(id);
+    };
+
+    const handleResumeStepChange = (id: number) => {
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+        );
+        setResumeStepId(id);
+    };
+
+    const handleModeSwitch = (toProfile: boolean) => {
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+        );
+        setIsProfileMode(toProfile);
+    };
 
     if (showDashboard) {
         return <ProfileDashboard onOpenProfileDetails={() => setShowDashboard(false)} />;
@@ -31,13 +56,13 @@ export default function ProfileContainer() {
                     <TouchableOpacity onPress={() => setShowDashboard(true)} className="p-2 mr-2">
                         <ArrowLeft size={24} color="#282828" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsProfileMode(true)}>
+                    <TouchableOpacity onPress={() => handleModeSwitch(true)}>
                         <Text className={`text-lg font-bold ${isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>
                             Profile
                         </Text>
                     </TouchableOpacity>
                     <Text className="text-gray-400 mx-3 text-lg">/</Text>
-                    <TouchableOpacity onPress={() => setIsProfileMode(false)}>
+                    <TouchableOpacity onPress={() => handleModeSwitch(false)}>
                         <Text className={`text-lg font-bold ${!isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>
                             Resume
                         </Text>
@@ -51,35 +76,32 @@ export default function ProfileContainer() {
                         {isProfileMode ? (
                             <ProfileSteps
                                 currentStepId={profileStepId}
-                                onStepChange={(step) => setProfileStepId(step.id)}
+                                onStepChange={(step) => handleProfileStepChange(step.id)}
                             />
                         ) : (
                             <ResumeSteps
                                 currentStepId={resumeStepId}
-                                onStepChange={(step) => setResumeStepId(step.id)}
+                                onStepChange={(step) => handleResumeStepChange(step.id)}
                             />
                         )}
                     </View>
 
                     {/* Content Container */}
                     <View className="flex-1 px-4 mt-2">
-                        <NavigationIndependentTree>
-                            <NavigationContainer>
-                                {isProfileMode ? (
-                                    <ProfileContentManager 
-                                        profileStepId={profileStepId} 
-                                        setProfileStepId={setProfileStepId} 
-                                    />
-                                ) : (
-                                    <ResumeContentManager 
-                                        resumeStepId={resumeStepId} 
-                                    />
-                                )}
-                            </NavigationContainer>
-                        </NavigationIndependentTree>
+                        {isProfileMode ? (
+                            <ProfileContentManager 
+                                profileStepId={profileStepId} 
+                                setProfileStepId={handleProfileStepChange} 
+                            />
+                        ) : (
+                            <ResumeContentManager 
+                                resumeStepId={resumeStepId} 
+                            />
+                        )}
                     </View>
                 </View>
             </View>
         </View>
     );
 }
+

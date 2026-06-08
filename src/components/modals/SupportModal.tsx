@@ -152,7 +152,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                         <View className="mb-4">
                             <Text className="text-xs font-bold text-[#515151] mb-1">Upload Proof (Images/Video)</Text>
                             <TouchableOpacity className="border-2 border-dashed border-[#A8D5BA] bg-[#F8FCF9] rounded-xl p-8 items-center justify-center">
-                                <CloudArrowUp size={32} color="#888888" className="mb-2" />
+                                <View className="mb-2"><CloudArrowUp size={32} color="#888888" /></View>
                                 <Text className="text-sm text-[#282828] mb-1">
                                     Tap to <Text className="text-[#27AE60] font-bold">browse</Text>
                                 </Text>

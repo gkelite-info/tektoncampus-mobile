@@ -38,7 +38,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
     const isStudentOrFaculty = ["Student", "Faculty"].includes(role || "");
     const registrationId = identifierId || userId;
 
-    const ProfileRow = ({ label, value }: { label: string; value: string | undefined }) => (
+    const ProfileRow = ({ label, value }: { label: string; value?: string | null }) => (
         <View className="flex-row items-center py-3 border-b border-gray-100">
             <Text className="w-[120px] text-gray-500 font-medium text-sm">{label}</Text>
             <Text className="flex-1 text-gray-800 text-sm font-medium">{value || "—"}</Text>

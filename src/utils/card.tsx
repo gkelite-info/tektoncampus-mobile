@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { View, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
 
 type CardProps = {
-    style?: string; // Accept tailwind class strings directly now!
+    style?: string;
     inlineStyle?: ViewStyle;
     isActive?: boolean;
     textSize?: string;

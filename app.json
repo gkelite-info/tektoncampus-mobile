@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Tekton Campus",
-    "slug": "my-expo-app",
+    "slug": "tekton-campus",
     "version": "1.0.0",
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,7 +36,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "9b5e79c6-2893-4270-bfce-e580c8b01161"
+        "projectId": "642a3b40-0e9b-47da-8fc8-1a82459dc76b"
       }
     }
   }

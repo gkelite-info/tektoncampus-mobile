@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import {
     View,
@@ -8,6 +7,7 @@ import {
     Platform,
     LayoutAnimation,
     UIManager,
+    Dimensions,
 } from "react-native";
 import { Chalkboard, UsersThree, CaretDown } from "phosphor-react-native";
 import CardComponent from "@/utils/card";
@@ -26,6 +26,9 @@ import {
 } from "./shimmer/attendanceDashSkeleton";
 import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studentAttendanceActions";
 import { useTranslations } from "@/utils/useTranslations";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useHeaderHeight } from "@react-navigation/elements";
+
 
 if (
     Platform.OS === "android" &&
@@ -33,6 +36,9 @@ if (
 ) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const CARD_WIDTH = (SCREEN_WIDTH - 32 - 12) / 1;
 
 type DashboardData = Awaited<ReturnType<typeof getStudentDashboardData>>;
 
@@ -44,8 +50,6 @@ interface TableRow {
     ClassAttendance: string;
     Percentage: string;
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatAttendanceStatus(status: string) {
     return status
@@ -66,8 +70,6 @@ function getStatusTextClass(status: string) {
             return "text-gray-600";
     }
 }
-
-// ─── StatusBadge ─────────────────────────────────────────────────────────────
 
 function StatusBadge({ status }: { status: string }) {
     const t = useTranslations("Attendance.student");
@@ -90,22 +92,16 @@ function StatusBadge({ status }: { status: string }) {
     );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function AttendanceClient() {
     const t = useTranslations("Attendance.student");
 
     const [currentTab, setCurrentTab] = useState<string | null>(null);
     const showSubjectAttendanceTable = currentTab === "subject-attendance";
-    const showSubjectAttendanceDetails =
-        currentTab === "subject-attendance-details";
-    const hideRightSection =
-        showSubjectAttendanceTable || showSubjectAttendanceDetails;
+    const showSubjectAttendanceDetails = currentTab === "subject-attendance-details";
+    const hideRightSection = showSubjectAttendanceTable || showSubjectAttendanceDetails;
 
     const [dataLoading, setDataLoading] = useState(false);
-    const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-        null
-    );
+    const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
     const { userId, loading: userLoading } = useUser();
     const { collegeEducationType, loading: studentLoading } = useStudent();
     const isInter = collegeEducationType === "Inter";
@@ -119,34 +115,23 @@ export default function AttendanceClient() {
     const rowsPerPage = 10;
     const totalPages = Math.ceil(totalRecords / rowsPerPage);
 
-    // ─── Data fetch ───────────────────────────────────────────────────────────
+    const headerHeight = useHeaderHeight();
 
     useEffect(() => {
         if (userLoading || studentLoading) return;
-        if (!userId) {
-            setDataLoading(false);
-            return;
-        }
+        if (!userId) { setDataLoading(false); return; }
         let isMounted = true;
 
         async function fetchData() {
             try {
                 setDataLoading(true);
                 setTableLoading(true);
-
                 const year = viewDate.getFullYear();
                 const month = String(viewDate.getMonth() + 1).padStart(2, "0");
                 const day = String(viewDate.getDate()).padStart(2, "0");
-                const dateStr = `${year}-${month}-${day}`;
-
                 const data = await getStudentDashboardData(
-                    userId!,
-                    dateStr,
-                    currentPage,
-                    rowsPerPage,
-                    isInter
+                    userId!, `${year}-${month}-${day}`, currentPage, rowsPerPage, isInter
                 );
-
                 if (isMounted) {
                     setDashboardData(data);
                     setTotalRecords(data.totalCount || 0);
@@ -154,20 +139,13 @@ export default function AttendanceClient() {
             } catch {
                 // silent
             } finally {
-                if (isMounted) {
-                    setDataLoading(false);
-                    setTableLoading(false);
-                }
+                if (isMounted) { setDataLoading(false); setTableLoading(false); }
             }
         }
 
         fetchData();
-        return () => {
-            isMounted = false;
-        };
+        return () => { isMounted = false; };
     }, [userId, viewDate, currentPage, isInter, userLoading, studentLoading]);
-
-    // ─── Handlers ─────────────────────────────────────────────────────────────
 
     const handleCardClick = (cardId: number) => {
         if (cardId === 2) setCurrentTab("subject-attendance");
@@ -177,8 +155,6 @@ export default function AttendanceClient() {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpandedRow(expandedRow === index ? null : index);
     };
-
-    // ─── Derived ──────────────────────────────────────────────────────────────
 
     const tableRows: TableRow[] =
         dashboardData?.tableData?.map((row) => ({
@@ -190,107 +166,83 @@ export default function AttendanceClient() {
             Percentage: row.percentage,
         })) || [];
 
-    const dynamicCards = [
-        {
-            id: 1,
-            icon: <UsersThree size={32} color="#EFEFEF" />,
-            value: dashboardData
-                ? `${dashboardData.todayStats.attended}/${dashboardData.todayStats.total}`
-                : "0/0",
-            label: t("Today Total Classes"),
-            style: "bg-[#FFEDDA] w-44",
-            iconBgColor: "#FFBB70",
-            iconColor: "#EFEFEF",
-        },
-        {
-            id: 2,
-            icon: <Chalkboard size={32} color="#EFEFEF" />,
-            value: dashboardData
-                ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}`
-                : "0/0",
-            label: t("Sem Attendance"),
-            style: "bg-[#CEE6FF] w-44",
-            iconBgColor: "#7764FF",
-            iconColor: "#EFEFEF",
-            totalPercentage: dashboardData
-                ? `${dashboardData.cards.percentage}%`
-                : "0%",
-        },
-    ];
-
     const formattedDate = viewDate.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
+        day: "numeric", month: "short", year: "numeric",
     });
-
     const isToday = viewDate.toDateString() === new Date().toDateString();
 
-    // ─── Render ───────────────────────────────────────────────────────────────
-
     return (
-        <ScrollView
-            className="flex-1 bg-[#f4f5f6]"
-            showsVerticalScrollIndicator={false}
-        >
-            <View className="flex-1 w-full p-4 min-h-screen">
-
-                {/* ── Main column ──────────────────────────────────────────────── */}
-                <View className="flex-col gap-4 w-full">
+        <SafeAreaView edges={["left", "right", "bottom"]} className="flex-1 bg-[#F5F5F5]">
+            <ScrollView
+                className="flex-1 bg-[#f4f5f6] "
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 32, paddingTop: headerHeight + 16 }}
+            >
+                <View className="px-4 pt-4">
 
                     {!showSubjectAttendanceTable && !showSubjectAttendanceDetails && (
                         <>
-                            {/* ── Header ── */}
-                            <View className="mb-2">
+                            <View className="mb-4">
                                 <Text className="text-[#282828] font-bold text-[22px] mb-1">
                                     {t("Attendance")}
                                 </Text>
                                 <Text className="text-gray-600 text-[13px]">
-                                    {t(
-                                        "Track, manage, and maintain your attendance effortlessly"
-                                    )}
+                                    {t("Track, manage, and maintain your attendance effortlessly")}
                                 </Text>
                             </View>
 
-                            {/* ── Cards + Semester block ── */}
                             {dataLoading ? (
                                 <DashboardSkeleton />
                             ) : (
-                                <View className="flex-col gap-3">
-                                    {/* 2-column card grid — mirrors web's grid-cols-2 */}
-                                    <View className="flex-row gap-3">
-                                        {dynamicCards.map((card) => (
-                                            <TouchableOpacity
-                                                key={card.id}
-                                                className="flex-1"
-                                                activeOpacity={card.id === 2 ? 0.7 : 1}
-                                                onPress={
-                                                    card.id === 2
-                                                        ? () => handleCardClick(card.id)
-                                                        : undefined
+                                <View className="gap-3 bg-red-400 flex">
+                                    <View className="flex-row gap-3 bg-blue-400 w-[50%]">
+                                        <TouchableOpacity
+                                            activeOpacity={1}
+                                            style={{ width: CARD_WIDTH }}
+                                        >
+                                            <CardComponent
+                                                style="bg-[#FFEDDA]"
+                                                icon={<UsersThree size={28} color="#EFEFEF" />}
+                                                value={
+                                                    dashboardData
+                                                        ? `${dashboardData.todayStats.attended}/${dashboardData.todayStats.total}`
+                                                        : "0/0"
                                                 }
-                                            >
-                                                <CardComponent
-                                                    style={card.style}
-                                                    icon={card.icon}
-                                                    value={card.value}
-                                                    label={card.label}
-                                                    iconBgColor={card.iconBgColor}
-                                                    iconColor={card.iconColor}
-                                                />
-                                            </TouchableOpacity>
-                                        ))}
+                                                label={t("Today Total Classes")}
+                                                iconBgColor="#FFBB70"
+                                                iconColor="#EFEFEF"
+                                            />
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            style={{ width: CARD_WIDTH }}
+                                            onPress={() => handleCardClick(2)}
+                                        >
+                                            <CardComponent
+                                                style="bg-[#CEE6FF]"
+                                                icon={<Chalkboard size={28} color="#EFEFEF" />}
+                                                value={
+                                                    dashboardData
+                                                        ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}`
+                                                        : "0/0"
+                                                }
+                                                label={t("Sem Attendance")}
+                                                iconBgColor="#7764FF"
+                                                iconColor="#EFEFEF"
+                                                totalPercentage={
+                                                    dashboardData
+                                                        ? `${dashboardData.cards.percentage}%`
+                                                        : "0%"
+                                                }
+                                            />
+                                        </TouchableOpacity>
                                     </View>
 
-                                    {/* Semester attendance — full width below */}
-                                    <View className="w-full">
+                                    <View className="w-[50%]">
                                         <SemesterAttendanceCard
-                                            presentPercent={
-                                                dashboardData?.semesterStats.present || 0
-                                            }
-                                            absentPercent={
-                                                dashboardData?.semesterStats.absent || 0
-                                            }
+                                            presentPercent={dashboardData?.semesterStats.present || 0}
+                                            absentPercent={dashboardData?.semesterStats.absent || 0}
                                             leavePercent={dashboardData?.semesterStats.leave || 0}
                                             overallPercent={dashboardData?.cards.percentage || 0}
                                         />
@@ -298,10 +250,9 @@ export default function AttendanceClient() {
                                 </View>
                             )}
 
-                            {/* ── AI Insight Banner ── */}
-                            <View className="my-2">
+                            <View className="mt-3">
                                 <AiAttendanceNotificationBanner
-                                    className="h-auto min-h-[70px] py-4"
+                                    className="min-h-[70px] py-4"
                                     message={
                                         dashboardData?.attendancePolicyInsight?.message ||
                                         "Attendance insight will appear once records are available."
@@ -309,14 +260,16 @@ export default function AttendanceClient() {
                                 />
                             </View>
 
-                            {/* ── Attendance list section ── */}
-                            <View className="flex-col p-3">
-                                {/* Section title */}
+                            {/* ━━━ TODAY'S ATTENDANCE SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+                            {/* web: flex flex-col max-md:p-3 → p-3 on mobile             */}
+                            <View className="mt-3 p-3">
+                                {/* Section heading */}
                                 <Text className="text-[#282828] font-semibold text-[17px]">
                                     {isToday
                                         ? t("Today's Attendance")
                                         : t("Attendance – {date}", { date: formattedDate })}
                                 </Text>
+                                {/* web: max-md:hidden → hidden on mobile — we SHOW this on RN */}
                                 <Text className="text-gray-500 text-[13px] mt-0.5">
                                     {t("Classes on {date}", { date: formattedDate })}
                                 </Text>
@@ -327,7 +280,7 @@ export default function AttendanceClient() {
                                     </View>
                                 ) : (
                                     <>
-                                        {/* ── Accordion rows (mobile table replacement) ── */}
+                                        {/* ── Accordion list ───────────────────────────────────── */}
                                         <View className="flex-col mt-3 w-full">
                                             {tableRows.map((row, i) => {
                                                 const isExpanded = expandedRow === i;
@@ -336,16 +289,16 @@ export default function AttendanceClient() {
                                                 return (
                                                     <View
                                                         key={i}
-                                                        className={`overflow-hidden ${!isLast ? "border-b border-gray-100" : ""}`}
+                                                        className={`overflow-hidden${!isLast ? " border-b border-gray-100" : ""}`}
                                                     >
-                                                        {/* ── Collapsed header row ── */}
+                                                        {/* Collapsed header */}
                                                         <TouchableOpacity
                                                             className="py-3 flex-row justify-between items-center"
                                                             activeOpacity={0.7}
                                                             onPress={() => toggleRow(i)}
                                                         >
-                                                            {/* Left: label + subject name */}
-                                                            <View className="flex-col gap-0.5 flex-1">
+                                                            {/* Left */}
+                                                            <View className="flex-1 flex-col gap-0.5">
                                                                 <Text className="text-[#515151] text-[11px]">
                                                                     {t("Subject Name")}
                                                                 </Text>
@@ -357,13 +310,15 @@ export default function AttendanceClient() {
                                                                 </Text>
                                                             </View>
 
-                                                            {/* Right: PDF chip + caret */}
-                                                            <View className="flex-row items-center gap-2 shrink-0">
+                                                            {/* Right: PDF + caret */}
+                                                            <View className="flex-row items-center gap-2">
+                                                                {/* PDF chip — w-6 h-6 on web, w-8 h-8 here for touch */}
                                                                 <View className="w-8 h-8 rounded-full bg-blue-50 items-center justify-center">
                                                                     <Text className="text-blue-500 text-[9px] font-bold">
                                                                         PDF
                                                                     </Text>
                                                                 </View>
+                                                                {/* Caret circle */}
                                                                 <View className="w-6 h-6 rounded-full bg-[#43C17A] items-center justify-center">
                                                                     <CaretDown
                                                                         size={14}
@@ -371,11 +326,7 @@ export default function AttendanceClient() {
                                                                         weight="bold"
                                                                         style={{
                                                                             transform: [
-                                                                                {
-                                                                                    rotate: isExpanded
-                                                                                        ? "180deg"
-                                                                                        : "0deg",
-                                                                                },
+                                                                                { rotate: isExpanded ? "180deg" : "0deg" },
                                                                             ],
                                                                         }}
                                                                     />
@@ -383,9 +334,9 @@ export default function AttendanceClient() {
                                                             </View>
                                                         </TouchableOpacity>
 
-                                                        {/* ── Expanded detail panel ── */}
+                                                        {/* Expanded detail */}
                                                         {isExpanded && (
-                                                            <View className="pb-3 flex-col gap-2.5 bg-gray-50/50 px-2 pt-1 rounded-lg mb-1">
+                                                            <View className="pb-3 flex-col gap-2.5 px-2 pt-1 rounded-lg mb-1">
                                                                 {/* Faculty */}
                                                                 <View className="flex-row justify-between items-center">
                                                                     <Text className="text-[#282828] font-medium text-[13px]">
@@ -432,32 +383,20 @@ export default function AttendanceClient() {
                                             })}
                                         </View>
 
-                                        {/* ── Pagination ── */}
+                                        {/* ── Pagination ───────────────────────────────────────── */}
                                         {totalPages > 1 && (
                                             <View className="flex-row justify-end items-center gap-2 mt-6 mb-4 w-full">
-                                                {/* Prev */}
                                                 <TouchableOpacity
-                                                    onPress={() =>
-                                                        setCurrentPage((p) => Math.max(1, p - 1))
-                                                    }
+                                                    onPress={() => setCurrentPage((p) => Math.max(1, p - 1))}
                                                     disabled={currentPage === 1}
-                                                    className={`w-10 h-10 items-center justify-center rounded-lg border ${currentPage === 1
-                                                        ? "border-gray-200"
-                                                        : "border-gray-300 bg-white"
+                                                    className={`w-10 h-10 items-center justify-center rounded-lg border ${currentPage === 1 ? "border-gray-200" : "border-gray-300 bg-white"
                                                         }`}
                                                 >
-                                                    <Text
-                                                        className={
-                                                            currentPage === 1
-                                                                ? "text-gray-300 text-lg"
-                                                                : "text-gray-600 text-lg"
-                                                        }
-                                                    >
+                                                    <Text className={currentPage === 1 ? "text-gray-300 text-lg" : "text-gray-600 text-lg"}>
                                                         ‹
                                                     </Text>
                                                 </TouchableOpacity>
 
-                                                {/* Page numbers */}
                                                 {[...Array(totalPages)].map((_, i) => (
                                                     <TouchableOpacity
                                                         key={i}
@@ -467,50 +406,31 @@ export default function AttendanceClient() {
                                                             : "border border-gray-300 bg-white"
                                                             }`}
                                                     >
-                                                        <Text
-                                                            className={`font-semibold text-[13px] ${currentPage === i + 1
-                                                                ? "text-white"
-                                                                : "text-gray-600"
-                                                                }`}
-                                                        >
+                                                        <Text className={`font-semibold text-[13px] ${currentPage === i + 1 ? "text-white" : "text-gray-600"
+                                                            }`}>
                                                             {i + 1}
                                                         </Text>
                                                     </TouchableOpacity>
                                                 ))}
 
-                                                {/* Next */}
                                                 <TouchableOpacity
-                                                    onPress={() =>
-                                                        setCurrentPage((p) =>
-                                                            Math.min(totalPages, p + 1)
-                                                        )
-                                                    }
+                                                    onPress={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                                                     disabled={currentPage === totalPages}
-                                                    className={`w-10 h-10 items-center justify-center rounded-lg border ${currentPage === totalPages
-                                                        ? "border-gray-200"
-                                                        : "border-gray-300 bg-white"
+                                                    className={`w-10 h-10 items-center justify-center rounded-lg border ${currentPage === totalPages ? "border-gray-200" : "border-gray-300 bg-white"
                                                         }`}
                                                 >
-                                                    <Text
-                                                        className={
-                                                            currentPage === totalPages
-                                                                ? "text-gray-300 text-lg"
-                                                                : "text-gray-600 text-lg"
-                                                        }
-                                                    >
+                                                    <Text className={currentPage === totalPages ? "text-gray-300 text-lg" : "text-gray-600 text-lg"}>
                                                         ›
                                                     </Text>
                                                 </TouchableOpacity>
                                             </View>
                                         )}
 
-                                        {/* ── Empty state ── */}
+                                        {/* ── Empty state ──────────────────────────────────────── */}
                                         {tableRows.length === 0 && (
                                             <View className="mt-4 border border-gray-200 p-4 rounded-lg bg-white items-center">
                                                 <Text className="text-gray-400 italic text-[13px] text-center">
-                                                    {t("No classes scheduled for {date}", {
-                                                        date: formattedDate,
-                                                    })}
+                                                    {t("No classes scheduled for {date}", { date: formattedDate })}
                                                 </Text>
                                             </View>
                                         )}
@@ -520,29 +440,24 @@ export default function AttendanceClient() {
                         </>
                     )}
 
-                    {/* ── Sub-page tabs ── */}
+                    {/* Sub-page tabs */}
                     {showSubjectAttendanceTable && <SubjectAttendance />}
                     {showSubjectAttendanceDetails && <SubjectAttendanceDetailsClient />}
-                </View>
 
-                {/* ── Desktop side panel — web only ──────────────────────────── */}
-                {!hideRightSection && Platform.OS === "web" && (
-                    <View className="w-[32%] flex-col gap-3 p-2 pt-0">
-                        <CourseScheduleCard />
-                        <WorkWeekCalendar
-                            activeDate={viewDate}
-                            onDateSelect={setViewDate}
-                        />
-                        <View className="mt-5">
-                            <AttendanceInsight
-                                weeklyData={
-                                    dashboardData?.weeklyData || [0, 0, 0, 0, 0, 0, 0]
-                                }
-                            />
+                    {/* Desktop side panel — web only, hidden on native */}
+                    {!hideRightSection && Platform.OS === "web" && (
+                        <View className="w-[32%] flex-col gap-3 p-2 pt-0">
+                            <CourseScheduleCard />
+                            <WorkWeekCalendar activeDate={viewDate} onDateSelect={setViewDate} />
+                            <View className="mt-5">
+                                <AttendanceInsight
+                                    weeklyData={dashboardData?.weeklyData || [0, 0, 0, 0, 0, 0, 0]}
+                                />
+                            </View>
                         </View>
-                    </View>
-                )}
-            </View>
-        </ScrollView>
+                    )}
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }

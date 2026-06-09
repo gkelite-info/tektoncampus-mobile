@@ -16,12 +16,12 @@ i18n
             en: {
                 translation: "./locales/en.json",
             },
-            te: {
-                translation: "./locales/te.json",
-            },
-            hi: {
-                translation: "./locales/hi.json",
-            }
+            // te: {
+            //     translation: "./locales/te.json",
+            // },
+            // hi: {
+            //     translation: "./locales/hi.json",
+            // }
         },
 
         interpolation: {

@@ -116,7 +116,7 @@ export default function ProfilePersonalDetails() {
 
     if (isPageLoading) {
         return (
-            <View className="flex-1 bg-white rounded-xl shadow-sm items-center justify-center p-4">
+            <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading details...</Text>
             </View>
@@ -124,7 +124,7 @@ export default function ProfilePersonalDetails() {
     }
 
     return (
-        <ScrollView className="flex-1 bg-white rounded-xl shadow-sm" contentContainerStyle={{ padding: 16 }}>
+        <ScrollView className="flex-1 bg-white rounded-xl " contentContainerStyle={{ padding: 16 }}>
             <Text className="text-lg font-semibold text-[#000000] mb-6">Personal Details</Text>
 
             <View className="gap-5">

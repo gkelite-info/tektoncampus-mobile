@@ -128,7 +128,7 @@ export default function ResumeProfileSummary() {
 
     if (isPageLoading) {
         return (
-            <View className="flex-1 bg-white rounded-xl shadow-sm items-center justify-center p-4">
+            <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading ATS Engine...</Text>
             </View>
@@ -139,7 +139,7 @@ export default function ResumeProfileSummary() {
         <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
             {/* ATS Score Card */}
             {atsResult && (
-                <View className="bg-white rounded-lg p-6 shadow-sm mb-4 border border-gray-100 flex-row justify-between items-center">
+                <View className="bg-white rounded-lg p-6  mb-4 border border-gray-100 flex-row justify-between items-center">
                     <View className="flex-1">
                         <Text className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Resume ATS Score</Text>
                         <Text className="text-3xl font-bold mt-1" style={{ color: atsResult.color }}>{atsResult.total}/100</Text>
@@ -154,7 +154,7 @@ export default function ResumeProfileSummary() {
                 </View>
             )}
 
-            <View className="bg-white rounded-lg p-6 shadow-sm mb-4">
+            <View className="bg-white rounded-lg p-6  mb-4">
                 <View className="flex-row justify-between items-center mb-4">
                     <Text className="text-lg font-semibold text-[#000000]">Profile Summary</Text>
                     <TouchableOpacity onPress={handleSave} disabled={isSaving} className={`bg-[#43C17A] px-6 py-2 rounded-lg ${isSaving ? 'opacity-50' : ''}`}>
@@ -203,7 +203,7 @@ export default function ResumeProfileSummary() {
             </View>
 
             {/* JD Gap Analysis */}
-            <View className="bg-white rounded-lg p-6 shadow-sm mb-10 border border-purple-100">
+            <View className="bg-white rounded-lg p-6  mb-10 border border-purple-100">
                 <View className="flex-row items-center mb-2">
                     <Text className="text-lg font-semibold text-purple-700">🎯 ATS JD Gap Analyzer</Text>
                 </View>

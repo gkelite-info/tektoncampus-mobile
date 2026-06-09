@@ -66,7 +66,7 @@ export default function ProfileSummary() {
     }
 
     return (
-        <View className="bg-white rounded-xl shadow-sm p-6 mt-4">
+        <View className="bg-white rounded-xl  p-6 mt-4">
             <Text className="text-xl font-bold text-[#282828] mb-6">Profile Summary</Text>
 
             <View>

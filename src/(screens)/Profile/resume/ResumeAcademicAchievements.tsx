@@ -75,7 +75,7 @@ export default function ResumeAcademicAchievements() {
 
     if (isPageLoading) {
         return (
-            <View className="flex-1 bg-white rounded-xl shadow-sm items-center justify-center p-4">
+            <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading achievements...</Text>
             </View>
@@ -84,7 +84,7 @@ export default function ResumeAcademicAchievements() {
 
     return (
         <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
-            <View className="bg-white rounded-lg p-6 shadow-sm mb-10">
+            <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row justify-between items-center mb-6">
                     <Text className="text-lg font-semibold text-[#000000]">Academic Achievements</Text>
                 </View>
@@ -102,7 +102,7 @@ export default function ResumeAcademicAchievements() {
                     <Text className="text-gray-500 mb-4">No academic achievements added yet.</Text>
                 )}
 
-                <View className="border border-gray-200 rounded-xl p-4 bg-white mt-4 shadow-sm">
+                <View className="border border-gray-200 rounded-xl p-4 bg-white mt-4 ">
                     <Text className="text-sm font-medium text-[#43C17A] mb-3">Add New Achievement</Text>
                     
                     <Text className="text-sm font-medium text-[#282828] mb-1">Achievement Name *</Text>

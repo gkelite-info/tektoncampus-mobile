@@ -47,7 +47,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
 
     if (isLoading) {
         return (
-            <View className="flex-1 bg-white rounded-xl p-4 shadow-sm items-center justify-center">
+            <View className="flex-1 bg-white rounded-xl p-4  items-center justify-center">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading profile...</Text>
             </View>
@@ -55,7 +55,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
     }
 
     return (
-        <View className="flex-1 bg-white rounded-xl shadow-sm overflow-hidden">
+        <View className="flex-1 bg-white rounded-xl  overflow-hidden">
             <View className="flex-row justify-between items-center p-4 border-b border-gray-100">
                 <Text className="text-xl font-bold text-gray-900">Profile</Text>
                 <TouchableOpacity 
@@ -69,7 +69,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
             <ScrollView className="flex-1 p-4" contentContainerStyle={{ paddingBottom: 40 }}>
                 {/* Photo Section */}
                 <View className="items-center mb-8">
-                    <View className="w-32 h-32 rounded-full border-4 border-[#43C17A] bg-gray-100 items-center justify-center overflow-hidden mb-4 shadow-sm">
+                    <View className="w-32 h-32 rounded-full border-4 border-[#43C17A] bg-gray-100 items-center justify-center overflow-hidden mb-4 ">
                         {profilePhoto ? (
                             <Image 
                                 source={{ uri: profilePhoto }} 

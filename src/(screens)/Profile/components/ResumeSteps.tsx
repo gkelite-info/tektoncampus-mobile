@@ -67,7 +67,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
     };
 
     return (
-        <View className="w-full bg-white rounded-xl shadow-sm p-4 mb-4">
+        <View className="w-full bg-white rounded-xl  p-4 mb-4">
             <View className="flex-row items-center gap-2">
                 {/* Left Arrow */}
                 <TouchableOpacity
@@ -97,7 +97,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
                                         onPress={() => onStepChange(step)}
                                         className="items-center justify-center w-[80px]"
                                     >
-                                        <View className={`items-center transition-all ${isActive ? "scale-110" : ""}`}>
+                                        <View className="items-center">
                                             {isCompleted ? (
                                                 <CheckCircle size={32} color="#74CB64" weight="fill" />
                                             ) : (

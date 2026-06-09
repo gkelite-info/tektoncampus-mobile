@@ -38,7 +38,7 @@ export default function ResumeTemplates() {
 
     return (
         <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
-            <View className="bg-white rounded-lg p-6 shadow-sm mb-10">
+            <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row items-center mb-6">
                     <Palette size={24} color="#43C17A" weight="bold" />
                     <Text className="text-lg font-semibold text-[#000000] ml-2">Export Resume</Text>
@@ -79,7 +79,7 @@ export default function ResumeTemplates() {
                 <TouchableOpacity 
                     onPress={handleDownload} 
                     disabled={isGenerating}
-                    className={`bg-[#43C17A] flex-row justify-center items-center py-4 rounded-lg shadow-sm ${isGenerating ? 'opacity-50' : ''}`}
+                    className={`bg-[#43C17A] flex-row justify-center items-center py-4 rounded-lg  ${isGenerating ? 'opacity-50' : ''}`}
                 >
                     {isGenerating ? (
                         <>

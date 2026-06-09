@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Modal, ActivityIndicator, Linking } from 'react-native';
-import { CaretLeft, UploadSimple, FilePdf, Trash, Eye } from 'phosphor-react-native';
+import { X, Trash, UploadSimple, FilePdf, ArrowSquareOut } from 'phosphor-react-native';
 import Toast from 'react-native-toast-message';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { decode } from 'base64-arraybuffer';
 
 import { useUser } from '@/utils/context/UserContext';
-import { supabase } from '@/lib/supabaseClient';
 import { 
   fetchTopicResources, 
   saveTopicResource, 
   deactivateTopicResource,
   TopicResourceRow 
 } from '@/lib/helpers/faculty/Savetopicresource';
-import { Buffer } from 'buffer';
+
+type StagedFile = {
+  id: string;
+  uri: string;
+  previewName: string;
+  sizeLabel: string;
+};
 
 type TopicPdfModalProps = {
   visible: boolean;
@@ -24,88 +30,131 @@ type TopicPdfModalProps = {
   unitTitle: string;
 };
 
+function formatSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, unitLabel, unitTitle }: TopicPdfModalProps) {
   const { userId, collegeId, role } = useUser();
-  const [resources, setResources] = useState<TopicResourceRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [savedResources, setSavedResources] = useState<TopicResourceRow[]>([]);
+  const [loadingResources, setLoadingResources] = useState(false);
+  
+  const [stagedFiles, setStagedFiles] = useState<StagedFile[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (visible && topicId) {
       loadResources();
+    } else {
+      setStagedFiles([]);
     }
   }, [visible, topicId]);
 
   const loadResources = async () => {
     try {
-      setLoading(true);
+      setLoadingResources(true);
       const data = await fetchTopicResources(topicId);
-      setResources(data);
+      setSavedResources(data);
     } catch (err) {
       Toast.show({ type: "error", text1: "Failed to load PDFs" });
     } finally {
-      setLoading(false);
+      setLoadingResources(false);
     }
   };
 
-  const handleUpload = async () => {
+  const handleBrowseFiles = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'application/pdf',
         copyToCacheDirectory: true,
+        multiple: true,
       });
 
       if (result.canceled || !result.assets || result.assets.length === 0) {
         return;
       }
 
-      const asset = result.assets[0];
-      if (asset.size && asset.size > 10 * 1024 * 1024) {
-        Toast.show({ type: "error", text1: "File size must be less than 10MB" });
-        return;
+      const newStaged: StagedFile[] = [];
+      for (const asset of result.assets) {
+        if (asset.size && asset.size > 10 * 1024 * 1024) {
+          Toast.show({ type: "error", text1: `File ${asset.name} is too large (>10MB)` });
+          continue;
+        }
+        newStaged.push({
+          id: `staged-${asset.name}-${Date.now()}-${Math.random()}`,
+          uri: asset.uri,
+          previewName: asset.name,
+          sizeLabel: asset.size ? formatSize(asset.size) : "Unknown size",
+        });
       }
 
-      setUploading(true);
-
-      const base64 = await FileSystem.readAsStringAsync(asset.uri, { encoding: 'base64' });
-      const pdfBuffer = Buffer.from(base64, 'base64');
-
-      const isAdminNum = role === "admin" ? 1 : 0;
-      const createdByNum = Number(userId);
-
-      await saveTopicResource({
-        pdfBuffer,
-        topicTitle,
-        collegeSubjectUnitTopicId: topicId,
-        collegeId: collegeId as number,
-        createdBy: createdByNum,
-        isAdmin: isAdminNum,
-      });
-
-      Toast.show({ type: "success", text1: "PDF uploaded successfully" });
-      await loadResources();
-    } catch (err: any) {
-      Toast.show({ type: "error", text1: "Failed to upload PDF", text2: err?.message });
-    } finally {
-      setUploading(false);
+      setStagedFiles(prev => [...prev, ...newStaged]);
+    } catch (err) {
+      Toast.show({ type: "error", text1: "Error picking files" });
     }
   };
 
-  const handleDelete = async (resourceId: number) => {
+  const removeStagedFile = (id: string) => {
+    setStagedFiles(prev => prev.filter(f => f.id !== id));
+  };
+
+  const handleUpload = async () => {
+    if (stagedFiles.length === 0) return;
+    setIsUploading(true);
+
+    const isAdminNum = role === "admin" ? 1 : 0;
+    const createdByNum = Number(userId);
+    let successCount = 0;
+
+    for (const staged of stagedFiles) {
+      try {
+        const base64 = await FileSystem.readAsStringAsync(staged.uri, { encoding: 'base64' });
+        const pdfBuffer = decode(base64);
+
+        await saveTopicResource({
+          pdfBuffer: pdfBuffer as any,
+          topicTitle: staged.previewName.replace('.pdf', ''),
+          collegeSubjectUnitTopicId: topicId,
+          collegeId: collegeId as number,
+          createdBy: createdByNum,
+          isAdmin: isAdminNum,
+        });
+        successCount++;
+      } catch (err: any) {
+        Toast.show({ type: "error", text1: `Failed: ${staged.previewName}` });
+      }
+    }
+
+    if (successCount > 0) {
+      Toast.show({ type: "success", text1: `${successCount} file(s) uploaded successfully` });
+    }
+    
+    setStagedFiles([]);
+    setIsUploading(false);
+    await loadResources();
+  };
+
+  const handleDeleteSaved = async (resourceId: number) => {
     try {
-      setDeletingId(resourceId);
+      setDeletingIds(prev => new Set(prev).add(resourceId));
       const res = await deactivateTopicResource(resourceId);
       if (res.success) {
-        setResources(prev => prev.filter(r => r.collegeSubjectUnitTopicResourceId !== resourceId));
-        Toast.show({ type: "success", text1: "Deleted successfully" });
+        setSavedResources(prev => prev.filter(r => r.collegeSubjectUnitTopicResourceId !== resourceId));
+        Toast.show({ type: "success", text1: "Resource deleted" });
       } else {
         Toast.show({ type: "error", text1: "Failed to delete PDF" });
       }
     } catch (err) {
       Toast.show({ type: "error", text1: "Error deleting PDF" });
     } finally {
-      setDeletingId(null);
+      setDeletingIds(prev => {
+        const next = new Set(prev);
+        next.delete(resourceId);
+        return next;
+      });
     }
   };
 
@@ -116,96 +165,144 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
   };
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
-      <View className="flex-1 bg-[#F4F4F4]">
-        <View className="bg-white px-4 py-4 border-b border-gray-200 flex-row items-center justify-between shadow-sm z-10 pt-5">
-          <View className="flex-row items-center gap-3">
-            <TouchableOpacity onPress={onClose} className="p-1 rounded-full hover:bg-gray-100">
-              <CaretLeft size={24} weight="bold" color="#16284F" />
+    <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
+      <View className="flex-1 bg-black/40 justify-center items-center p-4">
+        <View className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90%] flex-col overflow-hidden relative">
+          
+          <TouchableOpacity 
+            onPress={onClose} 
+            className="absolute top-4 right-4 z-10 p-1"
+          >
+            <X size={20} weight="bold" color="#9ca3af" />
+          </TouchableOpacity>
+
+          <ScrollView className="px-6 py-6" contentContainerStyle={{ paddingBottom: 20 }}>
+            {/* Context Header */}
+            <Text className="text-base font-semibold text-gray-800 pr-6 flex-row flex-wrap leading-6 mb-5">
+              <Text className="text-[#7E5DFF]">{unitLabel}</Text>
+              <Text className="text-gray-400"> → </Text>
+              <Text className="text-gray-700">{unitTitle}</Text>
+              <Text className="text-gray-400"> → </Text>
+              <Text className="text-gray-700">{topicTitle}</Text>
+            </Text>
+
+            <Text className="text-sm font-semibold text-gray-700 mb-2">Upload</Text>
+
+            {/* Drop Zone equivalent */}
+            <TouchableOpacity 
+              onPress={handleBrowseFiles}
+              className="border-2 border-dashed border-gray-300 bg-gray-50 rounded-xl items-center justify-center py-8 mb-6"
+            >
+              <View className="bg-white rounded-full p-3 shadow-sm mb-2">
+                <UploadSimple size={28} color="#9ca3af" weight="bold" />
+              </View>
+              <Text className="text-sm text-gray-500 mb-2">Tap here to select PDF files</Text>
+              <View className="px-5 py-1.5 border border-gray-300 rounded-md bg-white">
+                <Text className="text-sm text-gray-600">Browse Files</Text>
+              </View>
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-[#16284F]">Topic Resources</Text>
+
+            {/* Staged Files */}
+            {stagedFiles.length > 0 && (
+              <View className="mb-6">
+                <Text className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
+                  Ready to upload ({stagedFiles.length})
+                </Text>
+                <View className="flex-col gap-2">
+                  {stagedFiles.map((f) => (
+                    <View key={f.id} className="flex-row items-center justify-between bg-orange-50 rounded-xl px-4 py-2.5 border border-orange-100">
+                      <View className="flex-row items-center gap-3 flex-1 mr-2">
+                        <View className="bg-red-100 rounded-lg p-1.5">
+                          <FilePdf size={20} color="#ef4444" weight="duotone" />
+                        </View>
+                        <View className="flex-1">
+                          <Text className="text-sm font-medium text-gray-700" numberOfLines={1}>{f.previewName}</Text>
+                          <Text className="text-xs text-gray-400">{f.sizeLabel}</Text>
+                        </View>
+                      </View>
+                      <TouchableOpacity 
+                        onPress={() => removeStagedFile(f.id)}
+                        disabled={isUploading}
+                        className="p-1"
+                      >
+                        <Trash size={18} color="#ef4444" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* Uploaded Files */}
+            {savedResources.length > 0 && (
+              <View>
+                <Text className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
+                  Uploaded ({savedResources.length})
+                </Text>
+                <View className="flex-col gap-2">
+                  {savedResources.map((r) => {
+                    const isDeleting = deletingIds.has(r.collegeSubjectUnitTopicResourceId);
+                    return (
+                      <View key={r.collegeSubjectUnitTopicResourceId} className="flex-row items-center justify-between bg-gray-50 rounded-xl px-4 py-2.5 border border-gray-100">
+                        <View className="flex-row items-center gap-3 flex-1 mr-2">
+                          <View className="bg-red-100 rounded-lg p-1.5">
+                            <FilePdf size={20} color="#ef4444" weight="duotone" />
+                          </View>
+                          <View className="flex-1">
+                            <Text className="text-sm font-medium text-gray-700" numberOfLines={1}>{r.resourceName}</Text>
+                            <Text className="text-xs text-gray-400">PDF</Text>
+                          </View>
+                        </View>
+                        <View className="flex-row items-center gap-2">
+                          <TouchableOpacity onPress={() => handleView(r.resourceUrl)} className="p-1">
+                            <ArrowSquareOut size={18} color="#9ca3af" />
+                          </TouchableOpacity>
+                          <TouchableOpacity 
+                            onPress={() => handleDeleteSaved(r.collegeSubjectUnitTopicResourceId)}
+                            disabled={isDeleting}
+                            className="p-1"
+                          >
+                            {isDeleting ? (
+                              <ActivityIndicator size="small" color="#ef4444" />
+                            ) : (
+                              <Trash size={18} color="#ef4444" />
+                            )}
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
+            
+            {loadingResources && (
+              <ActivityIndicator size="large" color="#43C17A" className="my-4" />
+            )}
+          </ScrollView>
+
+          {/* Footer Actions */}
+          <View className="flex-row gap-3 px-6 pb-6 pt-3 border-t border-gray-100">
+            <TouchableOpacity 
+              onPress={onClose}
+              className="flex-1 py-2.5 rounded-lg border border-gray-200 items-center justify-center"
+            >
+              <Text className="text-sm font-medium text-gray-600">Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={handleUpload}
+              disabled={isUploading || stagedFiles.length === 0}
+              className={`flex-1 py-2.5 rounded-lg flex-row items-center justify-center gap-2 ${
+                isUploading || stagedFiles.length === 0 ? "bg-[#43C17A]/50" : "bg-[#43C17A]"
+              }`}
+            >
+              {isUploading && <ActivityIndicator size="small" color="white" />}
+              <Text className="text-sm font-semibold text-white">
+                {isUploading ? "Uploading..." : `Upload File${stagedFiles.length > 1 ? "s" : ""}`}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-
-        <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 100 }}>
-           
-          {/* Header context */}
-          <View className="bg-white p-4 rounded-xl border border-gray-200 mb-6 flex-col gap-2 shadow-sm">
-            <View className="flex-row items-center gap-2">
-               <View className="h-2 w-2 rounded-full bg-[#A66BFF]" />
-               <Text className="text-xs text-[#7E5DFF] font-semibold">{unitLabel} • {unitTitle}</Text>
-            </View>
-            <Text className="text-[#282828] font-bold text-lg">{topicTitle}</Text>
-          </View>
-
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-[#282828] font-bold text-base">Uploaded PDFs</Text>
-            <TouchableOpacity 
-               onPress={handleUpload}
-               disabled={uploading}
-               className={`flex-row items-center gap-2 px-3 py-2 rounded-lg ${uploading ? 'bg-[#7E5DFF]/50' : 'bg-[#7E5DFF]'}`}
-            >
-               {uploading ? (
-                 <ActivityIndicator size="small" color="white" />
-               ) : (
-                 <>
-                   <UploadSimple size={16} weight="bold" color="white" />
-                   <Text className="text-white font-bold text-xs">Upload</Text>
-                 </>
-               )}
-            </TouchableOpacity>
-          </View>
-
-          {loading ? (
-            <ActivityIndicator size="large" color="#7E5DFF" className="mt-10" />
-          ) : resources.length === 0 ? (
-            <View className="items-center justify-center mt-10 bg-white p-8 rounded-xl border border-gray-100">
-              <FilePdf size={48} color="#cbd5e1" weight="duotone" />
-              <Text className="text-gray-500 font-semibold mt-4">No PDFs uploaded yet</Text>
-              <Text className="text-gray-400 text-xs mt-1 text-center">Click upload to add study materials for this topic</Text>
-            </View>
-          ) : (
-            <View className="flex-col gap-3">
-              {resources.map((resource) => (
-                <View key={resource.collegeSubjectUnitTopicResourceId} className="bg-white border border-gray-200 rounded-xl p-3 flex-row items-center justify-between shadow-sm">
-                  <View className="flex-row items-center gap-3 flex-1 mr-4">
-                    <View className="bg-[#E9E3FF] p-2 rounded-lg">
-                      <FilePdf size={24} color="#7E5DFF" weight="duotone" />
-                    </View>
-                    <View className="flex-col flex-1">
-                      <Text className="text-sm font-semibold text-[#282828]" numberOfLines={1}>
-                        {resource.resourceName}
-                      </Text>
-                      <Text className="text-xs text-gray-500 mt-0.5">
-                        {new Date(resource.createdAt).toLocaleDateString()}
-                      </Text>
-                    </View>
-                  </View>
-                  <View className="flex-row items-center gap-2">
-                    <TouchableOpacity 
-                      onPress={() => handleView(resource.resourceUrl)}
-                      className="p-2 bg-gray-100 rounded-lg"
-                    >
-                      <Eye size={18} color="#4b5563" />
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                      onPress={() => handleDelete(resource.collegeSubjectUnitTopicResourceId)}
-                      disabled={deletingId === resource.collegeSubjectUnitTopicResourceId}
-                      className="p-2 bg-red-50 rounded-lg"
-                    >
-                      {deletingId === resource.collegeSubjectUnitTopicResourceId ? (
-                        <ActivityIndicator size="small" color="#ef4444" />
-                      ) : (
-                        <Trash size={18} color="#ef4444" />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </View>
-          )}
-
-        </ScrollView>
       </View>
     </Modal>
   );

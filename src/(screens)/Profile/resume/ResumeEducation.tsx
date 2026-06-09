@@ -77,7 +77,7 @@ export default function ResumeEducation() {
 
     if (isPageLoading || addedForms === null) {
         return (
-            <View className="flex-1 bg-white rounded-xl shadow-sm items-center justify-center p-4">
+            <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading education...</Text>
             </View>
@@ -86,7 +86,7 @@ export default function ResumeEducation() {
 
     return (
         <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
-            <View className="bg-white rounded-lg p-6 shadow-sm mb-10">
+            <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row justify-between items-center mb-6">
                     <Text className="text-lg font-semibold text-[#000000]">Education</Text>
                 </View>
@@ -145,7 +145,7 @@ export default function ResumeEducation() {
                             <Text className="text-[#43C17A] font-bold">+ Add Education</Text>
                         </TouchableOpacity>
                     ) : (
-                        <View className="border border-gray-200 rounded-lg p-2 bg-white mt-2 shadow-sm">
+                        <View className="border border-gray-200 rounded-lg p-2 bg-white mt-2 ">
                             {!addedForms.includes("secondary") && (
                                 <TouchableOpacity onPress={() => addForm("secondary")} className="p-3 border-b border-gray-100">
                                     <Text className="text-[#282828] font-medium">Secondary Education</Text>

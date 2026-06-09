@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
 export type SaveTopicResourceParams = {
-    pdfBuffer: Buffer;
+    pdfBuffer: ArrayBuffer;
     topicTitle: string;
     collegeSubjectUnitTopicId: number;
     collegeId: number;

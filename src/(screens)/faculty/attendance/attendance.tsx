@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 import Toast from 'react-native-toast-message';
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { CaretLeft, Check, Prohibit, X, UsersThree, UserCircle, ChartLineDown } from "phosphor-react-native";
 import { useUser } from "@/utils/context/UserContext";
 import CardComponent, { CardProps } from "./components/StuAttendanceCard";
@@ -28,6 +29,7 @@ type ParamList = {
 export default function FacultyAttendance() {
   const route = useRoute<RouteProp<ParamList, 'Attendance'>>();
   const navigation = useNavigation<any>();
+  const headerHeight = useHeaderHeight();
   const urlClassId = route.params?.classId;
   
   const { facultyId, loading: contextLoading } = useUser();
@@ -240,7 +242,8 @@ export default function FacultyAttendance() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 20}
     >
       <ScrollView 
-        className="flex-1 bg-white px-4 pt-28 pb-4" 
+        className="flex-1 bg-white px-4 pb-4" 
+        style={{ paddingTop: headerHeight + 16 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >

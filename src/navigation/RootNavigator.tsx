@@ -28,7 +28,7 @@ function isNavigationStateValidForRole(
 
     const routeNames = state.routes.map((route) => route.name);
 
-    if (role.includes("faculty")) return routeNames.includes("FacultyTabs");
+    if (role.includes("faculty")) return routeNames.includes("Dashboard");
     if (role.includes("student")) return routeNames.includes("StudentTabs");
     if (role.includes("parent")) return routeNames.includes("ParentTabs");
 

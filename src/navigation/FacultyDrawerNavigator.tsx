@@ -1,15 +1,19 @@
 import React, { useRef, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomHeader from "./components/CustomHeader";
 import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
 
-import FacultyTabs from "@/tabs/FacultyTabs";
+import { FacultyCustomTabBar } from "@/tabs/FacultyTabs";
+import FacultyDashboard from "@/(screens)/faculty/faculty";
+import FacultyAssignmente from "@/(screens)/faculty/assignments/assignments";
+import FacultyAttendance from "@/(screens)/faculty/attendance/attendance";
+import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
+import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
 import {
     StudentProgressScreen,
     ProjectsScreen,
     PlacementsScreen,
-    LeaveRequestsScreen,
     ClubScreen,
     DriveScreen,
     MeetingsScreen,
@@ -18,6 +22,8 @@ import {
     SettingsScreen,
 } from "@/(screens)/student/mockScreens";
 
+import LeaveRequestsScreen from "@/(screens)/faculty/leaveRequests/leaveRequests";
+
 import CalendarScreen from "@/(screens)/faculty/calendar/CalendarScreen";
 import AssignmentSubmissions from "@/(screens)/faculty/assignments/submissions/AssignmentSubmissions";
 import QuizSubmissions from "@/(screens)/faculty/assignments/submissions/QuizSubmissions";
@@ -25,7 +31,8 @@ import DiscussionSubmissions from "@/(screens)/faculty/assignments/submissions/D
 import SubjectDetailsScreen from "@/(screens)/faculty/academics/SubjectDetails";
 
 export type FacultyDrawerParamList = {
-    FacultyTabs: undefined;
+    Dashboard: undefined;
+    Profile: undefined;
     Calendar: undefined;
     Attendance: undefined;
     Assignments: undefined;
@@ -46,10 +53,10 @@ export type FacultyDrawerParamList = {
     SubjectDetailsScreen: { details: any };
 };
 
-const Stack = createNativeStackNavigator<FacultyDrawerParamList>();
+const Tab = createBottomTabNavigator<FacultyDrawerParamList>();
 
 const menuItems: RoleSideMenuItem[] = [
-    { name: "FacultyTabs", label: "Home" },
+    { name: "Dashboard", label: "Home" },
     { name: "Calendar", label: "Calendar" },
     { name: "Attendance", label: "Attendance" },
     { name: "Assignments", label: "Assignments" },
@@ -68,13 +75,14 @@ const menuItems: RoleSideMenuItem[] = [
 
 export default function FacultyDrawerNavigator() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [activeRouteName, setActiveRouteName] = useState<keyof FacultyDrawerParamList>("FacultyTabs");
+    const [activeRouteName, setActiveRouteName] = useState<keyof FacultyDrawerParamList>("Dashboard");
     const navigationRef = useRef<any>(null);
 
     return (
         <>
-            <Stack.Navigator
-                initialRouteName="FacultyTabs"
+            <Tab.Navigator
+                initialRouteName="Dashboard"
+                tabBar={(props) => <FacultyCustomTabBar {...props} />}
                 screenOptions={({ navigation }) => {
                     navigationRef.current = navigation;
 
@@ -93,40 +101,39 @@ export default function FacultyDrawerNavigator() {
                     },
                 }}
             >
-                <Stack.Screen name="FacultyTabs" component={FacultyTabs} />
-                <Stack.Screen name="Calendar" component={CalendarScreen} />
-                <Stack.Screen name="StudentProgress" component={StudentProgressScreen} />
-                <Stack.Screen name="Projects" component={ProjectsScreen} />
-                <Stack.Screen name="Placements" component={PlacementsScreen} />
-                <Stack.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
-                <Stack.Screen name="Club" component={ClubScreen} />
-                <Stack.Screen name="Drive" component={DriveScreen} />
-                <Stack.Screen name="Meetings" component={MeetingsScreen} />
-                <Stack.Screen name="MyAttendance" component={MyAttendanceScreen} />
-                <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
-                <Stack.Screen name="Settings" component={SettingsScreen} />
-                <Stack.Screen name="AssignmentSubmissions" component={AssignmentSubmissions} options={{ headerShown: false }} />
-                <Stack.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />
-                <Stack.Screen name="DiscussionSubmissions" component={DiscussionSubmissions} options={{ headerShown: false }} />
-                <Stack.Screen name="SubjectDetailsScreen" component={SubjectDetailsScreen} options={{ headerShown: false }} />
-            </Stack.Navigator>
+                <Tab.Screen name="Assignments" component={FacultyAssignmente} />
+                <Tab.Screen name="Academics" component={FacultyAcademics} />
+                <Tab.Screen name="Dashboard" component={FacultyDashboard} />
+                <Tab.Screen name="Attendance" component={FacultyAttendance} />
+                <Tab.Screen name="Profile" component={ProfileContainer} />
+
+                <Tab.Screen name="Calendar" component={CalendarScreen} />
+                <Tab.Screen name="StudentProgress" component={StudentProgressScreen} />
+                <Tab.Screen name="Projects" component={ProjectsScreen} />
+                <Tab.Screen name="Placements" component={PlacementsScreen} />
+                <Tab.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
+                <Tab.Screen name="Club" component={ClubScreen} />
+                <Tab.Screen name="Drive" component={DriveScreen} />
+                <Tab.Screen name="Meetings" component={MeetingsScreen} />
+                <Tab.Screen name="MyAttendance" component={MyAttendanceScreen} />
+                <Tab.Screen name="Wellbeing" component={WellbeingScreen} />
+                <Tab.Screen name="Settings" component={SettingsScreen} />
+                <Tab.Screen name="AssignmentSubmissions" component={AssignmentSubmissions} options={{ headerShown: false }} />
+                <Tab.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />
+                <Tab.Screen name="DiscussionSubmissions" component={DiscussionSubmissions} options={{ headerShown: false }} />
+                <Tab.Screen name="SubjectDetailsScreen" component={SubjectDetailsScreen} options={{ headerShown: false }} />
+            </Tab.Navigator>
 
             <RoleSideMenu
                 visible={isMenuOpen}
                 activeRouteName={activeRouteName}
-                homeRouteName="FacultyTabs"
+                homeRouteName="Dashboard"
                 items={menuItems}
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
                     setActiveRouteName(routeName as keyof FacultyDrawerParamList);
-                    
-                    const tabRoutes = ["Assignments", "Academics", "Attendance", "Profile"];
-                    if (tabRoutes.includes(routeName)) {
-                        navigationRef.current?.navigate("FacultyTabs", { screen: routeName });
-                    } else {
-                        navigationRef.current?.navigate(routeName);
-                    }
+                    navigationRef.current?.navigate(routeName);
                 }}
             />
         </>

@@ -38,7 +38,7 @@ export default function ProfileSteps({ currentStepId, onStepChange }: ProfileSte
     }, [currentStepId, windowWidth]);
 
     return (
-        <View className="w-full p-4 bg-white rounded-xl shadow-sm mb-4">
+        <View className="w-full p-4 bg-white rounded-xl  mb-4">
             <ScrollView
                 ref={scrollViewRef}
                 horizontal
@@ -58,7 +58,7 @@ export default function ProfileSteps({ currentStepId, onStepChange }: ProfileSte
                                     onPress={() => onStepChange(step)}
                                     className="items-center justify-center relative w-[80px]"
                                 >
-                                    <View className={`items-center ${isActive ? 'scale-110' : ''}`}>
+                                    <View className="items-center">
                                         {isCompleted ? (
                                             <CheckCircle size={32} weight="fill" color="#74CB64" />
                                         ) : (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert, Platform, Modal } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { CaretLeft, CaretDown, CheckCircle, Trash, FilePdf, Clock } from 'phosphor-react-native';
 import Toast from 'react-native-toast-message';
@@ -10,6 +10,8 @@ import { CardProps } from '@/lib/types/faculty';
 
 import TopicPdfModal from './modals/TopicPdfModal';
 import AddUnitModal from './modals/AddUnitModal';
+import AddWeightageModal from './modals/AddWeightageModal';
+import { fonts } from '@/constants/fonts';
 
 const colorMap = {
   purple: {
@@ -17,18 +19,21 @@ const colorMap = {
     dot: "bg-[#A66BFF]",
     title: "text-[#3B2A91]",
     accent: "text-[#7E5DFF]",
+    solidEnd: "#7E5DFF",
   },
   orange: {
     cardBg: "bg-[#FFEDDA]",
     dot: "bg-[#FFAE4C]",
     title: "text-[#A35300]",
     accent: "text-[#FF8A2A]",
+    solidEnd: "#FF8A2A",
   },
   blue: {
     cardBg: "bg-[#CEE6FF]",
     dot: "bg-[#68A4FF]",
     title: "text-[#22518F]",
     accent: "text-[#4C8DFF]",
+    solidEnd: "#4C8DFF",
   },
 } as const;
 
@@ -42,8 +47,8 @@ function UnitCard({
   unit: UiUnit;
   onMarkComplete: (unitId: number, topics: UiTopic[], percentage: number) => Promise<void>;
   onOpenTopicPdf: (topicId: number, topicTitle: string, unitLabel: string, unitTitle: string) => void;
-  onDeleteTopic: (unitId: number, topicId: number) => Promise<void>;
-  onDeleteUnit: (unitId: number) => Promise<void>;
+  onDeleteTopic: (unitId: number, topicId: number) => void;
+  onDeleteUnit: (unitId: number) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [localTopics, setLocalTopics] = useState<UiTopic[]>(unit.topics);
@@ -68,28 +73,28 @@ function UnitCard({
   };
 
   return (
-    <View className={`rounded-xl px-4 py-4 mb-4 ${colors.cardBg} w-full flex-col relative`}>
+    <View className={`rounded-2xl p-4 mb-4 ${colors.cardBg} w-full flex-col`}>
       <TouchableOpacity 
-        className="flex-row items-center justify-between mb-3"
+        className="flex-row items-center justify-between mb-2"
         onPress={() => setIsExpanded(!isExpanded)}
       >
         <View className="flex-row items-center gap-2">
           <View className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
-          <Text className={`font-semibold text-[15px] text-[#4B4B4B] ${colors.accent}`}>
+          <Text className={`text-base ${colors.title}`} style={{ fontFamily: fonts.bold }}>
             {unit.unitLabel}
           </Text>
         </View>
         <CaretDown 
-          size={20} 
+          size={16} 
           weight="bold" 
-          color="#3B2A91"
+          color={colors.solidEnd}
           style={{ transform: [{ rotate: isExpanded ? '180deg' : '0deg' }] }}
         />
       </TouchableOpacity>
 
-      <View className="bg-white/80 rounded-2xl p-4 flex-col relative overflow-hidden shadow-sm">
-        <View className="flex-row justify-between items-start mb-3">
-          <Text className={`text-[15px] font-semibold flex-1 mr-2 ${colors.title}`}>
+      <View className="bg-white rounded-xl p-3 flex-col relative">
+        <View className="flex-row justify-between items-start mb-2">
+          <Text className={`text-base flex-1 mr-2 ${colors.title}`} style={{ fontFamily: fonts.bold }}>
             {unit.title}
           </Text>
           <TouchableOpacity onPress={() => onDeleteUnit(unit.id)} className="p-1">
@@ -97,37 +102,35 @@ function UnitCard({
           </TouchableOpacity>
         </View>
 
-        <View className="w-full h-2 rounded-full bg-gray-200 overflow-visible mb-2 mt-1 relative">
-          <View className={`h-full rounded-full bg-[#7E5DFF]`} style={{ width: `${percentage}%` }} />
-          {percentage > 0 && (
-             <View 
-                className="absolute top-1/2 -translate-y-1/2 bg-white rounded-full shadow-sm"
-                style={{
-                  left: `${percentage}%`,
-                  transform: [{ translateX: percentage >= 100 ? -8 : -4 }, { translateY: -4 }],
-                  height: 8,
-                  width: 8,
-                }}
-             />
-          )}
+        <View className="w-full h-2 rounded-full bg-gray-200 overflow-hidden relative my-2">
+          <View 
+             className="h-full rounded-full" 
+             style={{ 
+                 width: `${percentage}%`,
+                 backgroundColor: colors.solidEnd, 
+             }} 
+          />
         </View>
 
         <View className="flex-row items-center justify-between mt-1 mb-2">
           <View className="flex-row items-center gap-1.5">
-            <Clock size={13} weight="fill" color="#3B2A91" />
+            <Clock size={12} weight="fill" color={colors.solidEnd} />
             <Text className={`text-[10px] font-semibold ${colors.title}`}>
-              {unit.dateRange || "-"}
+              {unit.dateRange || "01-01-1970 - 03-17-2026"}
             </Text>
           </View>
-          <Text className={`text-[11px] font-bold ${colors.title}`}>
+          <Text className={`text-base ${colors.title}`} style={{ fontFamily: fonts.bold }}>
             {percentage}%
           </Text>
         </View>
 
         {isExpanded && (
-          <View className="mt-3 flex-col gap-3">
+          <View className="border-t border-gray-100 pt-2 mt-2 flex-col gap-1">
+            {localTopics.length === 0 && (
+                <Text className="text-gray-400 text-xs text-center" style={{ fontFamily: fonts.italic }}>No topics found</Text>
+            )}
             {localTopics.map((topic) => (
-              <View key={topic.id} className="flex-row items-start justify-between gap-2">
+              <View key={topic.id} className="flex-row items-start justify-between gap-2 py-1">
                 <TouchableOpacity 
                   className="flex-row items-start gap-2 flex-1"
                   onPress={() => {
@@ -135,24 +138,23 @@ function UnitCard({
                     setIsDirty(true);
                   }}
                 >
-                  <View className="mt-0.5">
-                    <CheckCircle 
-                      size={18} 
-                      weight={topic.isCompleted ? "fill" : "regular"} 
-                      color={topic.isCompleted ? "#7E5DFF" : "#9ca3af"} 
-                    />
-                  </View>
-                  <Text className={`text-xs flex-1 ${topic.isCompleted ? "text-gray-500" : "text-[#3F3F3F]"}`}>
+                  <CheckCircle 
+                    size={16} 
+                    weight={topic.isCompleted ? "fill" : "regular"} 
+                    color={colors.solidEnd} 
+                    style={{ marginTop: 2 }}
+                  />
+                  <Text className={`text-xs flex-1 ${topic.isCompleted ? "text-gray-400 line-through" : "text-[#3F3F3F]"}`} style={{ fontFamily: fonts.regular }}>
                     {topic.title}
                   </Text>
                 </TouchableOpacity>
 
-                <View className="flex-row items-center gap-3 mt-0.5">
+                <View className="flex-row items-center gap-3">
                   <TouchableOpacity onPress={() => onDeleteTopic(unit.id, topic.id)}>
                     <Trash size={16} color="#ef4444" />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => onOpenTopicPdf(topic.id, topic.title, unit.unitLabel, unit.title)}>
-                    <FilePdf size={18} color="#7E5DFF" weight="duotone" />
+                    <FilePdf size={18} color={colors.solidEnd} weight="duotone" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -167,7 +169,7 @@ function UnitCard({
               onPress={handleSave}
               className={`px-4 py-1.5 rounded-lg border text-sm ${(!isDirty || isSaving) ? 'border-[#43C17A]/50 bg-transparent' : 'border-[#43C17A] bg-[#43C17A]/10'}`}
             >
-              <Text className={`text-xs font-bold ${(!isDirty || isSaving) ? 'text-[#43C17A]/50' : 'text-[#43C17A]'}`}>
+              <Text className={`text-xs ${(!isDirty || isSaving) ? 'text-[#43C17A]/50' : 'text-[#43C17A]'}`} style={{ fontFamily: fonts.bold }}>
                 {isSaving ? "Saving..." : "Save Progress"}
               </Text>
             </TouchableOpacity>
@@ -175,6 +177,58 @@ function UnitCard({
         )}
       </View>
     </View>
+  );
+}
+
+function ConfirmDeleteModal({
+  visible,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  isDeleting,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+  isDeleting: boolean;
+}) {
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View className="flex-1 bg-black/40 justify-center items-center px-4">
+        <View className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl flex-col gap-3">
+          <View className="flex-row items-center gap-3">
+            <View className="bg-red-100 p-2.5 rounded-full">
+              <Trash size={22} color="#ef4444" weight="fill" />
+            </View>
+            <Text className="text-lg font-bold text-gray-800 flex-1">{title}</Text>
+          </View>
+          <Text className="text-sm text-gray-600 mt-1 leading-5">{message}</Text>
+          <View className="flex-row gap-3 justify-end mt-4">
+            <TouchableOpacity
+              onPress={onClose}
+              disabled={isDeleting}
+              className="px-4 py-2 rounded-lg border border-gray-200"
+            >
+              <Text className="text-sm font-medium text-gray-600">Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onConfirm}
+              disabled={isDeleting}
+              className="px-4 py-2 rounded-lg bg-red-600"
+            >
+              {isDeleting ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text className="text-sm font-medium text-white">Delete</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -187,6 +241,7 @@ export default function SubjectDetailsScreen() {
   const [loading, setLoading] = useState(true);
 
   const [addUnitVisible, setAddUnitVisible] = useState(false);
+  const [addWeightageVisible, setAddWeightageVisible] = useState(false);
   
   const [pdfModalVisible, setPdfModalVisible] = useState(false);
   const [selectedTopicPdf, setSelectedTopicPdf] = useState<{
@@ -195,6 +250,9 @@ export default function SubjectDetailsScreen() {
     unitLabel: string;
     unitTitle: string;
   } | null>(null);
+
+  const [deleteTarget, setDeleteTarget] = useState<{ type: 'unit' | 'topic', unitId?: number, topicId?: number } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const loadUnits = async () => {
     try {
@@ -240,70 +298,82 @@ export default function SubjectDetailsScreen() {
     }
   };
 
-  const handleDeleteUnit = async (unitId: number) => {
-    try {
-      const now = new Date().toISOString();
-      const { error: unitError } = await supabase
-        .from("college_subject_units")
-        .update({ isActive: false, deletedAt: now, updatedAt: now })
-        .eq("collegeSubjectUnitId", unitId);
-
-      if (unitError) throw unitError;
-
-      const { error: topicError } = await supabase
-        .from("college_subject_unit_topics")
-        .update({ isActive: false, deletedAt: now, updatedAt: now })
-        .eq("collegeSubjectUnitId", unitId)
-        .eq("isActive", true);
-
-      if (topicError) throw topicError;
-
-      setUnits((prev) => prev.filter((unit) => unit.id !== unitId));
-      Toast.show({ type: "success", text1: "Unit deleted successfully" });
-    } catch (error: any) {
-      Toast.show({ type: "error", text1: "Failed to delete unit" });
-    }
+  const handleDeleteUnit = (unitId: number) => {
+    setDeleteTarget({ type: 'unit', unitId });
   };
 
-  const handleDeleteTopic = async (unitId: number, topicId: number) => {
+  const handleDeleteTopic = (unitId: number, topicId: number) => {
+    setDeleteTarget({ type: 'topic', unitId, topicId });
+  };
+
+  const performDelete = async () => {
+    if (!deleteTarget) return;
+    setIsDeleting(true);
+
     try {
       const now = new Date().toISOString();
-      const { error: deleteError } = await supabase
-        .from("college_subject_unit_topics")
-        .update({ isActive: false, deletedAt: now, updatedAt: now })
-        .eq("collegeSubjectUnitTopicId", topicId);
 
-      if (deleteError) throw deleteError;
+      if (deleteTarget.type === 'unit' && deleteTarget.unitId) {
+        const { error: unitError } = await supabase
+          .from("college_subject_units")
+          .update({ isActive: false, deletedAt: now, updatedAt: now })
+          .eq("collegeSubjectUnitId", deleteTarget.unitId);
+        if (unitError) throw unitError;
 
-      const { data: remainingTopics, error: fetchError } = await supabase
-        .from("college_subject_unit_topics")
-        .select("isCompleted")
-        .eq("collegeSubjectUnitId", unitId)
-        .eq("isActive", true);
+        const { error: topicError } = await supabase
+          .from("college_subject_unit_topics")
+          .update({ isActive: false, deletedAt: now, updatedAt: now })
+          .eq("collegeSubjectUnitId", deleteTarget.unitId)
+          .eq("isActive", true);
+        if (topicError) throw topicError;
 
-      if (fetchError) throw fetchError;
+        setUnits((prev) => prev.filter((unit) => unit.id !== deleteTarget.unitId));
+        Toast.show({ type: "success", text1: "Unit deleted successfully" });
+      } 
+      
+      else if (deleteTarget.type === 'topic' && deleteTarget.topicId && deleteTarget.unitId) {
+        const { error: deleteError } = await supabase
+          .from("college_subject_unit_topics")
+          .update({ isActive: false, deletedAt: now, updatedAt: now })
+          .eq("collegeSubjectUnitTopicId", deleteTarget.topicId);
+        if (deleteError) throw deleteError;
 
-      const total = remainingTopics.length;
-      const completed = remainingTopics.filter((topic) => topic.isCompleted).length;
-      const newPercentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+        const { data: remainingTopics, error: fetchError } = await supabase
+          .from("college_subject_unit_topics")
+          .select("isCompleted")
+          .eq("collegeSubjectUnitId", deleteTarget.unitId)
+          .eq("isActive", true);
+        if (fetchError) throw fetchError;
 
-      const { error: unitError } = await supabase
-        .from("college_subject_units")
-        .update({ completionPercentage: newPercentage, updatedAt: now })
-        .eq("collegeSubjectUnitId", unitId);
+        const total = remainingTopics?.length || 0;
+        const completed = remainingTopics?.filter((t) => t.isCompleted).length || 0;
+        const newPercentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
-      if (unitError) throw unitError;
+        const { error: updateUnitError } = await supabase
+          .from("college_subject_units")
+          .update({ completionPercentage: newPercentage, updatedAt: now })
+          .eq("collegeSubjectUnitId", deleteTarget.unitId);
+        if (updateUnitError) throw updateUnitError;
 
-      setUnits((prev) =>
-        prev.map((unit) => {
-          if (unit.id !== unitId) return unit;
-          const topics = unit.topics.filter((topic) => topic.id !== topicId);
-          return { ...unit, topics, percentage: newPercentage };
-        })
-      );
-      Toast.show({ type: "success", text1: "Topic deleted successfully" });
+        setUnits((prev) =>
+          prev.map((unit) => {
+            if (unit.id === deleteTarget.unitId) {
+              return {
+                ...unit,
+                percentage: newPercentage,
+                topics: unit.topics.filter((t) => t.id !== deleteTarget.topicId),
+              };
+            }
+            return unit;
+          })
+        );
+        Toast.show({ type: "success", text1: "Topic deleted successfully" });
+      }
     } catch (error: any) {
-      Toast.show({ type: "error", text1: "Failed to delete topic" });
+      Toast.show({ type: "error", text1: "Failed to delete" });
+    } finally {
+      setIsDeleting(false);
+      setDeleteTarget(null);
     }
   };
 
@@ -319,38 +389,44 @@ export default function SubjectDetailsScreen() {
           <CaretLeft size={24} weight="bold" color="#16284F" />
         </TouchableOpacity>
         <View className="flex-1">
-          <Text className="text-lg font-bold text-[#16284F]" numberOfLines={1}>{details.subjectTitle}</Text>
+          <Text className="text-lg text-[#16284F]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{details.subjectTitle}</Text>
         </View>
       </View>
 
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 100 }}>
         <View className="mb-4 flex-row flex-wrap gap-2">
           <View className="flex-row items-center gap-2">
-            <Text className="text-[#525252] text-xs">Subject :</Text>
+            <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>Subject :</Text>
             <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
-              <Text className="text-[#43C17A] text-[10px] font-bold">{details.subjectTitle}</Text>
+              <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>{details.subjectTitle}</Text>
             </View>
           </View>
           <View className="flex-row items-center gap-2">
-            <Text className="text-[#525252] text-xs">Semester :</Text>
+            <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>Semester :</Text>
             <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
-              <Text className="text-[#43C17A] text-[10px] font-bold">{details.semester}</Text>
+              <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>{details.semester}</Text>
             </View>
           </View>
           <View className="flex-row items-center gap-2">
-            <Text className="text-[#525252] text-xs">Year :</Text>
+            <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>Year :</Text>
             <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
-              <Text className="text-[#43C17A] text-[10px] font-bold">{details.year}</Text>
+              <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>{details.year}</Text>
             </View>
           </View>
         </View>
 
-        <View className="flex-row justify-end mb-4">
+        <View className="flex-row justify-end mb-4 gap-2">
+          <TouchableOpacity 
+            onPress={() => setAddWeightageVisible(true)}
+            className="bg-white px-4 py-2 rounded-lg flex-row items-center gap-2 border border-[#43C17A]"
+          >
+            <Text className="text-[#43C17A] text-xs" style={{ fontFamily: fonts.bold }}>Add Weightage</Text>
+          </TouchableOpacity>
           <TouchableOpacity 
             onPress={() => setAddUnitVisible(true)}
-            className="bg-[#43C17A] px-4 py-2 rounded-lg flex-row items-center gap-2"
+            className="bg-[#43C17A] px-4 py-2 rounded-lg flex-row items-center gap-2 border border-[#43C17A]"
           >
-            <Text className="text-white font-bold text-xs">Add Unit</Text>
+            <Text className="text-white text-xs" style={{ fontFamily: fonts.bold }}>Add Unit</Text>
           </TouchableOpacity>
         </View>
 
@@ -358,7 +434,7 @@ export default function SubjectDetailsScreen() {
           <ActivityIndicator size="large" color="#7E5DFF" className="mt-10" />
         ) : units.length === 0 ? (
           <View className="items-center justify-center mt-10">
-            <Text className="text-gray-500 font-semibold">No units found</Text>
+            <Text className="text-gray-500" style={{ fontFamily: fonts.medium }}>No units found</Text>
           </View>
         ) : (
           units.map(unit => (
@@ -397,6 +473,29 @@ export default function SubjectDetailsScreen() {
           topicTitle={selectedTopicPdf.title}
           unitLabel={selectedTopicPdf.unitLabel}
           unitTitle={selectedTopicPdf.unitTitle}
+        />
+      )}
+
+      {addWeightageVisible && (
+        <AddWeightageModal 
+          visible={addWeightageVisible}
+          onClose={() => setAddWeightageVisible(false)}
+          subjectDetails={details}
+        />
+      )}
+
+      {deleteTarget && (
+        <ConfirmDeleteModal
+          visible={true}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={performDelete}
+          isDeleting={isDeleting}
+          title={deleteTarget.type === 'unit' ? "Delete Unit" : "Delete Topic"}
+          message={
+            deleteTarget.type === 'unit'
+              ? "Are you sure you want to permanently delete this unit and all its topics?"
+              : "Are you sure you want to permanently delete this topic?"
+          }
         />
       )}
     </View>

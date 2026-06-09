@@ -1,6 +1,7 @@
-import React from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Modal, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { MotiView, AnimatePresence } from 'moti';
 import {
     Buildings,
     Calendar,
@@ -18,6 +19,7 @@ import {
     SignOut,
     Smiley,
     UsersThree,
+    X,
 } from "phosphor-react-native";
 
 export type RoleSideMenuItem = {
@@ -85,11 +87,38 @@ export default function RoleSideMenu({
     onClose,
     onNavigate,
 }: Props) {
+    const [modalVisible, setModalVisible] = useState(visible);
+
+    useEffect(() => {
+        if (visible) {
+            setModalVisible(true);
+        } else {
+            const timeout = setTimeout(() => setModalVisible(false), 300);
+            return () => clearTimeout(timeout);
+        }
+    }, [visible]);
+
+    if (!modalVisible) return null;
+
     return (
-        <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+        <Modal visible={modalVisible} animationType="none" transparent onRequestClose={onClose}>
             <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={{ width: '75%', backgroundColor: "#47c67b", height: '100%' }} className="shadow-2xl shadow-black">
-                    <SafeAreaView style={{ flex: 1 }}>
+                <AnimatePresence>
+                    {visible && (
+                        <MotiView 
+                            from={{ translateX: -400 }}
+                            animate={{ translateX: 0 }}
+                            exit={{ translateX: -400 }}
+                            transition={{ type: "spring", damping: 150, stiffness: 350 }}
+                            style={{ width: '75%', backgroundColor: "#47c67b", height: '100%', zIndex: 10 }} 
+                            className="shadow-2xl shadow-black"
+                        >
+                            <SafeAreaView style={{ flex: 1 }}>
+                        <View style={{ position: 'absolute', top: 16, right: 16, zIndex: 50 }}>
+                            <TouchableOpacity onPress={onClose} className="bg-black/10 p-2 rounded-full">
+                                <X size={20} color="white" weight="bold" />
+                            </TouchableOpacity>
+                        </View>
                         <View className="items-center justify-center py-8" />
 
                         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -134,13 +163,27 @@ export default function RoleSideMenu({
                             </View>
                         </ScrollView>
                     </SafeAreaView>
-                </View>
+                </MotiView>
+                )}
+                </AnimatePresence>
                 
-                <TouchableOpacity 
-                    style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }} 
-                    onPress={onClose} 
-                    activeOpacity={1}
-                />
+                <AnimatePresence>
+                {visible && (
+                    <MotiView 
+                        from={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ type: "timing", duration: 300 }}
+                        style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
+                    >
+                        <TouchableOpacity 
+                            style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }} 
+                            onPress={onClose} 
+                            activeOpacity={1}
+                        />
+                    </MotiView>
+                )}
+                </AnimatePresence>
             </View>
         </Modal>
     );

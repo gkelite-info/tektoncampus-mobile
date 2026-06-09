@@ -29,7 +29,7 @@ function MockFacultyScreen({ title }: { title: string }) {
 const Tab = createBottomTabNavigator<FacultyTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     return (
         <View
             className="absolute bottom-0 bg-transparent"
@@ -40,6 +40,9 @@ function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
             <View className="flex-row h-[85px] absolute bottom-0 left-0 right-0">
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;
+                    
+                    const coreRoutes = ["Assignments", "Academics", "Dashboard", "Attendance", "Profile"];
+                    if (!coreRoutes.includes(route.name)) return null;
 
                     const onPress = () => {
                         const event = navigation.emit({

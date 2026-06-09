@@ -67,7 +67,7 @@ export default function ResumeLanguages() {
 
     if (loading) {
         return (
-            <View className="flex-1 bg-white rounded-xl shadow-sm items-center justify-center p-4">
+            <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading languages...</Text>
             </View>
@@ -75,7 +75,7 @@ export default function ResumeLanguages() {
     }
 
     return (
-        <ScrollView className="flex-1 bg-white rounded-xl shadow-sm" contentContainerStyle={{ padding: 16 }}>
+        <ScrollView className="flex-1 bg-white rounded-xl " contentContainerStyle={{ padding: 16 }}>
             <View className="flex-row justify-between items-center mb-6">
                 <Text className="text-lg font-semibold text-[#000000]">Languages</Text>
                 <TouchableOpacity className="bg-[#43C17A] px-4 py-1.5 rounded-md flex-row items-center justify-center">

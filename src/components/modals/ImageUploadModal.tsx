@@ -62,15 +62,17 @@ export default function ImageUploadModal({ visible, onClose, userId, onUploadSuc
             const fileName = `profile_${userId}_${Date.now()}.${ext}`;
             const filePath = `${userId}/${fileName}`;
 
-            const response = await fetch(asset.uri);
-            const blob = await response.blob();
+            if (!asset.base64) {
+                throw new Error("Base64 data missing");
+            }
 
+            const { decode } = require('base64-arraybuffer');
 
             const { data, error } = await supabase.storage
                 .from('user_profiles')
-                .upload(filePath, blob, {
+                .upload(filePath, decode(asset.base64), {
                     contentType: `image/${ext === 'png' ? 'png' : 'jpeg'}`,
-                    upsert: false,
+                    upsert: true,
                 });
 
             if (error) throw error;

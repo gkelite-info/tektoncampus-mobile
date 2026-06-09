@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 import AssignmentTab from './components/AssignmentTab';
@@ -23,8 +22,8 @@ export default function FacultyAssignments() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-      <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : headerHeight + 16, paddingHorizontal: 16 }}>
+    <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
+      <View style={{ flex: 1, paddingTop: headerHeight + 16, paddingHorizontal: 16 }}>
         {/* Header Text */}
         <View className="mb-3 mt-0">
           <Text className="font-bold text-2xl mb-1 text-[#282828]">
@@ -83,6 +82,6 @@ export default function FacultyAssignments() {
           {activeTab === 'lab' && <LabTab />}
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

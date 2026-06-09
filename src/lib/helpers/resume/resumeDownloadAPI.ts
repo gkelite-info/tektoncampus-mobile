@@ -10,8 +10,16 @@ export async function generateResumePdf(html: string, fileName: string = "Resume
       base64: false
     });
 
-    // Rename the file so it exports with the correct name
-    const newUri = `${FileSystem.documentDirectory}${fileName}`;
+    // Sanitize filename to prevent file system errors
+    const safeFileName = fileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const newUri = `${FileSystem.documentDirectory}${safeFileName}`;
+
+    // Ensure we delete any existing file with the same name before copying
+    const fileInfo = await FileSystem.getInfoAsync(newUri);
+    if (fileInfo.exists) {
+        await FileSystem.deleteAsync(newUri, { idempotent: true });
+    }
+
     await FileSystem.copyAsync({
       from: uri,
       to: newUri
@@ -32,4 +40,4 @@ export async function generateResumePdf(html: string, fileName: string = "Resume
     Toast.show({ type: "error", text1: "Failed to generate PDF" });
     throw error;
   }
-}
+}

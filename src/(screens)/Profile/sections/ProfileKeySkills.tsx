@@ -83,7 +83,7 @@ export default function ProfileKeySkills() {
 
     if (loading) {
         return (
-            <View className="flex-1 bg-white rounded-xl shadow-sm items-center justify-center p-4">
+            <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
                 <Text className="text-gray-400 mt-2">Loading skills...</Text>
             </View>
@@ -91,7 +91,7 @@ export default function ProfileKeySkills() {
     }
 
     return (
-        <ScrollView className="flex-1 bg-white rounded-xl shadow-sm" contentContainerStyle={{ padding: 16 }}>
+        <ScrollView className="flex-1 bg-white rounded-xl " contentContainerStyle={{ padding: 16 }}>
             <View className="flex-row justify-between items-center mb-6">
                 <Text className="text-lg font-semibold text-[#000000]">Skills</Text>
                 <View className="flex-row gap-2">

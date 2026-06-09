@@ -45,6 +45,7 @@ export async function generateRawWithGroqFallback({
         }),
       });
 
+
       if (!response.ok) {
         throw new Error(`Groq API Error: ${response.status} ${response.statusText}`);
       }

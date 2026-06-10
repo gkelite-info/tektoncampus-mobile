@@ -19,7 +19,7 @@ import {
 } from "lucide-react-native";
 
 import { supabase } from "@/lib/supabaseClient";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "@/utils/useTranslations";
 import UserInfoCard from "@/utils/userInfoCardComp";
 import AcademicPerformance from "@/utils/AcademicPerformance";
 import CardComponent from "@/utils/card";
@@ -72,7 +72,7 @@ export default function StudentHome() {
         collegeSectionsId,
     } = useStudent();
 
-    const { t } = useTranslation();
+    const t = useTranslations("Dashboard.student");
 
     const {
         data: lectures = [],
@@ -278,7 +278,7 @@ export default function StudentHome() {
             value: assignmentsLoading ? (
                 <ValueShimmer />
             ) : (
-                t('{count} Due', { count: dueAssignmentsCount })
+                t('{count} Due', { count: String(dueAssignmentsCount) })
             ),
             label: t('Assignments'),
             to: 'Assignments',

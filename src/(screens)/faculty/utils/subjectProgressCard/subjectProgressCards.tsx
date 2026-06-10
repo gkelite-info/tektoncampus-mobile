@@ -24,7 +24,8 @@ const getSubjectInitials = (title: string) => {
     const parts = title.trim().split(/\s+/).filter(Boolean);
     if (parts.length === 0) return "SU";
     if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+    const initials = `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+    return initials.replace(/[^A-Z0-9]/g, "");
 };
 
 function SubjectCardRow({ subject }: { subject: SubjectProgressCard }) {
@@ -42,7 +43,7 @@ function SubjectCardRow({ subject }: { subject: SubjectProgressCard }) {
                     />
                 ) : (
                     <View className="h-12 w-12 items-center justify-center rounded-md bg-[#BFEFCD]">
-                        <Text className="text-[16px] font-semibold text-[#16284F]">
+                        <Text className="text-[16px] text-[#16284F]" style={{ fontFamily: fonts.semiBold }}>
                             {getSubjectInitials(subject.title)}
                         </Text>
                     </View>
@@ -52,12 +53,13 @@ function SubjectCardRow({ subject }: { subject: SubjectProgressCard }) {
             <View className="h-full w-[80%] p-2 flex-row justify-between items-center">
                 <View className="flex-col gap-1 flex-1 pr-2">
                     <Text
-                        className="text-[10px] font-semibold text-[#16284F]"
+                        className="text-base text-[#16284F]"
                         numberOfLines={2}
+                        style={{ fontFamily: fonts.semiBold }}
                     >
                         {subject.title}
                     </Text>
-                    <Text className="text-[10px] text-[#454545]" numberOfLines={1}>
+                    <Text className="text-sm text-[#454545]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>
                         {subject.professor}
                     </Text>
                 </View>
@@ -72,7 +74,7 @@ function SubjectCardRow({ subject }: { subject: SubjectProgressCard }) {
               remainingColor={subject.remainingColor}
             />
           */}
-                    <Text className="text-[10px] font-bold text-[#16284F]">{subject.percentage}%</Text>
+                    <Text className="text-base text-[#16284F]" style={{ fontFamily: fonts.semiBold }}>{subject.percentage}%</Text>
                 </View>
             </View>
         </View>
@@ -119,7 +121,7 @@ export default function SubjectProgressCards({
                     ))
                 ) : props.length === 0 ? (
                     <View className="items-center justify-center py-10 opacity-70">
-                        <Text className="text-[#282828] text-sm font-medium">
+                        <Text className="text-[#282828] text-sm" style={{ fontFamily: fonts.medium }}>
                             {t("No subjects yet !", "No subjects yet !")}
                         </Text>
                     </View>

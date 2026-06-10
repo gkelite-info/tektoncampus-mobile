@@ -28,14 +28,12 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
 
     if (!studentId) return [];
 
-    // 1. Fetch Student profile data
     const { data: student } = await supabase
         .from("students")
-        .select("collegeBranchId")
+        .select("collegeBranchId, collegeEducationId")
         .eq("studentId", studentId)
         .single();
 
-    // 2. Fetch Active Academic History
     const { data: history } = await supabase
         .from("student_academic_history")
         .select("collegeSemesterId, collegeAcademicYearId")
@@ -47,17 +45,16 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
         return [{ subject: "BASE_DATA_MISSING", value: 0, full: 100 }];
     }
 
-    // 3. Get Course Subjects matching current criteria
     const { data: subjects } = await supabase
         .from("college_subjects")
         .select("collegeSubjectId, subjectName, subjectKey")
-        .eq("collegeSemesterId", history.collegeSemesterId)
         .eq("collegeBranchId", student.collegeBranchId)
+        .eq("collegeEducationId", student.collegeEducationId)
+        .eq("collegeAcademicYearId", history.collegeAcademicYearId)
         .is("deletedAt", null);
 
     if (!subjects) return [];
 
-    // 4. Resolve calculations in parallel across all found courses
     const performanceData = await Promise.all(
         subjects.map(async (subject) => {
             const { data: config } = await supabase
@@ -66,7 +63,6 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
                 .eq("collegeSubjectId", subject.collegeSubjectId)
                 .maybeSingle();
 
-            // Fallback: If no strict grading weight config exists, calculate raw average score across quizzes
             if (!config) {
                 const { data: rawQuizzes } = await supabase
                     .from("quiz_submissions")
@@ -100,7 +96,6 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
                 let earned = 0;
                 let possible = 0;
 
-                // Category A: Quizzes
                 if (label.includes("quiz")) {
                     const { data: quizData } = await supabase
                         .from("quiz_submissions")
@@ -122,7 +117,6 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
                     }
                 }
 
-                // Category B: Discussion Board Posts
                 else if (label.includes("discussion")) {
                     const { data: forumData } = await supabase
                         .from("student_discussion_uploads")
@@ -149,7 +143,6 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
                     }
                 }
 
-                // Category C: Homework / Assignments
                 else if (label.includes("assignment")) {
                     const { data: assignData } = await supabase
                         .from("student_assignments_submission")
@@ -173,7 +166,6 @@ export async function getStudentAcademicPerformance(studentId: number | null) {
                     }
                 }
 
-                // Category D: Class Attendance Logs
                 else if (label.includes("attendance")) {
                     const { data: attendanceRecords } = await supabase
                         .from("attendance_record")

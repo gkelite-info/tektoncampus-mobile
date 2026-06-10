@@ -8,6 +8,7 @@ import {
     useWindowDimensions
 } from "react-native";
 import { CaretLeft, Chalkboard, CaretDown } from "phosphor-react-native";
+import { fonts } from "@/constants/fonts";
 
 const useNavigate = () => {
     return {
@@ -32,13 +33,13 @@ const getStudentDashboardData = async (...args: any[]): Promise<any> => ({
 const CardComponent = ({ label, value, totalPercentage, style, icon }: any) => (
     <View className={`p-4 rounded-xl shadow-sm bg-amber-50 mb-2 ${style}`}>
         {icon}
-        <Text className="text-xl font-bold mt-2 text-[#282828]">{value}</Text>
-        {totalPercentage && <Text className="text-md text-emerald-600 font-semibold">{totalPercentage}</Text>}
-        <Text className="text-xs text-gray-500 mt-1">{label}</Text>
+        <Text className="text-xl mt-2 text-[#282828]" style={{ fontFamily: fonts.bold }}>{value}</Text>
+        {totalPercentage && <Text className="text-md text-emerald-600" style={{ fontFamily: fonts.semiBold }}>{totalPercentage}</Text>}
+        <Text className="text-sm text-gray-500 mt-1" style={{ fontFamily: fonts.regular }}>{label}</Text>
     </View>
 );
 const CourseScheduleCard = ({ style }: any) => <View className={`bg-gray-100 p-4 rounded-xl ${style}`}><Text>Schedule Card</Text></View>;
-const SemesterAttendanceCard = ({ presentPercent }: any) => <View className="bg-emerald-50 p-4 rounded-xl"><Text>Semester Stats: {presentPercent}%</Text></View>;
+const SemesterAttendanceCard = ({ presentPercent }: any) => <View className="bg-emerald-50 p-4 rounded-xl"><Text style={{ fontFamily: fonts.semiBold }} className="text-base">Semester Stats: {presentPercent}%</Text></View>;
 const WorkWeekCalendar = ({ style }: any) => <View className={`bg-gray-50 p-4 rounded-xl ${style}`}><Text>Calendar Section</Text></View>;
 const AiAttendanceNotificationBanner = ({ message }: any) => (
     <View className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl"><Text className="text-indigo-900 text-xs font-medium">{message}</Text></View>
@@ -57,7 +58,7 @@ interface CardItem {
     totalPercentage?: string | number;
 }
 
-export default function SubjectAttendance() {
+export default function SubjectAttendance({ onBack, onNavigate }: { onBack?: () => void; onNavigate?: (screen: string, params?: any) => void }) {
     const router = useNavigate();
     const t = useTranslations("Attendance.student");
     const { width } = useWindowDimensions();
@@ -111,16 +112,16 @@ export default function SubjectAttendance() {
     const rawTableData = dashboardData?.subjectWiseStats || [];
 
     return (
-        <ScrollView className="flex-1 bg-white px-4 pt-4" showsVerticalScrollIndicator={false}>
+        <View className="flex-1">
             <View className="flex-row justify-between items-center w-full">
                 <View className="flex-col flex-1 pr-2">
                     <View className="flex-row items-center gap-1">
-                        <TouchableOpacity onPress={() => router.goBack()} className="p-1 -ml-2">
+                        <TouchableOpacity onPress={onBack || (() => router.goBack())} className="p-1 -ml-2">
                             <CaretLeft size={24} color="#282828" weight="bold" />
                         </TouchableOpacity>
-                        <Text className="text-[#282828] font-bold text-2xl">{t("Attendance")}</Text>
+                        <Text className="text-[#282828] text-2xl" style={{ fontFamily: fonts.bold }}>{t("Attendance")}</Text>
                     </View>
-                    <Text className="text-gray-500 text-xs mt-0.5">
+                    <Text className="text-gray-500 text-sm mt-0.5" style={{ fontFamily: fonts.regular }}>
                         {t("Track, manage, and maintain your attendance effortlessly")}
                     </Text>
                 </View>
@@ -170,7 +171,7 @@ export default function SubjectAttendance() {
             </View>
 
             <View className="mt-2 flex-col items-start w-full">
-                <Text className="text-[#282828] font-semibold text-lg">{t("Subject-Wise Breakdown")}</Text>
+                <Text className="text-[#282828] text-lg" style={{ fontFamily: fonts.semiBold }}>{t("Subject-Wise Breakdown")}</Text>
                 {isDesktopView ? (
                     <View className="w-full mt-2">
                         <TableComponent tableData={rawTableData} isLoading={loading} />
@@ -191,15 +192,15 @@ export default function SubjectAttendance() {
                                             onPress={() => setExpandedRow(isExpanded ? null : i)}
                                         >
                                             <View className="flex-col flex-1 pr-2">
-                                                <Text className="text-gray-400 text-[10px] font-medium uppercase tracking-wider">{t("Subject Name")}</Text>
-                                                <Text className="text-sm text-[#282828] font-semibold mt-0.5" numberOfLines={1}>
+                                                <Text className="text-gray-400 text-base font-medium uppercase tracking-wider">{t("Subject Name")}</Text>
+                                                <Text className="text-base text-[#282828] mt-0.5" numberOfLines={1} style={{ fontFamily: fonts.semiBold }}>
                                                     {row.subjectName}
                                                 </Text>
                                             </View>
 
                                             <View className="flex-row items-center gap-2">
                                                 <View className="w-7 h-7 rounded-full bg-blue-50 items-center justify-center">
-                                                    <Text className="text-blue-500 text-[8px] font-black">PDF</Text>
+                                                    <Text className="text-blue-500 text-sm font-black">PDF</Text>
                                                 </View>
                                                 <View className="w-7 h-7 rounded-full bg-[#43C17A] items-center justify-center">
                                                     <CaretDown
@@ -221,17 +222,17 @@ export default function SubjectAttendance() {
                                                     { label: t("Percentage %"), value: `${row.percentage}%`, highlight: true }
                                                 ].map((item, idx) => (
                                                     <View key={idx} className="flex-row justify-between items-center py-0.5">
-                                                        <Text className="text-gray-500 text-xs font-medium">{item.label}</Text>
-                                                        <Text className={`text-xs ${item.highlight ? "text-emerald-600 font-bold" : "text-gray-800 font-semibold"}`}>
+                                                        <Text className="text-gray-500 text-base" style={{ fontFamily: fonts.medium }}>{item.label}</Text>
+                                                        <Text className={`text-base ${item.highlight ? "text-emerald-600 font-bold" : "text-gray-800 font-semibold"}`}>
                                                             {item.value}
                                                         </Text>
                                                     </View>
                                                 ))}
                                                 <TouchableOpacity
                                                     className="mt-2 items-end"
-                                                    onPress={() => router.navigate("SubjectDetails", { subjectId: row.subjectId })}
+                                                    onPress={() => (onNavigate || router.navigate)("SubjectDetails", { subjectId: row.subjectId })}
                                                 >
-                                                    <Text className="text-indigo-600 underline text-xs font-semibold">{t("View Details")}</Text>
+                                                    <Text className="text-indigo-600 underline text-base" style={{ fontFamily: fonts.semiBold }}>{t("View Details")}</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         )}
@@ -277,6 +278,6 @@ export default function SubjectAttendance() {
                     </View>
                 )}
             </View>
-        </ScrollView>
+        </View>
     );
 }

@@ -10,7 +10,9 @@
       "tsconfigPaths": true
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      "expo-localization"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",

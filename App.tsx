@@ -36,7 +36,7 @@ export default function App() {
           <RootNavigator />
         </UserProvider>
         <Toast position='top' swipeable />
-        <StatusBar style="auto" />
+        <StatusBar style="auto" translucent={false} backgroundColor="#ffffff" />
       </SafeAreaProvider>
     </QueryProvider>
     // </NextIntlClientProvider >

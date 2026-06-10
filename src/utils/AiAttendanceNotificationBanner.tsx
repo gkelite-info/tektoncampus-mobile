@@ -16,7 +16,8 @@ export default function AiAttendanceNotificationBanner({
             colors={["#FBF5FD", "#CBB1FF"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            className={`flex-row w-full items-center rounded-xl px-4 py-3 relative min-h-[80px] shadow-sm ${className}`}
+            style={{ borderRadius: 8 }}
+            className={`flex-row w-full items-center px-4 py-3 relative min-h-[80px] shadow-sm ${className}`}
         >
             <View className="absolute -bottom-1 left-2 z-10">
                 <Image

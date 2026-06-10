@@ -1,3 +1,4 @@
+import { fonts } from "@/constants/fonts";
 import React from "react";
 import { View, Text } from "react-native";
 
@@ -22,24 +23,23 @@ export default function LectureCard({
     return (
         <View className="flex-row gap-3 mb-2">
             <View className="w-[22%] items-center justify-start pt-1">
-                <Text className="text-[12px] font-semibold text-[#16284F] text-left w-full">
+                <Text className="text-[12px] text-[#16284F] text-left w-full" style={{ fontFamily: fonts.semiBold }}>
                     {time}
                 </Text>
             </View>
 
             <View className="w-[78%] bg-white rounded-md border-l-4 border-[#16284F] shadow-sm overflow-hidden">
                 <View className="bg-[#E8E9ED] w-full px-3 py-2.5 gap-1.5">
-
                     <View className="flex-row items-center flex-wrap gap-2">
-                        <Text className="text-[#16284F] text-[14px] font-semibold">
+                        <Text className="text-[#16284F] text-[14px]" style={{ fontFamily: fonts.semiBold }}>
                             {title}
                         </Text>
-                        <Text className="text-[#43C17A] text-[11px]">
+                        <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.semiBold }}>
                             ({professor})
                         </Text>
                     </View>
 
-                    <Text className="text-[#454545] text-[12px] leading-snug">
+                    <Text className="text-[#454545] text-[12px] leading-snug" style={{ fontFamily: fonts.regular }}>
                         {primaryDescription}
                     </Text>
 

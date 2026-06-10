@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
     View,
     Text,
@@ -8,6 +8,7 @@ import {
     LayoutAnimation,
     UIManager,
     Dimensions,
+    RefreshControl,
 } from "react-native";
 import { Chalkboard, UsersThree, CaretDown } from "phosphor-react-native";
 import CardComponent from "@/utils/card";
@@ -28,6 +29,8 @@ import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studen
 import { useTranslations } from "@/utils/useTranslations";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { fonts } from "@/constants/fonts";
+import { FolderTree } from "lucide-react-native";
 
 
 if (
@@ -96,6 +99,7 @@ export default function AttendanceClient() {
     const t = useTranslations("Attendance.student");
 
     const [currentTab, setCurrentTab] = useState<string | null>(null);
+    const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(null);
     const showSubjectAttendanceTable = currentTab === "subject-attendance";
     const showSubjectAttendanceDetails = currentTab === "subject-attendance-details";
     const hideRightSection = showSubjectAttendanceTable || showSubjectAttendanceDetails;
@@ -147,6 +151,27 @@ export default function AttendanceClient() {
         return () => { isMounted = false; };
     }, [userId, viewDate, currentPage, isInter, userLoading, studentLoading]);
 
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(async () => {
+        if (!userId) return;
+        setRefreshing(true);
+        try {
+            const year = viewDate.getFullYear();
+            const month = String(viewDate.getMonth() + 1).padStart(2, "0");
+            const day = String(viewDate.getDate()).padStart(2, "0");
+            const data = await getStudentDashboardData(
+                userId, `${year}-${month}-${day}`, currentPage, rowsPerPage, isInter
+            );
+            setDashboardData(data);
+            setTotalRecords(data.totalCount || 0);
+        } catch {
+            // silent
+        } finally {
+            setRefreshing(false);
+        }
+    }, [userId, viewDate, currentPage, isInter]);
+
     const handleCardClick = (cardId: number) => {
         if (cardId === 2) setCurrentTab("subject-attendance");
     };
@@ -176,17 +201,21 @@ export default function AttendanceClient() {
             <ScrollView
                 className="flex-1 bg-[#f4f5f6] "
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 32, paddingTop: headerHeight + 16 }}
+                contentContainerStyle={{ paddingBottom: 140, paddingTop: headerHeight + 16 }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                alwaysBounceVertical={true}
+                overScrollMode="always"
             >
                 <View className="px-4 pt-4">
-
                     {!showSubjectAttendanceTable && !showSubjectAttendanceDetails && (
                         <>
                             <View className="mb-4">
-                                <Text className="text-[#282828] font-bold text-[22px] mb-1">
+                                <Text className="text-[#282828] text-[22px] mb-1" style={{ fontFamily: fonts.bold }}>
                                     {t("Attendance")}
                                 </Text>
-                                <Text className="text-gray-600 text-[13px]">
+                                <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                     {t("Track, manage, and maintain your attendance effortlessly")}
                                 </Text>
                             </View>
@@ -194,52 +223,42 @@ export default function AttendanceClient() {
                             {dataLoading ? (
                                 <DashboardSkeleton />
                             ) : (
-                                <View className="gap-3 bg-red-400 flex">
-                                    <View className="flex-row gap-3 bg-blue-400 w-[50%]">
-                                        <TouchableOpacity
-                                            activeOpacity={1}
-                                            style={{ width: CARD_WIDTH }}
-                                        >
-                                            <CardComponent
-                                                style="bg-[#FFEDDA]"
-                                                icon={<UsersThree size={28} color="#EFEFEF" />}
-                                                value={
-                                                    dashboardData
-                                                        ? `${dashboardData.todayStats.attended}/${dashboardData.todayStats.total}`
-                                                        : "0/0"
-                                                }
-                                                label={t("Today Total Classes")}
-                                                iconBgColor="#FFBB70"
-                                                iconColor="#EFEFEF"
-                                            />
-                                        </TouchableOpacity>
+                                <View className="flex-row gap-3 w-full">
+                                    <View className="flex-1 gap-3">
+                                        <CardComponent
+                                            style="bg-[#FFEDDA] w-full h-[95px] rounded-xl"
+                                            icon={<UsersThree size={28} color="#FFFFFF" weight="fill" />}
+                                            value={
+                                                dashboardData
+                                                    ? `${dashboardData.todayStats.attended}/${dashboardData.todayStats.total}`
+                                                    : "0/0"
+                                            }
+                                            label={t("Today Total Classes")}
+                                            iconBgColor="#FFBB70"
+                                            iconColor="#FFFFFF"
+                                        />
 
-                                        <TouchableOpacity
-                                            activeOpacity={0.7}
-                                            style={{ width: CARD_WIDTH }}
-                                            onPress={() => handleCardClick(2)}
-                                        >
-                                            <CardComponent
-                                                style="bg-[#CEE6FF]"
-                                                icon={<Chalkboard size={28} color="#EFEFEF" />}
-                                                value={
-                                                    dashboardData
-                                                        ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}`
-                                                        : "0/0"
-                                                }
-                                                label={t("Sem Attendance")}
-                                                iconBgColor="#7764FF"
-                                                iconColor="#EFEFEF"
-                                                totalPercentage={
-                                                    dashboardData
-                                                        ? `${dashboardData.cards.percentage}%`
-                                                        : "0%"
-                                                }
-                                            />
-                                        </TouchableOpacity>
+                                        <CardComponent
+                                            style="bg-[#CEE6FF] w-full h-[95px] rounded-xl"
+                                            icon={<Chalkboard size={28} color="#FFFFFF" weight="fill" />}
+                                            value={
+                                                dashboardData
+                                                    ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}`
+                                                    : "0/0"
+                                            }
+                                            label={t("Sem Attendance")}
+                                            iconBgColor="#7764FF"
+                                            iconColor="#FFFFFF"
+                                            totalPercentage={
+                                                dashboardData
+                                                    ? `${dashboardData.cards.percentage}%`
+                                                    : "0%"
+                                            }
+                                            onClick={() => handleCardClick(2)}
+                                        />
                                     </View>
 
-                                    <View className="w-[50%]">
+                                    <View className="flex-1">
                                         <SemesterAttendanceCard
                                             presentPercent={dashboardData?.semesterStats.present || 0}
                                             absentPercent={dashboardData?.semesterStats.absent || 0}
@@ -260,17 +279,13 @@ export default function AttendanceClient() {
                                 />
                             </View>
 
-                            {/* ━━━ TODAY'S ATTENDANCE SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-                            {/* web: flex flex-col max-md:p-3 → p-3 on mobile             */}
                             <View className="mt-3 p-3">
-                                {/* Section heading */}
-                                <Text className="text-[#282828] font-semibold text-[17px]">
+                                <Text className="text-[#282828] text-[17px]" style={{ fontFamily: fonts.semiBold }}>
                                     {isToday
                                         ? t("Today's Attendance")
                                         : t("Attendance – {date}", { date: formattedDate })}
                                 </Text>
-                                {/* web: max-md:hidden → hidden on mobile — we SHOW this on RN */}
-                                <Text className="text-gray-500 text-[13px] mt-0.5">
+                                <Text className="text-gray-500 text-[13px] mt-0.5" style={{ fontFamily: fonts.regular }}>
                                     {t("Classes on {date}", { date: formattedDate })}
                                 </Text>
 
@@ -280,7 +295,6 @@ export default function AttendanceClient() {
                                     </View>
                                 ) : (
                                     <>
-                                        {/* ── Accordion list ───────────────────────────────────── */}
                                         <View className="flex-col mt-3 w-full">
                                             {tableRows.map((row, i) => {
                                                 const isExpanded = expandedRow === i;
@@ -291,34 +305,30 @@ export default function AttendanceClient() {
                                                         key={i}
                                                         className={`overflow-hidden${!isLast ? " border-b border-gray-100" : ""}`}
                                                     >
-                                                        {/* Collapsed header */}
                                                         <TouchableOpacity
                                                             className="py-3 flex-row justify-between items-center"
                                                             activeOpacity={0.7}
                                                             onPress={() => toggleRow(i)}
                                                         >
-                                                            {/* Left */}
                                                             <View className="flex-1 flex-col gap-0.5">
-                                                                <Text className="text-[#515151] text-[11px]">
+                                                                <Text className="text-[#515151] text-[11px]" style={{ fontFamily: fonts.regular }}>
                                                                     {t("Subject Name")}
                                                                 </Text>
                                                                 <Text
-                                                                    className="text-[14px] text-[#282828] font-medium pr-2"
+                                                                    className="text-[14px] text-[#282828] pr-2"
                                                                     numberOfLines={1}
+                                                                    style={{ fontFamily: fonts.medium }}
                                                                 >
                                                                     {row.Subject}
                                                                 </Text>
                                                             </View>
 
-                                                            {/* Right: PDF + caret */}
                                                             <View className="flex-row items-center gap-2">
-                                                                {/* PDF chip — w-6 h-6 on web, w-8 h-8 here for touch */}
                                                                 <View className="w-8 h-8 rounded-full bg-blue-50 items-center justify-center">
-                                                                    <Text className="text-blue-500 text-[9px] font-bold">
+                                                                    <Text className="text-blue-500 text-[9px]" style={{ fontFamily: fonts.bold }}>
                                                                         PDF
                                                                     </Text>
                                                                 </View>
-                                                                {/* Caret circle */}
                                                                 <View className="w-6 h-6 rounded-full bg-[#43C17A] items-center justify-center">
                                                                     <CaretDown
                                                                         size={14}
@@ -334,45 +344,42 @@ export default function AttendanceClient() {
                                                             </View>
                                                         </TouchableOpacity>
 
-                                                        {/* Expanded detail */}
                                                         {isExpanded && (
                                                             <View className="pb-3 flex-col gap-2.5 px-2 pt-1 rounded-lg mb-1">
-                                                                {/* Faculty */}
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Faculty")}
                                                                     </Text>
-                                                                    <Text className="text-gray-600 text-[13px]">
+                                                                    <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                                                         {row.Faculty}
                                                                     </Text>
                                                                 </View>
 
-                                                                {/* Today's Status */}
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Today's Status")}
                                                                     </Text>
                                                                     <View className="px-3 py-0.5 bg-[#DCEAE2] rounded-full">
-                                                                        {row.TodaysStatus}
+                                                                        <Text style={{ fontFamily: fonts.medium }}>
+                                                                            {row.TodaysStatus}
+                                                                        </Text>
                                                                     </View>
                                                                 </View>
 
-                                                                {/* Class Attendance */}
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Class Attendance")}
                                                                     </Text>
-                                                                    <Text className="text-gray-600 text-[13px]">
+                                                                    <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                                                         {row.ClassAttendance}
                                                                     </Text>
                                                                 </View>
 
-                                                                {/* Percentage */}
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Percentage %")}
                                                                     </Text>
-                                                                    <Text className="text-gray-600 text-[13px]">
+                                                                    <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                                                         {row.Percentage}
                                                                     </Text>
                                                                 </View>
@@ -383,7 +390,6 @@ export default function AttendanceClient() {
                                             })}
                                         </View>
 
-                                        {/* ── Pagination ───────────────────────────────────────── */}
                                         {totalPages > 1 && (
                                             <View className="flex-row justify-end items-center gap-2 mt-6 mb-4 w-full">
                                                 <TouchableOpacity
@@ -426,7 +432,6 @@ export default function AttendanceClient() {
                                             </View>
                                         )}
 
-                                        {/* ── Empty state ──────────────────────────────────────── */}
                                         {tableRows.length === 0 && (
                                             <View className="mt-4 border border-gray-200 p-4 rounded-lg bg-white items-center">
                                                 <Text className="text-gray-400 italic text-[13px] text-center">
@@ -440,11 +445,24 @@ export default function AttendanceClient() {
                         </>
                     )}
 
-                    {/* Sub-page tabs */}
-                    {showSubjectAttendanceTable && <SubjectAttendance />}
-                    {showSubjectAttendanceDetails && <SubjectAttendanceDetailsClient />}
+                    {showSubjectAttendanceTable && (
+                        <SubjectAttendance
+                            onBack={() => setCurrentTab(null)}
+                            onNavigate={(screen, params) => {
+                                if (screen === "SubjectDetails") {
+                                    setSelectedSubjectId(params?.subjectId ? Number(params.subjectId) : null);
+                                    setCurrentTab("subject-attendance-details");
+                                }
+                            }}
+                        />
+                    )}
+                    {showSubjectAttendanceDetails && (
+                        <SubjectAttendanceDetailsClient
+                            route={{ params: { subjectId: selectedSubjectId } }}
+                            navigation={{ goBack: () => setCurrentTab("subject-attendance") }}
+                        />
+                    )}
 
-                    {/* Desktop side panel — web only, hidden on native */}
                     {!hideRightSection && Platform.OS === "web" && (
                         <View className="w-[32%] flex-col gap-3 p-2 pt-0">
                             <CourseScheduleCard />

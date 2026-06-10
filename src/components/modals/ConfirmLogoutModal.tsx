@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ActivityIndicator } from "react-native";
 import { WarningCircle } from "phosphor-react-native";
+import { fonts } from "@/constants/fonts";
 
 type Props = {
     visible: boolean;
@@ -24,9 +25,9 @@ export default function ConfirmLogoutModal({ visible, onClose, onConfirm }: Prop
                     <View className="w-16 h-16 bg-red-100 rounded-full items-center justify-center mb-4">
                         <WarningCircle size={32} color="#ef4444" weight="fill" />
                     </View>
-                    
-                    <Text className="text-xl font-bold text-gray-900 mb-2">Confirm Logout</Text>
-                    <Text className="text-center text-gray-500 mb-6">
+
+                    <Text className="text-xl text-gray-900 mb-2" style={{ fontFamily: fonts.bold }}>Confirm Logout</Text>
+                    <Text className="text-center text-gray-500 mb-6" style={{ fontFamily: fonts.regular }}>
                         Are you sure you want to log out? You will need to enter your credentials again to access your account.
                     </Text>
 
@@ -36,9 +37,9 @@ export default function ConfirmLogoutModal({ visible, onClose, onConfirm }: Prop
                             disabled={isLoading}
                             className="flex-1 py-3 bg-gray-100 rounded-xl items-center"
                         >
-                            <Text className="font-semibold text-gray-700">Cancel</Text>
+                            <Text className="text-gray-700 text-lg" style={{ fontFamily: fonts.semiBold }}>Cancel</Text>
                         </TouchableOpacity>
-                        
+
                         <TouchableOpacity
                             onPress={handleConfirm}
                             disabled={isLoading}
@@ -47,10 +48,10 @@ export default function ConfirmLogoutModal({ visible, onClose, onConfirm }: Prop
                             {isLoading ? (
                                 <>
                                     <ActivityIndicator size="small" color="#ffffff" />
-                                    <Text className="font-semibold text-white">Logging out...</Text>
+                                    <Text className="text-white text-lg" style={{ fontFamily: fonts.semiBold }}>Logging out...</Text>
                                 </>
                             ) : (
-                                <Text className="font-semibold text-white">Logout</Text>
+                                <Text className="text-white text-lg" style={{ fontFamily: fonts.semiBold }}>Logout</Text>
                             )}
                         </TouchableOpacity>
                     </View>

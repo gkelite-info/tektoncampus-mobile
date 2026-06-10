@@ -6,20 +6,13 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Linking,
+    RefreshControl,
 } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import { useHeaderHeight } from '@react-navigation/elements';
-
-import {
-    BookOpen,
-    Clock,
-    Users,
-    ChevronRight,
-} from "lucide-react-native";
-
 import { supabase } from "@/lib/supabaseClient";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "@/utils/useTranslations";
 import UserInfoCard from "@/utils/userInfoCardComp";
 import AcademicPerformance from "@/utils/AcademicPerformance";
 import CardComponent from "@/utils/card";
@@ -31,7 +24,7 @@ import { useStudent } from "@/utils/context/student/useStudent";
 import { fetchStudentFeePlan } from "@/lib/helpers/student/payments/fetchStudentFeePlan";
 import { ValueShimmer } from "@/components/shimmers/valueShimmer";
 import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studentAttendanceActions";
-import { Chalkboard } from "phosphor-react-native";
+import { BookOpenIcon, CaretRightIcon, Chalkboard, ClockIcon, UsersIcon } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
 import { useUpcomingClasses } from "@/features/student/hooks/useUpcomingClasses";
 
@@ -72,7 +65,7 @@ export default function StudentHome() {
         collegeSectionsId,
     } = useStudent();
 
-    const { t } = useTranslation();
+    const t = useTranslations("Dashboard.student");
 
     const {
         data: lectures = [],
@@ -108,10 +101,6 @@ export default function StudentHome() {
                 .eq('collegeAcademicYearId', collegeAcademicYearId)
                 .eq('isActive', true)
                 .is('deletedAt', null);
-
-            if (collegeSemesterId !== null && collegeSemesterId !== undefined) {
-                query = query.eq('collegeSemesterId', collegeSemesterId);
-            }
 
             const { data: subjectData } = await query;
             if (!subjectData) {
@@ -247,6 +236,25 @@ export default function StudentHome() {
         }
     }, [collegeAcademicYearId, collegeBranchId, collegeSectionsId]);
 
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        try {
+            await Promise.all([
+                loadAssignmentCount(),
+                loadAttendancePercent(),
+                loadPendingFee(),
+                loadSubjects(),
+                refetch(),
+            ]);
+        } catch (err) {
+            console.error("Refresh error:", err);
+        } finally {
+            setRefreshing(false);
+        }
+    }, [loadAssignmentCount, loadAttendancePercent, loadPendingFee, loadSubjects, refetch]);
+
     useEffect(() => {
         if (studentLoading) return;
 
@@ -266,33 +274,33 @@ export default function StudentHome() {
 
     const cardData = [
         {
-            style: 'bg-[#E2DAFF] h-[126.35px] w-[46%] rounded-2xl p-4 justify-between',
+            style: 'bg-[#E2DAFF] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
             icon: <Chalkboard size={32} color="#714EF2" weight="fill" />,
             value: attendancePercent === null ? <ValueShimmer /> : `${attendancePercent}%`,
             label: t('Attendance'),
             to: 'Attendance',
         },
         {
-            style: 'bg-[#FFEDDA] h-[126.35px] w-[46%] rounded-2xl p-4 justify-between',
-            icon: <Users size={32} color="#FFBB70" fill="#FFBB70" />,
+            style: 'bg-[#FFEDDA] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            icon: <UsersIcon size={32} color="#FFBB70" weight="fill" />,
             value: assignmentsLoading ? (
                 <ValueShimmer />
             ) : (
-                t('{count} Due', { count: dueAssignmentsCount })
+                t('{count} Due', { count: String(dueAssignmentsCount) })
             ),
             label: t('Assignments'),
             to: 'Assignments',
         },
         {
-            style: 'bg-[#E6FBEA] h-[126.35px] w-[46%] rounded-2xl p-4 justify-between',
-            icon: <BookOpen size={32} color="#74FF8F" fill="#74FF8F" />,
+            style: 'bg-[#E6FBEA] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            icon: <BookOpenIcon size={32} color="#74FF8F" weight="fill" />,
             value: t('Mid Exams'),
             label: t('N/A'),
             onClick: () => setView('exams'),
         },
         {
-            style: 'bg-[#CEE6FF] h-[126.35px] w-[46%] rounded-2xl p-4 justify-between',
-            icon: <Clock size={32} color="#60AEFF" fill="#60AEFF" />,
+            style: 'bg-[#CEE6FF] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            icon: <ClockIcon size={32} color="#60AEFF" weight="fill" />,
             value: feeLoading ? <ValueShimmer /> : `₹${pendingFeeAmount?.toLocaleString('en-IN')}`,
             label: t('Fee Due'),
             to: 'Payments',
@@ -327,7 +335,15 @@ export default function StudentHome() {
     }
 
     return (
-        <ScrollView style={tw`flex-1 bg-[#f4f5f6]`} contentContainerStyle={[tw`p-4 gap-5 pb-30`, { paddingTop: headerHeight + 16 }]}>
+        <ScrollView
+            style={tw`flex-1 bg-[#f4f5f6]`}
+            contentContainerStyle={[tw`p-4 gap-5 pb-30`, { paddingTop: headerHeight + 16 }]}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            alwaysBounceVertical={true}
+            overScrollMode="always"
+        >
             <View>
                 <UserInfoCard />
             </View>
@@ -351,7 +367,7 @@ export default function StudentHome() {
                         {t('Upcoming Events')}
                     </Text>
                     <TouchableOpacity onPress={handleUpcomingClasses}>
-                        <ChevronRight size={20} color="#000000" />
+                        <CaretRightIcon size={20} color="#000000" weight="bold" />
                     </TouchableOpacity>
                 </View>
 

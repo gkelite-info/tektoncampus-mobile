@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
     View,
     Text,
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
+    RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -146,128 +147,136 @@ export default function StudentCalendar() {
     const [weeklyData, setWeeklyData] = useState<Record<string, DayData>>({});
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const loadAllData = async () => {
-            try {
-                setLoading(true);
-                const {
-                    data: { user },
-                } = await supabase.auth.getUser();
-                if (!user) {
-                    console.log("❌ [Calendar] No authenticated user found.");
-                    return;
-                }
-
-                const userResult = await getUserIdFromAuth(user.id);
-                if (!userResult.success || !userResult.userId) {
-                    console.log("❌ [Calendar] Failed to get userId from auth.", userResult);
-                    return;
-                }
-
-                const studentContext = await fetchStudentContext(userResult.userId);
-                if (!studentContext) {
-                    console.log("❌ [Calendar] Student Context is empty or failed to load.");
-                    return;
-                }
-
-                const resultsMap: Record<string, DayData> = {};
-                const currentDate = new Date();
-                const todayInt = Number(
-                    `${currentDate.getFullYear()}${String(currentDate.getMonth() + 1).padStart(2, "0")}${String(currentDate.getDate()).padStart(2, "0")}`
-                );
-                const assignmentRes = await supabase
-                    .from("assignments")
-                    .select("*")
-                    .eq("collegeBranchId", studentContext.collegeBranchId)
-                    .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
-                    .eq("collegeSectionsId", studentContext.collegeSectionsId)
-                    .eq("status", "Active")
-                    .eq("is_deleted", false)
-                    .is("deletedAt", null)
-                    .gte("submissionDeadlineInt", todayInt);
-
-                if (assignmentRes.error) {
-                    console.error("Assignments query error:", assignmentRes.error);
-                }
-
-                const promises = week.map(async (day) => {
-                    const [classes, quizRes, discRes, facultyTasks] = await Promise.all([
-                        fetchStudentTimetableByDate({
-                            date: day.fullDate,
-                            collegeEducationId: studentContext.collegeEducationId,
-                            collegeBranchId: studentContext.collegeBranchId,
-                            collegeAcademicYearId: studentContext.collegeAcademicYearId,
-                            collegeSemesterId: studentContext.collegeSemesterId,
-                            collegeSectionId: studentContext.collegeSectionsId,
-                            isInter: collegeEducationType === "Inter",
-                        }),
-                        supabase
-                            .from("quizzes")
-                            .select("*")
-                            .eq("collegeSectionsId", studentContext.collegeSectionsId)
-                            .eq("isActive", true)
-                            .gte("startDate", `${day.fullDate}T00:00:00`)
-                            .lte("startDate", `${day.fullDate}T23:59:59`),
-                        supabase
-                            .from("discussion_forum_sections")
-                            .select("discussionSectionId, discussion_forum!inner(deadline, title)")
-                            .eq("collegeSectionsId", studentContext.collegeSectionsId)
-                            .eq("is_deleted", false)
-                            .gte("discussion_forum.deadline", `${day.fullDate}T00:00:00`)
-                            .lte("discussion_forum.deadline", `${day.fullDate}T23:59:59`),
-                        fetchFacultyTasksForStudent({
-                            date: day.fullDate,
-                            collegeId: studentContext.collegeId,
-                            collegeBranchId: studentContext.collegeBranchId,
-                            collegeAcademicYearId: studentContext.collegeAcademicYearId,
-                            collegeSemesterId: studentContext.collegeSemesterId,
-                        }),
-                    ]);
-
-                    const qCount = quizRes.data?.length ?? 0;
-                    const aCount = assignmentRes.data?.length ?? 0;
-                    const dCount = discRes.data?.length ?? 0;
-
-                    let focus = t("General Revision");
-                    if (aCount > 0 && assignmentRes.data?.[0]) {
-                        focus = assignmentRes.data[0].topicName;
-                    }
-                    else if (qCount > 0 && quizRes.data?.[0]) focus = quizRes.data[0].quizTitle;
-
-                    let tip = t("Organize your study desk");
-                    const deadlines: string[] = [];
-                    if (qCount > 0) deadlines.push(t("Quizzes", { count: qCount }));
-                    if (aCount > 0) deadlines.push(t("Assignments", { count: aCount }));
-                    if (dCount > 0) deadlines.push(t("Discussions", { count: dCount }));
-                    if (deadlines.length > 0) {
-                        tip = `${t("Check the deadlines for")}: ${deadlines.join(", ")}`;
-                    }
-
-                    resultsMap[day.fullDate] = {
-                        classCount: classes?.length ?? 0,
-                        quizCount: qCount,
-                        assignmentCount: aCount,
-                        discussionCount: dCount,
-                        facultyTasks: facultyTasks ?? [],
-                        quizzes: quizRes.data ?? [],
-                        assignments: assignmentRes.data ?? [],
-                        timetable: (classes as TimetableEntry[]) ?? [],
-                        focus,
-                        tip,
-                    };
-                });
-
-                await Promise.all(promises);
-                setWeeklyData(resultsMap);
-            } catch (err) {
-                console.error("🚨 CALENDAR LOAD ERROR:", err);
-            } finally {
-                setLoading(false);
+    const loadAllData = useCallback(async (showLoader = true) => {
+        try {
+            if (showLoader) setLoading(true);
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+            if (!user) {
+                console.log("❌ [Calendar] No authenticated user found.");
+                return;
             }
-        };
 
-        loadAllData();
+            const userResult = await getUserIdFromAuth(user.id);
+            if (!userResult.success || !userResult.userId) {
+                console.log("❌ [Calendar] Failed to get userId from auth.", userResult);
+                return;
+            }
+
+            const studentContext = await fetchStudentContext(userResult.userId);
+            if (!studentContext) {
+                console.log("❌ [Calendar] Student Context is empty or failed to load.");
+                return;
+            }
+
+            const resultsMap: Record<string, DayData> = {};
+            const currentDate = new Date();
+            const todayInt = Number(
+                `${currentDate.getFullYear()}${String(currentDate.getMonth() + 1).padStart(2, "0")}${String(currentDate.getDate()).padStart(2, "0")}`
+            );
+            const assignmentRes = await supabase
+                .from("assignments")
+                .select("*")
+                .eq("collegeBranchId", studentContext.collegeBranchId)
+                .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
+                .eq("collegeSectionsId", studentContext.collegeSectionsId)
+                .eq("status", "Active")
+                .eq("is_deleted", false)
+                .is("deletedAt", null)
+                .gte("submissionDeadlineInt", todayInt);
+
+            if (assignmentRes.error) {
+                console.error("Assignments query error:", assignmentRes.error);
+            }
+
+            const promises = week.map(async (day) => {
+                const [classes, quizRes, discRes, facultyTasks] = await Promise.all([
+                    fetchStudentTimetableByDate({
+                        date: day.fullDate,
+                        collegeEducationId: studentContext.collegeEducationId,
+                        collegeBranchId: studentContext.collegeBranchId,
+                        collegeAcademicYearId: studentContext.collegeAcademicYearId,
+                        collegeSemesterId: studentContext.collegeSemesterId,
+                        collegeSectionId: studentContext.collegeSectionsId,
+                        isInter: collegeEducationType === "Inter",
+                    }),
+                    supabase
+                        .from("quizzes")
+                        .select("*")
+                        .eq("collegeSectionsId", studentContext.collegeSectionsId)
+                        .eq("isActive", true)
+                        .gte("startDate", `${day.fullDate}T00:00:00`)
+                        .lte("startDate", `${day.fullDate}T23:59:59`),
+                    supabase
+                        .from("discussion_forum_sections")
+                        .select("discussionSectionId, discussion_forum!inner(deadline, title)")
+                        .eq("collegeSectionsId", studentContext.collegeSectionsId)
+                        .eq("is_deleted", false)
+                        .gte("discussion_forum.deadline", `${day.fullDate}T00:00:00`)
+                        .lte("discussion_forum.deadline", `${day.fullDate}T23:59:59`),
+                    fetchFacultyTasksForStudent({
+                        date: day.fullDate,
+                        collegeId: studentContext.collegeId,
+                        collegeBranchId: studentContext.collegeBranchId,
+                        collegeAcademicYearId: studentContext.collegeAcademicYearId,
+                        collegeSemesterId: studentContext.collegeSemesterId,
+                    }),
+                ]);
+
+                const qCount = quizRes.data?.length ?? 0;
+                const aCount = assignmentRes.data?.length ?? 0;
+                const dCount = discRes.data?.length ?? 0;
+
+                let focus = t("General Revision");
+                if (aCount > 0 && assignmentRes.data?.[0]) {
+                    focus = assignmentRes.data[0].topicName;
+                }
+                else if (qCount > 0 && quizRes.data?.[0]) focus = quizRes.data[0].quizTitle;
+
+                let tip = t("Organize your study desk");
+                const deadlines: string[] = [];
+                if (qCount > 0) deadlines.push(t("Quizzes", { count: qCount }));
+                if (aCount > 0) deadlines.push(t("Assignments", { count: aCount }));
+                if (dCount > 0) deadlines.push(t("Discussions", { count: dCount }));
+                if (deadlines.length > 0) {
+                    tip = `${t("Check the deadlines for")}: ${deadlines.join(", ")}`;
+                }
+
+                resultsMap[day.fullDate] = {
+                    classCount: classes?.length ?? 0,
+                    quizCount: qCount,
+                    assignmentCount: aCount,
+                    discussionCount: dCount,
+                    facultyTasks: facultyTasks ?? [],
+                    quizzes: quizRes.data ?? [],
+                    assignments: assignmentRes.data ?? [],
+                    timetable: (classes as TimetableEntry[]) ?? [],
+                    focus,
+                    tip,
+                };
+            });
+
+            await Promise.all(promises);
+            setWeeklyData(resultsMap);
+        } catch (err) {
+            console.error("🚨 CALENDAR LOAD ERROR:", err);
+        } finally {
+            setLoading(false);
+        }
     }, [collegeEducationType, week, t]);
+
+    useEffect(() => {
+        loadAllData(true);
+    }, [loadAllData]);
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        await loadAllData(false);
+        setRefreshing(false);
+    }, [loadAllData]);
 
     const activeDayItem = week.find((d) => d.fullDate === selectedDate);
     const activeDayInfo = activeDayItem ? weeklyData[activeDayItem.fullDate] : null;
@@ -278,6 +287,11 @@ export default function StudentCalendar() {
                 className="flex-1"
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                alwaysBounceVertical={true}
+                overScrollMode="always"
             >
                 <Text className="text-[#282828] text-2xl mb-1" style={{ fontFamily: fonts.bold }}>Calendar</Text>
                 <Text className="text-[#282828] font-semibold text-[15px] mb-3">

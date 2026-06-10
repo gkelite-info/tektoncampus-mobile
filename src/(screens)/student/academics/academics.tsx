@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, ActivityIndicator, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Loader } from "../calendar/right/timetable";
@@ -14,12 +14,25 @@ const useTranslations = (namespace: string) => {
 };
 
 function AcademicsContent() {
-    const { studentProfile, subjects, loading } = useStudent();
+    const { studentProfile, subjects, loading, refreshData } = useStudent();
     const t = useTranslations("Academics.student");
 
     const { width } = useWindowDimensions();
     const headerHeight = useHeaderHeight();
     const isLargeScreen = width >= 1024;
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        try {
+            await refreshData();
+        } catch (err) {
+            console.error("Refresh error:", err);
+        } finally {
+            setRefreshing(false);
+        }
+    }, [refreshData]);
 
     return (
         <ScrollView
@@ -30,6 +43,11 @@ function AcademicsContent() {
                 paddingBottom: isLargeScreen ? 20 : 100,
             }}
             showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            alwaysBounceVertical={true}
+            overScrollMode="always"
         >
             <View className="flex-row justify-between items-center mb-5">
                 <View style={{ width: "68%" }} className="flex-col">

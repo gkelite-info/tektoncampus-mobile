@@ -8,6 +8,7 @@ import {
     useWindowDimensions
 } from "react-native";
 import { CaretLeft, Chalkboard, Percent } from "phosphor-react-native";
+import { fonts } from "@/constants/fonts";
 
 type ViewFilter = "ALL" | "ATTENDED" | "ABSENT" | "LEAVE";
 
@@ -44,7 +45,7 @@ const StatusBadge = ({ status, t }: { status: string; t: (key: string) => string
 
     return (
         <View className="w-[85px] h-[26px] items-center justify-center rounded-lg" style={{ backgroundColor: bg }}>
-            <Text style={{ color: color }} className="text-xs font-semibold">
+            <Text style={{ color: color, fontFamily: fonts.semiBold }} className="text-base">
                 {t(status)}
             </Text>
         </View>
@@ -130,17 +131,17 @@ export default function SubjectAttendanceDetailsClient({ route, navigation }: an
     };
 
     return (
-        <ScrollView className="flex-1 bg-white px-4 pt-4" showsVerticalScrollIndicator={false}>
+        <View className="flex-1">
             <View className="flex-row justify-between items-center w-full">
                 <View className="flex-col flex-1">
                     <View className="flex-row items-center gap-1">
                         <TouchableOpacity onPress={() => navigation?.goBack()} className="p-1 -ml-2">
                             <CaretLeft size={24} color="#282828" weight="bold" />
                         </TouchableOpacity>
-                        <Text className="text-[#282828] font-bold text-xl">{t("Attendance")}</Text>
+                        <Text className="text-[#282828] text-2xl" style={{ fontFamily: fonts.bold }}>{t("Attendance")}</Text>
                     </View>
-                    <Text className="text-gray-500 text-xs mt-0.5">
-                        {t("Track, manage, and maintain your attendance effortlessly")}
+                    <Text className="text-gray-500 text-sm mt-0.5" style={{ fontFamily: fonts.regular }}>
+                        {t("Track, manage, and maintain your attendance effortlesslyss")}
                     </Text>
                 </View>
             </View>
@@ -153,44 +154,44 @@ export default function SubjectAttendanceDetailsClient({ route, navigation }: an
                         style={{ width: isDesktopView ? "23%" : "48%" }}
                         className={`p-3 rounded-xl flex-col justify-between ${card.style}`}
                     >
-                        <View className="w-8 h-8 rounded-full bg-white/60 items-center justify-center">
+                        <View className="w-10 h-10 rounded-full bg-white/60 items-center justify-center">
                             {card.icon}
                         </View>
                         <View className="mt-4">
-                            <Text className="text-xl font-bold text-[#282828]">{card.value}</Text>
-                            <Text className="text-[11px] text-gray-600 font-medium mt-0.5">{card.label}</Text>
+                            <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.bold }}>{card.value}</Text>
+                            <Text className="text-base text-gray-600 font-medium mt-0.5">{card.label}</Text>
                         </View>
                     </TouchableOpacity>
                 ))}
             </View>
 
             <View className="mt-4 w-full bg-indigo-50/60 border border-indigo-100 p-3 rounded-xl">
-                <Text className="text-indigo-900 text-xs font-medium">
+                <Text className="text-indigo-900 text-sm" style={{ fontFamily: fonts.medium }}>
                     {data?.attendancePolicyInsight?.message || "Attendance insight will appear once records are available."}
                 </Text>
             </View>
 
             <View className="mt-5 w-full">
-                <Text className="text-[#282828] font-semibold text-base">{t("Subject Detail View")}</Text>
+                <Text className="text-[#282828] text-lg" style={{ fontFamily: fonts.semiBold }}>{t("Subject Detail View")}</Text>
 
                 <View className="flex-row flex-wrap items-center gap-2 mt-2">
                     <View className="flex-row items-center bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100">
-                        <Text className="text-gray-500 text-xs font-medium mr-1">{t("Subject:")}</Text>
-                        <Text className="text-emerald-700 text-xs font-semibold">{data?.subjectName ?? "-"}</Text>
+                        <Text className="text-gray-500 text-base mr-1" style={{ fontFamily: fonts.medium }}>{t("Subject:")}</Text>
+                        <Text className="text-emerald-700 text-base" style={{ fontFamily: fonts.semiBold }}>{data?.subjectName ?? "-"}</Text>
                     </View>
 
                     <View className="flex-row items-center bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100">
-                        <Text className="text-gray-500 text-xs font-medium mr-1">{t("Faculty:")}</Text>
-                        <Text className="text-emerald-700 text-xs font-semibold">{data?.facultyName ?? "-"}</Text>
+                        <Text className="text-gray-500 text-base mr-1" style={{ fontFamily: fonts.medium }}>{t("Faculty:")}</Text>
+                        <Text className="text-emerald-700 text-base" style={{ fontFamily: fonts.semiBold }}>{data?.facultyName ?? "-"}</Text>
                     </View>
                 </View>
             </View>
 
             <View className="mt-5 w-full">
                 <View className="flex-row bg-gray-100 py-2.5 px-3 rounded-t-lg border-b border-gray-200">
-                    <Text className="flex-1 text-gray-600 font-bold text-xs">{t("Date")}</Text>
-                    <Text className="flex-1 text-gray-600 font-bold text-xs text-center">{t("Time")}</Text>
-                    <Text className="flex-1 text-gray-600 font-bold text-xs text-right pr-2">{t("Status")}</Text>
+                    <Text className="flex-1 text-gray-600 text-base" style={{ fontFamily: fonts.bold }}>{t("Date")}</Text>
+                    <Text className="flex-1 text-gray-600 text-base text-center" style={{ fontFamily: fonts.bold }}>{t("Time")}</Text>
+                    <Text className="flex-1 text-gray-600 text-base text-right pr-2" style={{ fontFamily: fonts.bold }}>{t("Status")}</Text>
                 </View>
 
                 {loading ? (
@@ -200,8 +201,8 @@ export default function SubjectAttendanceDetailsClient({ route, navigation }: an
                 ) : (
                     data?.rows.map((row: any, idx: number) => (
                         <View key={idx} className="flex-row items-center py-3 px-3 border-b border-gray-100 bg-white">
-                            <Text className="flex-1 text-gray-800 text-xs font-medium">{row.date}</Text>
-                            <Text className="flex-1 text-gray-500 text-xs text-center">{row.time}</Text>
+                            <Text className="flex-1 text-gray-800 text-base" style={{ fontFamily: fonts.medium }}>{row.date}</Text>
+                            <Text className="flex-1 text-gray-500 text-base text-center" style={{ fontFamily: fonts.regular }}>{row.time}</Text>
                             <View className="flex-1 items-end">
                                 <StatusBadge status={normalizeStatus(row.status)} t={t} />
                             </View>
@@ -244,6 +245,6 @@ export default function SubjectAttendanceDetailsClient({ route, navigation }: an
                     </TouchableOpacity>
                 </View>
             )}
-        </ScrollView>
+        </View>
     );
 }

@@ -1,7 +1,7 @@
 import { fonts } from "@/constants/fonts";
 import { getStudentAcademicPerformance } from "@/lib/helpers/student/AcademicPerformance/calculations";
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, Alert } from "react-native";
+import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 
 type AcademicPerformanceDatum = {
@@ -25,6 +25,9 @@ export default function AcademicPerformance({
     data: externalData,
     translations,
 }: AcademicPerformanceProps) {
+    const { width: screenWidth } = useWindowDimensions();
+    const chartWidth = screenWidth - 110;
+
     const [data, setData] = useState<AcademicPerformanceDatum[]>(externalData ?? []);
     const [loading, setLoading] = useState(!externalData);
 
@@ -42,6 +45,7 @@ export default function AcademicPerformance({
         async function loadData() {
             try {
                 const performance = await getStudentAcademicPerformance(studentId);
+
                 setData(performance);
             } catch (err) {
                 Alert.alert("Error", tFailed);
@@ -90,6 +94,9 @@ export default function AcademicPerformance({
                     data={chartData}
                     barWidth={32}
                     spacing={24}
+                    width={chartWidth}
+                    rulesLength={chartWidth}
+                    xAxisLength={chartWidth}
                     roundedTop
                     roundedBottom
                     noOfSections={4}
@@ -97,8 +104,8 @@ export default function AcademicPerformance({
                     yAxisThickness={0}
                     xAxisThickness={1}
                     xAxisColor="#E5E7EB"
-                    yAxisTextStyle={{ fontSize: 10, color: "#888888" }}
-                    xAxisLabelTextStyle={{ fontSize: 9.5, color: "#282828", fontWeight: "600", textAlign: "center" }}
+                    yAxisTextStyle={{ fontSize: 10, color: "#888888", fontFamily: fonts.regular }}
+                    xAxisLabelTextStyle={{ fontSize: 9.5, color: "#282828", fontWeight: "600", textAlign: "center", fontFamily: fonts.regular }}
                     yAxisLabelSuffix="%"
                     isAnimated
                     showReferenceLine1

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
     View,
     Text,
@@ -8,6 +8,7 @@ import {
     LayoutAnimation,
     UIManager,
     Dimensions,
+    RefreshControl,
 } from "react-native";
 import { Chalkboard, UsersThree, CaretDown } from "phosphor-react-native";
 import CardComponent from "@/utils/card";
@@ -29,6 +30,7 @@ import { useTranslations } from "@/utils/useTranslations";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { fonts } from "@/constants/fonts";
+import { FolderTree } from "lucide-react-native";
 
 
 if (
@@ -97,6 +99,7 @@ export default function AttendanceClient() {
     const t = useTranslations("Attendance.student");
 
     const [currentTab, setCurrentTab] = useState<string | null>(null);
+    const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(null);
     const showSubjectAttendanceTable = currentTab === "subject-attendance";
     const showSubjectAttendanceDetails = currentTab === "subject-attendance-details";
     const hideRightSection = showSubjectAttendanceTable || showSubjectAttendanceDetails;
@@ -148,6 +151,27 @@ export default function AttendanceClient() {
         return () => { isMounted = false; };
     }, [userId, viewDate, currentPage, isInter, userLoading, studentLoading]);
 
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(async () => {
+        if (!userId) return;
+        setRefreshing(true);
+        try {
+            const year = viewDate.getFullYear();
+            const month = String(viewDate.getMonth() + 1).padStart(2, "0");
+            const day = String(viewDate.getDate()).padStart(2, "0");
+            const data = await getStudentDashboardData(
+                userId, `${year}-${month}-${day}`, currentPage, rowsPerPage, isInter
+            );
+            setDashboardData(data);
+            setTotalRecords(data.totalCount || 0);
+        } catch {
+            // silent
+        } finally {
+            setRefreshing(false);
+        }
+    }, [userId, viewDate, currentPage, isInter]);
+
     const handleCardClick = (cardId: number) => {
         if (cardId === 2) setCurrentTab("subject-attendance");
     };
@@ -177,10 +201,14 @@ export default function AttendanceClient() {
             <ScrollView
                 className="flex-1 bg-[#f4f5f6] "
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 32, paddingTop: headerHeight + 16 }}
+                contentContainerStyle={{ paddingBottom: 140, paddingTop: headerHeight + 16 }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                alwaysBounceVertical={true}
+                overScrollMode="always"
             >
                 <View className="px-4 pt-4">
-
                     {!showSubjectAttendanceTable && !showSubjectAttendanceDetails && (
                         <>
                             <View className="mb-4">
@@ -252,12 +280,12 @@ export default function AttendanceClient() {
                             </View>
 
                             <View className="mt-3 p-3">
-                                <Text className="text-[#282828] font-semibold text-[17px]">
+                                <Text className="text-[#282828] text-[17px]" style={{ fontFamily: fonts.semiBold }}>
                                     {isToday
                                         ? t("Today's Attendance")
                                         : t("Attendance – {date}", { date: formattedDate })}
                                 </Text>
-                                <Text className="text-gray-500 text-[13px] mt-0.5">
+                                <Text className="text-gray-500 text-[13px] mt-0.5" style={{ fontFamily: fonts.regular }}>
                                     {t("Classes on {date}", { date: formattedDate })}
                                 </Text>
 
@@ -283,12 +311,13 @@ export default function AttendanceClient() {
                                                             onPress={() => toggleRow(i)}
                                                         >
                                                             <View className="flex-1 flex-col gap-0.5">
-                                                                <Text className="text-[#515151] text-[11px]">
+                                                                <Text className="text-[#515151] text-[11px]" style={{ fontFamily: fonts.regular }}>
                                                                     {t("Subject Name")}
                                                                 </Text>
                                                                 <Text
-                                                                    className="text-[14px] text-[#282828] font-medium pr-2"
+                                                                    className="text-[14px] text-[#282828] pr-2"
                                                                     numberOfLines={1}
+                                                                    style={{ fontFamily: fonts.medium }}
                                                                 >
                                                                     {row.Subject}
                                                                 </Text>
@@ -296,7 +325,7 @@ export default function AttendanceClient() {
 
                                                             <View className="flex-row items-center gap-2">
                                                                 <View className="w-8 h-8 rounded-full bg-blue-50 items-center justify-center">
-                                                                    <Text className="text-blue-500 text-[9px] font-bold">
+                                                                    <Text className="text-blue-500 text-[9px]" style={{ fontFamily: fonts.bold }}>
                                                                         PDF
                                                                     </Text>
                                                                 </View>
@@ -318,37 +347,39 @@ export default function AttendanceClient() {
                                                         {isExpanded && (
                                                             <View className="pb-3 flex-col gap-2.5 px-2 pt-1 rounded-lg mb-1">
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Faculty")}
                                                                     </Text>
-                                                                    <Text className="text-gray-600 text-[13px]">
+                                                                    <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                                                         {row.Faculty}
                                                                     </Text>
                                                                 </View>
 
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Today's Status")}
                                                                     </Text>
                                                                     <View className="px-3 py-0.5 bg-[#DCEAE2] rounded-full">
-                                                                        {row.TodaysStatus}
+                                                                        <Text style={{ fontFamily: fonts.medium }}>
+                                                                            {row.TodaysStatus}
+                                                                        </Text>
                                                                     </View>
                                                                 </View>
 
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Class Attendance")}
                                                                     </Text>
-                                                                    <Text className="text-gray-600 text-[13px]">
+                                                                    <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                                                         {row.ClassAttendance}
                                                                     </Text>
                                                                 </View>
 
                                                                 <View className="flex-row justify-between items-center">
-                                                                    <Text className="text-[#282828] font-medium text-[13px]">
+                                                                    <Text className="text-[#282828] text-[13px]" style={{ fontFamily: fonts.medium }}>
                                                                         {t("Percentage %")}
                                                                     </Text>
-                                                                    <Text className="text-gray-600 text-[13px]">
+                                                                    <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.regular }}>
                                                                         {row.Percentage}
                                                                     </Text>
                                                                 </View>
@@ -414,8 +445,23 @@ export default function AttendanceClient() {
                         </>
                     )}
 
-                    {showSubjectAttendanceTable && <SubjectAttendance />}
-                    {showSubjectAttendanceDetails && <SubjectAttendanceDetailsClient />}
+                    {showSubjectAttendanceTable && (
+                        <SubjectAttendance
+                            onBack={() => setCurrentTab(null)}
+                            onNavigate={(screen, params) => {
+                                if (screen === "SubjectDetails") {
+                                    setSelectedSubjectId(params?.subjectId ? Number(params.subjectId) : null);
+                                    setCurrentTab("subject-attendance-details");
+                                }
+                            }}
+                        />
+                    )}
+                    {showSubjectAttendanceDetails && (
+                        <SubjectAttendanceDetailsClient
+                            route={{ params: { subjectId: selectedSubjectId } }}
+                            navigation={{ goBack: () => setCurrentTab("subject-attendance") }}
+                        />
+                    )}
 
                     {!hideRightSection && Platform.OS === "web" && (
                         <View className="w-[32%] flex-col gap-3 p-2 pt-0">

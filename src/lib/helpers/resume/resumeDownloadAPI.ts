@@ -1,6 +1,6 @@
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import Toast from "react-native-toast-message";
 
 export async function generateResumePdf(html: string, fileName: string = "Resume.pdf"): Promise<void> {
@@ -10,14 +10,12 @@ export async function generateResumePdf(html: string, fileName: string = "Resume
       base64: false
     });
 
-    // Sanitize filename to prevent file system errors
     const safeFileName = fileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
     const newUri = `${FileSystem.documentDirectory}${safeFileName}`;
 
-    // Ensure we delete any existing file with the same name before copying
     const fileInfo = await FileSystem.getInfoAsync(newUri);
     if (fileInfo.exists) {
-        await FileSystem.deleteAsync(newUri, { idempotent: true });
+      await FileSystem.deleteAsync(newUri, { idempotent: true });
     }
 
     await FileSystem.copyAsync({
@@ -40,4 +38,4 @@ export async function generateResumePdf(html: string, fileName: string = "Resume
     Toast.show({ type: "error", text1: "Failed to generate PDF" });
     throw error;
   }
-}
+}

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions } from "react-native";
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { House, ClipboardText, BookOpen, User, Calendar } from "phosphor-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import StudentHome from "@/(screens)/student/student";
 import StudentAttendance from "@/(screens)/student/attendance/attendance";
 import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
@@ -20,13 +21,22 @@ const Tab = createBottomTabNavigator<StudentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+    const insets = useSafeAreaInsets();
+    const bottomInset = insets.bottom || 10; // Fallback to 10 for devices with no bottom insets to give some breathing room
+
     return (
         <View
             className="absolute bottom-0 bg-transparent"
-            style={{ width: SCREEN_WIDTH, height: 120 }}
+            style={{ width: SCREEN_WIDTH, height: 120 + bottomInset }}
         >
-            <View className="absolute bottom-0 left-0 right-0 h-[85px] bg-white rounded-t-[15px] flex-row shadow-lg shadow-black/10" />
-            <View className="flex-row h-[85px] absolute bottom-0 left-0 right-0">
+            <View 
+                className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[15px] shadow-lg shadow-black/10" 
+                style={{ height: 85 + bottomInset }}
+            />
+            <View 
+                className="flex-row absolute left-0 right-0"
+                style={{ height: 85, bottom: bottomInset }}
+            >
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;
 

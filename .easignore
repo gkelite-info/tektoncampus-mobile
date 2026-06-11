@@ -1,0 +1,25 @@
+# EAS build ignore rules
+# Inherits from .gitignore but explicitly excludes heavy local native build caches
+
+node_modules/
+.expo/
+dist/
+web-build/
+
+# Android generated build files and caches
+android/.gradle/
+android/build/
+android/app/build/
+android/.cxx/
+android/local.properties
+android/iproute2/
+
+# iOS generated files and cocoapods
+ios/build/
+ios/Pods/
+ios/.xcode.env.local
+
+# Temporary files & logs
+npm-debug.*
+.DS_Store
+.metro-health-check*

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions } from "react-native";
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ChartLineUp, CreditCard, ClipboardText, User, House } from "phosphor-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ParentHomeScreen from "@/(screens)/parent/parent";
 import ParentProgress from "@/(screens)/parent/Progress/progress";
 import ParentPayment from "@/(screens)/parent/Payment/payment";
@@ -30,19 +31,28 @@ const Tab = createBottomTabNavigator<ParentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+    const insets = useSafeAreaInsets();
+    const bottomInset = insets.bottom || 10; // Fallback to 10 for devices with no bottom insets to give some breathing room
+
     return (
         /* Global absolute navigation zone layer wrapper */
         <View
             className="absolute bottom-0 bg-transparent"
-            style={{ width: SCREEN_WIDTH, height: 120 }}
+            style={{ width: SCREEN_WIDTH, height: 120 + bottomInset }}
         >
             {/* FLAT TALL WHITE BACKGROUND
         Maintains matching height (85px) and flat top framing profile across all views
       */}
-            <View className="absolute bottom-0 left-0 right-0 h-[85px] bg-white flex-row rounded-t-[15px] shadow-lg shadow-black/10" />
+            <View 
+                className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[15px] shadow-lg shadow-black/10" 
+                style={{ height: 85 + bottomInset }}
+            />
 
             {/* Interactive Item Stack */}
-            <View className="flex-row h-[85px] absolute bottom-0 left-0 right-0">
+            <View 
+                className="flex-row absolute left-0 right-0"
+                style={{ height: 85, bottom: bottomInset }}
+            >
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;
 

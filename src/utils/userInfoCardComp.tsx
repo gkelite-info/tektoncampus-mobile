@@ -37,9 +37,9 @@ export default function UserInfoCard() {
             style={tw`w-full rounded-2xl h-[170px] shadow-sm overflow-hidden`}
         >
             <View style={tw`flex-1 flex-row justify-between p-4 relative`}>
-                <View style={tw`max-w-[65%] justify-center gap-1.5`}>
+                <View style={tw`max-w-[75%] justify-center gap-1.5`}>
                     <View style={tw`flex-row flex-wrap gap-1 items-center`}>
-                        <Text style={[tw`text-[#714EF2] text-[11px]`, { fontFamily: fonts.medium }]}>
+                        <Text style={[tw`text-[#714EF2] text-[13px]`, { fontFamily: fonts.medium }]}>
                             {collegeEducationType && collegeBranchCode
                                 ? `${collegeEducationType} ${collegeBranchCode}`
                                 : "—"}{" "}
@@ -48,14 +48,14 @@ export default function UserInfoCard() {
 
                         <Text
                             style={[
-                                tw`text-[#089144] text-[11px]`,
+                                tw`text-[#089144] text-[12px]`,
                                 { fontFamily: fonts.italic }
                             ]}
                         >
                             {t("Student Id - ")}{" "}
                             <Text
                                 style={[
-                                    tw`text-[#282828] text-[11px]`,
+                                    tw`text-[#282828] text-[12px]`,
                                     { fontFamily: fonts.bold }
                                 ]}
                             >
@@ -65,27 +65,27 @@ export default function UserInfoCard() {
                     </View>
 
                     <View style={tw`flex-row items-center`}>
-                        <Text style={tw`text-[#282828] text-[15px] font-normal`}>
+                        <Text style={tw`text-[#282828] text-base font-normal`}>
                             {t("Welcome Back, ")}{" "}
-                            <Text style={[tw`text-[#089144] text-[15px]`, { fontFamily: fonts.bold }]}>
+                            <Text style={[tw`text-[#089144] text-base`, { fontFamily: fonts.bold }]}>
                                 {fullName}
                             </Text>
                         </Text>
                     </View>
 
                     <View style={tw`mt-1`}>
-                        <Text style={tw`text-[10px] text-[#454545]`}>
+                        <Text style={tw`text-sm text-[#454545]`}>
                             {t("You’ve completed ")}
                             <Text style={tw`text-[#089144] font-semibold`}>0</Text>
                             {t(" of your tasks")}
                         </Text>
-                        <Text style={tw`text-[10px] text-[#454545] -mt-0.5`}>
+                        <Text style={tw`text-sm text-[#454545] -mt-0.5`}>
                             {t("Keep up the great progress!")}
                         </Text>
                     </View>
 
                     <View style={tw`mt-1 bg-[#BFEFCD] px-2 py-0.5 rounded self-start`}>
-                        <Text style={[tw`text-[#089144] text-[10px] font-semibold`, { fontFamily: fonts.semiBold }]}>
+                        <Text style={[tw`text-[#089144] text-sm`, { fontFamily: fonts.semiBold }]}>
                             {currentDate}
                         </Text>
                     </View>

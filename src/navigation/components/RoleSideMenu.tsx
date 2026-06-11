@@ -105,84 +105,82 @@ export default function RoleSideMenu({
             <View style={{ flex: 1, flexDirection: "row" }}>
                 <AnimatePresence>
                     {visible && (
-                        <MotiView 
+                        <MotiView
                             from={{ translateX: -400 }}
                             animate={{ translateX: 0 }}
                             exit={{ translateX: -400 }}
                             transition={{ type: "spring", damping: 150, stiffness: 350 }}
-                            style={{ width: '75%', backgroundColor: "#47c67b", height: '100%', zIndex: 10 }} 
+                            style={{ width: '75%', backgroundColor: "#47c67b", height: '100%', zIndex: 10 }}
                             className="shadow-2xl shadow-black"
                         >
                             <SafeAreaView style={{ flex: 1 }}>
-                        <View style={{ position: 'absolute', top: 16, right: 16, zIndex: 50 }}>
-                            <TouchableOpacity onPress={onClose} className="bg-black/10 p-2 rounded-full">
-                                <X size={20} color="white" weight="bold" />
-                            </TouchableOpacity>
-                        </View>
-                        <View className="items-center justify-center py-8" />
-
-                        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-                            {items.map((item) => {
-                                const isActive =
-                                    activeRouteName === item.name ||
-                                    (!activeRouteName && item.name === homeRouteName);
-
-                                return (
-                                    <TouchableOpacity
-                                        key={item.name}
-                                        onPress={() => onNavigate(item.name)}
-                                        activeOpacity={0.7}
-                                        className={`flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full ${
-                                            isActive ? "bg-white shadow-sm" : "bg-transparent"
-                                        }`}
-                                    >
-                                        <View className="mr-4">{renderIcon(item.name, isActive)}</View>
-                                        <Text
-                                            className={`text-base font-semibold ${
-                                                isActive ? "text-[#3fbe73]" : "text-white"
-                                            }`}
-                                        >
-                                            {item.label}
-                                        </Text>
+                                <View style={{ position: 'absolute', top: 16, right: 16, zIndex: 50 }}>
+                                    <TouchableOpacity onPress={onClose} className="bg-black/10 p-2 rounded-full">
+                                        <X size={20} color="white" weight="bold" />
                                     </TouchableOpacity>
-                                );
-                            })}
+                                </View>
+                                <View className="items-center justify-center py-8" />
 
-                            <View className="mb-8">
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    className="flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full mt-4 border-t border-green-500/30 pt-4"
-                                >
-                                    <View className="mr-4">
-                                        <SignOut size={24} color="#ef4444" weight="bold" />
-                                    </View>
-                                    <Text className="text-base font-semibold text-[#ef4444]">
-                                        Logout
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </ScrollView>
-                    </SafeAreaView>
-                </MotiView>
-                )}
+                                <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+                                    {items.map((item) => {
+                                        const isActive =
+                                            activeRouteName === item.name ||
+                                            (!activeRouteName && item.name === homeRouteName);
+
+                                        return (
+                                            <TouchableOpacity
+                                                key={item.name}
+                                                onPress={() => onNavigate(item.name)}
+                                                activeOpacity={0.7}
+                                                className={`flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full ${isActive ? "bg-white shadow-sm" : "bg-transparent"
+                                                    }`}
+                                            >
+                                                <View className="mr-4">{renderIcon(item.name, isActive)}</View>
+                                                <Text
+                                                    className={`text-base font-semibold ${isActive ? "text-[#3fbe73]" : "text-white"
+                                                        }`}
+                                                >
+                                                    {item.label}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
+
+                                    {/* <View className="mb-8">
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            className="flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full mt-4 border-t border-green-500/30 pt-4"
+                                        >
+                                            <View className="mr-4">
+                                                <SignOut size={24} color="#ef4444" weight="bold" />
+                                            </View>
+                                            <Text className="text-base font-semibold text-[#ef4444]">
+                                                Logout
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View> */}
+                                </ScrollView>
+                            </SafeAreaView>
+                        </MotiView>
+                    )}
                 </AnimatePresence>
-                
+
                 <AnimatePresence>
-                {visible && (
-                    <MotiView 
-                        from={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ type: "timing", duration: 300 }}
-                        style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
-                    >
-                        <TouchableOpacity 
-                            style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }} 
-                            onPress={onClose} 
-                            activeOpacity={1}
-                        />
-                    </MotiView>
-                )}
+                    {visible && (
+                        <MotiView
+                            from={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ type: "timing", duration: 300 }}
+                            style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
+                        >
+                            <TouchableOpacity
+                                style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}
+                                onPress={onClose}
+                                activeOpacity={1}
+                            />
+                        </MotiView>
+                    )}
                 </AnimatePresence>
             </View>
         </Modal>

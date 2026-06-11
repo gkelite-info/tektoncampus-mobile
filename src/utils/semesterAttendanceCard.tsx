@@ -96,58 +96,76 @@ export default function SemesterAttendanceCard({
   }
 
   return (
-    <View className="w-full rounded-xl p-4 bg-[#E9FFF0] flex-col shadow-sm gap-3">
+    <View className="w-full rounded-xl p-4 bg-[#E9FFF0] flex-col shadow-sm gap-4">
+      {/* Top Row: Icon + Title + Overall Percentage */}
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-3">
-          <View className="bg-[#43C17A] w-11 h-11 rounded-full items-center justify-center">
-            <CalendarCheck size={22} color="#FFFFFF" weight="fill" />
+          <View className="bg-[#43C17A] w-10 h-10 rounded-full items-center justify-center">
+            <CalendarCheck size={20} color="#FFFFFF" weight="fill" />
           </View>
-          <View className="flex-col justify-center">
-            <Text className="text-[#282828] text-[15px] leading-tight" style={{ fontFamily: fonts.bold }}>
-              Semester
-            </Text>
-            <Text className="text-[#282828] text-[15px] leading-tight" style={{ fontFamily: fonts.bold }}>
-              Attendance
-            </Text>
-          </View>
+          <Text className="text-[#282828] text-[15px]" style={{ fontFamily: fonts.bold }}>
+            Semester Attendance
+          </Text>
         </View>
+        <Text className="text-[#43C17A] text-[20px]" style={{ fontFamily: fonts.bold }}>
+          {overallPercent}%
+        </Text>
       </View>
 
-      <View className="flex-col gap-3">
-        <View className="flex-row items-center justify-between gap-3">
-          <View className="flex-1 h-3 rounded-full overflow-hidden bg-[#BFF5D2]">
+      {/* Bottom Row: 3 horizontal bars side-by-side */}
+      <View className="flex-row gap-3">
+        {/* Present Bar Column */}
+        <View className="flex-1 flex-col gap-1">
+          <View className="flex-row justify-between items-center">
+            <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.bold }}>
+              {t("Present")}
+            </Text>
+            <Text className="text-[#282828] text-[11px]" style={{ fontFamily: fonts.medium }}>
+              {presentPercent}%
+            </Text>
+          </View>
+          <View className="h-2 w-full rounded-full overflow-hidden bg-[#BFF5D2]">
             <View
-              style={{ width: `${overallPercent}%` }}
+              style={{ width: `${presentPercent}%` }}
               className="h-full rounded-full bg-[#43C17A]"
             />
           </View>
-          <Text className="text-[#43C17A] text-[15px] w-12 text-right" style={{ fontFamily: fonts.bold }}>
-            {overallPercent}%
-          </Text>
         </View>
 
-        <View className="flex-row items-center justify-between gap-3">
-          <View className="flex-1 h-3 rounded-full overflow-hidden bg-[#FFD6D6]">
+        {/* Absent Bar Column */}
+        <View className="flex-1 flex-col gap-1">
+          <View className="flex-row justify-between items-center">
+            <Text className="text-[#FF2020] text-[11px]" style={{ fontFamily: fonts.bold }}>
+              {t("Absent")}
+            </Text>
+            <Text className="text-[#282828] text-[11px]" style={{ fontFamily: fonts.medium }}>
+              {absentPercent}%
+            </Text>
+          </View>
+          <View className="h-2 w-full rounded-full overflow-hidden bg-[#FFD6D6]">
             <View
               style={{ width: `${absentPercent}%` }}
               className="h-full rounded-full bg-[#FF2020]"
             />
           </View>
-          <Text className="text-[#FF2020] text-[15px] w-12 text-right" style={{ fontFamily: fonts.bold }}>
-            {absentPercent}%
-          </Text>
         </View>
 
-        <View className="flex-row items-center justify-between gap-3">
-          <View className="flex-1 h-3 rounded-full overflow-hidden bg-[#FFE7C2]">
+        {/* Leave Bar Column */}
+        <View className="flex-1 flex-col gap-1">
+          <View className="flex-row justify-between items-center">
+            <Text className="text-[#FFBB70] text-[11px]" style={{ fontFamily: fonts.bold }}>
+              {t("Leave")}
+            </Text>
+            <Text className="text-[#282828] text-[11px]" style={{ fontFamily: fonts.medium }}>
+              {leavePercent}%
+            </Text>
+          </View>
+          <View className="h-2 w-full rounded-full overflow-hidden bg-[#FFE7C2]">
             <View
               style={{ width: `${leavePercent}%` }}
               className="h-full rounded-full bg-[#FFBB70]"
             />
           </View>
-          <Text className="text-[#FFBB70] text-[15px] w-12 text-right" style={{ fontFamily: fonts.bold }}>
-            {leavePercent}%
-          </Text>
         </View>
       </View>
     </View>

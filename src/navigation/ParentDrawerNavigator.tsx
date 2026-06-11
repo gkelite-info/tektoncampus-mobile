@@ -63,10 +63,34 @@ const menuItems: RoleSideMenuItem[] = [
     { name: "Settings", label: "Settings" },
 ];
 
+const getActiveRouteName = (state: any): string => {
+    if (!state || !state.routes) return "";
+    const index = state.index ?? 0;
+    const route = state.routes[index];
+    if (!route) return "";
+    if (route.state) {
+        return getActiveRouteName(route.state);
+    }
+    return route.name || "";
+};
+
 export default function ParentDrawerNavigator() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [activeRouteName, setActiveRouteName] = useState<keyof ParentDrawerParamList>("ParentTabs");
     const navigationRef = useRef<any>(null);
+
+    // Dynamically evaluate active route name from the stack navigator state when the drawer is open
+    let activeRouteName: keyof ParentDrawerParamList = "ParentTabs";
+    if (isMenuOpen && navigationRef.current) {
+        const navState = navigationRef.current.getState();
+        const activeLeafName = getActiveRouteName(navState);
+        if (activeLeafName) {
+            if (activeLeafName === "Home" || activeLeafName === "Dashboard") {
+                activeRouteName = "ParentTabs";
+            } else {
+                activeRouteName = activeLeafName as keyof ParentDrawerParamList;
+            }
+        }
+    }
 
     return (
         <>
@@ -81,13 +105,8 @@ export default function ParentDrawerNavigator() {
                         header: () => (
                             <CustomHeader navigation={{ toggleDrawer: () => setIsMenuOpen(true) }} />
                         ),
+                        freezeOnBlur: false,
                     };
-                }}
-                screenListeners={{
-                    state: (event) => {
-                        const route = event.data.state.routes[event.data.state.index];
-                        setActiveRouteName(route.name as keyof ParentDrawerParamList);
-                    },
                 }}
             >
                 <Stack.Screen name="ParentTabs" component={ParentTabs} />
@@ -116,8 +135,10 @@ export default function ParentDrawerNavigator() {
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
-                    setActiveRouteName(routeName as keyof ParentDrawerParamList);
-                    navigationRef.current?.navigate(routeName);
+                    // Use a short delay to allow the Modal dismissal to start and avoid transition layout freezes on Android
+                    setTimeout(() => {
+                        navigationRef.current?.navigate(routeName);
+                    }, 100);
                 }}
             />
         </>

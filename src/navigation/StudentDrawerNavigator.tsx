@@ -2,26 +2,17 @@ import React, { useRef, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CustomHeader from "./components/CustomHeader";
 import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
-
 import StudentTabs from "@/tabs/StudentTabs";
-
-import {
-    AcademicsScreen,
-    StudentProgressScreen,
-    ProjectsScreen,
-    PlacementsScreen,
-    LeaveRequestsScreen,
-    ClubScreen,
-    DriveScreen,
-    MeetingsScreen,
-    MyAttendanceScreen,
-    WellbeingScreen,
-    SettingsScreen,
-} from "@/(screens)/student/mockScreens";
-
-import StudentCalendar from "@/(screens)/student/calendar/calendar";
 import StudentAssignments from "@/(screens)/student/assignments/assignments";
-import StudentAttendance from "@/(screens)/student/attendance/attendance";
+import StudentProgressScreen from "@/(screens)/student/studentProgress/studentProgress";
+import ProjectsScreen from "@/(screens)/student/projects/projects";
+import PlacementsScreen from "@/(screens)/student/placements/placements";
+import LeaveRequestsScreen from "@/(screens)/student/leaveRequests/leaveRequests";
+import ClubScreen from "@/(screens)/student/club/club";
+import DriveScreen from "@/(screens)/student/drive/drive";
+import MeetingsScreen from "@/(screens)/student/meetings/meetings";
+import WellbeingScreen from "@/(screens)/student/wellbeing/wellbeing";
+import SettingsScreen from "@/(screens)/student/settings/settings";
 
 export type StudentDrawerParamList = {
     StudentTabs: undefined;
@@ -56,15 +47,38 @@ const menuItems: RoleSideMenuItem[] = [
     { name: "Club", label: "Club" },
     { name: "Drive", label: "Drive" },
     { name: "Meetings", label: "Meetings" },
-    { name: "MyAttendance", label: "My Attendance" },
     { name: "Wellbeing", label: "Wellbeing" },
     { name: "Settings", label: "Settings" },
 ];
 
+const getActiveRouteName = (state: any): string => {
+    if (!state || !state.routes) return "";
+    const index = state.index ?? 0;
+    const route = state.routes[index];
+    if (!route) return "";
+    if (route.state) {
+        return getActiveRouteName(route.state);
+    }
+    return route.name || "";
+};
+
 export default function StudentDrawerNavigator() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [activeRouteName, setActiveRouteName] = useState<keyof StudentDrawerParamList>("StudentTabs");
     const navigationRef = useRef<any>(null);
+
+    // Dynamically evaluate active route name from the stack navigator state when the drawer is open
+    let activeRouteName: keyof StudentDrawerParamList = "StudentTabs";
+    if (isMenuOpen && navigationRef.current) {
+        const navState = navigationRef.current.getState();
+        const activeLeafName = getActiveRouteName(navState);
+        if (activeLeafName) {
+            if (activeLeafName === "Home") {
+                activeRouteName = "StudentTabs";
+            } else {
+                activeRouteName = activeLeafName as keyof StudentDrawerParamList;
+            }
+        }
+    }
 
     return (
         <>
@@ -72,27 +86,18 @@ export default function StudentDrawerNavigator() {
                 initialRouteName="StudentTabs"
                 screenOptions={({ navigation }) => {
                     navigationRef.current = navigation;
-
                     return {
                         headerShown: true,
                         headerTransparent: true,
                         header: () => (
                             <CustomHeader navigation={{ toggleDrawer: () => setIsMenuOpen(true) }} />
                         ),
+                        freezeOnBlur: false,
                     };
-                }}
-                screenListeners={{
-                    state: (event) => {
-                        const route = event.data.state.routes[event.data.state.index];
-                        setActiveRouteName(route.name as keyof StudentDrawerParamList);
-                    },
                 }}
             >
                 <Stack.Screen name="StudentTabs" component={StudentTabs} />
-                <Stack.Screen name="Calendar" component={StudentCalendar} />
-                <Stack.Screen name="Attendance" component={StudentAttendance} />
                 <Stack.Screen name="Assignments" component={StudentAssignments} />
-                <Stack.Screen name="Academics" component={AcademicsScreen} />
                 <Stack.Screen name="StudentProgress" component={StudentProgressScreen} />
                 <Stack.Screen name="Projects" component={ProjectsScreen} />
                 <Stack.Screen name="Placements" component={PlacementsScreen} />
@@ -100,7 +105,6 @@ export default function StudentDrawerNavigator() {
                 <Stack.Screen name="Club" component={ClubScreen} />
                 <Stack.Screen name="Drive" component={DriveScreen} />
                 <Stack.Screen name="Meetings" component={MeetingsScreen} />
-                <Stack.Screen name="MyAttendance" component={MyAttendanceScreen} />
                 <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
                 <Stack.Screen name="Settings" component={SettingsScreen} />
             </Stack.Navigator>
@@ -113,8 +117,20 @@ export default function StudentDrawerNavigator() {
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
-                    setActiveRouteName(routeName as keyof StudentDrawerParamList);
-                    navigationRef.current?.navigate(routeName);
+                    // Use a short delay to allow the Modal dismissal to start and avoid transition layout freezes on Android
+                    setTimeout(() => {
+                        if (routeName === "StudentTabs") {
+                            navigationRef.current?.navigate("StudentTabs", { screen: "Home" });
+                        } else if (routeName === "Calendar") {
+                            navigationRef.current?.navigate("StudentTabs", { screen: "Calendar" });
+                        } else if (routeName === "Attendance") {
+                            navigationRef.current?.navigate("StudentTabs", { screen: "Attendance" });
+                        } else if (routeName === "Academics") {
+                            navigationRef.current?.navigate("StudentTabs", { screen: "Academics" });
+                        } else {
+                            navigationRef.current?.navigate(routeName);
+                        }
+                    }, 100);
                 }}
             />
         </>

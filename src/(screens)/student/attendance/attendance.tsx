@@ -223,10 +223,10 @@ export default function AttendanceClient() {
                             {dataLoading ? (
                                 <DashboardSkeleton />
                             ) : (
-                                <View className="flex-row gap-3 w-full">
-                                    <View className="flex-1 gap-3">
+                                <View className="flex-col gap-3 w-full">
+                                    <View className="flex-row gap-3 w-full">
                                         <CardComponent
-                                            style="bg-[#FFEDDA] w-full h-[95px] rounded-xl"
+                                            style="bg-[#FFEDDA] flex-1 h-[95px] rounded-xl"
                                             icon={<UsersThree size={28} color="#FFFFFF" weight="fill" />}
                                             value={
                                                 dashboardData
@@ -239,7 +239,7 @@ export default function AttendanceClient() {
                                         />
 
                                         <CardComponent
-                                            style="bg-[#CEE6FF] w-full h-[95px] rounded-xl"
+                                            style="bg-[#CEE6FF] flex-1 h-[95px] rounded-xl"
                                             icon={<Chalkboard size={28} color="#FFFFFF" weight="fill" />}
                                             value={
                                                 dashboardData
@@ -258,7 +258,7 @@ export default function AttendanceClient() {
                                         />
                                     </View>
 
-                                    <View className="flex-1">
+                                    <View className="w-full">
                                         <SemesterAttendanceCard
                                             presentPercent={dashboardData?.semesterStats.present || 0}
                                             absentPercent={dashboardData?.semesterStats.absent || 0}

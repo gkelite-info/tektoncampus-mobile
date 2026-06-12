@@ -6,6 +6,8 @@ import Toast from "react-native-toast-message";
 import { useTranslations } from "@/utils/useTranslations";
 import { deactivateStudentDiscussionUpload, deleteStudentDiscussionFileFromStorage } from "@/lib/helpers/student/assignments/discussionForum/student_discussion_uploadsAPI";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import { fonts } from "@/constants/fonts";
+import { AttachmentViewerModal } from "./studentDiscussionModals";
 
 interface StudentDiscussionCardProps {
     data: {
@@ -32,6 +34,7 @@ export default function StudentDiscussionCard({
     const route = useRoute<any>();
     const [deleteUploadId, setDeleteUploadId] = useState<number | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [viewerUrl, setViewerUrl] = useState<string | null>(null);
     const t = useTranslations("Assignment.student");
 
     const handleCardClick = () => {
@@ -50,14 +53,9 @@ export default function StudentDiscussionCard({
         });
     };
 
-    const handleOpenFile = async (url: string) => {
+    const handleOpenFile = (url: string) => {
         if (!url) return;
-        const supported = await Linking.canOpenURL(url);
-        if (supported) {
-            await Linking.openURL(url);
-        } else {
-            Toast.show({ type: "error", text1: t("Cannot open this file URL") });
-        }
+        setViewerUrl(url);
     };
 
     const handleRemoveUpload = async () => {
@@ -95,43 +93,43 @@ export default function StudentDiscussionCard({
                 className="bg-[#F4F5F6] rounded-xl p-4 flex flex-col shadow-sm border border-gray-100"
             >
                 <View className="flex-row justify-between items-start mb-2">
-                    <Text className="text-[#282828] font-bold text-[15px] flex-1 pr-2">
+                    <Text className="text-[#282828] text-[15px] flex-1 pr-2" style={{ fontFamily: fonts.bold }}>
                         {data.title}
                     </Text>
                     {!isCompleted ? (
                         <TouchableOpacity
                             onPress={handleUploadClick}
-                            className="bg-[#43C17A] px-4 py-1.5 rounded-md shadow-sm flex-row items-center"
+                            className="bg-[#43C17A] px-4 py-1.5 rounded-md gap-2 shadow-sm flex-row items-center"
                         >
-                            <FileUp size={12} color="#FFFFFF" className="mr-1" />
-                            <Text className="text-white text-[11px] font-bold">
+                            <FileUp size={13} color="#FFFFFF" />
+                            <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>
                                 {t("Upload")}
                             </Text>
                         </TouchableOpacity>
                     ) : (
-                        <View className="bg-[#16284F] px-3 py-1 rounded-md shadow-sm flex-row items-center">
-                            <FileCheck size={12} color="#FFFFFF" className="mr-1" />
-                            <Text className="text-white text-[11px] font-bold">
+                        <View className="bg-[#16284F] px-3 py-1 rounded-md shadow-sm gap-2 flex-row items-center">
+                            <FileCheck size={13} color="#FFFFFF" />
+                            <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>
                                 {t("Uploaded")}
                             </Text>
                         </View>
                     )}
                 </View>
 
-                <Text className="text-gray-600 text-xs numberOfLines={2} mb-3">
+                <Text className="text-gray-600 text-xs mb-3" numberOfLines={2} style={{ fontFamily: fonts.regular }}>
                     {data.description}
                 </Text>
 
                 <View className="flex-col gap-y-1.5 mb-3 w-full">
                     <View className="flex-row items-center gap-x-1.5">
                         <UserCircle size={14} color="#43C17A" />
-                        <Text className="text-[11px] text-gray-600">
+                        <Text className="text-[11px] text-gray-600" style={{ fontFamily: fonts.regular }}>
                             {t("Faculty Name :")} {data.facultyName}
                         </Text>
                     </View>
                     <View className="flex-row items-center gap-x-1.5">
                         <CalendarDays size={14} color="#43C17A" />
-                        <Text className="text-[11px] text-gray-600">
+                        <Text className="text-[11px] text-gray-600" style={{ fontFamily: fonts.regular }}>
                             {t("Uploaded On :")}{" "}
                             {data.createdAt
                                 ? new Date(data.createdAt).toLocaleDateString()
@@ -140,7 +138,7 @@ export default function StudentDiscussionCard({
                     </View>
                     <View className="flex-row items-center gap-x-1.5">
                         <CalendarDays size={14} color="#EF4444" />
-                        <Text className="text-[11px] text-gray-600">
+                        <Text className="text-[11px] text-gray-600" style={{ fontFamily: fonts.regular }}>
                             {t("Deadline :")}{" "}
                             {data.deadline
                                 ? new Date(data.deadline).toLocaleDateString()
@@ -150,7 +148,7 @@ export default function StudentDiscussionCard({
                 </View>
 
                 <View className="mt-1">
-                    <Text className="text-[11px] font-bold text-[#282828] mb-1.5">
+                    <Text className="text-[11px] text-[#282828] mb-1.5" style={{ fontFamily: fonts.bold }}>
                         {t("Attachments")}
                     </Text>
                     <ScrollView
@@ -165,7 +163,7 @@ export default function StudentDiscussionCard({
                                 className="flex-row items-center bg-[#e2e8f0] text-[#334155] px-2.5 py-1 rounded border border-slate-300 mr-2"
                             >
                                 <FileText size={14} color="#16284F" className="mr-1" />
-                                <Text className="text-[10px] font-medium text-[#334155]">
+                                <Text className="text-[10px] text-[#334155]" style={{ fontFamily: fonts.medium }}>
                                     {getFileName(file.fileUrl)}
                                 </Text>
                             </TouchableOpacity>
@@ -181,7 +179,7 @@ export default function StudentDiscussionCard({
                                     className="flex-row items-center"
                                 >
                                     <FileText size={14} color="#43C17A" className="mr-1" />
-                                    <Text className="text-[10px] font-medium text-[#334155] mr-1">
+                                    <Text className="text-[10px] text-[#334155] mr-1" style={{ fontFamily: fonts.medium }}>
                                         {getFileName(file.fileUrl)}
                                     </Text>
                                 </TouchableOpacity>
@@ -197,7 +195,7 @@ export default function StudentDiscussionCard({
 
                         {(!data.attachments || data.attachments.length === 0) &&
                             (!uploadedFiles || uploadedFiles.length === 0) && (
-                                <Text className="text-[10px] text-gray-400 italic py-1">
+                                <Text className="text-[10px] text-gray-400 italic py-1" style={{ fontFamily: fonts.regular }}>
                                     {t("No attachments")}
                                 </Text>
                             )}
@@ -211,6 +209,12 @@ export default function StudentDiscussionCard({
                 onCancel={() => setDeleteUploadId(null)}
                 isDeleting={isDeleting}
                 name="uploaded file"
+            />
+
+            <AttachmentViewerModal
+                visible={!!viewerUrl}
+                url={viewerUrl || ""}
+                onClose={() => setViewerUrl(null)}
             />
         </View>
     );

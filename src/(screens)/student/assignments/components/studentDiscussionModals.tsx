@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, ActivityIndicator } from "react-native";
+import { Modal, View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Platform, PermissionsAndroid } from "react-native";
 import { X, CloudUpload, FileText, Trash2, Download, UserCircle, CalendarDays } from "lucide-react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -10,12 +10,58 @@ import {
     uploadStudentDiscussionFiles,
 } from "@/lib/helpers/student/assignments/discussionForum/student_discussion_uploadsAPI";
 import { useStudent } from "@/utils/context/student/useStudent";
+import { useTranslations } from "@/utils/useTranslations";
+import { fonts } from "@/constants/fonts";
+import { WebView } from "react-native-webview";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as FileSystem from "expo-file-system/legacy";
+import * as Sharing from "expo-sharing";
 
 interface LocalFileType {
     uri: string;
     name: string;
     size: number;
     mimeType?: string;
+}
+
+export function AttachmentViewerModal({
+    visible,
+    url,
+    onClose,
+}: {
+    visible: boolean;
+    url: string;
+    onClose: () => void;
+}) {
+    const cleanUrl = url.split("?")[0].toLowerCase();
+    const isPdf = cleanUrl.endsWith(".pdf");
+    const webViewUrl = isPdf && Platform.OS === "android"
+        ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`
+        : url;
+
+    return (
+        <Modal visible={visible} transparent={false} animationType="slide" onRequestClose={onClose}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+                <View className="h-[56px] flex-row items-center justify-between px-4 border-b border-gray-200">
+                    <Text className="text-base text-gray-800" style={{ fontFamily: fonts.bold }}>
+                        Attachment Viewer
+                    </Text>
+                    <TouchableOpacity onPress={onClose} className="p-1 bg-gray-100 rounded-full">
+                        <X size={20} color="#000000" />
+                    </TouchableOpacity>
+                </View>
+                {webViewUrl ? (
+                    <WebView source={{ uri: webViewUrl }} style={{ flex: 1 }} startInLoadingState />
+                ) : (
+                    <View className="flex-1 items-center justify-center">
+                        <Text className="text-gray-500 text-sm" style={{ fontFamily: fonts.regular }}>
+                            No URL provided
+                        </Text>
+                    </View>
+                )}
+            </SafeAreaView>
+        </Modal>
+    );
 }
 
 export function StudentDiscussionUploadModal({
@@ -29,6 +75,7 @@ export function StudentDiscussionUploadModal({
 }) {
     const navigation = useNavigation<any>();
     const route = useRoute<any>();
+    const t = useTranslations("Assignment.student");
 
     const [files, setFiles] = useState<LocalFileType[]>([]);
     const { studentId } = useStudent();
@@ -122,8 +169,8 @@ export function StudentDiscussionUploadModal({
                 <View className="bg-white rounded-2xl w-full max-w-[340px] p-6 shadow-xl flex-col">
                     <View className="flex-row justify-between items-start mb-4">
                         <View className="flex-1 pr-2">
-                            <Text className="text-lg font-bold text-[#43C17A]">{discussion.title}</Text>
-                            <Text className="text-base font-bold text-[#282828] mt-1">Upload</Text>
+                            <Text className="text-lg text-[#43C17A]" style={{ fontFamily: fonts.bold }}>{discussion.title}</Text>
+                            <Text className="text-base text-[#282828] mt-1" style={{ fontFamily: fonts.bold }}>{t("Upload")}</Text>
                         </View>
                         <TouchableOpacity onPress={handleClose} className="p-1">
                             <X size={22} color="#000000" />
@@ -137,7 +184,9 @@ export function StudentDiscussionUploadModal({
                             className="border-2 border-dashed border-gray-300 bg-gray-50/50 rounded-2xl p-6 flex-col items-center justify-center gap-y-2"
                         >
                             <CloudUpload size={40} color="#9CA3AF" />
-                            <Text className="text-sm text-gray-600 text-center">Tap here to choose documents</Text>
+                            <Text className="text-sm text-gray-600 text-center" style={{ fontFamily: fonts.regular }}>
+                                Tap here to choose documents
+                            </Text>
                         </TouchableOpacity>
 
                         {files.length > 0 && (
@@ -148,8 +197,8 @@ export function StudentDiscussionUploadModal({
                                             <View className="flex-1 flex-row items-center gap-x-2 pr-2">
                                                 <FileText size={20} color="#EF4444" />
                                                 <View className="flex-1 flex-col">
-                                                    <Text numberOfLines={1} className="text-xs font-medium text-[#282828]">{file.name}</Text>
-                                                    <Text className="text-[10px] text-gray-400">{(file.size / 1024).toFixed(2)} KB</Text>
+                                                    <Text numberOfLines={1} className="text-xs text-[#282828]" style={{ fontFamily: fonts.medium }}>{file.name}</Text>
+                                                    <Text className="text-[10px] text-gray-400" style={{ fontFamily: fonts.regular }}>{(file.size / 1024).toFixed(2)} KB</Text>
                                                 </View>
                                             </View>
                                             <TouchableOpacity
@@ -167,7 +216,7 @@ export function StudentDiscussionUploadModal({
 
                     <View className="flex-row items-center mt-6 gap-x-3">
                         <TouchableOpacity onPress={handleClose} className="flex-1 py-3 border border-gray-200 bg-white rounded-xl">
-                            <Text className="text-center font-bold text-sm text-gray-600">Cancel</Text>
+                            <Text className="text-center text-sm text-gray-600" style={{ fontFamily: fonts.bold }}>Cancel</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={handleUploadSubmit}
@@ -177,7 +226,7 @@ export function StudentDiscussionUploadModal({
                             {loading ? (
                                 <ActivityIndicator size="small" color="#FFFFFF" />
                             ) : (
-                                <Text className="text-center font-bold text-sm text-white">Upload File</Text>
+                                <Text className="text-center text-sm text-white" style={{ fontFamily: fonts.bold }}>Upload File</Text>
                             )}
                         </TouchableOpacity>
                     </View>
@@ -187,6 +236,29 @@ export function StudentDiscussionUploadModal({
     );
 }
 
+async function requestStoragePermission() {
+    if (Platform.OS !== "android") return true;
+    try {
+        if (Number(Platform.Version) >= 33) {
+            return true;
+        }
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+                title: "Storage Permission Required",
+                message: "This app needs access to your storage to download discussion files.",
+                buttonNeutral: "Ask Me Later",
+                buttonNegative: "Cancel",
+                buttonPositive: "OK",
+            }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+        console.warn(err);
+        return false;
+    }
+}
+
 export function StudentDiscussionDetailsModal({
     discussion,
 }: {
@@ -194,8 +266,10 @@ export function StudentDiscussionDetailsModal({
 }) {
     const navigation = useNavigation<any>();
     const route = useRoute<any>();
+    const t = useTranslations("Assignment.student");
     const { studentId } = useStudent();
     const [marks, setMarks] = useState<{ marksObtained: number | null; totalMarks: number | null } | null>(null);
+    const [viewerUrl, setViewerUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (!studentId || !discussion?.discussionId) return;
@@ -212,22 +286,57 @@ export function StudentDiscussionDetailsModal({
         });
     };
 
-    const handleOpenFile = async (url: string) => {
+    const handleOpenFile = (url: string) => {
         if (!url) return;
-        const supported = await Linking.canOpenURL(url);
-        if (supported) {
-            await Linking.openURL(url);
-        } else {
-            Toast.show({ type: "error", text1: "Cannot open this attachment link" });
+        setViewerUrl(url);
+    };
+
+    const handleDownloadFile = async (url: string) => {
+        if (!url) return;
+        try {
+            Toast.show({ type: "info", text1: "Downloading file..." });
+
+            const fileName = url.split("/").pop()?.split("?")[0] || "attachment";
+            const decodedFileName = decodeURIComponent(fileName).split("_").slice(1).join("_") || decodeURIComponent(fileName);
+
+            if (Platform.OS === "android") {
+                const hasPermission = await requestStoragePermission();
+                if (!hasPermission) {
+                    Toast.show({ type: "error", text1: "Storage permission denied" });
+                    return;
+                }
+
+                const publicDownloadUri = `file:///storage/emulated/0/Download/${decodedFileName}`;
+                try {
+                    await FileSystem.downloadAsync(url, publicDownloadUri);
+                    Toast.show({ type: "success", text1: "File downloaded to Downloads folder!" });
+                    return;
+                } catch (androidError) {
+                    console.log("Direct download to Downloads failed, falling back:", androidError);
+                }
+            }
+
+            const localUri = `${FileSystem.documentDirectory}${decodedFileName}`;
+            await FileSystem.downloadAsync(url, localUri);
+
+            const isSharingAvailable = await Sharing.isAvailableAsync();
+            if (isSharingAvailable) {
+                await Sharing.shareAsync(localUri);
+                Toast.show({ type: "success", text1: "File downloaded successfully!" });
+            } else {
+                Toast.show({ type: "error", text1: "Sharing not available on this device" });
+            }
+        } catch (error) {
+            console.error("Download failed:", error);
+            Toast.show({ type: "error", text1: "Failed to download file" });
         }
     };
 
-    const handleDownloadAll = async () => {
+    const handleDownloadAll = () => {
         if (discussion.attachments?.length > 0) {
-            for (const file of discussion.attachments) {
-                if (file.fileUrl) {
-                    await handleOpenFile(file.fileUrl);
-                }
+            const firstAttachment = discussion.attachments[0];
+            if (firstAttachment?.fileUrl) {
+                handleDownloadFile(firstAttachment.fileUrl);
             }
         } else {
             Toast.show({ type: "error", text1: "No attachments available to download" });
@@ -239,97 +348,140 @@ export function StudentDiscussionDetailsModal({
             <View className="flex-1 justify-center items-center bg-black/40 p-4">
                 <TouchableOpacity activeOpacity={1} onPress={handleClose} className="absolute inset-0 w-full h-full" />
 
-                <View className="bg-white rounded-2xl w-full max-w-[340px] p-5 shadow-xl flex-col max-h-[80vh]">
-                    <View className="flex-row justify-between items-start border-b border-gray-100 pb-3 mb-3">
-                        <View className="flex-1 pr-2">
-                            <Text className="text-lg font-bold text-[#43C17A] mb-1.5">{discussion.title}</Text>
-
-                            <View className="flex-col gap-y-1">
-                                <View className="flex-row items-center gap-x-1.5">
-                                    <UserCircle size={14} color="#43C17A" />
-                                    <Text numberOfLines={1} className="text-[11px] font-bold text-[#282828]">
-                                        Faculty: <Text className="font-normal text-gray-600">{discussion.facultyName}</Text>
-                                    </Text>
-                                </View>
-                                <View className="flex-row items-center gap-x-1.5">
-                                    <CalendarDays size={14} color="#43C17A" />
-                                    <Text className="text-[11px] font-bold text-[#282828]">
-                                        Uploaded: <Text className="font-normal text-gray-600">{discussion.createdAt ? new Date(discussion.createdAt).toLocaleDateString() : "—"}</Text>
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-
+                <View className="bg-white rounded-[24px] w-full max-w-[340px] flex-col overflow-hidden" style={{ height: "80%" }}>
+                    <View className="flex-row items-center justify-between px-6 py-5 border-b border-gray-100 shrink-0">
+                        <Text className="text-xl text-[#43C17A]" style={{ fontFamily: fonts.bold }}>
+                            {t("Discussion forum")}
+                        </Text>
                         <TouchableOpacity onPress={handleClose} className="p-1">
-                            <X size={22} color="#43C17A" />
+                            <X size={22} color="#9CA3AF" />
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView className="flex-1 pr-1">
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        className="flex-1 px-6 py-4"
+                        contentContainerStyle={{ paddingBottom: 24 }}
+                    >
                         <View className="flex-col gap-y-3">
-                            <View className="flex-row items-center justify-between bg-gray-50 p-2.5 rounded-xl">
-                                <Text className="text-xs text-[#282828] font-medium">Marks Scored:</Text>
-                                <Text className="text-xs font-bold text-orange-600">
-                                    {marks?.marksObtained !== null ? `${marks?.marksObtained}` : "-"}
+                            <View className="flex-row items-center gap-x-2.5">
+                                <View className="bg-[#E2F3E9] p-1 rounded-full">
+                                    <UserCircle size={16} color="#43C17A" />
+                                </View>
+                                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>
+                                    {t("Faculty Name :")}{" "}
+                                    <Text className="text-gray-500" style={{ fontFamily: fonts.regular }}>
+                                        {discussion.facultyName}
+                                    </Text>
                                 </Text>
                             </View>
 
-                            <View className="flex-col">
-                                <Text className="text-xs font-bold text-[#282828] mb-1">Description</Text>
-                                <Text className="text-xs text-[#282828] leading-5 bg-gray-50 p-2.5 rounded-xl">
-                                    {discussion.description ?? "No description provided."}
+                            <View className="flex-row items-center gap-x-2.5">
+                                <View className="bg-[#E2F3E9] p-1 rounded-full">
+                                    <CalendarDays size={16} color="#43C17A" />
+                                </View>
+                                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>
+                                    {t("Uploaded On :")}{" "}
+                                    <Text className="text-gray-500" style={{ fontFamily: fonts.regular }}>
+                                        {discussion.createdAt ? new Date(discussion.createdAt).toLocaleDateString() : "—"}
+                                    </Text>
                                 </Text>
                             </View>
 
-                            <View className="flex-row justify-between border-t border-b border-gray-100 py-2">
+                            <TouchableOpacity
+                                onPress={handleDownloadAll}
+                                activeOpacity={0.8}
+                                className="bg-[#43C17A] px-4 py-2 rounded-xl flex-row items-center gap-x-2 self-start mt-2 mb-2 shadow-xs"
+                            >
+                                <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>
+                                    {t("Download")}
+                                </Text>
+                                <View className="bg-white rounded-full p-0.5 items-center justify-center">
+                                    <Download size={12} color="#43C17A" />
+                                </View>
+                            </TouchableOpacity>
+
+                            <View className="flex-row items-center mb-1">
+                                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>
+                                    {t("Marks Scored :")}{" "}
+                                    <Text className="text-[#FF5A1F]" style={{ fontFamily: fonts.bold }}>
+                                        {marks?.marksObtained !== null && marks?.marksObtained !== undefined ? `${marks?.marksObtained}` : "-"}
+                                    </Text>
+                                </Text>
+                            </View>
+
+                            <View className="border-t border-gray-100 pt-3 flex-col gap-y-4">
                                 <View className="flex-col">
-                                    <Text className="text-[11px] font-bold text-[#282828]">Deadline</Text>
-                                    <Text className="text-xs text-gray-600 mt-0.5">
+                                    <Text className="text-xs text-[#282828]" style={{ fontFamily: fonts.bold }}>
+                                        {t("Description")}
+                                    </Text>
+                                    <Text className="text-xs text-gray-500 mt-1 leading-5" style={{ fontFamily: fonts.regular }}>
+                                        {discussion.description ?? t("No description provided.")}
+                                    </Text>
+                                </View>
+
+                                <View className="flex-col">
+                                    <Text className="text-xs text-[#282828]" style={{ fontFamily: fonts.bold }}>
+                                        {t("Deadline")}
+                                    </Text>
+                                    <Text className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: fonts.regular }}>
                                         {discussion.deadline ? new Date(discussion.deadline).toLocaleDateString() : "—"}
                                     </Text>
                                 </View>
-                                <View className="flex-col items-end">
-                                    <Text className="text-[11px] font-bold text-[#282828]">Total Marks</Text>
-                                    <Text className="text-xs text-gray-600 mt-0.5">{discussion.marks ?? "—"}</Text>
-                                </View>
-                            </View>
 
-                            {discussion.attachments?.length > 0 && (
                                 <View className="flex-col">
-                                    <Text className="text-xs font-bold text-[#282828] mb-1.5">Attachments</Text>
-                                    <View className="flex-row flex-wrap gap-2">
-                                        {discussion.attachments.map((file: { fileUrl: string }, idx: number) => (
-                                            <TouchableOpacity
-                                                key={idx}
-                                                onPress={() => handleOpenFile(file.fileUrl)}
-                                                className="flex-row items-center gap-x-1.5 bg-[#e2e8f0] px-2.5 py-1.5 rounded-lg"
-                                            >
-                                                <FileText size={12} color="#1E293B" />
-                                                <Text numberOfLines={1} className="text-[10px] font-semibold text-[#334155] max-w-[120px]">
-                                                    {file.fileUrl?.split("/").pop()?.split("_").slice(1).join("_") || "File"}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
+                                    <Text className="text-xs text-[#282828]" style={{ fontFamily: fonts.bold }}>
+                                        {t("Total Marks")}
+                                    </Text>
+                                    <Text className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: fonts.regular }}>
+                                        {discussion.marks ?? "—"}
+                                    </Text>
                                 </View>
-                            )}
+
+                                {discussion.attachments?.length > 0 && (
+                                    <View className="flex-col">
+                                        <Text className="text-xs text-[#282828] mb-1.5" style={{ fontFamily: fonts.bold }}>
+                                            {t("Attachments")}
+                                        </Text>
+                                        <View className="flex-row flex-wrap gap-2">
+                                            {discussion.attachments.map((file: { fileUrl: string }, idx: number) => (
+                                                <TouchableOpacity
+                                                    key={idx}
+                                                    onPress={() => handleOpenFile(file.fileUrl)}
+                                                    className="flex-row items-center gap-x-1.5 bg-[#e2e8f0] px-2.5 py-1.5 rounded-lg"
+                                                >
+                                                    <FileText size={12} color="#1E293B" />
+                                                    <Text numberOfLines={1} className="text-[10px] text-[#334155] max-w-[120px]" style={{ fontFamily: fonts.semiBold }}>
+                                                        {file.fileUrl?.split("/").pop()?.split("_").slice(1).join("_") || "File"}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </View>
+                                    </View>
+                                )}
+                            </View>
                         </View>
                     </ScrollView>
 
-                    <View className="flex-row gap-x-3 mt-4 pt-2 border-t border-gray-100">
-                        <TouchableOpacity onPress={handleClose} className="flex-1 py-2.5 border border-gray-200 bg-white rounded-xl">
-                            <Text className="text-center font-bold text-xs text-gray-600">Close</Text>
-                        </TouchableOpacity>
+                    <View className="px-6 py-4 border-t border-gray-100 bg-white shrink-0">
                         <TouchableOpacity
-                            onPress={handleDownloadAll}
-                            className="flex-1 py-2.5 bg-[#43C17A] rounded-xl flex-row items-center justify-center gap-x-1.5 shadow-sm"
+                            onPress={handleClose}
+                            activeOpacity={0.7}
+                            className="w-full bg-white border border-gray-300 py-3 rounded-xl items-center justify-center"
                         >
-                            <Text className="text-center font-bold text-xs text-white">Open Links</Text>
-                            <Download size={12} color="#FFFFFF" />
+                            <Text className="text-gray-700 text-sm" style={{ fontFamily: fonts.bold }}>
+                                {t("Close")}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
+
+            <AttachmentViewerModal
+                visible={!!viewerUrl}
+                url={viewerUrl || ""}
+                onClose={() => setViewerUrl(null)}
+            />
         </Modal>
     );
 }

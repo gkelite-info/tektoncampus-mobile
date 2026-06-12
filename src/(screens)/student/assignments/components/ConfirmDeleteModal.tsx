@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { CheckCircle2, Trash2, XCircle } from "lucide-react-native";
+import { fonts } from "@/constants/fonts";
 
 interface Props {
     open: boolean;
@@ -66,31 +67,31 @@ export default function ConfirmDeleteModal({
                         <IconComponent size={32} color={iconColor} />
                     </View>
 
-                    <Text className="text-xl font-bold text-gray-900 mb-2 text-center">
+                    <Text className="text-xl text-gray-900 mb-2 text-center" style={{ fontFamily: fonts.bold }}>
                         {title} {name}?
                     </Text>
 
                     <View className="mb-6 w-full">
                         {customDescription ? (
                             typeof customDescription === "string" ? (
-                                <Text className="text-[14px] text-gray-500 text-center leading-5">{customDescription}</Text>
+                                <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{customDescription}</Text>
                             ) : (
                                 customDescription
                             )
                         ) : actionType === "accept" ? (
-                            <Text className="text-[14px] text-gray-500 text-center leading-5">
+                            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>
                                 Please confirm if you would like to approve the request for{" "}
-                                <Text className="font-semibold text-gray-700">{name}</Text>. They will be officially added to your club members list.
+                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>. They will be officially added to your club members list.
                             </Text>
                         ) : actionType === "reject" ? (
-                            <Text className="text-[14px] text-gray-500 text-center leading-5">
+                            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>
                                 Please confirm if you would like to decline the request for{" "}
-                                <Text className="font-semibold text-gray-700">{name}</Text>. This will clear them from your pending approvals.
+                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>. This will clear them from your pending approvals.
                             </Text>
                         ) : (
-                            <Text className="text-[14px] text-gray-500 text-center leading-5">
+                            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>
                                 Are you sure you want to {title.toLowerCase()}{" "}
-                                <Text className="font-semibold text-gray-700">{name}</Text>?
+                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>?
                                 {actionType === "remove" && " This action cannot be undone and will permanently remove the data."}
                             </Text>
                         )}
@@ -102,7 +103,7 @@ export default function ConfirmDeleteModal({
                             disabled={isDeleting}
                             className="flex-1 border border-gray-300 bg-white py-3 rounded-xl active:bg-gray-50 disabled:opacity-50"
                         >
-                            <Text className="text-gray-700 font-semibold text-center">
+                            <Text className="text-gray-700 text-center" style={{ fontFamily: fonts.bold }}>
                                 Cancel
                             </Text>
                         </TouchableOpacity>
@@ -115,12 +116,12 @@ export default function ConfirmDeleteModal({
                             {isDeleting ? (
                                 <View className="flex-row items-center justify-center">
                                     <ActivityIndicator size="small" color="#FFFFFF" className="mr-2" />
-                                    <Text className="text-white font-semibold text-center">
+                                    <Text className="text-white text-center" style={{ fontFamily: fonts.bold }}>
                                         {loadingText}
                                     </Text>
                                 </View>
                             ) : (
-                                <Text className="text-white font-semibold text-center">
+                                <Text className="text-white text-center" style={{ fontFamily: fonts.bold }}>
                                     {confirmText}
                                 </Text>
                             )}

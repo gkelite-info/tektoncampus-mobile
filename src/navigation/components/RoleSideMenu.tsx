@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Modal, ScrollView, Text, TouchableOpacity, View, StyleSheet, Platform, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MotiView, AnimatePresence } from 'moti';
 import {
@@ -113,13 +113,13 @@ export default function RoleSideMenu({
                             style={{ width: '75%', backgroundColor: "#47c67b", height: '100%', zIndex: 10 }}
                             className="shadow-2xl shadow-black"
                         >
-                            <SafeAreaView style={{ flex: 1 }}>
-                                <View style={{ position: 'absolute', top: 16, right: 16, zIndex: 50 }}>
+                            <SafeAreaView style={{ flex: 1, paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0 }}>
+                                <View style={{ position: 'absolute', top: Platform.OS === 'android' ? (StatusBar.currentHeight || 0) + 0 : 0, right: 16, zIndex: 50 }}>
                                     <TouchableOpacity onPress={onClose} className="bg-black/10 p-2 rounded-full">
                                         <X size={20} color="white" weight="bold" />
                                     </TouchableOpacity>
                                 </View>
-                                <View className="items-center justify-center py-8" />
+                                <View className="items-center justify-center py-6" />
 
                                 <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
                                     {items.map((item) => {

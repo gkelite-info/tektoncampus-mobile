@@ -9,9 +9,11 @@ import {
     AppState,
     AppStateStatus,
     Modal,
+    SafeAreaView,
 } from "react-native";
 import { XCircle } from "phosphor-react-native";
 import Toast from "react-native-toast-message";
+import Svg, { Circle } from "react-native-svg";
 
 import { fetchQuestionsWithOptionsByQuizId } from "@/lib/helpers/quiz/quizQuestionAPI";
 import { saveBulkSubmissionAnswers } from "@/lib/helpers/quiz/quizSubmissionAnswerAPI";
@@ -20,6 +22,7 @@ import { fetchQuizById } from "@/lib/helpers/quiz/quizAPI";
 import { startOrGetQuizSession, endQuizSession, getSessionStartTime } from "@/lib/helpers/quiz/quizSessionAPI";
 import { QuizAttemptShimmer } from "./shimmer/QuizAttemptShimmer";
 import { useStudent } from "@/utils/context/student/useStudent";
+import { fonts } from "@/constants/fonts";
 
 const useTranslations = (namespace: string) => {
     return (key: string, variables?: Record<string, any>) => {
@@ -41,30 +44,64 @@ function QuizExitWarningModal({
     onSubmit: () => void;
 }) {
     const t = useTranslations("Assignment.student");
+    const R = 34;
+    const C = 2 * Math.PI * R; // ~213.63
+    const progress = countdown / 10;
+    const strokeDashoffset = C * (1 - progress);
+
     return (
         <Modal visible={visible} transparent animationType="fade">
-            <View className="flex-1 justify-center items-center bg-slate-900/40 p-4">
-                <View className="bg-white rounded-2xl w-full max-w-[360px] p-6 shadow-xl border border-gray-100 items-center">
-                    <View className="w-20 h-20 mb-5 items-center justify-center rounded-full border-4 border-red-100">
-                        <Text className="text-2xl font-bold text-red-500">{countdown}</Text>
+            <View className="flex-1 justify-center items-center bg-slate-900/60 p-4">
+                <View className="bg-white rounded-3xl w-full max-w-[340px] p-6 shadow-2xl items-center border border-gray-100">
+                    {/* Smoothly unfilling circular progress countdown */}
+                    <View className="w-20 h-20 items-center justify-center mb-6 relative">
+                        <Svg width="80" height="80" viewBox="0 0 80 80">
+                            {/* Background track circle */}
+                            <Circle
+                                cx="40"
+                                cy="40"
+                                r={R}
+                                stroke="#FFD6D6"
+                                strokeWidth="5"
+                                fill="none"
+                            />
+                            {/* Animated progress circle */}
+                            <Circle
+                                cx="40"
+                                cy="40"
+                                r={R}
+                                stroke="#E13B30"
+                                strokeWidth="5"
+                                fill="none"
+                                strokeDasharray={`${C} ${C}`}
+                                strokeDashoffset={strokeDashoffset}
+                                strokeLinecap="round"
+                                transform="rotate(-90 40 40)"
+                            />
+                        </Svg>
+                        <View className="absolute inset-0 items-center justify-center">
+                            <Text className="text-3xl font-bold text-[#E13B30]" style={{ fontFamily: fonts.bold }}>
+                                {countdown}
+                            </Text>
+                        </View>
                     </View>
 
-                    <Text className="text-lg font-bold text-gray-900 mb-2 text-center">
-                        ⚠️ {t("Don't Switch Apps!")}
+                    <Text className="text-xl text-[#182142] mb-3 text-center" style={{ fontFamily: fonts.bold }}>
+                        ⚠️ Don't Switch Tabs!
                     </Text>
-                    <Text className="text-sm text-gray-500 mb-2 text-center leading-relaxed">
-                        {t("You switched away from the quiz window Your quiz will be automatically submitted in {countdown} seconds if you don't return", { countdown })}
+                    <Text className="text-[#5C6B82] text-sm text-center mb-1 leading-relaxed" style={{ fontFamily: fonts.regular }}>
+                        You switched away from the quiz window. Your quiz will be automatically submitted in {countdown} seconds if you don't return.
                     </Text>
-                    <Text className="text-xs text-gray-400 mb-6 text-center">
-                        {t("Leaving the app window during a quiz environment is restricted")}
+                    <Text className="text-[#8E9CAE] text-[11px] text-center mb-6" style={{ fontFamily: fonts.regular }}>
+                        Switching tabs or windows during a quiz is not allowed.
                     </Text>
 
                     <View className="flex-row gap-3 w-full">
-                        <TouchableOpacity onPress={onSubmit} className="flex-1 p-3 rounded-xl bg-red-500 items-center">
-                            <Text className="text-white font-semibold text-sm">{t("Submit Now")}</Text>
+                        <TouchableOpacity onPress={onSubmit} activeOpacity={0.8} className="flex-1 py-3 bg-[#FF3B30] rounded-2xl items-center justify-center">
+                            <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>Submit Now</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onStay} className="flex-1 p-3 rounded-xl bg-[#43C17A] items-center">
-                            <Text className="text-white font-semibold text-sm">{t("Return")}</Text>
+                        <TouchableOpacity onPress={onStay} activeOpacity={0.8} className="flex-1 py-3 bg-[#43C17A] rounded-2xl items-center justify-center">
+                            <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>Return to Quiz</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -330,7 +367,7 @@ function QuizAttemptScreenContent({
             if (appStateRef.current === "active" && nextAppState.match(/inactive|background/)) {
                 if (isSubmittingRef.current || hasAutoSubmitted) return;
 
-                if (tabSwitchCountRef.current >= 3) {
+                if (tabSwitchCountRef.current >= 2) {
                     setHasAutoSubmitted(true);
                     triggerSubmit();
                     return;
@@ -438,98 +475,113 @@ function QuizAttemptScreenContent({
     if (isLoading) return <QuizAttemptShimmer />;
 
     return (
-        <View className="flex-1 bg-[#f4f4f4] p-4 relative">
-            <QuizExitWarningModal visible={showExitWarningModal} countdown={warningCountdown} onStay={handleExitWarningStay} onSubmit={handleExitWarningSubmit} />
+        <SafeAreaView className="flex-1 bg-[#f4f4f4]">
+            <View className="flex-1 p-6 relative">
+                <QuizExitWarningModal visible={showExitWarningModal} countdown={warningCountdown} onStay={handleExitWarningStay} onSubmit={handleExitWarningSubmit} />
 
-            <View className="flex-row justify-between items-start mb-4">
-                <View className="flex-1 pr-2">
-                    <Text className="text-lg font-bold text-[#282828]">{quiz?.courseName ?? "Quiz"}</Text>
-                    {quiz?.topic ? <Text className="text-xs font-medium text-gray-500 mt-0.5">{quiz.topic}</Text> : null}
-                </View>
-
-                <View className={`${timerBg} px-3 py-1.5 rounded-xl items-center min-w-[85px]`}>
-                    <Text className={`text-[9px] font-bold uppercase tracking-wider ${timerTextColor} opacity-80`}>{t("Time Left")}</Text>
-                    <Text className={`font-bold text-lg ${timerTextColor}`}>{timeLeft !== null ? formatTime(timeLeft) : "--:--"}</Text>
-                    <View className="w-full h-[3px] bg-white/20 rounded-full overflow-hidden mt-1">
-                        <View className={`h-full rounded-full ${timerPercent > 50 ? "bg-[#87cefa]" : timerPercent > 20 ? "bg-yellow-300" : "bg-red-400"}`} style={{ width: `${timerPercent}%` }} />
-                    </View>
-                </View>
-            </View>
-
-            <View className="mb-4">
-                <View className="flex-row justify-between mb-1">
-                    <Text className="text-xs font-medium text-gray-400">{t("Quiz Progress")}</Text>
-                    <Text className="text-[#43C17A] font-bold text-xs">{progressCount} {t("of")} {questions.length}</Text>
-                </View>
-                <View className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <View className="h-full bg-[#43C17A]" style={{ width: `${progressPercentage}%` }} />
-                </View>
-            </View>
-
-            <ScrollView showsVerticalScrollIndicator={false} className="flex-1 mb-2">
-                {questions.map((q, qIndex) => (
-                    <View key={q.questionId} className="bg-white p-4 rounded-xl mb-4 shadow-sm border border-gray-100">
-                        <Text className="text-sm font-semibold text-[#282828] mb-4">
-                            {qIndex + 1}. {q.questionText}
+                <View className="flex-row justify-between items-center mb-6">
+                    <View className="flex-1 pr-4">
+                        <Text className="text-2xl text-[#1A1A1A]" style={{ fontFamily: fonts.bold }}>
+                            {quiz?.courseName ?? "Quiz"}
                         </Text>
-
-                        {q.questionType === "Multiple Choice" ? (
-                            <View className="flex-col gap-3">
-                                {q.quiz_question_options
-                                    ?.sort((a: any, b: any) => a.displayOrder - b.displayOrder)
-                                    .map((opt: any) => {
-                                        const isSelected = answers[q.questionId]?.optionId === opt.optionId;
-                                        return (
-                                            <TouchableOpacity
-                                                key={opt.optionId}
-                                                activeOpacity={0.7}
-                                                onPress={() => handleOptionChange(q.questionId, opt.optionId)}
-                                                className="flex-row items-center gap-3 py-1"
-                                            >
-                                                <View className={`w-5 h-5 rounded-full border items-center justify-center ${isSelected ? "border-[#43C17A]" : "border-gray-300"}`}>
-                                                    {isSelected ? <View className="w-2.5 h-2.5 rounded-full bg-[#43C17A]" /> : null}
-                                                </View>
-                                                <Text className={`text-sm flex-1 ${isSelected ? "text-[#282828] font-medium" : "text-gray-500"}`}>
-                                                    {opt.optionText}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        );
-                                    })}
-                            </View>
-                        ) : (
-                            <TextInput
-                                value={answers[q.questionId]?.writtenAnswer ?? ""}
-                                onChangeText={(text) => handleWrittenAnswerChange(q.questionId, text)}
-                                placeholder={t("Type your answer here")}
-                                placeholderTextColor="#9ca3af"
-                                className="w-full border-b border-gray-200 pb-2 text-sm text-[#282828]"
-                            />
-                        )}
+                        <Text className="text-base text-gray-500 mt-1" style={{ fontFamily: fonts.medium }}>
+                            {quiz?.topic ?? ""}
+                        </Text>
                     </View>
-                ))}
-            </ScrollView>
 
-            <View className="pt-2 bg-[#f4f4f4]">
-                <TouchableOpacity
-                    onPress={triggerSubmit}
-                    disabled={isSubmitting}
-                    className="bg-[#43C17A] py-3.5 rounded-xl w-full items-center justify-center shadow-sm disabled:opacity-50"
-                >
-                    {isSubmitting ? (
-                        <ActivityIndicator size="small" color="#ffffff" />
-                    ) : (
-                        <Text className="text-white text-sm font-bold">{t("Submit Quiz")}</Text>
-                    )}
-                </TouchableOpacity>
+                    <View className="bg-[#131F3F] px-5 py-3.5 rounded-2xl items-center min-w-[110px]">
+                        <Text className="text-[10px] text-white tracking-widest opacity-90" style={{ fontFamily: fonts.bold }}>
+                            {t("TIME LEFT")}
+                        </Text>
+                        <Text className="text-3xl text-[#79C1FC] mt-1" style={{ fontFamily: fonts.bold }}>
+                            {timeLeft !== null ? formatTime(timeLeft) : "--:--"}
+                        </Text>
+                        <View className="h-[2px] bg-[#79C1FC] w-full mt-1.5 rounded-full" />
+                    </View>
+                </View>
+
+                <View className="mb-6">
+                    <View className="flex-row justify-end mb-2">
+                        <Text className="text-[#43C17A] text-base" style={{ fontFamily: fonts.bold }}>
+                            {progressCount} of {questions.length}
+                        </Text>
+                    </View>
+                    <View className="h-[8px] w-full bg-[#E5F7ED] rounded-full overflow-hidden">
+                        <View className="h-full bg-[#43C17A] rounded-full" style={{ width: `${progressPercentage}%` }} />
+                    </View>
+                </View>
+
+                <ScrollView showsVerticalScrollIndicator={false} className="flex-1 mb-4">
+                    {questions.map((q, qIndex) => (
+                        <View key={q.questionId} className="bg-white p-6 rounded-2xl mb-6 shadow-sm border border-gray-100">
+                            <Text className="text-lg text-[#1A1A1A] mb-5" style={{ fontFamily: fonts.bold }}>
+                                {q.questionText}
+                            </Text>
+
+                            {q.questionType === "Multiple Choice" ? (
+                                <View className="flex-col gap-4">
+                                    {q.quiz_question_options
+                                        ?.sort((a: any, b: any) => a.displayOrder - b.displayOrder)
+                                        .map((opt: any) => {
+                                            const isSelected = answers[q.questionId]?.optionId === opt.optionId;
+                                            return (
+                                                <TouchableOpacity
+                                                    key={opt.optionId}
+                                                    activeOpacity={0.7}
+                                                    onPress={() => handleOptionChange(q.questionId, opt.optionId)}
+                                                    className="flex-row items-center gap-3 py-1"
+                                                >
+                                                    <View className={`w-5 h-5 rounded-full border-2 items-center justify-center ${isSelected ? "border-[#43C17A]" : "border-[#B0B9C3]"}`}>
+                                                        {isSelected ? <View className="w-2.5 h-2.5 rounded-full bg-[#43C17A]" /> : null}
+                                                    </View>
+                                                    <Text className={`text-base flex-1 ${isSelected ? "text-[#1A1A1A]" : "text-[#7B8896]"}`} style={{ fontFamily: isSelected ? fonts.medium : fonts.regular }}>
+                                                        {opt.optionText}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            );
+                                        })}
+                                </View>
+                            ) : (
+                                <TextInput
+                                    value={answers[q.questionId]?.writtenAnswer ?? ""}
+                                    onChangeText={(text) => handleWrittenAnswerChange(q.questionId, text)}
+                                    placeholder={t("Type your answer here")}
+                                    placeholderTextColor="#9ca3af"
+                                    className="w-full border-b border-gray-200 pb-2 text-base text-[#1A1A1A]"
+                                    style={{ fontFamily: fonts.regular }}
+                                />
+                            )}
+                        </View>
+                    ))}
+                </ScrollView>
+
+                <View className="flex-row justify-end pt-2">
+                    <TouchableOpacity
+                        onPress={triggerSubmit}
+                        disabled={isSubmitting}
+                        activeOpacity={0.8}
+                        className="bg-[#43C17A] px-8 py-3.5 rounded-2xl items-center justify-center shadow-md disabled:opacity-50"
+                    >
+                        {isSubmitting ? (
+                            <ActivityIndicator size="small" color="#ffffff" />
+                        ) : (
+                            <Text className="text-white text-base" style={{ fontFamily: fonts.bold }}>
+                                {t("Submit Quiz")}
+                            </Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
 export default function QuizAttemptScreen({ quiz, onSubmitSuccess, navigation }: { quiz: any; onSubmitSuccess?: () => void; navigation: any }) {
     return (
-        <Suspense fallback={<View className="flex-1 justify-center items-center"><ActivityIndicator size="large" color="#16284F" /></View>}>
-            <QuizAttemptScreenContent quiz={quiz} onSubmitSuccess={onSubmitSuccess} navigation={navigation} />
-        </Suspense>
+        <Modal visible={true} animationType="slide" presentationStyle="fullScreen">
+            <Suspense fallback={<View className="flex-1 justify-center items-center"><ActivityIndicator size="large" color="#16284F" /></View>}>
+                <QuizAttemptScreenContent quiz={quiz} onSubmitSuccess={onSubmitSuccess} navigation={navigation} />
+            </Suspense>
+        </Modal>
     );
 }

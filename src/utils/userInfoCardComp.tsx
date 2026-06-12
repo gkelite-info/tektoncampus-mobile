@@ -34,12 +34,12 @@ export default function UserInfoCard() {
         <ImageBackground
             source={bgBanner}
             resizeMode="stretch"
-            style={tw`w-full rounded-2xl h-[170px] shadow-sm overflow-hidden`}
+            style={tw`w-full rounded-2xl py-2 pb-0 shadow-sm overflow-hidden`}
         >
-            <View style={tw`flex-1 flex-row justify-between p-4 relative`}>
-                <View style={tw`max-w-[75%] justify-center gap-1.5`}>
+            <View style={tw`flex-row justify-between p-4 relative`}>
+                <View style={tw`w-auto p-1 overflow-y-auto flex-col flex-wrap justify-center gap-1.5`}>
                     <View style={tw`flex-row flex-wrap gap-1 items-center`}>
-                        <Text style={[tw`text-[#714EF2] text-[13px]`, { fontFamily: fonts.medium }]}>
+                        <Text style={[tw`text-[#714EF2] text-[12px]`, { fontFamily: fonts.medium }]}>
                             {collegeEducationType && collegeBranchCode
                                 ? `${collegeEducationType} ${collegeBranchCode}`
                                 : "—"}{" "}

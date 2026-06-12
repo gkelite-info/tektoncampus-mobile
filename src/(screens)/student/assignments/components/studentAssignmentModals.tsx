@@ -277,7 +277,7 @@ export function StudentAssignmentUploadModal({
                                     Drag & Drop your file here or
                                 </Text>
                                 <View className="bg-white px-3 py-1 rounded-full border border-gray-300">
-                                    <Text className="text-xs font-semibold text-gray-700" style={{ fontFamily: fonts.semiBold }}>
+                                    <Text className="text-xs text-gray-700" style={{ fontFamily: fonts.semiBold }}>
                                         Browse Files
                                     </Text>
                                 </View>
@@ -289,7 +289,7 @@ export function StudentAssignmentUploadModal({
                                         <FilePdf size={24} color="#EF4444" weight="duotone" />
                                     </View>
                                     <View className="flex-1 min-w-0">
-                                        <Text numberOfLines={1} className="text-base font-semibold text-[#282828]" style={{ fontFamily: fonts.medium }}>
+                                        <Text numberOfLines={1} className="text-base text-[#282828]" style={{ fontFamily: fonts.medium }}>
                                             {file.name}
                                         </Text>
                                         <Text className="text-xs text-gray-400" style={{ fontFamily: fonts.regular }}>
@@ -301,7 +301,7 @@ export function StudentAssignmentUploadModal({
                                     {deleting ? (
                                         <ActivityIndicator size="small" color="#EF4444" />
                                     ) : (
-                                        <Text className="text-red-500 text-base underline font-semibold" style={{ fontFamily: fonts.semiBold }}>
+                                        <Text className="text-red-500 text-base underline" style={{ fontFamily: fonts.semiBold }}>
                                             Delete uploaded file
                                         </Text>
                                     )}
@@ -411,7 +411,7 @@ export function StudentAssignmentDetailsModal({
                             </Text>
                             {assignment?.existingFilePath ? (
                                 <TouchableOpacity onPress={() => onDownloadAttachment(assignment.existingFilePath)}>
-                                    <Text className="text-emerald-600 text-base underline font-semibold mt-1" style={{ fontFamily: fonts.semiBold }}>
+                                    <Text className="text-emerald-600 text-base underline mt-1" style={{ fontFamily: fonts.semiBold }}>
                                         {assignment.existingFilePath.split("/").pop()}
                                     </Text>
                                 </TouchableOpacity>

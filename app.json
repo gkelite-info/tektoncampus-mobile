@@ -34,8 +34,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.gkelite.tektoncampus",
-      "versionCode": 1
+      "package": "com.gkelite.tektoncampus"
     },
     "extra": {
       "eas": {

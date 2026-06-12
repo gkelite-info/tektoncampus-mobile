@@ -269,7 +269,7 @@ export default function AssignmentCardMobile({
                                 <View>
                                     {uploadedFiles[index] ? (
                                         <View className="bg-[#E2F3E9] px-3 py-1 rounded-full border border-[#43C17A]/20">
-                                            <Text className="text-[#43C17A] text-[11px] font-bold">
+                                            <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.bold }}>
                                                 {t("Uploaded")}
                                             </Text>
                                         </View>
@@ -279,7 +279,7 @@ export default function AssignmentCardMobile({
                                             activeOpacity={0.7}
                                             className="bg-[#E2F3E9] px-3 py-1 rounded-full border border-[#43C17A]/20"
                                         >
-                                            <Text className="text-[#43C17A] text-[11px] font-bold">
+                                            <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.bold }}>
                                                 {t("Upload")} +
                                             </Text>
                                         </TouchableOpacity>

@@ -274,14 +274,14 @@ export default function StudentHome() {
 
     const cardData = [
         {
-            style: 'bg-[#E2DAFF] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            style: 'bg-[#E2DAFF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
             icon: <Chalkboard size={32} color="#714EF2" weight="fill" />,
             value: attendancePercent === null ? <ValueShimmer /> : `${attendancePercent}%`,
             label: t('Attendance'),
             to: 'Attendance',
         },
         {
-            style: 'bg-[#FFEDDA] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            style: 'bg-[#FFEDDA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
             icon: <UsersIcon size={32} color="#FFBB70" weight="fill" />,
             value: assignmentsLoading ? (
                 <ValueShimmer />
@@ -292,14 +292,14 @@ export default function StudentHome() {
             to: 'Assignments',
         },
         {
-            style: 'bg-[#E6FBEA] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            style: 'bg-[#E6FBEA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
             icon: <BookOpenIcon size={32} color="#74FF8F" weight="fill" />,
             value: t('Mid Exams'),
             label: t('N/A'),
             onClick: () => setView('exams'),
         },
         {
-            style: 'bg-[#CEE6FF] h-[126.35px] w-[48%] rounded-2xl p-4 justify-between',
+            style: 'bg-[#CEE6FF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
             icon: <ClockIcon size={32} color="#60AEFF" weight="fill" />,
             value: feeLoading ? <ValueShimmer /> : `₹${pendingFeeAmount?.toLocaleString('en-IN')}`,
             label: t('Fee Due'),

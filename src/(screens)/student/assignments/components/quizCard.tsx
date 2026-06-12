@@ -15,6 +15,7 @@ import {
     ArrowsClockwise,
     UserCircle,
 } from "phosphor-react-native";
+import { fonts } from "@/constants/fonts";
 
 const useTranslations = (namespace: string) => {
     return (key: string) => key;
@@ -42,19 +43,19 @@ export default function QuizCard({ data, onStartQuiz }: QuizCardProps) {
             <View className="flex-row gap-3">
                 <View className={`w-[72px] h-[72px] rounded-lg overflow-hidden shrink-0 items-center justify-center`} style={{ backgroundColor: data.bgColor.startsWith('bg-[') ? data.bgColor.replace('bg-[', '').replace(']', '') : '#1A1A1A' }}>
                     <Image
-                         source={{ uri: 'https://via.placeholder.com/150' }}
-                         className="w-full h-full opacity-80"
-                         resizeMode="cover"
+                        source={require('../../../../../assets/quiz.png')}
+                        className="w-full h-full opacity-80"
+                        resizeMode="cover"
                     />
                 </View>
 
                 <View className="flex-1 min-w-0">
                     <View className="flex-row justify-between items-start">
                         <View className="flex-1 min-w-0 pr-1">
-                            <Text className="text-[#282828] font-bold text-sm" numberOfLines={1}>
+                            <Text className="text-[#282828] text-base" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
                                 {data.courseName}
                             </Text>
-                            <Text className="text-gray-500 text-[11px] mt-0.5" numberOfLines={1}>
+                            <Text className="text-gray-500 text-sm mt-0.5" numberOfLines={1} style={{ fontFamily: fonts.regular }}>
                                 {data.topic}
                             </Text>
                         </View>
@@ -63,34 +64,34 @@ export default function QuizCard({ data, onStartQuiz }: QuizCardProps) {
                             activeOpacity={0.7}
                             className="bg-[#43C17A] px-3 py-1.5 rounded-md shadow-xs"
                         >
-                            <Text className="text-white text-xs font-bold shrink-0">
+                            <Text className="text-white text-base shrink-0" style={{ fontFamily: fonts.bold }}>
                                 {t("Start Quiz")}
                             </Text>
                         </TouchableOpacity>
                     </View>
 
-                    <View className="flex-row flex-wrap gap-y-1.5 mt-4 w-full">
-                        <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
+                    <View className="flex-row flex-wrap gap-y-1.5 gap-2 mt-4 w-full">
+                        <View className="flex-row items-center gap-1.5 w-fit pr-1">
                             <UserCircle size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Faculty: {data.facultyName}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
                             <ArrowsClockwise size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Left: {data.attemptsLeft}
                             </Text>
                         </View>
-                        <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
+                        <View className="flex-row items-center gap-1.5 w-fit pr-1 mt-0.5">
                             <CalendarDots size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Duration: {data.quizDuration}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
                             <ClockCountdown size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Time: {data.timeLimit || "30 mins"}
                             </Text>
                         </View>
@@ -127,7 +128,7 @@ export function AttemptedQuizCard({ data, onOpenPerformanceModal }: AttemptedQui
             <View className="flex-row gap-3">
                 <View className="w-[72px] h-[72px] rounded-lg overflow-hidden shrink-0 items-center justify-center" style={{ backgroundColor: data.bgColor.startsWith('bg-[') ? data.bgColor.replace('bg-[', '').replace(']', '') : '#1A1A1A' }}>
                     <Image
-                        source={{ uri: 'https://via.placeholder.com/150' }}
+                        source={require('../../../../../assets/quiz.png')}
                         className="w-full h-full opacity-80"
                         resizeMode="cover"
                     />
@@ -136,40 +137,39 @@ export function AttemptedQuizCard({ data, onOpenPerformanceModal }: AttemptedQui
                 <View className="flex-1 min-w-0">
                     <View className="flex-row justify-between items-start">
                         <View className="flex-1 min-w-0 pr-1">
-                            <Text className="text-[#282828] font-bold text-sm" numberOfLines={1}>
+                            <Text className="text-[#282828] text-sm" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
                                 {data.courseName}
                             </Text>
-                            <Text className="text-gray-500 text-[11px] mt-0.5" numberOfLines={1}>
+                            <Text className="text-gray-500 text-[11px] mt-0.5" numberOfLines={1} style={{ fontFamily: fonts.regular }}>
                                 {data.topic}
                             </Text>
                         </View>
                         <View className="bg-[#43C17A] px-2.5 py-1 rounded-md shadow-xs shrink-0">
-                            <Text className="text-white text-[11px] font-bold">{data.score}</Text>
+                            <Text className="text-white text-[11px]" style={{ fontFamily: fonts.bold }}>{data.score}</Text>
                         </View>
                     </View>
-
                     <View className="flex-row flex-wrap gap-y-1.5 mt-4 w-full">
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
                             <UserCircle size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Faculty: {data.facultyName}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
                             <CalendarDots size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Att: {data.attemptedOn}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
                             <Question size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Qs: {data.questionsAttempted}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
                             <ArrowsClockwise size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px] font-medium" numberOfLines={1}>
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                                 Used: {data.attemptsUsed}
                             </Text>
                         </View>
@@ -233,23 +233,23 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
                     <TouchableOpacity onPress={onGoBack} activeOpacity={0.7} className="mb-2 w-8 h-8 justify-center">
                         <ArrowLeft size={24} color="#282828" weight="bold" />
                     </TouchableOpacity>
-                    <Text className="text-xl font-bold text-[#282828]" numberOfLines={1}>
+                    <Text className="text-xl text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
                         {quiz?.courseName || "N/A"}
                     </Text>
-                    <Text className="text-sm font-medium text-gray-500 mt-0.5" numberOfLines={1}>
+                    <Text className="text-sm text-gray-500 mt-0.5" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                         {quiz?.topic || "N/A"}
                     </Text>
                 </View>
 
                 <View className="flex-row items-center gap-2 bg-[#182142] px-3.5 py-2 rounded-lg shadow-xs">
                     <Alarm size={18} color="#87cefa" weight="fill" />
-                    <Text className="font-bold text-base text-white">{formatTime(timeLeft)}</Text>
+                    <Text className="text-base text-white" style={{ fontFamily: fonts.bold }}>{formatTime(timeLeft)}</Text>
                 </View>
             </View>
 
             <View className="mb-5">
                 <View className="flex-row justify-end mb-1.5">
-                    <Text className="text-[#43C17A] font-bold text-sm">
+                    <Text className="text-[#43C17A] text-sm" style={{ fontFamily: fonts.bold }}>
                         {progressCount.toString().padStart(2, "0")} of {MOCK_QUESTIONS.length}
                     </Text>
                 </View>
@@ -265,7 +265,7 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
                 <View className="flex-col gap-4 pb-6">
                     {MOCK_QUESTIONS.map((q) => (
                         <View key={q.id} className="bg-white p-4 rounded-xl border border-gray-100 shadow-xs">
-                            <Text className="text-[14px] font-semibold text-[#282828] mb-3.5 leading-5">
+                            <Text className="text-[14px] text-[#282828] mb-3.5 leading-5" style={{ fontFamily: fonts.semiBold }}>
                                 {q.question}
                             </Text>
 
@@ -284,7 +284,7 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
                                                     <View className="w-2 h-2 rounded-full bg-[#43C17A]" />
                                                 )}
                                             </View>
-                                            <Text className={`text-sm flex-1 ${isSelected ? "text-[#282828] font-medium" : "text-gray-500"}`}>
+                                            <Text className={`text-sm flex-1 ${isSelected ? "text-[#282828]" : "text-gray-500"}`} style={{ fontFamily: isSelected ? fonts.medium : fonts.regular }}>
                                                 {opt}
                                             </Text>
                                         </TouchableOpacity>
@@ -302,7 +302,7 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
                     activeOpacity={0.8}
                     className="bg-[#43C17A] py-3.5 rounded-xl items-center justify-center shadow-xs"
                 >
-                    <Text className="text-white font-bold text-sm">Submit Quiz</Text>
+                    <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>Submit Quiz</Text>
                 </TouchableOpacity>
             </View>
         </View>

@@ -15,6 +15,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { getUnreadNotificationCount } from '@/lib/helpers/notifications/notificationAPI';
 import { saveFacultyTask } from '@/lib/helpers/faculty/facultyTasks';
 import { saveStudentTask } from '@/lib/helpers/student/studentTaskAPI';
+import { fonts } from '@/constants/fonts';
 
 export default function CustomHeader({ navigation }: { navigation?: any } = {}) {
     const { role, identifierId, userId, facultyId, studentId, subjectIds } = useUser();
@@ -117,10 +118,9 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
     return (
         <>
             <BlurView
-                intensity={80}
+                intensity={Platform.OS === 'ios' ? 80 : 0}
                 tint="light"
-                experimentalBlurMethod="dimezisBlurView"
-                style={{ paddingTop: insets.top, backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+                style={{ paddingTop: insets.top, backgroundColor: Platform.OS === 'ios' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.96)' }}
                 className="border-b-0 border-transparent"
             >
                 <View className={`px-4 pt-2 pb-3 ${Platform.OS === 'android' ? 'mt-2' : ''}`}>
@@ -173,6 +173,7 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
                         <View className="flex-1 flex-row items-center bg-[#EAEAEA] rounded-full h-[38px] px-4 mr-2 border border-transparent">
                             <TextInput
                                 className="flex-1 text-[#282828] text-sm py-0"
+                                style={{ fontFamily: fonts.regular }}
                                 placeholder="What do you want to find?"
                                 placeholderTextColor="#9CA3AF"
                                 value={searchValue}
@@ -185,7 +186,7 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
 
                         {(displayRole.includes('Faculty') || displayRole.includes('Student')) && (
                             <TouchableOpacity onPress={handleAddTaskClick} className="bg-[#43C17A] h-[38px] px-3 md:px-4 rounded-md items-center justify-center">
-                                <Text className="text-white text-xs md:text-sm font-medium">Add task +</Text>
+                                <Text className="text-white text-xs md:text-sm" style={{ fontFamily: fonts.medium }}>Add task +</Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -219,4 +220,3 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
         </>
     );
 }
-    

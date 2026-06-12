@@ -57,11 +57,7 @@ export default function LabTab() {
       }
 
       if (data) {
-        const enriched = await Promise.all(data.map(async (lab: any) => {
-          let url = lab.pdfUrl;
-          if (lab.pdfUrl && !lab.pdfUrl.startsWith('http')) {
-            url = await getLabManualPublicUrl(lab.pdfUrl);
-          }
+        const enriched = data.map((lab: any) => {
           return {
             labId: lab.labManualId,
             labTitle: lab.labTitle,
@@ -70,7 +66,7 @@ export default function LabTab() {
             description: lab.description,
             fileName: lab.pdfUrl ? lab.pdfUrl.split('/').pop() : 'Document',
             fileSize: lab.fileSize || 0,
-            fileUrl: url,
+            fileUrl: lab.pdfUrl && lab.pdfUrl.startsWith('http') ? lab.pdfUrl : undefined,
             uploadedAt: lab.createdAt,
             // Keep original IDs for editing
             collegeSubjectId: lab.collegeSubjectId,
@@ -78,7 +74,7 @@ export default function LabTab() {
             collegeSectionsId: lab.collegeSectionsId,
             pdfUrl: lab.pdfUrl,
           };
-        }));
+        });
         setLabs(enriched);
       }
     } catch (err) {

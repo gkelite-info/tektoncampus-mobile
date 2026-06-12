@@ -12,8 +12,24 @@ import QueryProvider from '@/providers/QueryProvider';
 
 import './i18n';
 
+// Suppress specific development warnings from console/terminal and screen
+const originalWarn = console.warn;
+console.warn = (...args: any[]) => {
+  const message = args.join(" ");
+  if (
+    message.includes("[Reanimated] Reduced motion setting is enabled on this device") ||
+    message.includes("SafeAreaView has been deprecated") ||
+    message.includes("setLayoutAnimationEnabledExperimental is currently a no-op")
+  ) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 LogBox.ignoreLogs([
   '[Reanimated] Reduced motion setting is enabled on this device.',
+  'SafeAreaView has been deprecated and will be removed in a future release.',
+  'setLayoutAnimationEnabledExperimental is currently a no-op in the New Architecture.',
 ]);
 LogBox.ignoreAllLogs(true);
 

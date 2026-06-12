@@ -1,4 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
+import { decode } from "base64-arraybuffer";
+import * as FileSystem from "expo-file-system/legacy";
 
 export type StudentDiscussionUploadRow = {
     studentDiscussionUploadId: number;
@@ -287,30 +289,41 @@ export async function deactivateStudentDiscussionUpload(
 export async function uploadStudentDiscussionFiles(
     discussionId: number,
     studentId: number,
-    files: File[],
+    files: any[],
 ): Promise<string[]> {
     const uploadedUrls: string[] = [];
 
     for (const file of files) {
         const fileName = `${discussionId}/${studentId}/${Date.now()}_${file.name}`;
 
-        const { error } = await supabase.storage
-            .from("student-discussion-files")
-            .upload(fileName, file, {
-                cacheControl: "3600",
-                upsert: false,
+        try {
+            const base64 = await FileSystem.readAsStringAsync(file.uri, {
+                encoding: FileSystem.EncodingType.Base64,
             });
+            const arrayBuffer = decode(base64);
 
-        if (error) {
-            console.error("uploadStudentDiscussionFiles error:", error);
+            const { error } = await supabase.storage
+                .from("student-discussion-files")
+                .upload(fileName, arrayBuffer, {
+                    contentType: file.mimeType || "application/octet-stream",
+                    cacheControl: "3600",
+                    upsert: false,
+                });
+
+            if (error) {
+                console.error("uploadStudentDiscussionFiles upload error:", error);
+                throw error;
+            }
+
+            const { data: publicUrl } = supabase.storage
+                .from("student-discussion-files")
+                .getPublicUrl(fileName);
+
+            uploadedUrls.push(publicUrl.publicUrl);
+        } catch (err) {
+            console.error("uploadStudentDiscussionFiles error:", err);
             throw new Error(`Failed to upload ${file.name}`);
         }
-
-        const { data: publicUrl } = supabase.storage
-            .from("student-discussion-files")
-            .getPublicUrl(fileName);
-
-        uploadedUrls.push(publicUrl.publicUrl);
     }
 
     return uploadedUrls;

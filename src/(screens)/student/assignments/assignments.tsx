@@ -136,7 +136,7 @@ function AssignmentsLeftContent() {
     const DISCUSSION_PER_PAGE = 8;
     const LAB_PER_PAGE = 8;
     const [labs, setLabs] = useState<LabManual[]>([]);
-    const [labsLoading, setLabsLoading] = useState(false);
+    const [labsLoading, setLabsLoading] = useState(true);
     const [labTotalRecords, setLabTotalRecords] = useState(0);
 
     const [performanceData, setPerformanceData] = useState<any>(null);
@@ -313,29 +313,26 @@ function AssignmentsLeftContent() {
                 labCurrentPage,
                 LAB_PER_PAGE,
             );
-            const formatted = await Promise.all(
-                response.data.map(async (lab: StudentLabManualRow) => {
-                    const fileUrl = await getLabManualPublicUrl(lab.pdfUrl);
-                    return {
-                        labId: lab.labManualId,
-                        labTitle: lab.labTitle,
-                        collegeSubjectId: lab.collegeSubjectId,
-                        collegeAcademicYearId: lab.collegeAcademicYearId,
-                        collegeSectionsId: lab.collegeSectionsId,
-                        pdfUrl: lab.pdfUrl,
-                        subjectName: lab.college_subjects?.subjectName || undefined,
-                        sectionName:
-                            lab.college_sections?.sectionName ||
-                            lab.college_sections?.collegeSections ||
-                            undefined,
-                        description: lab.description || undefined,
-                        fileName: lab.pdfUrl?.split("/").pop() || "Lab manual.pdf",
-                        fileSize: lab.fileSize ?? 0,
-                        fileUrl: fileUrl || undefined,
-                        uploadedAt: lab.createdAt,
-                    };
-                }),
-            );
+            const formatted = response.data.map((lab: StudentLabManualRow) => {
+                return {
+                    labId: lab.labManualId,
+                    labTitle: lab.labTitle,
+                    collegeSubjectId: lab.collegeSubjectId,
+                    collegeAcademicYearId: lab.collegeAcademicYearId,
+                    collegeSectionsId: lab.collegeSectionsId,
+                    pdfUrl: lab.pdfUrl,
+                    subjectName: lab.college_subjects?.subjectName || undefined,
+                    sectionName:
+                        lab.college_sections?.sectionName ||
+                        lab.college_sections?.collegeSections ||
+                        undefined,
+                    description: lab.description || undefined,
+                    fileName: lab.pdfUrl?.split("/").pop() || "Lab manual.pdf",
+                    fileSize: lab.fileSize ?? 0,
+                    fileUrl: undefined,
+                    uploadedAt: lab.createdAt,
+                };
+            });
 
             setLabs(formatted);
             setLabTotalRecords(response.totalCount || 0);
@@ -755,7 +752,7 @@ function AssignmentsLeftContent() {
                                         numberOfLines={1}
                                         adjustsFontSizeToFit
                                     >
-                                        {t("Active Assignments")}
+                                        {t("Active")}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
@@ -774,7 +771,7 @@ function AssignmentsLeftContent() {
                                         numberOfLines={1}
                                         adjustsFontSizeToFit
                                     >
-                                        {t("Previous Assignments")}
+                                        {t("Previous")}
                                     </Text>
                                 </TouchableOpacity>
                             </>
@@ -936,7 +933,7 @@ function AssignmentsLeftContent() {
                                                         timeLimit: `${quiz.durationMinutes || 30} mins`,
                                                     }}
                                                     onStartQuiz={(quizId) => {
-                                                        console.log("Starting Quiz with ID:", quizId);
+                                                        setParams({ action: "attempt", quizId });
                                                     }}
                                                 />
                                             );

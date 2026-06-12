@@ -57,6 +57,7 @@
     "react-native-gesture-handler": "~2.28.0",
     "react-native-gifted-charts": "^1.4.77",
     "react-native-localize": "^3.7.0",
+    "react-native-modal": "^14.0.0-rc.1",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-pager-view": "6.9.1",
     "react-native-pell-rich-editor": "^1.10.0",

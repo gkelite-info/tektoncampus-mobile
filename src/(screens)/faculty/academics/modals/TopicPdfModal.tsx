@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Modal, ActivityIndicator, Lin
 import { X, Trash, UploadSimple, FilePdf, ArrowSquareOut } from 'phosphor-react-native';
 import Toast from 'react-native-toast-message';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { decode } from 'base64-arraybuffer';
 
 import { useUser } from '@/utils/context/UserContext';

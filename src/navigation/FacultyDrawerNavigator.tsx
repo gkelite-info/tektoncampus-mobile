@@ -12,15 +12,17 @@ import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
 import {
     StudentProgressScreen,
-    ProjectsScreen,
     PlacementsScreen,
-    ClubScreen,
-    DriveScreen,
     MeetingsScreen,
     MyAttendanceScreen,
     WellbeingScreen,
     SettingsScreen,
 } from "@/(screens)/student/mockScreens";
+
+import ProjectsScreen from "@/(screens)/faculty/projects/index";
+
+import DriveScreen from "@/(screens)/faculty/drive/drive";
+import FacultyClubScreen from "@/(screens)/faculty/clubs";
 
 import LeaveRequestsScreen from "@/(screens)/faculty/leaveRequests/leaveRequests";
 
@@ -112,7 +114,7 @@ export default function FacultyDrawerNavigator() {
                 <Tab.Screen name="Projects" component={ProjectsScreen} />
                 <Tab.Screen name="Placements" component={PlacementsScreen} />
                 <Tab.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
-                <Tab.Screen name="Club" component={ClubScreen} />
+                <Tab.Screen name="Club" component={FacultyClubScreen} />
                 <Tab.Screen name="Drive" component={DriveScreen} />
                 <Tab.Screen name="Meetings" component={MeetingsScreen} />
                 <Tab.Screen name="MyAttendance" component={MyAttendanceScreen} />

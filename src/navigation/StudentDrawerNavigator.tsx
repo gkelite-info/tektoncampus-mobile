@@ -117,8 +117,7 @@ export default function StudentDrawerNavigator() {
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
-                    // Use a delay equal to the modal close transition (300ms) to allow the Modal to close completely before navigating.
-                    // This prevents visual glitches on Android where transitions freeze or render under the fading backdrop overlay.
+
                     setTimeout(() => {
                         if (routeName === "StudentTabs") {
                             navigationRef.current?.navigate("StudentTabs", { screen: "Home" });

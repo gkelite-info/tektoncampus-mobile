@@ -128,7 +128,7 @@ export async function fetchUserEmailsChunk(
     .order("createdAt", { ascending: false });
 
   if (tab === "inbox") {
-    // FIX: .neq excludes NULL values in PostgreSQL. We must explicitly include senderAddress.is.null
+    
     query = query
       .eq("userId", userId)
       .or(`senderAddress.neq.${userEmail},senderAddress.is.null`);

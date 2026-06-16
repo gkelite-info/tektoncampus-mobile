@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, LayoutAnimation, UIManager, Platform } from 'react-native';
 import { Book, CalendarDots, Trash, CaretDown, PencilSimple } from 'phosphor-react-native';
 import { useNavigation } from '@react-navigation/native';
-import ConfirmDeleteModal from './ConfirmDeleteModal'; // We will create this next
+import ConfirmDeleteModal from './ConfirmDeleteModal'; 
 
-// Enable LayoutAnimation on Android
+
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -75,7 +75,7 @@ export default function AssignmentCard({
             <View className="flex-row gap-3">
               <View className="w-[70px] h-[70px] rounded-lg overflow-hidden shrink-0 bg-slate-900 border border-gray-100">
                 <Image
-                  source={require('../../../../../assets/icon.png')} // Fallback image since ds.jpg does not exist in RN assets
+                  source={require('../../../../../assets/icon.png')} 
                   style={{ width: '100%', height: '100%' }}
                   resizeMode="cover"
                 />

@@ -47,7 +47,7 @@ export async function fetchDriveFilesByFolder(driveFolderId: number) {
   return data ?? [];
 }
 
-// Returns file count and total size (raw bytes) grouped by folderId for a college
+
 export async function fetchFolderStats(
   collegeId: number,
   userId?: number,
@@ -147,7 +147,7 @@ export async function saveDriveFile(
     fileType: string;
     fileSize?: number | null;
     fileUrl?: string;
-    fileUri?: string; // RN specific
+    fileUri?: string; 
   },
   userId: number,
 ) {
@@ -213,7 +213,7 @@ export async function saveDriveFile(
     upsertPayload.uploadedBy = userId;
     upsertPayload.createdAt = now;
 
-    // Check if a soft-deleted row exists for same folder + fileName
+    
     const { data: deleted } = await supabase
       .from("drive_files")
       .select("driveFileId")
@@ -284,7 +284,7 @@ export async function deleteDriveFile(
     return { success: false };
   }
 
-  // Remove file from bucket
+  
   const storagePath = `${collegeId}/${driveFolderId}/${fileName.trim()}`;
   const { error: storageError } = await supabase.storage
     .from(BUCKET)

@@ -40,7 +40,7 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {
     const [selectedEmail, setSelectedEmail] = useState<any>(null);
     const [isComposeOpen, setIsComposeOpen] = useState(false);
 
-    // Pagination States
+    
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [isLoadingInitial, setIsLoadingInitial] = useState(true);
@@ -154,7 +154,7 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {
             time: mail.time,
         });
         setSelectedEmail(null);
-        setTimeout(() => setIsComposeOpen(true), 300); // Small delay to allow detail modal to close smoothly
+        setTimeout(() => setIsComposeOpen(true), 300); 
     };
 
     const displayedEmails = useMemo(() => {

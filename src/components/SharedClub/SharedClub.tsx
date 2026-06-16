@@ -20,15 +20,15 @@ interface SharedClubProps {
 export default function SharedClub({ role }: SharedClubProps) {
     const { userId, collegeId, studentId, facultyId } = useUser();
     
-    // For faculty
+    
     const [clubData, setClubData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     
-    // For student
+    
     const [clubStatus, setClubStatus] = useState<"loading" | "none" | "pending" | "joined" | "error">("loading");
     const [studentRole, setStudentRole] = useState<string | null>(null);
 
-    // Common
+    
     const [currentTab, setCurrentTab] = useState<string>("");
     const [currentFilter, setCurrentFilter] = useState<string>("all");
 
@@ -139,7 +139,7 @@ export default function SharedClub({ role }: SharedClubProps) {
         );
     }
 
-    // Role is student
+    
     if (clubStatus === "error") {
         return (
             <View style={tw`flex-1 items-center justify-center bg-[#F4F5F6] p-4`}>

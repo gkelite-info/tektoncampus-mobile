@@ -93,7 +93,7 @@ export default function ProfileLanguages() {
                     )}
                 </View>
 
-                {/* Add language button */}
+                {}
                 <TouchableOpacity onPress={() => setIsModalOpen(true)} className="border-2 border-dashed border-[#43C17A] rounded-lg p-4 mt-6 items-center justify-center bg-[#43C17A]/5">
                     <Text className="text-[#43C17A] font-bold">+ Add Language</Text>
                 </TouchableOpacity>

@@ -1,17 +1,17 @@
-// ============================================================
-// generateTopicNotes.ts  –  Fully dynamic, zero hardcoding
-// ============================================================
-// Key changes vs previous version:
-//  • ALL hardcoded topic blocks removed (MOT, Solar PV, Inverter, etc.)
-//  • buildDynamicPrompt() is the single prompt builder for every topic
-//  • tightenTopicAccuracy() is purely generic – no topic detection
-//  • Bad/generic generations are rejected instead of being turned into PDFs
-//  • Wikimedia image search and quality checks are unchanged
-// ============================================================
+
+
+
+
+
+
+
+
+
+
 
 import { generateRawWithGroqFallback } from "./groqClient";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+
 
 export type TopicNotesSection = {
   heading: string;
@@ -71,7 +71,7 @@ export type TopicNotes = {
   realTopicImages?: RealTopicImage[];
 };
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 
 function safePlainText(value: unknown) {
   return String(value ?? "")
@@ -125,8 +125,8 @@ function detectDomain(notes: Pick<TopicNotes, "topicTitle" | "subject" | "unit" 
   return "generic";
 }
 
-// ─── Dynamic label generators ─────────────────────────────────────────────────
-// These generate truly topic-specific labels from the topic title + unit words.
+
+
 
 const STOP_WORDS = new Set([
   "and","for","the","with","from","into","onto","over","under","using",
@@ -443,7 +443,7 @@ function getDomainWorkedExamples(
   return exampleSets[domain] ?? exampleSets.generic;
 }
 
-// ─── Quality detection ────────────────────────────────────────────────────────
+
 
 const GENERIC_KEY_TERMS = new Set([
   "concept","process","application","diagram","example",
@@ -642,7 +642,7 @@ export function createFallbackTopicNotes(params: {
   };
 }
 
-// ─── AI prompt builder ────────────────────────────────────────────────────────
+
 
 function buildDynamicPrompt(params: {
   topicTitle: string;
@@ -654,7 +654,7 @@ function buildDynamicPrompt(params: {
   const { topicTitle, subjectName, unitName, branch, educationType } = params;
   const domain = detectDomain({ topicTitle, subject: subjectName, unit: unitName, branch });
 
-  // Build domain-aware hints injected into the prompt
+  
   const domainHints: Record<TopicDomain, string> = {
     solar_pv: `
 SOLAR PV RULES:
@@ -838,7 +838,7 @@ Advantages and applications must belong to the selected concept, not to the broa
 Return ONLY valid JSON matching the structure from the previous prompt. No markdown, no backticks.`;
 }
 
-// ─── JSON parser ──────────────────────────────────────────────────────────────
+
 
 function parseTopicNotes(raw: string): TopicNotes {
   const cleaned = raw.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
@@ -850,7 +850,7 @@ function parseTopicNotes(raw: string): TopicNotes {
   return JSON.parse(cleaned.slice(jsonStart, jsonEnd + 1)) as TopicNotes;
 }
 
-// ─── Wikimedia image search ───────────────────────────────────────────────────
+
 
 type WikimediaApiPage = {
   title?: string;
@@ -991,7 +991,7 @@ async function enrichWithWikimediaImages(notes: TopicNotes): Promise<TopicNotes>
   }
 }
 
-// ─── Main export ──────────────────────────────────────────────────────────────
+
 
 export async function generateTopicNotes(params: {
   topicTitle: string;

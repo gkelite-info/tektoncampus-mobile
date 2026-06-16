@@ -9,8 +9,8 @@ const GROQ_MODELS = [
   "gemma-7b-it"
 ];
 
-// In Expo, the env is usually stored in EXPO_PUBLIC_GROQ_API_KEY
-// Fallback to process.env if available
+
+
 const getApiKey = () => {
   return process.env.EXPO_PUBLIC_GROQ_API_KEY || process.env.GROQ_API_KEY || Constants.expoConfig?.extra?.groqApiKey || "";
 };
@@ -45,7 +45,7 @@ async function callGroqREST(systemPrompt: string, userPrompt: string, maxTokens 
             });
 
             if (!response.ok) {
-                if (response.status === 429) continue; // Rate limited, try next model
+                if (response.status === 429) continue; 
                 throw new Error(`Groq API Error: ${response.statusText}`);
             }
 
@@ -60,7 +60,7 @@ async function callGroqREST(systemPrompt: string, userPrompt: string, maxTokens 
     throw new Error("All Groq models exhausted or failed");
 }
 
-// ─── Exported AI Handlers ────────────────────────────────────────────────────────
+
 
 export async function generateProfileSummary(details: any): Promise<{ success: boolean; data?: string; error?: string }> {
     try {

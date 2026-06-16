@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator 
 import Toast from "react-native-toast-message";
 import { useUser } from "@/utils/context/UserContext";
 
-// Import from the new resume helpers
+
 import { fetchResumePersonalDetails, saveResumePersonalDetails } from "@/lib/helpers/resume/Resumepersonaldetailsapi";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -151,7 +151,7 @@ export default function ResumePersonalDetails({ onNext }: { onNext?: () => void 
             <Text className="text-lg font-semibold text-[#000000] mb-6">Personal Details</Text>
 
             <View className="gap-5">
-                {/* Full Name */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">
                         Full Name<Text className="text-red-500">*</Text>
@@ -165,7 +165,7 @@ export default function ResumePersonalDetails({ onNext }: { onNext?: () => void 
                     />
                 </View>
 
-                {/* Mobile */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">
                         Mobile Number<Text className="text-red-500">*</Text>
@@ -180,7 +180,7 @@ export default function ResumePersonalDetails({ onNext }: { onNext?: () => void 
                     />
                 </View>
 
-                {/* Email */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">
                         Email ID<Text className="text-red-500">*</Text>
@@ -196,7 +196,7 @@ export default function ResumePersonalDetails({ onNext }: { onNext?: () => void 
                     />
                 </View>
 
-                {/* LinkedIn */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">LinkedIn ID</Text>
                     <TextInput
@@ -210,7 +210,7 @@ export default function ResumePersonalDetails({ onNext }: { onNext?: () => void 
                     />
                 </View>
 
-                {/* Current City */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">Current City</Text>
                     <TextInput
@@ -222,7 +222,7 @@ export default function ResumePersonalDetails({ onNext }: { onNext?: () => void 
                     />
                 </View>
 
-                {/* Work Status */}
+                {}
                 <View className="mt-2">
                     <Text className="text-sm font-medium text-[#282828] mb-2">Work Status</Text>
                     <View className="gap-3">

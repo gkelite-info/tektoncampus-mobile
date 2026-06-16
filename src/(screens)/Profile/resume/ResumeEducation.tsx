@@ -70,7 +70,7 @@ export default function ResumeEducation() {
 
     const handleDelete = async (api: any, type: EducationLevel, id?: number) => {
         if (id && studentId) {
-            await api.delete(id); // Resume API delete only takes id usually
+            await api.delete(id); 
         }
         setAddedForms((prev) => prev?.filter((t) => t !== type) || null);
     };

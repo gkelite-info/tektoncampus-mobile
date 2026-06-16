@@ -48,7 +48,7 @@ export async function getFacultyClasses(
     .eq("facultyId", facultyId)
     .eq("is_deleted", false)
     .eq("date", today)
-    .eq("faculty_class_sessions.status", "Accepted") // <-- STRICT FILTER ADDED
+    .eq("faculty_class_sessions.status", "Accepted") 
     .order("fromTime", { ascending: true });
 
   if (error) return [];

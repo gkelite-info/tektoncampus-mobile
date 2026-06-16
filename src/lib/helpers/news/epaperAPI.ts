@@ -41,7 +41,7 @@ export async function uploadEPaper(
   const fileExt = file.name.split(".").pop();
   const fileName = `epaper-${collegeId}-${Date.now()}.${fileExt}`;
 
-  // In React Native with Supabase, we often upload using FormData
+  
   const formData = new FormData();
   formData.append('files', {
     uri: file.uri,

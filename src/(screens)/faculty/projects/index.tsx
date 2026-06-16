@@ -91,7 +91,7 @@ export default function FacultyProjects() {
     return (
         <View style={[tw`flex-1 bg-[#F9FAFB]`, { paddingTop: insets.top + 105 }]}>
             <ScrollView style={tw`flex-1 px-4`} contentContainerStyle={tw`pb-20 pt-4`}>
-                {/* Header */}
+                {}
                 <View style={tw`flex-row justify-between items-start mb-6`}>
                     <View style={tw`flex-1 pr-4`}>
                         <Text style={tw`text-2xl font-bold text-black`}>
@@ -109,7 +109,7 @@ export default function FacultyProjects() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Tabs */}
+                {}
                 <View style={tw`items-center mb-6`}>
                     <View style={tw`flex-row bg-gray-200 p-1 rounded-full relative w-[320px]`}>
                         <MotiView

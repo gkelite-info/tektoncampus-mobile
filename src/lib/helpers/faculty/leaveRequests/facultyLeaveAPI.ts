@@ -263,7 +263,7 @@ export async function submitFacultyLeaveRequest(
 
   if (error) throw error;
 
-  // Insert tagged faculties if any
+  
   if (taggedFacultyIds && taggedFacultyIds.length > 0 && data?.facultyLeaveId) {
     const tagsToInsert = taggedFacultyIds.map((id: number) => ({
       facultyLeaveId: data.facultyLeaveId,
@@ -276,7 +276,7 @@ export async function submitFacultyLeaveRequest(
       
     if (tagError) {
       console.warn("Failed to tag faculties:", tagError);
-      // We don't throw here to not break the primary leave submission if the table doesn't exist
+      
     }
   }
 

@@ -149,11 +149,11 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
     try {
       setIsSaving(true);
       
-      // Since this is mobile, we'd normally use formData to upload the PDF to Supabase storage.
-      // Assuming upload is handled or simplified for now:
+      
+      
       let filePath = initialData?.pdfUrl || 'dummy_mobile_path.pdf';
       if (pdfFile) {
-        // Mock upload logic due to FormData limitations in this prompt context
+        
         filePath = `faculty_${facultyId}/${pdfFile.name}`;
       }
 
@@ -196,7 +196,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         
-        {/* Title */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-bold text-[#282828]">Lab Title <Text className="text-red-500">*</Text></Text>
           <TextInput
@@ -207,7 +207,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
           />
         </View>
 
-        {/* Subject, Year, Section */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-bold text-[#282828]">Subject <Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden mb-3">
@@ -293,7 +293,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
           )}
         </View>
 
-        {/* Actions */}
+        {}
         <View className="flex-row items-center justify-end mt-2 border-t border-gray-100 pt-4 gap-3">
           <TouchableOpacity onPress={onCancel} disabled={isSaving} className="px-6 py-2.5 rounded-md border border-[#7B7B7B]">
             <Text className="text-[#7B7B7B] text-sm font-bold">Cancel</Text>

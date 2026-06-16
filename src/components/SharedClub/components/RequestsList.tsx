@@ -85,7 +85,7 @@ export default function RequestsList({ clubId, currentFilter, onChangeFilter }: 
 
     return (
         <View style={tw`flex-1 px-4`}>
-            {/* Filters */}
+            {}
             <View style={tw`flex-row gap-2 mb-4`}>
                 {["all", "pending", "accepted"].map((filter) => (
                     <TouchableOpacity

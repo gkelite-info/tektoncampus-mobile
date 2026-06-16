@@ -73,10 +73,10 @@ export default function SubjectCard({ subjectProps }: SubjectCardProps) {
         setActiveSubjectTitle(null);
     };
 
-    // const filteredSubjects = useMemo(() => {
-    //     if (selectedSubject === "All") return subjectProps;
-    //     return subjectProps.filter((s) => s.subjectTitle === selectedSubject);
-    // }, [subjectProps, selectedSubject]);
+    
+    
+    
+    
 
     const filteredSubjects = useMemo(() => {
         let result = subjectProps;

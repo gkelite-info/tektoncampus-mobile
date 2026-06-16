@@ -31,13 +31,13 @@ import { loginUser } from '@/services/auth/login';
 import Toast from 'react-native-toast-message';
 import { useAuthStore } from '@/store/authStore';
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+
 const { width: SW, height: SH } = Dimensions.get('window');
 const SAFE_TOP = Platform.OS === 'ios' ? 56 : 40;
 
-// Tailwind token → px map  (1 unit = 4px)
+
 const T = {
-  /** spacing */
+  
   s0_5: 2,
   s1: 4,
   s1_5: 6,
@@ -52,12 +52,12 @@ const T = {
   s9: 36,
   s10: 40,
   s12: 48,
-  /** radius */
+  
   rLg: 8,
   rXl: 12,
   r2Xl: 16,
   r3Xl: 20,
-  /** font sizes */
+  
   f11: 11,
   f13: 13,
   f13_5: 13.5,
@@ -66,14 +66,14 @@ const T = {
   f16: 16,
   f19: 19,
   f20: 20,
-  /** line heights */
+  
   lh16: 16,
   lh18: 18,
   lh20: 20,
   lh24: 24,
 };
 
-// ─── Colors ───────────────────────────────────────────────────────────────────
+
 const C = {
   green1: '#6AE18B',
   green2: '#B7F3CB',
@@ -84,7 +84,7 @@ const C = {
   gray700: '#374151',
   amber300: '#FCD34D',
   white: '#FFFFFF',
-  // opacity variants
+  
   white90: 'rgba(255,255,255,0.90)',
   white80: 'rgba(255,255,255,0.80)',
   white70: 'rgba(255,255,255,0.70)',
@@ -164,12 +164,12 @@ const N = SLIDES.length;
 interface SlideCardProps {
   slide: (typeof SLIDES)[0];
   position: 'center' | 'left' | 'right' | 'hidden';
-  /** transition progress 0→1 driven by parent Animated.Value */
+  
   containerWidth: number;
 }
 
 const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProps) => {
-  // Continuous gentle float for the CENTER card  (mirror web's hover effect)
+  
   const floatAnim = useRef(new Animated.Value(0)).current;
   const floatLoopRef = useRef<Animated.CompositeAnimation | null>(null);
 
@@ -230,14 +230,14 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
         sCard.wrapper,
         {
           width: cardWidth,
-          // aspect ratio 4:3
+          
           height: cardWidth * 0.75,
           opacity: op,
           zIndex: position === 'center' ? 10 : 0,
           transform: [{ translateX: tx }, { translateY: ty }, { rotate: rot }, { scale: sc }],
         },
       ]}>
-      {/* Float wraps only the center card */}
+      {}
       <Animated.View
         style={[StyleSheet.absoluteFillObject, { transform: [{ translateY: floatAnim }] }]}>
         <Image source={slide.image} style={sCard.image} resizeMode="cover" />
@@ -263,9 +263,9 @@ const sCard = StyleSheet.create({
   },
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Main screen
-// ─────────────────────────────────────────────────────────────────────────────
+
+
+
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -278,27 +278,27 @@ export default function LoginScreen() {
     (state) => state.setUser
   );
 
-  // ── Text-slide animation (framer-motion AnimatePresence mode="wait")
-  //    initial  { opacity:0, x:60 }
-  //    animate  { opacity:1, x:0  }  duration 500ms ease [0.22,1,0.36,1]
-  //    exit     { opacity:0, x:60 }  duration 250ms
+  
+  
+  
+  
   const textOpacity = useRef(new Animated.Value(1)).current;
   const textSlideX = useRef(new Animated.Value(0)).current;
 
-  // ── Panel slide
+  
   const leftX = useRef(new Animated.Value(0)).current;
   const rightX = useRef(new Animated.Value(SW)).current;
 
-  // ── Spinner
+  
   const spinVal = useRef(new Animated.Value(0)).current;
   const spinLoopRef = useRef<Animated.CompositeAnimation | null>(null);
 
-  // ── Proceed / back button entrance animation (fade+slide up on mount)
+  
   const btnEntrance = useRef(new Animated.Value(0)).current;
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ─── Entrance on mount
+  
   useEffect(() => {
     Animated.timing(btnEntrance, {
       toValue: 1,
@@ -309,7 +309,7 @@ export default function LoginScreen() {
     }).start();
   }, []);
 
-  // ─── Spinner
+  
   useEffect(() => {
     if (loading) {
       spinLoopRef.current = Animated.loop(
@@ -330,8 +330,8 @@ export default function LoginScreen() {
 
   const spinDeg = spinVal.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
 
-  // ─── Slide auto-advance
-  //     EXIT  250ms   ENTER 500ms   easing: Easing.out(Easing.cubic) ≈ [0.22,1,0.36,1]
+  
+  
   const advanceSlide = useCallback(() => {
     Animated.parallel([
       Animated.timing(textOpacity, { toValue: 0, duration: 250, useNativeDriver: true }),
@@ -505,9 +505,9 @@ export default function LoginScreen() {
                 opacity: textOpacity,
                 transform: [{ translateX: textSlideX }],
               }}>
-              {/* text-[19px] leading-tight font-bold text-[#1B4D3E] text-center */}
+              {}
               <Text style={s.slideHeading}>{SLIDES[current].heading}</Text>
-              {/* text-[#1F3D2F] text-[13.5px] mt-2 opacity-90 text-center */}
+              {}
               <Text style={s.slidePara}>{SLIDES[current].para}</Text>
             </Animated.View>
           </View>
@@ -525,23 +525,14 @@ export default function LoginScreen() {
             })}
           </View>
 
-          {/* ── Dot indicators ────────────────────────────────────────────
-              Next.js: flex gap-3 z-20 shrink-0 mt-1 flex-wrap justify-center px-4
-              Active:   h-2 w-10 rounded-full bg-[#1A5D3C]
-              Inactive: h-2 w-3  rounded-full bg-white/60 border border-white/40
-          ──────────────────────────────────────────────────────────────── */}
+          {}
           <View style={s.dotsRow}>
             {SLIDES.map((_, i) => (
               <View key={i} style={[s.dot, i === current ? s.dotActive : s.dotInactive]} />
             ))}
           </View>
 
-          {/* ── "Proceed to Login" button ──────────────────────────────────
-              Next.js: mt-auto pt-6 pb-3  (pushes to very bottom)
-              Button: bg-[#16284F] w-full py-2.5 rounded-xl gap-2
-                      shadow-[0_8px_20px_-6px_rgba(27,77,62,0.5)]
-                      text-white text-[16px] font-bold tracking-wide
-          ──────────────────────────────────────────────────────────────── */}
+          {}
           <Animated.View
             style={[
               s.proceedWrapper,
@@ -564,65 +555,53 @@ export default function LoginScreen() {
           </Animated.View>
         </LinearGradient>
       </Animated.View>
-      {/* end LEFT panel */}
+      {}
 
-      {/* ══════════════════════════════════════════════════════════════════
-          RIGHT PANEL  —  Login form
-          Next.js: absolute z-10 w-full h-full
-                   translate-x-full / translate-x-0  transition-transform duration-500
-                   backgroundImage loginpagebg.webp cover center
-      ══════════════════════════════════════════════════════════════════ */}
+      {}
       <Animated.View
         style={[s.panel, { transform: [{ translateX: rightX }] }]}
         pointerEvents={panelState === 'login' ? 'auto' : 'none'}>
-        {/* Background image */}
+        {}
         <ImageBackground
           source={require('../../../assets/loginpagebg.webp')}
           resizeMode="cover"
           style={s.rightBg}>
-          {/* Dark overlay  bg-black/30  */}
+          {}
           <View style={s.rightOverlay} />
 
-          {/* ── Back button ─────────────────────────────────────────────
-              Next.js: absolute top-4 left-4 z-20
-                       flex items-center gap-1.5
-                       bg-black/20 px-3 py-2 rounded-xl backdrop-blur-md
-                       border border-white/10
-          ─────────────────────────────────────────────────────────────── */}
+          {}
           <TouchableOpacity activeOpacity={0.8} onPress={handleBack} style={s.backBtn}>
             <ArrowLeft size={16} color={C.white} weight="bold" />
             <Text style={s.backBtnText}>Back to slides</Text>
           </TouchableOpacity>
 
-          {/* ── Scrollable area ──────────────────────────────────────────
-              max-h-[85dvh] mt-12 overflow-y-auto
-          ─────────────────────────────────────────────────────────────── */}
+          {}
           <ScrollView
             style={s.formScroll}
             contentContainerStyle={s.formScrollContent}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled">
-            {/* ── Glass Card Container View ───────────────────────────────── */}
+            {}
             <View style={s.glassCard}>
-              {/* ── Background Blur Layer ─────────────────────────────────── */}
+              {}
               <BlurView
                 intensity={35}
                 tint="light"
-                style={StyleSheet.absoluteFillObject} // This stretches it perfectly behind everything
+                style={StyleSheet.absoluteFillObject} 
               />
 
-              {/* ── Icon circle ───────────────────────────────────────── */}
+              {}
               <View style={s.iconCircleRow}>
                 <View style={s.iconCircle}>
                   <GraduationCap size={26} color={C.white} weight="fill" />
                 </View>
               </View>
 
-              {/* Title & Subtitle */}
+              {}
               <Text style={s.cardTitle}>Login to Your Account</Text>
               <Text style={s.cardSubtitle}>Please enter your credentials to proceed.</Text>
 
-              {/* ── Email ─────────────────────────────────────────────── */}
+              {}
               <View>
                 <Text style={s.fieldLabel}>Email</Text>
                 <View style={s.inputRow}>
@@ -642,7 +621,7 @@ export default function LoginScreen() {
                 </View>
               </View>
 
-              {/* ── Password ──────────────────────────────────────────── */}
+              {}
               <View style={{ marginTop: T.s5 }}>
                 <Text style={s.fieldLabel}>Password</Text>
                 <View style={s.inputRow}>
@@ -670,7 +649,7 @@ export default function LoginScreen() {
                 </View>
               </View>
 
-              {/* ── Info + Forgot password ──────────────────────────────── */}
+              {}
               <View style={s.infoRow}>
                 <TouchableOpacity activeOpacity={0.7} style={s.forgotBtn}>
                   <Text style={s.forgotText}>Forgot Password?</Text>
@@ -684,7 +663,7 @@ export default function LoginScreen() {
                 </View>
               </View>
 
-              {/* ── Gradient divider ────────────────────────────────────── */}
+              {}
               <LinearGradient
                 colors={['transparent', C.white20, 'transparent']}
                 start={{ x: 0, y: 0 }}
@@ -692,7 +671,7 @@ export default function LoginScreen() {
                 style={s.divider}
               />
 
-              {/* ── Login button ────────────────────────────────────────── */}
+              {}
               <TouchableOpacity
                 activeOpacity={0.8}
                 disabled={loading}
@@ -710,21 +689,21 @@ export default function LoginScreen() {
                 )}
               </TouchableOpacity>
             </View>
-            {/* end glass card */}
+            {}
           </ScrollView>
-          {/* end scroll */}
+          {}
         </ImageBackground>
       </Animated.View>
-      {/* end RIGHT panel */}
+      {}
     </View>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Styles
-// ─────────────────────────────────────────────────────────────────────────────
+
+
+
 const s = StyleSheet.create({
-  // ── Root
+  
   root: {
     flex: 1,
     backgroundColor: '#000',
@@ -740,18 +719,18 @@ const s = StyleSheet.create({
     zIndex: 10,
   },
 
-  // ───────────────────────────────────────────────
-  //  LEFT PANEL
-  // ───────────────────────────────────────────────
+  
+  
+  
   leftGradient: {
     flex: 1,
     paddingTop: SAFE_TOP,
-    paddingBottom: T.s4, // pb-4
-    paddingHorizontal: T.s8, // px-8
+    paddingBottom: T.s4, 
+    paddingHorizontal: T.s8, 
     flexDirection: 'column',
   },
 
-  // Logo block
+  
   logoBlock: {
     alignItems: 'center',
     flexShrink: 0,
@@ -765,93 +744,93 @@ const s = StyleSheet.create({
   },
   logoSubtext: {
     fontFamily: F.bold,
-    color: C.gray700, // text-gray-700
-    fontSize: T.f11, // text-[11px]
-    letterSpacing: 0.8, // tracking-wide
-    marginTop: T.s1, // mt-1
+    color: C.gray700, 
+    fontSize: T.f11, 
+    letterSpacing: 0.8, 
+    marginTop: T.s1, 
   },
 
-  // Heading wrapper
+  
   headingWrapper: {
-    marginTop: T.s5, // mt-5
-    minHeight: 95, // min-h-[95px]
+    marginTop: T.s5, 
+    minHeight: 95, 
     width: '100%',
     overflow: 'hidden',
   },
   slideHeading: {
     fontFamily: F.bold,
-    fontSize: T.f19, // text-[19px]
-    lineHeight: T.lh24, // leading-tight → ~24
-    color: C.darkGreen, // text-[#1B4D3E]
+    fontSize: T.f19, 
+    lineHeight: T.lh24, 
+    color: C.darkGreen, 
     textAlign: 'center',
   },
   slidePara: {
     fontFamily: F.regular,
-    fontSize: T.f13_5, // text-[13.5px]
-    color: C.darkGreen2, // text-[#1F3D2F]
+    fontSize: T.f13_5, 
+    color: C.darkGreen2, 
     textAlign: 'center',
-    marginTop: T.s2, // mt-2
-    opacity: 0.9, // opacity-90
-    lineHeight: T.lh20, // leading-5
+    marginTop: T.s2, 
+    opacity: 0.9, 
+    lineHeight: T.lh20, 
   },
 
-  // Carousel
+  
   carouselContainer: {
     flex: 1,
     width: '100%',
-    minHeight: 250, // min-h-[250px]
-    marginTop: T.s4, // mt-4
-    marginBottom: T.s4, // mb-4
+    minHeight: 250, 
+    marginTop: T.s4, 
+    marginBottom: T.s4, 
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  // Dots row
+  
   dotsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: T.s3, // gap-3
+    gap: T.s3, 
     flexShrink: 0,
-    marginTop: T.s1, // mt-1
-    paddingHorizontal: T.s4, // px-4
+    marginTop: T.s1, 
+    paddingHorizontal: T.s4, 
     zIndex: 20,
   },
   dot: {
-    height: 8, // h-2
+    height: 8, 
     borderRadius: 4,
   },
   dotActive: {
-    width: 40, // w-10
-    backgroundColor: C.darkGreen3, // bg-[#1A5D3C]
+    width: 40, 
+    backgroundColor: C.darkGreen3, 
   },
   dotInactive: {
-    width: 12, // w-3
-    backgroundColor: C.white60, // bg-white/60
+    width: 12, 
+    backgroundColor: C.white60, 
     borderWidth: 1,
-    borderColor: C.white40, // border-white/40
+    borderColor: C.white40, 
   },
 
-  // Proceed button wrapper
+  
   proceedWrapper: {
-    marginTop: 'auto', // mt-auto → pushes to bottom
-    paddingTop: T.s6, // pt-6
-    paddingBottom: T.s3, // pb-3
+    marginTop: 'auto', 
+    paddingTop: T.s6, 
+    paddingBottom: T.s3, 
     flexShrink: 0,
     zIndex: 20,
   },
   proceedBtn: {
-    backgroundColor: C.navy, // bg-[#16284F]
+    backgroundColor: C.navy, 
     width: '100%',
-    paddingVertical: T.s2_5, // py-2.5
-    borderRadius: T.rXl, // rounded-xl → 12
+    paddingVertical: T.s2_5, 
+    borderRadius: T.rXl, 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: T.s2, // gap-2
-    // shadow-[0_8px_20px_-6px_rgba(27,77,62,0.5)]
+    gap: T.s2, 
+    
     shadowColor: 'rgba(27,77,62,1)',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.5,
@@ -860,220 +839,220 @@ const s = StyleSheet.create({
   },
   proceedBtnText: {
     fontFamily: F.bold,
-    color: C.white, // text-white
-    fontSize: T.f16, // text-[16px]
-    letterSpacing: 0.4, // tracking-wide
+    color: C.white, 
+    fontSize: T.f16, 
+    letterSpacing: 0.4, 
     marginRight: T.s1,
   },
 
-  // ───────────────────────────────────────────────
-  //  RIGHT PANEL
-  // ───────────────────────────────────────────────
+  
+  
+  
   rightBg: {
     flex: 1,
   },
   rightOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: C.black30, // bg-black/30
+    backgroundColor: C.black30, 
   },
 
-  // Back button
+  
   backBtn: {
     position: 'absolute',
     top: SAFE_TOP,
-    left: T.s4, // left-4
+    left: T.s4, 
     zIndex: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: T.s1_5, // gap-1.5
-    backgroundColor: C.black20, // bg-black/20
-    paddingHorizontal: T.s3, // px-3
-    paddingVertical: T.s2, // py-2
-    borderRadius: T.rXl, // rounded-xl
+    gap: T.s1_5, 
+    backgroundColor: C.black20, 
+    paddingHorizontal: T.s3, 
+    paddingVertical: T.s2, 
+    borderRadius: T.rXl, 
     borderWidth: 1,
-    borderColor: C.white10, // border-white/10
-    // shadow
+    borderColor: C.white10, 
+    
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    // elevation: 4,
+    
   },
 
   backBtnText: {
     fontFamily: F.semibold,
-    color: C.white90, // text-white/90
-    fontSize: T.f13, // text-[13.5px] → 13
-    letterSpacing: 0.3, // tracking-wide
+    color: C.white90, 
+    fontSize: T.f13, 
+    letterSpacing: 0.3, 
     marginLeft: T.s1_5,
   },
 
-  // Scroll
+  
   formScroll: {
     flex: 1,
   },
   formScrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: T.s5, // px-5  (90% card handles its own width)
-    paddingTop: SAFE_TOP + T.s12, // mt-12 + safe area
-    paddingBottom: T.s10, // pb-10
+    paddingHorizontal: T.s5, 
+    paddingTop: SAFE_TOP + T.s12, 
+    paddingBottom: T.s10, 
   },
 
-  // Glass card
-  //   bg rgba(255,255,255,0.10)
-  //   borderRadius 20px
-  //   border 1px solid rgba(255,255,255,0.20)
-  //   shadow: 0 8px 32px rgba(0,0,0,0.25)
+  
+  
+  
+  
+  
   glassCard: {
-    width: '90%', // matches your w-[90%] web spec
-    alignSelf: 'center', // centers the card since width is 90%
-    overflow: 'hidden', // critical so the inner BlurView cuts clean at the 20px corners
+    width: '90%', 
+    alignSelf: 'center', 
+    overflow: 'hidden', 
     borderRadius: 20,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
-    backgroundColor: 'transparent', // let the blur handle the tone
+    backgroundColor: 'transparent', 
 
-    // Spacing (Next.js px-5 py-6)
-    paddingHorizontal: 20, // or your theme equivalent
+    
+    paddingHorizontal: 20, 
     paddingVertical: 24,
 
-    // Box Shadow
+    
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 32,
-    // elevation: 14,
+    
   },
 
-  // Icon circle
+  
   iconCircleRow: {
     alignItems: 'center',
-    marginBottom: T.s6, // mb-6
+    marginBottom: T.s6, 
   },
   iconCircle: {
-    width: T.s12, // w-12 = 48
-    height: T.s12, // h-12 = 48
-    borderRadius: T.rXl, // rounded-xl = 12
+    width: T.s12, 
+    height: T.s12, 
+    borderRadius: T.rXl, 
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: C.white10, // bg-white/10
+    backgroundColor: C.white10, 
     borderWidth: 1,
-    borderColor: C.white20, // border-white/20
+    borderColor: C.white20, 
   },
 
-  // Card title + subtitle
+  
   cardTitle: {
     fontFamily: F.semibold,
-    fontSize: T.f20, // text-[20px]
+    fontSize: T.f20, 
     color: C.white,
     textAlign: 'center',
-    letterSpacing: -0.3, // tracking-tight
+    letterSpacing: -0.3, 
   },
   cardSubtitle: {
     fontFamily: F.regular,
-    fontSize: T.f13, // text-[13px]
-    color: C.white80, // text-white/80
+    fontSize: T.f13, 
+    color: C.white80, 
     textAlign: 'center',
-    marginTop: T.s1, // mt-1
-    marginBottom: T.s6, // mb-6
+    marginTop: T.s1, 
+    marginBottom: T.s6, 
   },
 
-  // Field label
+  
   fieldLabel: {
     fontFamily: F.semibold,
-    fontSize: T.f13, // text-[13px]
+    fontSize: T.f13, 
     color: C.white,
-    marginBottom: T.s1_5, // mb-1.5
-    letterSpacing: 0.9, // tracking-wide
+    marginBottom: T.s1_5, 
+    letterSpacing: 0.9, 
     textTransform: 'uppercase',
   },
 
-  // Input row
+  
   inputRow: {
     position: 'relative',
     justifyContent: 'center',
   },
   inputIconLeft: {
     position: 'absolute',
-    left: 14, // left-3.5 = 14
+    left: 14, 
     zIndex: 5,
-    // vertically centered — label is outside, input height is 48
-    top: 15, // (48 - 18) / 2 ≈ 15
+    
+    top: 15, 
   },
   textInput: {
     fontFamily: F.regular,
-    height: T.s12, // h-12 = 48
-    backgroundColor: C.white10, // bg-white/10
+    height: T.s12, 
+    backgroundColor: C.white10, 
     borderWidth: 1,
-    borderColor: C.white20, // border-white/20
-    borderRadius: T.rLg, // rounded-lg = 8
-    paddingLeft: 44, // pl-11 = 44
-    paddingRight: T.s4, // pr-4 = 16
+    borderColor: C.white20, 
+    borderRadius: T.rLg, 
+    paddingLeft: 44, 
+    paddingRight: T.s4, 
     color: C.white,
-    fontSize: T.f14, // text-[14px]
+    fontSize: T.f14, 
   },
   eyeBtn: {
     position: 'absolute',
-    right: 14, // right-3.5 = 14
+    right: 14, 
     top: 14,
     zIndex: 5,
   },
 
-  // Info + Forgot row
+  
   infoRow: {
-    flexDirection: 'column-reverse', // flex-col-reverse (mobile)
-    marginTop: T.s4, // mt-4
-    gap: T.s3, // gap-3
+    flexDirection: 'column-reverse', 
+    marginTop: T.s4, 
+    gap: T.s3, 
   },
   forgotBtn: {
     alignSelf: 'flex-end',
-    paddingBottom: T.s1, // pb-1
+    paddingBottom: T.s1, 
   },
   forgotText: {
     fontFamily: F.medium,
-    fontSize: 12.5, // text-[12.5px]
+    fontSize: 12.5, 
     color: C.white,
     textDecorationLine: 'underline',
   },
   infoBlock: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: T.s1_5, // gap-1.5
+    gap: T.s1_5, 
     width: '100%',
   },
   infoText: {
     fontFamily: F.regular,
-    fontSize: 11.5, // text-[11.5px]
-    color: C.white70, // text-white/70
-    lineHeight: T.lh16, // leading-snug
+    fontSize: 11.5, 
+    color: C.white70, 
+    lineHeight: T.lh16, 
     flex: 1,
     marginLeft: T.s1_5,
   },
 
-  // Gradient divider
+  
   divider: {
     height: 1,
-    marginVertical: T.s6, // my-6
+    marginVertical: T.s6, 
     width: '100%',
   },
 
-  // Login button
+  
   loginBtn: {
     width: '100%',
-    height: T.s12, // h-[48px]
-    borderRadius: 10, // rounded-[10px]
-    backgroundColor: C.white10, // bg-white/10
+    height: T.s12, 
+    borderRadius: 10, 
+    backgroundColor: C.white10, 
     borderWidth: 1,
-    borderColor: C.white30, // border-white/30
+    borderColor: C.white30, 
     alignItems: 'center',
     justifyContent: 'center',
-    // shadow-[0_8px_32px_rgba(0,0,0,0.2)]
+    
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 24,
-    // elevation: 8,
+    
   },
   loginBtnDisabled: {
     opacity: 0.5,
@@ -1081,8 +1060,8 @@ const s = StyleSheet.create({
   loginBtnText: {
     fontFamily: F.semibold,
     color: C.white,
-    fontSize: T.f15, // text-[15px]
-    letterSpacing: 0.3, // tracking-wide
+    fontSize: T.f15, 
+    letterSpacing: 0.3, 
   },
   loadingRow: {
     flexDirection: 'row',

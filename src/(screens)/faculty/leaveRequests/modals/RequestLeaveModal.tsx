@@ -89,7 +89,7 @@ export default function RequestLeaveModal({ isOpen, onClose, facultyId, onSucces
           </View>
 
           <ScrollView className="p-5" contentContainerStyle={{ gap: 16 }}>
-            {/* Leave Type */}
+            {}
             <View className="gap-1.5 z-50">
               <Text className="text-sm font-semibold text-[#282828]">Leave Type *</Text>
               <TouchableOpacity 
@@ -117,7 +117,7 @@ export default function RequestLeaveModal({ isOpen, onClose, facultyId, onSucces
               )}
             </View>
 
-            {/* Dates */}
+            {}
             <View className="flex-row gap-4">
               <View className="flex-1 gap-1.5">
                 <Text className="text-sm font-semibold text-[#282828]">Start Date *</Text>
@@ -140,7 +140,7 @@ export default function RequestLeaveModal({ isOpen, onClose, facultyId, onSucces
                 />
               </View>
             </View>
-            {/* Description */}
+            {}
             <View className="gap-1.5 z-10">
               <Text className="text-sm font-semibold text-[#282828]">Description *</Text>
               <TextInput 
@@ -155,7 +155,7 @@ export default function RequestLeaveModal({ isOpen, onClose, facultyId, onSucces
               />
             </View>
 
-            {/* Tag Faculties */}
+            {}
             <View className="gap-1.5 z-0">
               <Text className="text-sm font-semibold text-[#282828]">Tag Faculty (Optional)</Text>
               <TouchableOpacity 

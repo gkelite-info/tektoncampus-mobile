@@ -58,7 +58,7 @@ export default function PlacementsScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Placements Hub
@@ -68,7 +68,7 @@ export default function PlacementsScreen() {
                     </Text>
                 </View>
 
-                {/* Section: Active Recruitment Drives */}
+                {}
                 <View className="mb-6">
                     <Text className="text-[#1E293B] text-[16px] mb-4" style={{ fontFamily: fonts.bold }}>
                         Active Drives
@@ -76,7 +76,7 @@ export default function PlacementsScreen() {
 
                     {ongoingDrives.map((drive, idx) => (
                         <View key={idx} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-4">
-                            {/* Header details */}
+                            {}
                             <View className="flex-row items-center mb-4">
                                 <View 
                                     className="w-11 h-11 rounded-xl items-center justify-center mr-3"
@@ -97,7 +97,7 @@ export default function PlacementsScreen() {
                                 </View>
                             </View>
 
-                            {/* Job Specs */}
+                            {}
                             <View className="flex-row justify-between bg-slate-50 p-3 rounded-xl mb-4">
                                 <View>
                                     <Text className="text-slate-400 text-[10px]" style={{ fontFamily: fonts.regular }}>Package Offered</Text>
@@ -109,7 +109,7 @@ export default function PlacementsScreen() {
                                 </View>
                             </View>
 
-                            {/* Eligibility */}
+                            {}
                             <View className="flex-row justify-between items-center">
                                 <View className="flex-1 mr-3">
                                     <Text className="text-slate-400 text-[10px]" style={{ fontFamily: fonts.regular }}>Eligibility</Text>
@@ -127,7 +127,7 @@ export default function PlacementsScreen() {
                     ))}
                 </View>
 
-                {/* Section: Application History */}
+                {}
                 <View>
                     <Text className="text-[#1E293B] text-[16px] mb-3" style={{ fontFamily: fonts.bold }}>
                         Application History

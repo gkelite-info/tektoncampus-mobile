@@ -70,7 +70,7 @@ export default function ResumeProfileSummary() {
             }
             Toast.show({ type: "success", text1: "Summary saved successfully" });
             
-            // Reload ATS after save
+            
             const allResumeData = await fetchAllResumeData(studentId);
             setAtsResult(calculateATSScore(allResumeData));
         } catch (e) {
@@ -137,7 +137,7 @@ export default function ResumeProfileSummary() {
 
     return (
         <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
-            {/* ATS Score Card */}
+            {}
             {atsResult && (
                 <View className="bg-white rounded-lg p-6  mb-4 border border-gray-100 flex-row justify-between items-center">
                     <View className="flex-1">
@@ -202,7 +202,7 @@ export default function ResumeProfileSummary() {
                 )}
             </View>
 
-            {/* JD Gap Analysis */}
+            {}
             <View className="bg-white rounded-lg p-6  mb-10 border border-purple-100">
                 <View className="flex-row items-center mb-2">
                     <Text className="text-lg font-semibold text-purple-700">🎯 ATS JD Gap Analyzer</Text>

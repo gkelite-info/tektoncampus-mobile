@@ -8,7 +8,7 @@ export interface CalendarEvent {
   type: EventType;
   startTime: string;
   endTime: string;
-  // year?: string[];
+  
   subjectName?: string;
   subjectCode?: string;
   subjectKey?: string;

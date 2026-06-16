@@ -100,7 +100,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
       }
 
       if (suggestions.length > 0) {
-        // Filter out those already in `topics`
+        
         const newSuggestions = suggestions.filter(s => !topics.includes(s));
         setStagedTopics(newSuggestions.map(s => ({ title: s, selected: false })));
       } else {
@@ -195,7 +195,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
 
       const unitId = result.collegeSubjectUnitId;
 
-      // Insert Unit mappings (faculty section mapping)
+      
       await saveAcademicUnit({
         collegeId: subjectDetails.collegeId,
         collegeEducationId: subjectDetails.collegeEducationId,
@@ -235,7 +235,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
         });
       }
       
-      // Reset form
+      
       setUnitName("");
       setUnitNumber((Number(unitNumber) + 1).toString());
       setStartDate("");
@@ -267,7 +267,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
               Track progress, add lessons, and manage course content across all your batches.
             </Text>
 
-            {/* Read-only Context Grid */}
+            {}
             <View className="flex-row flex-wrap gap-x-4 gap-y-4 mb-6">
               <View className="w-[47%]">
                 <Text className="text-sm font-semibold text-[#282828] mb-1.5">Education</Text>
@@ -304,7 +304,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
               </View>
             </View>
 
-            {/* Unit Name with AI Suggestions */}
+            {}
             <View className="mb-6 z-50">
               <Text className="text-sm font-semibold text-[#282828] mb-1.5">Unit Name *</Text>
               <TextInput
@@ -315,7 +315,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
                 style={{ fontFamily: 'Inter-Regular' }}
               />
 
-              {/* AI Auto-Suggestions block */}
+              {}
               {unitName && (stagedTopics.length > 0 || isSuggesting) && (
                 <View className="mt-3 border border-[#BBF7D0] bg-[#F0FDF4] rounded-lg p-4">
                   <View className="flex-row items-center justify-between mb-3">
@@ -358,7 +358,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
                 </View>
               )}
 
-              {/* Selected Topics Chips */}
+              {}
               {topics.length > 0 && (
                 <View className="flex-row flex-wrap gap-2 mt-3">
                   {topics.map((topic, index) => (
@@ -372,7 +372,7 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
                 </View>
               )}
 
-              {/* Add Custom Topic */}
+              {}
               <View className="flex-row items-center gap-2 mt-4">
                 <TextInput
                   className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 bg-white"

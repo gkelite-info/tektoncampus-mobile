@@ -266,7 +266,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
       </View>
 
       <View className="bg-white p-4 rounded-xl">
-        {/* Subject */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-medium text-gray-700">Subject <Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
@@ -406,7 +406,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
           </View>
         </View>
 
-        {/* Action Buttons */}
+        {}
         <View className="flex-row gap-3 mt-4">
           <TouchableOpacity
             disabled={isSaving}

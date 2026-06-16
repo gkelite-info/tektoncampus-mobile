@@ -303,26 +303,32 @@ export async function getStudentProgressData(userId: number) {
         new Set((facultySectionRows ?? []).map((row) => row.facultyId)),
     );
 
-    const { data: attendanceRecords, error: attendanceError } = await supabase
+    const { data: attendanceRecordsRaw, error: attendanceError } = await supabase
         .from("attendance_record")
-        .select(
-            `
-      calendarEventId,
-      status,
-      calendar_event:calendarEventId (
-        calendarEventId,
-        subject,
-        facultyId,
-        type,
-        date,
-        is_deleted
-      )
-    `,
-        )
+        .select("calendarEventId, status")
         .eq("studentId", studentContext.studentId)
         .is("deletedAt", null)
-        .lte("markedAt", today)
-        .returns<AttendanceRecordRow[]>();
+        .lte("markedAt", today);
+
+    if (attendanceError) throw attendanceError;
+
+    const attendanceEventIds = Array.from(new Set((attendanceRecordsRaw ?? []).map(r => r.calendarEventId))).filter(Boolean);
+    let calendarEventsData: any[] = [];
+    if (attendanceEventIds.length > 0) {
+        const { data: events, error: eventsError } = await supabase
+            .from("calendar_event")
+            .select("calendarEventId, subject, facultyId, type, date, is_deleted")
+            .in("calendarEventId", attendanceEventIds);
+        if (!eventsError && events) {
+            calendarEventsData = events;
+        }
+    }
+
+    const calendarEventsMap = new Map(calendarEventsData.map(e => [e.calendarEventId, e]));
+    const attendanceRecords = (attendanceRecordsRaw ?? []).map(r => ({
+        ...r,
+        calendar_event: calendarEventsMap.get(r.calendarEventId) || null
+    })) as AttendanceRecordRow[];
 
     if (attendanceError) throw attendanceError;
 

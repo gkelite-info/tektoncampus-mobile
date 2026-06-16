@@ -9,7 +9,7 @@ import ParentPayment from "@/(screens)/parent/Payment/payment";
 import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import ParentAttendance from "@/(screens)/parent/Attendance/attendance";
 
-// Strict TypeScript navigation route configurations for Parent view context
+
 export type ParentTabParamList = {
     Progress: undefined;
     Payment: undefined;
@@ -18,7 +18,7 @@ export type ParentTabParamList = {
     Profile: undefined;
 };
 
-// Layout Mock Screens
+
 function MockParentScreen({ title }: { title: string }) {
     return (
         <View className="flex-1 justify-center items-center bg-[#0F172A]">
@@ -32,23 +32,21 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const insets = useSafeAreaInsets();
-    const bottomInset = insets.bottom || 10; // Fallback to 10 for devices with no bottom insets to give some breathing room
+    const bottomInset = insets.bottom || 10; 
 
     return (
-        /* Global absolute navigation zone layer wrapper */
+        
         <View
             className="absolute bottom-0 bg-transparent"
             style={{ width: SCREEN_WIDTH, height: 120 + bottomInset }}
         >
-            {/* FLAT TALL WHITE BACKGROUND
-        Maintains matching height (85px) and flat top framing profile across all views
-      */}
+            {}
             <View 
                 className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[15px] shadow-lg shadow-black/10" 
                 style={{ height: 85 + bottomInset }}
             />
 
-            {/* Interactive Item Stack */}
+            {}
             <View 
                 className="flex-row absolute left-0 right-0"
                 style={{ height: 85, bottom: bottomInset }}
@@ -68,7 +66,7 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                         }
                     };
 
-                    // Label layout configurations mapped exactly over requested changes
+                    
                     const labels: Record<keyof ParentTabParamList, string> = {
                         Progress: "Progress",
                         Payment: "Payment",
@@ -81,7 +79,7 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                     const iconSize = 24;
                     const iconColor = isFocused ? "#6AE18B" : "#94A3B8";
 
-                    // Icons safely matched to your parent-specific needs using Phosphor components
+                    
                     const renderIcon = () => {
                         switch (route.name) {
                             case "Progress": return <ChartLineUp size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
@@ -92,7 +90,7 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                         }
                     };
 
-                    // --- CENTRAL GREEN HOME BUTTON (NO OPACITY FLASH) ---
+                    
                     if (route.name === "Home") {
                         return (
                             <View key={route.key} className="flex-1 items-center justify-center">
@@ -114,7 +112,7 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                         );
                     }
 
-                    // --- STANDARD SIDE NAVIGATION TABS ---
+                    
                     return (
                         <TouchableOpacity
                             key={route.key}

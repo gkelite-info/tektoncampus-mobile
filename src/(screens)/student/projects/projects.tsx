@@ -51,7 +51,7 @@ export default function ProjectsScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Projects Board
@@ -61,7 +61,7 @@ export default function ProjectsScreen() {
                     </Text>
                 </View>
 
-                {/* Filter Tabs */}
+                {}
                 <View className="flex-row bg-slate-100 p-1.5 rounded-xl mb-6">
                     {(["all", "active", "completed"] as const).map((tab) => (
                         <TouchableOpacity
@@ -83,7 +83,7 @@ export default function ProjectsScreen() {
                     ))}
                 </View>
 
-                {/* Projects List */}
+                {}
                 <View>
                     {filteredProjects.length === 0 ? (
                         <View className="items-center justify-center py-12">
@@ -95,7 +95,7 @@ export default function ProjectsScreen() {
                     ) : (
                         filteredProjects.map((proj, idx) => (
                             <View key={idx} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-4">
-                                {/* Status Header */}
+                                {}
                                 <View className="flex-row justify-between items-center mb-3">
                                     <View className="flex-row items-center">
                                         <View 
@@ -120,7 +120,7 @@ export default function ProjectsScreen() {
                                     </View>
                                 </View>
 
-                                {/* Project Info */}
+                                {}
                                 <Text className="text-[#1E293B] text-[16px] mb-2" style={{ fontFamily: fonts.bold }}>
                                     {proj.title}
                                 </Text>
@@ -128,7 +128,7 @@ export default function ProjectsScreen() {
                                     {proj.description}
                                 </Text>
 
-                                {/* Tech Badges */}
+                                {}
                                 <View className="flex-row flex-wrap gap-2 mb-4">
                                     {proj.techStack.map((tech, tid) => (
                                         <View key={tid} className="bg-slate-50 border border-slate-100 px-2.5 py-1 rounded-md">
@@ -139,10 +139,10 @@ export default function ProjectsScreen() {
                                     ))}
                                 </View>
 
-                                {/* Divider */}
+                                {}
                                 <View className="h-[1px] bg-slate-100 mb-4" />
 
-                                {/* Progress Bar & Mentor */}
+                                {}
                                 <View className="flex-row justify-between items-center">
                                     <View className="flex-1 mr-4">
                                         <View className="flex-row justify-between items-center mb-1">

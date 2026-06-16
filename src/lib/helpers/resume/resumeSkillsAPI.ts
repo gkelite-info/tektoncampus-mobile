@@ -52,7 +52,7 @@ async function findOrCreateMasterSkill(
   categoryId: number,
   skillName: string
 ): Promise<{ resumeSkillId: number; name: string }> {
-  // 1. Try to find existing skill first
+  
   const { data: existing, error: findError } = await supabase
     .from("resume_skills_master")
     .select("resumeSkillId, name")
@@ -64,7 +64,7 @@ async function findOrCreateMasterSkill(
   if (findError) throw findError;
   if (existing) return existing;
 
-  // 2. Not found — insert it
+  
   const { data: created, error: insertError } = await supabase
     .from("resume_skills_master")
     .insert({
@@ -76,7 +76,7 @@ async function findOrCreateMasterSkill(
     .select("resumeSkillId, name")
     .single();
 
-  // 3. Race condition guard: if another request inserted between our SELECT and INSERT
+  
   if (insertError) {
     if (insertError.code === "23505") {
       const { data: race, error: raceError } = await supabase
@@ -126,8 +126,8 @@ export async function createStudentResumeSkill(
 ) {
   const categoryId = await getCategoryId(section);
 
-  // Replaced upsert with findOrCreateMasterSkill to reliably get resumeSkillId
-  // whether the skill already exists or is newly created (e.g. AI-suggested skills)
+  
+  
   const skill = await findOrCreateMasterSkill(categoryId, skillName);
 
   const { error: linkError } = await supabase

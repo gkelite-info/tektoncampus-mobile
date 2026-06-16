@@ -114,7 +114,7 @@ export async function saveCalendarEvent(payload: {
 }) {
   const now = new Date().toISOString();
 
-  // 🔁 EDIT
+  
   if (payload.calendarEventId) {
     const { error } = await supabase
       .from("calendar_event")
@@ -145,7 +145,7 @@ export async function saveCalendarEvent(payload: {
     };
   }
 
-  // ➕ CREATE
+  
   const { data, error } = await supabase
     .from("calendar_event")
     .insert({

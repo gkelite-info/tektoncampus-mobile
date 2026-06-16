@@ -268,7 +268,7 @@ export default function FacultyAddQuizQuestions({
 
   return (
     <View className="flex-1 bg-[#F4F4F4]">
-      {/* Header */}
+      {}
       <View className="bg-white px-4 py-4 border-b border-gray-200 flex-row items-center gap-3 shadow-sm z-10 pt-4">
         <TouchableOpacity onPress={onBack} className="p-1 rounded-full bg-gray-100">
           <CaretLeft size={24} weight="bold" color="#16284F" />
@@ -280,7 +280,7 @@ export default function FacultyAddQuizQuestions({
       </View>
 
       <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-        {/* Quiz Info Banner */}
+        {}
         <View className="bg-white rounded-xl px-4 py-3 mb-4 min-h-[60px] flex-row items-center justify-between border-2 border-[#43C17A]">
           <View className="flex-col flex-1 pr-2">
             <Text className="font-bold text-[#282828] text-sm" numberOfLines={1}>{quizDetails?.quizTitle}</Text>
@@ -314,11 +314,11 @@ export default function FacultyAddQuizQuestions({
           </TouchableOpacity>
         </View>
 
-        {/* Questions List */}
+        {}
         <View className="flex-col gap-4 pb-12">
           {questions.map((question, index) => (
             <View key={question.id} className={`bg-white rounded-xl p-4 shadow-sm border ${index === 0 ? "border-[#43C17A]" : "border-gray-100"}`}>
-              {/* Title Input & Type Picker */}
+              {}
               <View className="flex-col gap-3 mb-4">
                 <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
                   <Picker
@@ -340,7 +340,7 @@ export default function FacultyAddQuizQuestions({
                 />
               </View>
 
-              {/* Options */}
+              {}
               <View className="flex-col gap-2 mb-2">
                 {question.type === "Multiple Choice" ? (
                   question.options.map((option, optIdx) => (
@@ -379,7 +379,7 @@ export default function FacultyAddQuizQuestions({
                 )}
               </View>
 
-              {/* Bottom Actions */}
+              {}
               <View className="flex-row items-center justify-between mt-3 pt-3 border-t border-gray-100">
                 {question.type === "Multiple Choice" ? (
                   <TouchableOpacity onPress={() => addOption(question.id)} className="px-2 py-1 bg-blue-50 rounded">
@@ -397,7 +397,7 @@ export default function FacultyAddQuizQuestions({
 
       </ScrollView>
 
-      {/* Footer Actions */}
+      {}
       <View className="bg-white border-t border-gray-200 p-4 flex-row justify-end gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
         <TouchableOpacity
           onPress={() => handleSave("Draft")}

@@ -43,7 +43,7 @@ export async function generatePdfsForTopics(
 
   const results: TopicPdfResult[] = [];
 
-  // Generate all notes via Groq
+  
   const notesResults = await generateTopicNotesBatchAction({
     subjectName,
     unitName,
@@ -64,26 +64,26 @@ export async function generatePdfsForTopics(
     }
 
     try {
-      // Build HTML
+      
       const html = buildTopicHtml(result.notes!);
 
-      // Print to local PDF
+      
       const { uri } = await Print.printToFileAsync({
         html,
         margins: { top: 0, right: 0, bottom: 0, left: 0 },
         base64: false,
       });
 
-      // Read as base64 and decode to ArrayBuffer
+      
       const base64 = await FileSystem.readAsStringAsync(uri, {
         encoding: 'base64' as any,
       });
       const arrayBuffer = decode(base64);
 
-      // Clean up local temp file
+      
       await FileSystem.deleteAsync(uri, { idempotent: true });
 
-      // Save to Supabase
+      
       const saved = await saveTopicResource({
         pdfBuffer: arrayBuffer as any,
         topicTitle: result.topicTitle,

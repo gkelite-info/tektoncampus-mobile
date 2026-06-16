@@ -8,7 +8,7 @@ import { fonts } from "@/constants/fonts";
 export default function SettingsScreen() {
     const headerHeight = useHeaderHeight();
     
-    // Toggle preferences mock state
+    
     const [pushNotifs, setPushNotifs] = useState(true);
     const [emailNotifs, setEmailNotifs] = useState(false);
 
@@ -36,7 +36,7 @@ export default function SettingsScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         App Settings
@@ -46,7 +46,7 @@ export default function SettingsScreen() {
                     </Text>
                 </View>
 
-                {/* Notifications Panel */}
+                {}
                 <View className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6">
                     <Text className="text-[#1E293B] text-[15px] mb-4" style={{ fontFamily: fonts.bold }}>
                         Notifications
@@ -93,7 +93,7 @@ export default function SettingsScreen() {
                     </View>
                 </View>
 
-                {/* General Settings List */}
+                {}
                 {settingSections.map((section, sidx) => (
                     <View key={sidx} className="mb-6">
                         <Text className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-3 px-1" style={{ fontFamily: fonts.bold }}>
@@ -132,7 +132,7 @@ export default function SettingsScreen() {
                     </View>
                 ))}
 
-                {/* Sign Out Action Button */}
+                {}
                 <TouchableOpacity className="bg-rose-50 border border-rose-100 py-3.5 rounded-2xl flex-row items-center justify-center mt-2">
                     <View className="mr-2">
                         <SignOut size={18} color="#E11D48" weight="bold" />

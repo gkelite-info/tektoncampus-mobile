@@ -177,7 +177,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
           </TouchableOpacity>
 
           <ScrollView className="px-6 py-6" contentContainerStyle={{ paddingBottom: 20 }}>
-            {/* Context Header */}
+            {}
             <Text className="text-base font-semibold text-gray-800 pr-6 flex-row flex-wrap leading-6 mb-5">
               <Text className="text-[#7E5DFF]">{unitLabel}</Text>
               <Text className="text-gray-400"> → </Text>
@@ -188,7 +188,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
 
             <Text className="text-sm font-semibold text-gray-700 mb-2">Upload</Text>
 
-            {/* Drop Zone equivalent */}
+            {}
             <TouchableOpacity 
               onPress={handleBrowseFiles}
               className="border-2 border-dashed border-gray-300 bg-gray-50 rounded-xl items-center justify-center py-8 mb-6"
@@ -202,7 +202,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
               </View>
             </TouchableOpacity>
 
-            {/* Staged Files */}
+            {}
             {stagedFiles.length > 0 && (
               <View className="mb-6">
                 <Text className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
@@ -233,7 +233,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
               </View>
             )}
 
-            {/* Uploaded Files */}
+            {}
             {savedResources.length > 0 && (
               <View>
                 <Text className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
@@ -281,7 +281,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
             )}
           </ScrollView>
 
-          {/* Footer Actions */}
+          {}
           <View className="flex-row gap-3 px-6 pb-6 pt-3 border-t border-gray-100">
             <TouchableOpacity 
               onPress={onClose}

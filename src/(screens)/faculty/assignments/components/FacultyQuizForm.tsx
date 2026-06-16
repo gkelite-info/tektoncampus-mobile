@@ -55,7 +55,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
   const [isSaving, setIsSaving] = useState(false);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
 
-  // Date picker states
+  
   const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisible] = useState(false);
@@ -224,7 +224,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         startDate: form.startDate,
         endDate: form.endDate,
         maxAttempts: Number(form.maxAttempts),
-        status: 'Draft', // Saved as draft initially, to be published later
+        status: 'Draft', 
       });
 
       if (!result.success) throw new Error(result.error?.message);
@@ -255,7 +255,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         
-        {/* Title */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-bold text-[#282828]">Quiz Title <Text className="text-red-500">*</Text></Text>
           <TextInput
@@ -266,7 +266,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
           />
         </View>
 
-        {/* Subject */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-bold text-[#282828]">Subject <Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
@@ -403,7 +403,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
           </View>
         </View>
 
-        {/* Times */}
+        {}
         <View className="flex-row gap-4 mb-6">
           <View className="flex-1">
             <Text className="mb-1 text-sm font-bold text-[#282828]">Start Time <Text className="text-red-500">*</Text></Text>
@@ -433,7 +433,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
           </View>
         </View>
 
-        {/* Actions */}
+        {}
         <View className="flex-row items-center justify-between mt-2 border-t border-gray-100 pt-4 gap-2">
           <TouchableOpacity onPress={onCancel} disabled={isSaving || isDraftSaving} className="px-4 py-3 rounded-md border border-[#16284F] flex-1 items-center">
             <Text className="text-[#16284F] text-sm font-medium">Cancel</Text>

@@ -468,7 +468,7 @@ export default function SharedDrive() {
           </TouchableOpacity>
         </View>
 
-        {/* Folders Section */}
+        {}
         <View className="mt-4 px-4">
           <Text className="text-base font-semibold text-gray-900 mb-3">
             Folders
@@ -501,7 +501,7 @@ export default function SharedDrive() {
           )}
         </View>
 
-        {/* Recent Section */}
+        {}
         <View className="mt-6 px-4">
           <Text className="text-base font-semibold text-gray-900 mb-3">
             Recent

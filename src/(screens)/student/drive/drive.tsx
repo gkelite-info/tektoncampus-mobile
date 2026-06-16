@@ -7,7 +7,7 @@ import { fonts } from "@/constants/fonts";
 
 export default function DriveScreen() {
     const headerHeight = useHeaderHeight();
-    const [openFolder, setOpenFolder] = useState<number | null>(1); // Pre-open the first folder
+    const [openFolder, setOpenFolder] = useState<number | null>(1); 
 
     const storageUsage = {
         used: "1.2 GB",
@@ -61,7 +61,7 @@ export default function DriveScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Resource Drive
@@ -71,7 +71,7 @@ export default function DriveScreen() {
                     </Text>
                 </View>
 
-                {/* Storage Bar Indicator */}
+                {}
                 <View className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 mb-6">
                     <View className="flex-row justify-between items-center mb-2">
                         <Text className="text-slate-500 text-xs font-semibold" style={{ fontFamily: fonts.medium }}>Cloud Storage</Text>
@@ -84,7 +84,7 @@ export default function DriveScreen() {
                     </View>
                 </View>
 
-                {/* Folders List */}
+                {}
                 <View>
                     <Text className="text-[#1E293B] text-[16px] mb-4" style={{ fontFamily: fonts.bold }}>
                         Academic Folders
@@ -95,7 +95,7 @@ export default function DriveScreen() {
 
                         return (
                             <View key={folder.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 mb-4 overflow-hidden">
-                                {/* Folder Header */}
+                                {}
                                 <TouchableOpacity 
                                     onPress={() => toggleFolder(folder.id)}
                                     activeOpacity={0.8}
@@ -121,7 +121,7 @@ export default function DriveScreen() {
                                     )}
                                 </TouchableOpacity>
 
-                                {/* Folder Files Drawer */}
+                                {}
                                 {isOpen && (
                                     <View className="bg-slate-50/50 border-t border-slate-100 p-3">
                                         {folder.files.map((file, fid) => (

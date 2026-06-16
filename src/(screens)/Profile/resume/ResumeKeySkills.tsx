@@ -88,7 +88,7 @@ export default function ResumeKeySkills() {
 
                 <View className="gap-6">
                     {groupedSkills.map((group) => {
-                        // Skip rendering category if it has no skills
+                        
                         if (group.skills.length === 0) return null;
 
                         return (

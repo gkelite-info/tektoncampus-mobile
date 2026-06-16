@@ -258,14 +258,14 @@ export default function StudentHome() {
     useEffect(() => {
         if (studentLoading) return;
 
-        // loadUpcomingClasses();
+        
         loadAssignmentCount();
         loadAttendancePercent();
         loadPendingFee();
         loadSubjects();
     }, [
         studentLoading,
-        // loadUpcomingClasses,
+        
         loadAssignmentCount,
         loadAttendancePercent,
         loadPendingFee,

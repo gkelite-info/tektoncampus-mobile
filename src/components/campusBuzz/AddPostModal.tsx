@@ -86,13 +86,13 @@ export default function AddPostModal({ visible, onClose, onSuccess, editData }: 
     };
 
     const uploadImageToSupabase = async (uri: string) => {
-        if (uri.startsWith('http')) return uri; // Already a remote URL (editing mode)
+        if (uri.startsWith('http')) return uri; 
 
         const fileExt = uri.split('.').pop() || 'jpg';
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `${collegeId}/campus-buzz/${fileName}`;
 
-        // Convert URI to blob
+        
         const response = await fetch(uri);
         const blob = await response.blob();
 

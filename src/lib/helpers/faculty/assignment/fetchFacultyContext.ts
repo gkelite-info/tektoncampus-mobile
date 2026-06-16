@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
 export async function fetchFacultyContext(userId: number) {
-  // 1. Fetch Basic Faculty Info
+  
   const { data: faculty, error: facultyError } = await supabase
     .from("faculty")
     .select(

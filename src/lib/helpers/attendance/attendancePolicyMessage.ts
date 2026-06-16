@@ -70,7 +70,7 @@ export function buildAttendancePolicyMessage({
             minAttendance: threshold,
             percentage,
             classesNeeded: 0,
-            // Previous copy: `${name} does not have attendance records yet. Minimum eligibility is ${threshold}%, so start tracking from the next class.`
+            
             message: `${name}'s minimum attendance is ${threshold}%. No attendance records yet. Start tracking from the next class.`,
         };
     }
@@ -80,7 +80,7 @@ export function buildAttendancePolicyMessage({
             minAttendance: threshold,
             percentage,
             classesNeeded: 0,
-            // Previous copy: `${name} has excellent attendance (${percentage}%). Eligible for exams and maintaining the required ${threshold}% criteria. Keep it up.`
+            
             message:
                 audience === "student"
                     ? `Hi ${name}, your attendance is ${percentage}%, safely above the ${threshold}%. Keep it up.`
@@ -95,7 +95,7 @@ export function buildAttendancePolicyMessage({
             minAttendance: threshold,
             percentage,
             classesNeeded,
-            // Previous copy: `${name} has good attendance (${percentage}%), but needs ${threshold}% for eligibility. Attend the next ${classesNeeded} ${classText} to reach the required level.`
+            
             message: `${name}'s minimum attendance is ${threshold}%. Current attendance is ${percentage}%. Attend ${classesNeeded} more ${classText} to reach it.`,
         };
     }
@@ -104,7 +104,7 @@ export function buildAttendancePolicyMessage({
         minAttendance: threshold,
         percentage,
         classesNeeded,
-        // Previous copy: `${name}'s attendance is below the safe range (${percentage}%). Attend the next ${classesNeeded} ${classText} to reach ${threshold}% and avoid eligibility risk.`
+        
         message: `${name}'s minimum attendance is ${threshold}%. Current attendance is ${percentage}%. Attend ${classesNeeded} more ${classText} to become eligible.`,
     };
 }

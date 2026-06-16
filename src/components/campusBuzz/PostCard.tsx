@@ -185,7 +185,7 @@ export default function PostCard({ post, userId, fullName, currentUserPhoto, isH
     };
 
     const handleShareAction = async (platform: string) => {
-        const postUrl = `https://tektoncampus.com/buzz?post=${pId}`; // Placeholder base URL for sharing
+        const postUrl = `https://tektoncampus.com/buzz?post=${pId}`; 
         
         if (platform === "whatsapp") {
             Linking.openURL(`https://api.whatsapp.com/send?text=Check out this update on Campus Buzz: ${encodeURIComponent(postUrl)}`);
@@ -201,7 +201,7 @@ export default function PostCard({ post, userId, fullName, currentUserPhoto, isH
     return (
         <View className={`bg-white rounded-xl border mb-4 shadow-sm ${isHighlighted && !debouncedSearch ? "border-[#43C17A] bg-[#fafffb]" : "border-gray-100"}`}>
             <View className="p-4">
-                {/* Header */}
+                {}
                 <View className="flex-row justify-between items-start mb-3 relative z-10">
                     <View className="flex-row items-center gap-3">
                         <UserAvatar userId={post.createdBy} name={post.users?.fullName} photoUrl={postAuthorPhoto} size={40} />
@@ -242,7 +242,7 @@ export default function PostCard({ post, userId, fullName, currentUserPhoto, isH
                     )}
                 </View>
 
-                {/* Content */}
+                {}
                 <Text className="text-[16px] font-semibold text-[#282828] mb-1">{post.title}</Text>
                 <Text className="text-[14px] text-gray-700 leading-5">{post.description}</Text>
 
@@ -262,7 +262,7 @@ export default function PostCard({ post, userId, fullName, currentUserPhoto, isH
                     </View>
                 )}
 
-                {/* Actions */}
+                {}
                 <View className="flex-row justify-between items-center mt-4 pt-3 border-t border-gray-50">
                     <View className="flex-row gap-4">
                         <TouchableOpacity onPress={handleToggleLike} className="flex-row items-center gap-1.5 p-1">
@@ -296,7 +296,7 @@ export default function PostCard({ post, userId, fullName, currentUserPhoto, isH
                     </View>
                 </View>
 
-                {/* Comments Section */}
+                {}
                 {commentsActive && (
                     <View className="mt-4 pt-3 border-t border-gray-50 flex-col gap-3">
                         {replyingTo && (
@@ -380,7 +380,7 @@ export default function PostCard({ post, userId, fullName, currentUserPhoto, isH
                                                     )}
                                                 </View>
 
-                                                {/* Comment menu */}
+                                                {}
                                                 {activeCommentMenuId === c.campusBuzzPostCommentId && (
                                                     <View className="flex-row gap-3 mt-1 ml-1 bg-white px-2 py-1 rounded shadow-sm border border-gray-100 self-start">
                                                         <TouchableOpacity onPress={() => { setEditingCommentId(c.campusBuzzPostCommentId); setEditingCommentText(c.comment); setActiveCommentMenuId(null); }}>

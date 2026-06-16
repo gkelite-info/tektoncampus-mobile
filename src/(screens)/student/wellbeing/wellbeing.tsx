@@ -35,7 +35,7 @@ export default function WellbeingScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Wellbeing Center
@@ -45,7 +45,7 @@ export default function WellbeingScreen() {
                     </Text>
                 </View>
 
-                {/* Quote card */}
+                {}
                 <View className="bg-emerald-50/75 border border-emerald-100 p-5 rounded-2xl mb-6">
                     <View className="mb-3">
                         <Heart size={24} color="#10B981" weight="fill" />
@@ -58,7 +58,7 @@ export default function WellbeingScreen() {
                     </Text>
                 </View>
 
-                {/* Mood Check-in */}
+                {}
                 <View className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6">
                     <Text className="text-[#1E293B] text-[15px] mb-3.5" style={{ fontFamily: fonts.bold }}>
                         How are you feeling today?
@@ -82,7 +82,7 @@ export default function WellbeingScreen() {
                     </View>
                 </View>
 
-                {/* Wellbeing Actions */}
+                {}
                 <View className="flex-row mb-6" style={{ gap: 12 }}>
                     <TouchableOpacity className="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 items-center justify-center">
                         <View className="mb-2">
@@ -109,7 +109,7 @@ export default function WellbeingScreen() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Self Help Resources */}
+                {}
                 <View>
                     <Text className="text-[#1E293B] text-[16px] mb-3" style={{ fontFamily: fonts.bold }}>
                         Recommended Reads

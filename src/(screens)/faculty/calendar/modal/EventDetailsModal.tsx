@@ -32,7 +32,7 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {
     <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
       <View className="flex-1 bg-black/40 justify-center items-center px-4">
         <View className="w-full max-w-[420px] bg-white rounded-2xl p-5 shadow-xl">
-          {/* Header */}
+          {}
           <View className="flex-row items-center justify-between mb-4">
             <View className="flex-row items-center gap-3">
               <View className="h-9 w-9 rounded-full bg-purple-100 items-center justify-center">
@@ -45,7 +45,7 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {
             </TouchableOpacity>
           </View>
 
-          {/* Title / Subject */}
+          {}
           <Text className="font-semibold text-base mb-1 text-gray-900 leading-tight">
             {event.type.charAt(0).toUpperCase() + event.type.slice(1)} -{" "}
             {event.subjectName && event.subjectName !== "-"
@@ -69,7 +69,7 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {
             </Text>
           )}
 
-          {/* Details Box */}
+          {}
           <View className="mt-3 space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
             <DetailRow
               label="Type"

@@ -16,7 +16,7 @@ export type ResumePersonalDetailsRow = {
   deletedAt: string | null;
 };
 
-// ─── FETCH ────────────────────────────────────────────────────────────────────
+
 
 export async function fetchResumePersonalDetails(studentId: number) {
   const { data, error } = await supabase
@@ -50,7 +50,7 @@ export async function fetchResumePersonalDetails(studentId: number) {
   return { success: true, data };
 }
 
-// ─── SAVE (INSERT or UPDATE) ──────────────────────────────────────────────────
+
 
 export async function saveResumePersonalDetails(payload: {
   resumePersonalDetailsId?: number;
@@ -65,7 +65,7 @@ export async function saveResumePersonalDetails(payload: {
 }) {
   const now = new Date().toISOString();
 
-  // ── INSERT ────────────────────────────────────────────────────────────────
+  
   if (!payload.resumePersonalDetailsId) {
     const insertPayload = {
       studentId: payload.studentId,
@@ -106,7 +106,7 @@ export async function saveResumePersonalDetails(payload: {
     };
   }
 
-  // ── UPDATE — only updatable fields, never touch studentId/collegeId ────────
+  
   const updatePayload = {
     fullName: payload.fullName.trim(),
     mobile: payload.mobile.trim(),
@@ -142,7 +142,7 @@ export async function saveResumePersonalDetails(payload: {
   };
 }
 
-// ─── SOFT DELETE ──────────────────────────────────────────────────────────────
+
 
 export async function deleteResumePersonalDetails(
   resumePersonalDetailsId: number
@@ -163,7 +163,7 @@ export async function deleteResumePersonalDetails(
   return { success: true };
 }
 
-// ─── FETCH ALL (admin use) ────────────────────────────────────────────────────
+
 
 export async function fetchAllResumePersonalDetails() {
   const { data, error } = await supabase

@@ -97,7 +97,7 @@ export default function SemesterAttendanceCard({
 
   return (
     <View className="w-full rounded-xl p-4 bg-[#E9FFF0] flex-col shadow-sm gap-4">
-      {/* Top Row: Icon + Title + Overall Percentage */}
+      {}
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-3">
           <View className="bg-[#43C17A] w-10 h-10 rounded-full items-center justify-center">
@@ -112,9 +112,9 @@ export default function SemesterAttendanceCard({
         </Text>
       </View>
 
-      {/* Bottom Row: 3 horizontal bars side-by-side */}
+      {}
       <View className="flex-row gap-3">
-        {/* Present Bar Column */}
+        {}
         <View className="flex-1 flex-col gap-1">
           <View className="flex-row justify-between items-center">
             <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.bold }}>
@@ -132,7 +132,7 @@ export default function SemesterAttendanceCard({
           </View>
         </View>
 
-        {/* Absent Bar Column */}
+        {}
         <View className="flex-1 flex-col gap-1">
           <View className="flex-row justify-between items-center">
             <Text className="text-[#FF2020] text-[11px]" style={{ fontFamily: fonts.bold }}>
@@ -150,7 +150,7 @@ export default function SemesterAttendanceCard({
           </View>
         </View>
 
-        {/* Leave Bar Column */}
+        {}
         <View className="flex-1 flex-col gap-1">
           <View className="flex-row justify-between items-center">
             <Text className="text-[#FFBB70] text-[11px]" style={{ fontFamily: fonts.bold }}>

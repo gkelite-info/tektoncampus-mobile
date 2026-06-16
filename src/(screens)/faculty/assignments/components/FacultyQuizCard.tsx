@@ -19,7 +19,7 @@ export default function FacultyQuizCard({
 }: FacultyQuizCardProps) {
   return (
     <View className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex-col gap-3 relative mb-3">
-      {/* Action Icons */}
+      {}
       <View className="absolute top-4 right-4 flex-row items-center gap-3 z-10">
         {onEdit && (
           <TouchableOpacity onPress={() => onEdit(data.quizId)} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>

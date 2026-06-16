@@ -9,16 +9,16 @@ import FacultyAttendance from "@/(screens)/faculty/attendance/attendance";
 import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
-// Strict Typescript interface definitions for Faculty Navigation context
+
 export type FacultyTabParamList = {
     Assignments: undefined;
     Academics: undefined;
-    Dashboard: undefined; // Map central Home button structure to primary Dashboard screen
+    Dashboard: undefined; 
     Attendance: undefined;
     Profile: undefined;
 };
 
-// Target screen mocks using Tailwind design system
+
 function MockFacultyScreen({ title }: { title: string }) {
     return (
         <View className="flex-1 justify-center items-center bg-[#0F172A]">
@@ -32,7 +32,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const insets = useSafeAreaInsets();
-    const bottomInset = insets.bottom || 10; // Fallback to 10 for devices with no bottom insets to give some breathing room
+    const bottomInset = insets.bottom || 10; 
 
     return (
         <View
@@ -66,11 +66,11 @@ export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTa
                         }
                     };
 
-                    // Precise Label configurations mapped directly over Faculty structural keys
+                    
                     const labels: Record<keyof FacultyTabParamList, string> = {
                         Assignments: "Assignments",
                         Academics: "Academics",
-                        Dashboard: "Home", // Keeps label standard matching original interface design
+                        Dashboard: "Home", 
                         Attendance: "Attendance",
                         Profile: "Profile",
                     };
@@ -79,7 +79,7 @@ export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTa
                     const iconSize = 24;
                     const iconColor = isFocused ? "#6AE18B" : "#94A3B8";
 
-                    // Icon parsing switch engine matching Phosphor specifications
+                    
                     const renderIcon = () => {
                         switch (route.name) {
                             case "Assignments": return <ClipboardText size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
@@ -90,7 +90,7 @@ export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTa
                         }
                     };
 
-                    // --- EXTRAORDINARY FLOATING ACTION BUTTON (DASHBOARD SCREEN ANCHOR) ---
+                    
                     if (route.name === "Dashboard") {
                         return (
                             <View key={route.key} className="flex-1 items-center justify-center">
@@ -112,7 +112,7 @@ export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTa
                         );
                     }
 
-                    // --- STANDARD SYSTEM RUNTIME NAVIGATION TABS ---
+                    
                     return (
                         <TouchableOpacity
                             key={route.key}

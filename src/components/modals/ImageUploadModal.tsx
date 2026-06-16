@@ -25,7 +25,7 @@ export default function ImageUploadModal({ visible, onClose, userId, onUploadSuc
         const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1], // Square aspect ratio for profile picture
+            aspect: [1, 1], 
             quality: 0.8,
             base64: true,
         });

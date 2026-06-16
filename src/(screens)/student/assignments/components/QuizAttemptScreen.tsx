@@ -45,7 +45,7 @@ function QuizExitWarningModal({
 }) {
     const t = useTranslations("Assignment.student");
     const R = 34;
-    const C = 2 * Math.PI * R; // ~213.63
+    const C = 2 * Math.PI * R; 
     const progress = countdown / 10;
     const strokeDashoffset = C * (1 - progress);
 
@@ -53,10 +53,10 @@ function QuizExitWarningModal({
         <Modal visible={visible} transparent animationType="fade">
             <View className="flex-1 justify-center items-center bg-slate-900/60 p-4">
                 <View className="bg-white rounded-3xl w-full max-w-[340px] p-6 shadow-2xl items-center border border-gray-100">
-                    {/* Smoothly unfilling circular progress countdown */}
+                    {}
                     <View className="w-20 h-20 items-center justify-center mb-6 relative">
                         <Svg width="80" height="80" viewBox="0 0 80 80">
-                            {/* Background track circle */}
+                            {}
                             <Circle
                                 cx="40"
                                 cy="40"
@@ -65,7 +65,7 @@ function QuizExitWarningModal({
                                 strokeWidth="5"
                                 fill="none"
                             />
-                            {/* Animated progress circle */}
+                            {}
                             <Circle
                                 cx="40"
                                 cy="40"

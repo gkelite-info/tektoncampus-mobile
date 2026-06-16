@@ -35,7 +35,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Date picker state
+  
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
   const [form, setForm] = useState({
@@ -233,9 +233,9 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
         throw new Error('Failed to save discussion sections');
       }
 
-      // Note: File uploading from React Native requires special handling with FormData
-      // which is complex to implement robustly without proper multipart logic. 
-      // For now, we will skip file upload on mobile and let users upload from web.
+      
+      
+      
       if (newFiles.length > 0) {
           Toast.show({ type: 'info', text1: 'Discussion saved. File uploads from mobile are currently disabled.' });
       } else {
@@ -266,7 +266,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         
-        {/* Title */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-bold text-[#282828]">Title <Text className="text-red-500">*</Text></Text>
           <TextInput
@@ -277,7 +277,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
           />
         </View>
 
-        {/* Description */}
+        {}
         <View className="mb-4">
           <Text className="mb-1 text-sm font-bold text-[#282828]">Description <Text className="text-red-500">*</Text></Text>
           <TextInput
@@ -291,7 +291,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
           />
         </View>
 
-        {/* Subject, Year, Sections Helpers */}
+        {}
         <View className="mb-4">
             <Text className="text-xs font-bold text-gray-400 mb-2">FILTER SECTIONS</Text>
             <View className="flex-row gap-2 mb-2">
@@ -373,7 +373,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
           </View>
         </View>
 
-        {/* Files Section */}
+        {}
         <View className="mt-2 mb-4">
             <Text className="font-bold text-[#282828] text-sm mb-2">Project Files</Text>
             <TouchableOpacity onPress={handlePickFile} className="border-2 border-dashed border-gray-300 rounded-xl p-6 items-center justify-center bg-gray-50/50 mb-3">
@@ -413,7 +413,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
             )}
         </View>
 
-        {/* Actions */}
+        {}
         <View className="flex-row items-center justify-end mt-2 border-t border-gray-100 pt-4 gap-3">
           <TouchableOpacity onPress={onCancel} disabled={isSaving} className="px-6 py-2 rounded-md border border-[#7B7B7B]">
             <Text className="text-[#7B7B7B] text-sm font-bold">Cancel</Text>

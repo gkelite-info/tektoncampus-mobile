@@ -70,7 +70,7 @@ export async function saveQuizSubmission(payload: {
   const now = new Date().toISOString();
 
   const MAX_RETRIES = 3;
-  const RETRY_DELAYS = [1000, 2000, 3000]; // 1s, 2s, 3s
+  const RETRY_DELAYS = [1000, 2000, 3000]; 
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
@@ -150,30 +150,30 @@ export async function deactivateQuizSubmission(submissionId: number) {
   return { success: true };
 }
 
-// export async function fetchSubmissionsWithStudentsByQuizId(quizId: number) {
-//   const { data, error } = await supabase
-//     .from("quiz_submissions")
-//     .select(
-//       `
-//             submissionId,
-//             quizId,
-//             studentId,
-//             totalMarksObtained,
-//             submittedAt
-//         `,
-//     )
-//     .eq("quizId", quizId)
-//     .eq("isActive", true)
-//     .is("deletedAt", null)
-//     .order("submittedAt", { ascending: false });
 
-//   if (error) {
-//     console.error("fetchSubmissionsWithStudentsByQuizId error:", error);
-//     throw error;
-//   }
 
-//   return data ?? [];
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export async function getStudentAttemptCount(
   quizId: number,

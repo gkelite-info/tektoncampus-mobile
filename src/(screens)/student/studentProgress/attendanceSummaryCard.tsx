@@ -52,13 +52,13 @@ export function AttendanceSummaryCard({ percentage, attendedCount, conductedCoun
                 {t("Attendance Summary")}
             </Text>
 
-            <View className="flex-col items-center justify-center">
-                <View className="w-full max-w-[240px] aspect-[2/1] relative items-center justify-end">
+            <View className="flex-col items-center justify-center ">
+                <View className="w-full max-w-[240px] aspect-[2/1] relative items-center justify-end ">
                     <Svg
                         viewBox="0 0 200 100"
                         width="100%"
                         height="100%"
-                        style={{ position: "absolute", top: 0, left: 0, overflow: "visible" }}
+                        style={{ position: "absolute", top: -12, left: 0, overflow: "visible" }}
                     >
                         <Defs>
                             <LinearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="0">
@@ -86,9 +86,9 @@ export function AttendanceSummaryCard({ percentage, attendedCount, conductedCoun
                         />
                     </Svg>
 
-                    <View className="items-center justify-end pb-1">
-                        <View className="flex-row items-baseline leading-none">
-                            <Text className="text-3xl text-[#2D3139]" style={{ fontFamily: fonts.bold }}>
+                    <View className="items-center justify-end pb-1 ">
+                        <View className="flex-row items-baseline leading-none ">
+                            <Text className="text-3xl text-[#2D3139] " style={{ fontFamily: fonts.bold }}>
                                 {displayedTextPercent}
                             </Text>
                             <Text className="text-xl text-[#2D3139] ml-0.5" style={{ fontFamily: fonts.bold }}>%</Text>

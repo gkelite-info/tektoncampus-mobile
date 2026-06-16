@@ -135,7 +135,7 @@ export default function ParentDrawerNavigator() {
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
-                    // Use a short delay to allow the Modal dismissal to start and avoid transition layout freezes on Android
+                    
                     setTimeout(() => {
                         navigationRef.current?.navigate(routeName);
                     }, 100);

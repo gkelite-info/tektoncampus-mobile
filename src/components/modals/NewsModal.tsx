@@ -91,7 +91,7 @@ export default function NewsModal({ visible, onClose }: Props) {
                 loadEpapers();
             }
         } else {
-            // reset state on close
+            
             setSelectedArticleUrl(null);
         }
     }, [visible, activeTab]);

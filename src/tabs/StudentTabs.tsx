@@ -22,7 +22,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const insets = useSafeAreaInsets();
-    const bottomInset = insets.bottom || 10; // Fallback to 10 for devices with no bottom insets to give some breathing room
+    const bottomInset = insets.bottom || 10; 
 
     return (
         <View

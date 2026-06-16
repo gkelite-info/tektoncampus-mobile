@@ -118,7 +118,7 @@ export default function StuAttendanceTable({
   return (
     <View className="flex-1 w-full flex-col space-y-4">
       <View className="flex-col gap-4 mb-2">
-        {/* Top bar controls */}
+        {}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-3 py-1">
           {!isTopicMode && onFilterChange && (
             <TouchableOpacity 
@@ -203,7 +203,7 @@ export default function StuAttendanceTable({
         </View>
       </View>
 
-      {/* Bulk actions */}
+      {}
       {isEditing && selectedIds.length > 0 && !loadingFilters && (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row bg-white border border-gray-100 rounded-xl px-4 py-2 shadow-sm mb-4">
           <Text className="text-xs font-bold text-gray-500 mr-4 self-center">{selectedIds.length} Selected</Text>
@@ -254,7 +254,7 @@ export default function StuAttendanceTable({
                 </View>
               </View>
 
-              {/* Right Side: Quick Action Toggle */}
+              {}
               <View className="flex-row items-center">
                 {s.attendance === "Class Cancel" ? (
                   <View className="rounded-lg bg-gray-100 py-1.5 px-3 items-center">
@@ -267,7 +267,7 @@ export default function StuAttendanceTable({
 
             </View>
 
-            {/* Bottom Row: Reason input if applicable */}
+            {}
             {shouldShowReasonInput(s.attendance) && (
               isEditing ? (
                 <View className="px-4 py-3 bg-gray-50 border-t border-gray-100 flex-row items-center">
@@ -298,7 +298,7 @@ export default function StuAttendanceTable({
         )}
       </View>
 
-      {/* Class Filter Modal */}
+      {}
       <Modal visible={showClassFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
@@ -321,7 +321,7 @@ export default function StuAttendanceTable({
         </View>
       </Modal>
 
-      {/* Section Filter Modal */}
+      {}
       <Modal visible={showSectionFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
@@ -344,7 +344,7 @@ export default function StuAttendanceTable({
         </View>
       </Modal>
       
-      {/* Sort Filter Modal */}
+      {}
       <Modal visible={showSortFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">

@@ -1,6 +1,6 @@
 
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+
 
 import { ComplexityRow, TopicNotes } from "./Generatetopicnotes";
 
@@ -97,10 +97,10 @@ export function buildTopicHtml(notes: TopicNotes): string {
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>${esc(notes.topicTitle)}</title>
 <style>
-  /* ── Reset ── */
+  
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── Page setup ── */
+  
   @page { size: A4; margin: 0; }
 
   body {
@@ -111,7 +111,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     line-height: 1.7;
   }
 
-  /* ── Cover page ── */
+  
   .cover {
     width: 100%;
     min-height: 297mm;
@@ -322,7 +322,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     overflow-x: auto;
   }
 
-  /* ── Complexity table ── */
+  
   .complexity-table {
     width: 100%;
     border-collapse: collapse;
@@ -356,7 +356,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
   .complexity.bad   { color: #b91c1c; }
   .complexity.space { color: #1d4ed8; }
 
-  /* ── Two-column grid ── */
+  
   .two-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -378,7 +378,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     border-bottom: 2px solid #e94560;
   }
 
-  /* ── Key terms table ── */
+  
   .terms-table {
     width: 100%;
     border-collapse: collapse;
@@ -408,7 +408,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     line-height: 1.6;
   }
 
-  /* ── Real-world example callout ── */
+  
   .example-callout {
     background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
     border: 1px solid #fcd34d;
@@ -431,7 +431,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     line-height: 1.7;
   }
 
-  /* ── Summary block ── */
+  
   .summary-block {
     background: #1a1a2e;
     color: #e2e8f0;
@@ -445,7 +445,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     color: #cbd5e1;
   }
 
-  /* ── Page footer ── */
+  
   .page-footer {
     margin-top: 40px;
     padding-top: 14px;
@@ -456,7 +456,7 @@ export function buildTopicHtml(notes: TopicNotes): string {
     color: #9ca3af;
   }
 
-  /* ── Page break utility ── */
+  
   .page-break { page-break-before: always; }
 </style>
 </head>

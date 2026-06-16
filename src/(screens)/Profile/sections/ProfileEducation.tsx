@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator 
 import Toast from "react-native-toast-message";
 import { useUser } from "@/utils/context/UserContext";
 
-// Assumed API bindings based on NextJS helpers
+
 import {
   primaryEducationAPI,
   secondaryEducationAPI,
@@ -80,7 +80,7 @@ export default function ProfileEducation() {
             <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row justify-between items-center mb-6">
                     <Text className="text-lg font-semibold text-[#000000]">Education</Text>
-                    {/* The router handles 'Next' logic in ProfileDashboard/ProfileContainer but we'll leave placeholder for now */}
+                    {}
                 </View>
 
                 <View className="gap-4">

@@ -14,7 +14,7 @@ export default function ResumeCompetitiveExams() {
     const [exams, setExams] = useState<any[]>([]);
     const [isPageLoading, setIsPageLoading] = useState(true);
 
-    // Form states
+    
     const [examName, setExamName] = useState("");
     const [score, setScore] = useState("");
     const [isSaving, setIsSaving] = useState(false);

@@ -6,8 +6,8 @@ export interface EmploymentPayload {
     designation: string;
     experienceYears: number;
     experienceMonths: number;
-    startDate: string;       // YYYY-MM-DD
-    endDate: string | null;  // ✅ FIXED (allow NULL)
+    startDate: string;       
+    endDate: string | null;  
     description?: string;
     updatedAt: string;
 }
@@ -16,7 +16,7 @@ export interface EmploymentInsertPayload extends EmploymentPayload {
     createdAt: string;
 }
 
-// ── READ ──────────────────────────────────────────────────────────────────────
+
 
 export async function getEmployment(studentId: number) {
     const { data, error } = await supabase
@@ -43,7 +43,7 @@ export async function getEmployment(studentId: number) {
     return data ?? [];
 }
 
-// ── CREATE ────────────────────────────────────────────────────────────────────
+
 
 export async function addEmployment(
     payload: EmploymentInsertPayload
@@ -74,7 +74,7 @@ export async function addEmployment(
     return data[0];
 }
 
-// ── UPDATE ────────────────────────────────────────────────────────────────────
+
 
 export async function updateEmployment(
     employmentId: number,
@@ -84,7 +84,7 @@ export async function updateEmployment(
         .from("resume_employment_details")
         .update({
             ...payload,
-            endDate: payload.endDate ?? null, // ✅ ENSURE NULL (no "current")
+            endDate: payload.endDate ?? null, 
             updatedAt: new Date().toISOString(),
         })
         .eq("employmentId", employmentId)
@@ -96,7 +96,7 @@ export async function updateEmployment(
     }
 }
 
-// ── DELETE (soft) ─────────────────────────────────────────────────────────────
+
 
 export async function deleteEmployment(employmentId: number) {
     const { error } = await supabase

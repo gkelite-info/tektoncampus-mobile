@@ -20,13 +20,13 @@ async function fetchEducation(studentId: number, level: EducationLevel) {
   return { success: true, data };
 }
 
-// ONLY THIS PART UPDATED — rest unchanged
+
 
 async function saveEducation(payload: Record<string, any>, level: EducationLevel) {
   const timestamp = now();
   const id = payload.resumeEducationDetailId;
 
-  // ✅ ADDED LOGIC (DO NOT REMOVE EXISTING)
+  
   const isPrimary = level === "primary";
 
   const startYear = !isPrimary && payload.startDate
@@ -59,7 +59,7 @@ async function saveEducation(payload: Record<string, any>, level: EducationLevel
         ...updatable,
         ...(startYear !== undefined ? { startYear } : {}),
         ...(endYear !== undefined ? { endYear } : {}),
-        ...(yearOfPassing !== undefined ? { yearOfPassing } : {}), // ✅ added
+        ...(yearOfPassing !== undefined ? { yearOfPassing } : {}), 
         updatedAt: timestamp,
       })
       .eq("resumeEducationDetailId", id);
@@ -84,7 +84,7 @@ async function saveEducation(payload: Record<string, any>, level: EducationLevel
       ...insertPayload,
       ...(startYear !== undefined ? { startYear } : {}),
       ...(endYear !== undefined ? { endYear } : {}),
-      ...(yearOfPassing !== undefined ? { yearOfPassing } : {}), // ✅ added
+      ...(yearOfPassing !== undefined ? { yearOfPassing } : {}), 
       educationLevel: level,
       is_deleted: false,
       deletedAt: null,

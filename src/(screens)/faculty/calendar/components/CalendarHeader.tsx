@@ -37,7 +37,7 @@ const CalendarHeader = ({
         <View className="flex-row items-center justify-between gap-2 mb-4">
             <View className="flex-row items-center bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
                 
-                {/* Month Selector */}
+                {}
                 <TouchableOpacity 
                     className="flex-row items-center justify-between px-3 py-1.5"
                     onPress={() => setIsMonthModalOpen(true)}
@@ -50,7 +50,7 @@ const CalendarHeader = ({
 
                 <View className="w-px h-5 bg-gray-300 mx-1" />
 
-                {/* Year Selector */}
+                {}
                 <TouchableOpacity 
                     className="flex-row items-center justify-between px-3 py-1.5"
                     onPress={() => setIsYearModalOpen(true)}
@@ -70,7 +70,7 @@ const CalendarHeader = ({
                 <Text className="text-white text-sm font-bold">Add New</Text>
             </TouchableOpacity>
 
-            {/* Month Picker Modal */}
+            {}
             <Modal visible={isMonthModalOpen} transparent animationType="fade">
                 <TouchableOpacity 
                     className="flex-1 bg-black/50 justify-center items-center"
@@ -98,7 +98,7 @@ const CalendarHeader = ({
                 </TouchableOpacity>
             </Modal>
 
-            {/* Year Picker Modal */}
+            {}
             <Modal visible={isYearModalOpen} transparent animationType="fade">
                 <TouchableOpacity 
                     className="flex-1 bg-black/50 justify-center items-center"

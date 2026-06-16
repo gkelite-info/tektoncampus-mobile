@@ -32,7 +32,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                         Fill in the details below. Every submission is tracked and resolved transparently.
                     </Text>
 
-                    {/* Stats Cards */}
+                    {}
                     <View className="flex-row justify-between mb-6">
                         <View className="flex-1 bg-[#E5E0FF] rounded-xl p-3 mr-2 items-center">
                             <View className="bg-white rounded-full p-1.5 mb-2">
@@ -57,9 +57,9 @@ export default function SupportModal({ visible, onClose }: Props) {
                         </View>
                     </View>
 
-                    {/* Form Container */}
+                    {}
                     <View className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                        {/* Role Field */}
+                        {}
                         <View className="mb-4">
                             <Text className="text-xs font-bold text-[#515151] mb-1">Role</Text>
                             <View className="flex-row items-center bg-[#EEF2ED] border border-[#CCCCCC] rounded-md px-3 py-2.5">
@@ -68,7 +68,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                             </View>
                         </View>
 
-                        {/* Issue Related */}
+                        {}
                         <View className="mb-4">
                             <Text className="text-xs font-bold text-[#515151] mb-1">Issue Related</Text>
                             <TouchableOpacity 
@@ -98,7 +98,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                             )}
                         </View>
 
-                        {/* Description */}
+                        {}
                         <View className="mb-4">
                             <Text className="text-xs font-bold text-[#515151] mb-1">Description</Text>
                             <TextInput
@@ -112,7 +112,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                             />
                         </View>
 
-                        {/* Priority Level */}
+                        {}
                         <View className="mb-5">
                             <Text className="text-xs font-bold text-[#515151] mb-2">Priority Level</Text>
                             <View className="flex-row justify-between gap-2">
@@ -148,7 +148,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                             </View>
                         </View>
 
-                        {/* Upload Proof */}
+                        {}
                         <View className="mb-4">
                             <Text className="text-xs font-bold text-[#515151] mb-1">Upload Proof (Images/Video)</Text>
                             <TouchableOpacity className="border-2 border-dashed border-[#A8D5BA] bg-[#F8FCF9] rounded-xl p-8 items-center justify-center">
@@ -160,7 +160,7 @@ export default function SupportModal({ visible, onClose }: Props) {
                             </TouchableOpacity>
                         </View>
 
-                        {/* Submit Button */}
+                        {}
                         <TouchableOpacity className="bg-[#43C17A] py-3.5 rounded-xl items-center mt-2">
                             <Text className="text-white font-bold text-base">Submit Request</Text>
                         </TouchableOpacity>

@@ -39,7 +39,8 @@ export default function AddEventModal({
   const [endMinute, setEndMinute] = useState("00");
   const [endPeriod, setEndPeriod] = useState<"AM"|"PM">("AM");
   
-  const [roomNo, setRoomNo] = useState("");
+  const [collegeRoomId, setCollegeRoomId] = useState<number | null>(null);
+  const [rooms, setRooms] = useState<any[]>([]);
   const [topicId, setTopicId] = useState<number | null>(null);
   
   // Academics state
@@ -114,6 +115,19 @@ export default function AddEventModal({
     loadData();
   }, [collegeId, facultyCtx, isOpen]);
 
+  // Load college rooms
+  useEffect(() => {
+    if (!collegeId || !isOpen) return;
+    supabase
+      .from("college_rooms")
+      .select("collegeRoomId, roomNo")
+      .eq("collegeId", collegeId)
+      .eq("isActive", true)
+      .is("deletedAt", null)
+      .order("roomNo", { ascending: true })
+      .then(({ data }) => setRooms(data || []));
+  }, [collegeId, isOpen]);
+
   
   useEffect(() => {
     if (!subjectId || !isOpen) return;
@@ -138,7 +152,7 @@ export default function AddEventModal({
   useEffect(() => {
     if (!isOpen || !value || mode !== "edit") return;
     setSelectedType(value.type || "class");
-    setRoomNo(value.roomNo || "");
+    setCollegeRoomId(value.collegeRoomId || null);
     setDate(new Date(value.date || Date.now()));
     setTitle(value.title || "");
     setMeetingLink(value.meetingLink || "");
@@ -185,7 +199,7 @@ export default function AddEventModal({
       date: date.toISOString().split("T")[0],
       fromTime: startTime,
       toTime: endTime,
-      roomNo,
+      collegeRoomId: collegeRoomId!,
       meetingLink: selectedType === "meeting" && meetingPlatform !== "zoom" ? meetingLink : null,
       meetingId: selectedType === "meeting" && meetingPlatform === "zoom" ? meetingId : null,
       meetingPassword: selectedType === "meeting" && meetingPlatform === "zoom" ? meetingPassword : null,
@@ -341,12 +355,12 @@ export default function AddEventModal({
 
             {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Room No.</Text>
-            <TextInput
-              value={roomNo}
-              onChangeText={setRoomNo}
-              placeholder="e.g. 101"
-              className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
-            />
+            <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
+              <Picker selectedValue={collegeRoomId} onValueChange={setCollegeRoomId}>
+                <Picker.Item label="Select Room" value={null} />
+                {rooms.map(r => <Picker.Item key={r.collegeRoomId} label={r.roomNo} value={r.collegeRoomId} />)}
+              </Picker>
+            </View>
 
             {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Education Type</Text>

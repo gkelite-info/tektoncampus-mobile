@@ -15,7 +15,11 @@ export type CalendarEventRow = {
   } | null;
   type: string;
   date: string;
-  roomNo: string;
+  collegeRoomId: number;
+  college_rooms?: {
+    collegeRoomId: number;
+    roomNo: string;
+  } | null;
   fromTime: string;
   toTime: string;
   meetingLink: string | null;
@@ -46,7 +50,8 @@ export async function fetchCalendarEvents(
   eventTopic,
   type,
   date,
-  roomNo,
+  collegeRoomId,
+  college_rooms (collegeRoomId, roomNo),
   fromTime,
   toTime,
   meetingLink,
@@ -105,7 +110,7 @@ export async function saveCalendarEvent(payload: {
   eventTitle?: string | null;
   type: "class" | "meeting" | "exam" | "quiz";
   date: string;
-  roomNo: string;
+  collegeRoomId: number;
   fromTime: string;
   toTime: string;
   meetingLink?: string | null;
@@ -123,7 +128,7 @@ export async function saveCalendarEvent(payload: {
         eventTopic: payload.eventTopic,
         type: payload.type,
         date: payload.date,
-        roomNo: payload.roomNo,
+        collegeRoomId: payload.collegeRoomId,
         fromTime: payload.fromTime,
         toTime: payload.toTime,
         meetingTitle: payload.type === "meeting" ? payload.eventTitle : null,
@@ -154,7 +159,7 @@ export async function saveCalendarEvent(payload: {
       eventTopic: payload.eventTopic,
       type: payload.type,
       date: payload.date,
-      roomNo: payload.roomNo,
+      collegeRoomId: payload.collegeRoomId,
       fromTime: payload.fromTime,
       toTime: payload.toTime,
       meetingTitle: payload.type === "meeting" ? payload.eventTitle : null,
@@ -261,7 +266,7 @@ export async function notifyStudentsOfEvent(
     message += `(${payload.eventTitle}) `;
   }
 
-  message += `has been scheduled for ${payload.date} from ${payload.fromTime.slice(0, 5)} to ${payload.toTime.slice(0, 5)} in Room ${payload.roomNo}.`;
+  message += `has been scheduled for ${payload.date} from ${payload.fromTime.slice(0, 5)} to ${payload.toTime.slice(0, 5)}${payload.roomNo ? ` in Room ${payload.roomNo}` : ""}.`;
 
   if (payload.meetingLink) {
     message += ` Link: ${payload.meetingLink}`;

@@ -22,7 +22,7 @@ export default function AddEventModal({
   const { userId, collegeId, loading } = useUser();
   const [facultyCtx, setFacultyCtx] = useState<any>(null);
 
-  // Form State
+  
   const [title, setTitle] = useState("");
   const [selectedType, setSelectedType] = useState("class");
   const [meetingPlatform, setMeetingPlatform] = useState("meet");
@@ -114,7 +114,7 @@ export default function AddEventModal({
     loadData();
   }, [collegeId, facultyCtx, isOpen]);
 
-  // Load Topics
+  
   useEffect(() => {
     if (!subjectId || !isOpen) return;
     supabase
@@ -134,7 +134,7 @@ export default function AddEventModal({
       });
   }, [subjectId, isOpen]);
 
-  // Handle Edit Mode prepopulation
+  
   useEffect(() => {
     if (!isOpen || !value || mode !== "edit") return;
     setSelectedType(value.type || "class");
@@ -213,7 +213,7 @@ export default function AddEventModal({
     <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
       <View className="flex-1 bg-black/50 justify-end">
         <View className="bg-white h-[90%] rounded-t-3xl overflow-hidden">
-          {/* Header */}
+          {}
           <View className="flex-row items-center justify-between p-5 border-b border-gray-100">
             <Text className="text-xl font-bold text-gray-800">
               {mode === "edit" ? "Edit Event" : "New Event"}
@@ -224,7 +224,7 @@ export default function AddEventModal({
           </View>
 
           <ScrollView className="flex-1 p-5" contentContainerStyle={{ paddingBottom: 40 }}>
-            {/* Type */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-2">Type</Text>
             <View className="flex-row gap-2 mb-4">
               {["class", "meeting", "exam"].map((t) => (
@@ -242,7 +242,7 @@ export default function AddEventModal({
               ))}
             </View>
 
-            {/* Subject Picker */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Subject</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={subjectId} onValueChange={(val) => { setSubjectId(val); setTopicId(null); }}>
@@ -251,7 +251,7 @@ export default function AddEventModal({
               </Picker>
             </View>
 
-            {/* Topic Picker */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Topic</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={topicId} onValueChange={setTopicId}>
@@ -260,7 +260,7 @@ export default function AddEventModal({
               </Picker>
             </View>
 
-            {/* Meeting Fields */}
+            {}
             {selectedType === "meeting" && (
               <>
                 <Text className="text-sm font-medium text-gray-700 mb-1">Meeting Title</Text>
@@ -270,7 +270,7 @@ export default function AddEventModal({
                   placeholder="e.g. Parent Meeting"
                   className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
                 />
-                {/* Simplified meeting platform inputs */}
+                {}
                 <Text className="text-sm font-medium text-gray-700 mb-1">Meeting Link</Text>
                 <TextInput
                   value={meetingLink}
@@ -281,7 +281,7 @@ export default function AddEventModal({
               </>
             )}
 
-            {/* Date */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Date</Text>
             <TouchableOpacity 
               onPress={() => setDatePickerVisibility(true)}
@@ -298,7 +298,7 @@ export default function AddEventModal({
               date={date}
             />
 
-            {/* Time Pickers (Simplified to TextInput for hour/min due to Picker styling limitations on iOS, or just use Picker. We use Picker here) */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Start Time</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
@@ -339,7 +339,7 @@ export default function AddEventModal({
               </View>
             </View>
 
-            {/* Room */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Room No.</Text>
             <TextInput
               value={roomNo}
@@ -348,7 +348,7 @@ export default function AddEventModal({
               className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
             />
 
-            {/* Academics Display */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Education Type</Text>
             <TextInput editable={false} value={educations.find(e => e.collegeEducationId === educationId)?.collegeEducationType || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
@@ -366,7 +366,7 @@ export default function AddEventModal({
               </Picker>
             </View>
 
-            {/* Sections */}
+            {}
             <Text className="text-sm font-medium text-gray-700 mb-1">Sections</Text>
             <View className="border border-gray-300 rounded-lg p-2 mb-6">
               {sections.map(s => {

@@ -37,7 +37,7 @@ export const TableSkeleton = () => {
         <View className="w-full border border-gray-100 rounded-xl overflow-hidden bg-white p-4 max-md:p-0 max-md:border-none max-md:bg-transparent">
             {isTabletOrDesktop ? (
                 <View className="w-full flex-col">
-                    {/* Fake Header Matrix */}
+                    {}
                     <View className="flex-row justify-between mb-4 border-b border-gray-100 pb-2">
                         {[1, 2, 3, 4, 5].map((i) => (
                             <Skeleton key={i} className="h-4 w-20 rounded" />

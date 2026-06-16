@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+
 
 export type ResumePersonal = {
   fullName: string;
@@ -144,7 +144,7 @@ function sortEducationHighToPrimary(items: ResumeEducation[]): ResumeEducation[]
   });
 }
 
-// ─── Main Fetcher ─────────────────────────────────────────────────────────────
+
 
 export async function fetchAllResumeData(studentId: number): Promise<ResumeData> {
   const [
@@ -248,7 +248,7 @@ export async function fetchAllResumeData(studentId: number): Promise<ResumeData>
       .maybeSingle(),
   ]);
 
-  // Group skills by category
+  
   const categoryMap = new Map<string, string[]>();
   (skillRows ?? []).forEach((row: any) => {
     const name: string = row.resume_skills_master?.name;

@@ -63,7 +63,7 @@ export default function FacultyDashLeft() {
             if (currentFacultyId) {
                 setFacultyId(currentFacultyId);
 
-                // Fetch Subjects
+                
                 const { data: subjectData } = await supabase
                     .from("faculty_sections")
                     .select("college_subjects(subjectName)")
@@ -78,7 +78,7 @@ export default function FacultyDashLeft() {
                     setFacultySubject(`(${subjects})`);
                 }
 
-                // 2. Fetch the dynamic classes and stats using the ported helpers
+                
                 const [classesData, statsData] = await Promise.all([
                     getUpcomingClasses(userId),
                     getFacultyDashboardStats(currentFacultyId),

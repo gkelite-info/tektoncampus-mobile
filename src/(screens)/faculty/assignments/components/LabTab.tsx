@@ -68,7 +68,7 @@ export default function LabTab() {
             fileSize: lab.fileSize || 0,
             fileUrl: lab.pdfUrl && lab.pdfUrl.startsWith('http') ? lab.pdfUrl : undefined,
             uploadedAt: lab.createdAt,
-            // Keep original IDs for editing
+            
             collegeSubjectId: lab.collegeSubjectId,
             collegeAcademicYearId: lab.collegeAcademicYearId,
             collegeSectionsId: lab.collegeSectionsId,
@@ -136,7 +136,7 @@ export default function LabTab() {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Add Button */}
+      {}
       <TouchableOpacity
         className="bg-[#16284F] rounded-lg py-3 items-center mb-4 mt-2"
         onPress={handleAdd}
@@ -144,7 +144,7 @@ export default function LabTab() {
         <Text className="text-white font-bold">{t('Upload Lab Manual')}</Text>
       </TouchableOpacity>
 
-      {/* List */}
+      {}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         {isLoading ? (
           <View className="mt-4">

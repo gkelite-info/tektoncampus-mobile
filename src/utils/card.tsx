@@ -91,7 +91,7 @@ export default function CardComponent({
     let inlineHeightStyle: ViewStyle = {};
     if (detectedHeight) {
         inlineHeightStyle = { height: detectedHeight };
-        // Remove h-[...] or h-... or generic px height classes from finalStyleStr so twrnc doesn't process it
+        
         finalStyleStr = finalStyleStr
             .replace(/h-\[[^\]]+\]/g, "")
             .replace(/\bh-\d+\b/g, "")

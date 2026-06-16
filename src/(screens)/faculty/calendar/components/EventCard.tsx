@@ -77,7 +77,7 @@ const EventCard = ({
       onPress={onClick}
       className="flex-1 rounded-md overflow-hidden"
     >
-      {/* HEADER STRIP */}
+      {}
       <View
         className="flex-row items-center p-2 border-b border-dashed"
         style={{
@@ -120,7 +120,7 @@ const EventCard = ({
         </View>
       </View>
 
-      {/* BODY */}
+      {}
       <View
         className="flex-1 p-2"
         style={{ backgroundColor: style.lightBg }}

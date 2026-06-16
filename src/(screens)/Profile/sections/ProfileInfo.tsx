@@ -28,7 +28,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
     useEffect(() => {
-        // Simulate a small loading state for the shimmer effect parity
+        
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 800);
@@ -67,7 +67,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
             </View>
 
             <ScrollView className="flex-1 p-4" contentContainerStyle={{ paddingBottom: 40 }}>
-                {/* Photo Section */}
+                {}
                 <View className="items-center mb-8">
                     <View className="w-32 h-32 rounded-full border-4 border-[#43C17A] bg-gray-100 items-center justify-center overflow-hidden mb-4 ">
                         {profilePhoto ? (
@@ -92,7 +92,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {
                     </TouchableOpacity>
                 </View>
 
-                {/* Info Section */}
+                {}
                 <View className="px-2">
                     <Text className="text-2xl font-bold text-[#1B2B5B] mb-6">{fullName}</Text>
 

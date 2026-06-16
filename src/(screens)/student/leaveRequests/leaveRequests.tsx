@@ -9,7 +9,7 @@ export default function LeaveRequestsScreen() {
     const headerHeight = useHeaderHeight();
     const [showForm, setShowForm] = useState(false);
 
-    // Mocks
+    
     const balances = [
         { type: "Sick Leave", count: 4, color: "#EF4444" },
         { type: "Casual Leave", count: 6, color: "#3B82F6" },
@@ -47,7 +47,7 @@ export default function LeaveRequestsScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Leave Requests
@@ -57,7 +57,7 @@ export default function LeaveRequestsScreen() {
                     </Text>
                 </View>
 
-                {/* Balances Section */}
+                {}
                 <View className="flex-row justify-between mb-6" style={{ gap: 10 }}>
                     {balances.map((bal, idx) => (
                         <View key={idx} className="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 items-center">
@@ -75,14 +75,14 @@ export default function LeaveRequestsScreen() {
                     ))}
                 </View>
 
-                {/* Action Form Toggle */}
+                {}
                 {showForm ? (
                     <View className="bg-white p-5 rounded-2xl shadow-md border border-slate-100 mb-6">
                         <Text className="text-[#1E293B] text-[15px] mb-4" style={{ fontFamily: fonts.bold }}>
                             New Leave Application
                         </Text>
                         
-                        {/* Mock Input fields */}
+                        {}
                         <Text className="text-slate-500 text-xs mb-1.5" style={{ fontFamily: fonts.medium }}>Leave Type</Text>
                         <View className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 mb-3">
                             <Text className="text-slate-700 text-xs" style={{ fontFamily: fonts.regular }}>Sick Leave</Text>
@@ -122,7 +122,7 @@ export default function LeaveRequestsScreen() {
                     </TouchableOpacity>
                 )}
 
-                {/* Leave History List */}
+                {}
                 <View>
                     <Text className="text-[#1E293B] text-[16px] mb-3" style={{ fontFamily: fonts.bold }}>
                         Application History

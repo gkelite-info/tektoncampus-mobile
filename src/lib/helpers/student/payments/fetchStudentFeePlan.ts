@@ -67,7 +67,7 @@ export async function fetchStudentFeePlan(
             getFirst(student.college_session)?.sessionName || "Session";
         const defaultProgram = `${eduType} ${branchCode} - ${sessionName}`;
 
-        // 1. Get Current Academic History
+        
         const { data: academicHistory } = await supabase
             .from("student_academic_history")
             .select("collegeAcademicYearId, collegeSemesterId")
@@ -75,7 +75,7 @@ export async function fetchStudentFeePlan(
             .eq("isCurrent", true)
             .maybeSingle();
 
-        // 2. 🔥 FOOLPROOF DATA FETCH: Join Semesters with their Academic Years
+        
         const { data: allSemestersRaw } = await supabase
             .from("college_semester")
             .select(
@@ -93,20 +93,20 @@ export async function fetchStudentFeePlan(
             .eq("collegeEducationId", student.collegeEducationId)
             .eq("college_academic_year.collegeBranchId", student.collegeBranchId);
 
-        // 3. 🔥 DATA TRANSFORMATION: Sort chronologically by Year, then Semester
+        
         const sortedSemesters = (allSemestersRaw || []).sort((a, b) => {
             const yearA = getFirst(a.college_academic_year);
             const yearB = getFirst(b.college_academic_year);
 
-            // First sort by the Academic Year (1st Year, 2nd Year, etc.)
+            
             if (yearA.collegeAcademicYearId !== yearB.collegeAcademicYearId) {
                 return yearA.collegeAcademicYearId - yearB.collegeAcademicYearId;
             }
-            // If same year, sort by semester (1 or 2)
+            
             return a.collegeSemester - b.collegeSemester;
         });
 
-        // 4. Get Fee Obligation
+        
         const { data: obligation, error: obligationError } = await supabase
             .from("student_fee_obligation")
             .select(`studentFeeObligationId, totalAmount`)
@@ -118,7 +118,7 @@ export async function fetchStudentFeePlan(
 
         if (obligationError || !obligation) return null;
 
-        // 5. Get the Base Fee Structure
+        
         const { data: feeStructs } = await supabase
             .from("college_fee_structure")
             .select("*")
@@ -159,13 +159,13 @@ export async function fetchStudentFeePlan(
             subTotal > 0 ? Math.round((gstAmount / subTotal) * 100) : 0;
         const baseSemesterFee = subTotal + gstAmount;
 
-        // 6. Build the Dynamic Roadmap with ABSOLUTE Indexing
+        
         const { data: collectionRows } = await supabase
             .from("student_fee_collection")
             .select("collegeSemesterId, collectedAmount")
             .eq("studentFeeObligationId", obligation.studentFeeObligationId);
 
-        // Fallback: If no current history, default to the very first chronological semester
+        
         const targetSemesterId =
             academicHistory?.collegeSemesterId ||
             (sortedSemesters?.[0]?.collegeSemesterId ?? null);
@@ -198,7 +198,7 @@ export async function fetchStudentFeePlan(
             },
         );
 
-        // 7. Calculate Program Totals
+        
         const totalProgramPayable =
             baseSemesterFee * (sortedSemesters?.length || 1);
         const totalProgramPaid = semesterRoadmap.reduce(
@@ -210,7 +210,7 @@ export async function fetchStudentFeePlan(
             totalProgramPayable - totalProgramPaid,
         );
 
-        // 8. Get Current Semester Totals
+        
         const currentSemData = semesterRoadmap.find((s) => s.isCurrent);
         const currentSemPending = currentSemData
             ? currentSemData.pendingAmount
@@ -230,12 +230,12 @@ export async function fetchStudentFeePlan(
             applicableFees: subTotal,
             scholarship: 0,
 
-            // Program Totals
+            
             totalPayable: totalProgramPayable,
             paidTillNow: totalProgramPaid,
             pendingAmount: totalProgramPending,
 
-            // Current Semester Details
+            
             semesterTotalPayable: baseSemesterFee,
             semesterPaidTillNow: currentSemPaid,
             semesterPendingAmount: currentSemPending,

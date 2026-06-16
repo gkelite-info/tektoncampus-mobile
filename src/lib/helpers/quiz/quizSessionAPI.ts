@@ -7,7 +7,7 @@ export async function startOrGetQuizSession(
 ): Promise<{ startedAt: string }> {
     const now = new Date().toISOString();
 
-    // ✅ Upsert — if row exists for this attempt, ignore (don't overwrite startedAt)
+    
     const { error: upsertError } = await supabase
         .from("quiz_sessions")
         .upsert(
@@ -24,7 +24,7 @@ export async function startOrGetQuizSession(
             ],
             {
                 onConflict: "quizId,studentId,attemptNumber",
-                ignoreDuplicates: true, // ✅ never overwrite original startedAt
+                ignoreDuplicates: true, 
             },
         );
 
@@ -33,7 +33,7 @@ export async function startOrGetQuizSession(
         throw upsertError;
     }
 
-    // ✅ Always fetch the real startedAt for this specific attempt
+    
     const { data, error: fetchError } = await supabase
         .from("quiz_sessions")
         .select("startedAt")
@@ -74,7 +74,7 @@ export async function endQuizSession(
     }
 }
 
-// ✅ Helper to get attempts left — reads maxAttempts from quiz, counts submissions
+
 export async function getAttemptsLeft(
     quizId: number,
     studentId: number,
@@ -97,7 +97,7 @@ export async function getAttemptsLeft(
     const maxAttempts = quizData?.maxAttempts ?? 1;
     const usedAttempts = usedCount ?? 0;
     const attemptsLeft = Math.max(0, maxAttempts - usedAttempts);
-    const attemptNumber = usedAttempts + 1; // next attempt number
+    const attemptNumber = usedAttempts + 1; 
 
     return { attemptsLeft, attemptNumber, maxAttempts };
 }

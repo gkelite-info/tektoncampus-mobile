@@ -8,7 +8,7 @@ import { fonts } from "@/constants/fonts";
 export default function ClubScreen() {
     const headerHeight = useHeaderHeight();
     
-    const [joinedClubs, setJoinedClubs] = useState<number[]>([1]); // Pre-join the coding club
+    const [joinedClubs, setJoinedClubs] = useState<number[]>([1]); 
 
     const clubsList = [
         {
@@ -55,7 +55,7 @@ export default function ClubScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Clubs & Societies
@@ -65,14 +65,14 @@ export default function ClubScreen() {
                     </Text>
                 </View>
 
-                {/* Section: Registered/All Clubs */}
+                {}
                 <View>
                     {clubsList.map((club) => {
                         const isJoined = joinedClubs.includes(club.id);
 
                         return (
                             <View key={club.id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-4">
-                                {/* Club Header */}
+                                {}
                                 <View className="flex-row items-center mb-3">
                                     <View 
                                         className="w-10 h-10 rounded-xl items-center justify-center mr-3"
@@ -90,12 +90,12 @@ export default function ClubScreen() {
                                     </View>
                                 </View>
 
-                                {/* Description */}
+                                {}
                                 <Text className="text-slate-500 text-xs leading-5 mb-4" style={{ fontFamily: fonts.regular }}>
                                     {club.desc}
                                 </Text>
 
-                                {/* Stats & Join button */}
+                                {}
                                 <View className="flex-row justify-between items-center border-t border-slate-50 pt-4">
                                     <View className="flex-row gap-4">
                                         <View>

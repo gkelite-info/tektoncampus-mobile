@@ -17,7 +17,7 @@ async function clearPersistedNavigationState() {
 
 export async function logoutUser() {
     try {
-        // Only run web storage cleanup if we are explicitly running on a Web platform browser
+        
         if (Platform.OS === 'web' && typeof window !== 'undefined') {
             localStorage.clear();
             sessionStorage.clear();
@@ -41,7 +41,7 @@ export async function logoutUser() {
         return { success: true };
     } catch (err: any) {
         console.error("Logout error caught:", err);
-        // Fallback to true if Supabase already cleared the token but crashed on a web check
+        
         return { success: true };
     }
 }

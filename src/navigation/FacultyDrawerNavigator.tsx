@@ -11,13 +11,15 @@ import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
 import {
-    StudentProgressScreen,
     PlacementsScreen,
-    MeetingsScreen,
     MyAttendanceScreen,
     WellbeingScreen,
     SettingsScreen,
 } from "@/(screens)/student/mockScreens";
+import FacultyMeetingsPage from "@/(screens)/faculty/meetings/meetings";
+
+import StudentProgressScreen from "@/(screens)/faculty/student-progress/index";
+import StudentProgressDetailsScreen from "@/(screens)/faculty/student-progress/details";
 
 import ProjectsScreen from "@/(screens)/faculty/projects/index";
 
@@ -53,6 +55,7 @@ export type FacultyDrawerParamList = {
     QuizSubmissions: { quizId: string | number };
     DiscussionSubmissions: { discussionId: string | number };
     SubjectDetailsScreen: { details: any };
+    StudentProgressDetailsScreen: { rollNo: string };
 };
 
 const Tab = createBottomTabNavigator<FacultyDrawerParamList>();
@@ -116,7 +119,7 @@ export default function FacultyDrawerNavigator() {
                 <Tab.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
                 <Tab.Screen name="Club" component={FacultyClubScreen} />
                 <Tab.Screen name="Drive" component={DriveScreen} />
-                <Tab.Screen name="Meetings" component={MeetingsScreen} />
+                <Tab.Screen name="Meetings" component={FacultyMeetingsPage} />
                 <Tab.Screen name="MyAttendance" component={MyAttendanceScreen} />
                 <Tab.Screen name="Wellbeing" component={WellbeingScreen} />
                 <Tab.Screen name="Settings" component={SettingsScreen} />
@@ -124,6 +127,7 @@ export default function FacultyDrawerNavigator() {
                 <Tab.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />
                 <Tab.Screen name="DiscussionSubmissions" component={DiscussionSubmissions} options={{ headerShown: false }} />
                 <Tab.Screen name="SubjectDetailsScreen" component={SubjectDetailsScreen} options={{ headerShown: false }} />
+                <Tab.Screen name="StudentProgressDetailsScreen" component={StudentProgressDetailsScreen} options={{ headerShown: false }} />
             </Tab.Navigator>
 
             <RoleSideMenu

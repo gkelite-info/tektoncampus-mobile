@@ -8,7 +8,7 @@ export interface CompetitiveExamPayload {
   score: number;
 }
 
-// ─── GET ──────────────────────────────────────────────────────────────────────
+
 export const getCompetitiveExams = async (studentId: number) => {
   const { data, error } = await supabase
     .from("resume_competitive_exams")
@@ -24,7 +24,7 @@ export const getCompetitiveExams = async (studentId: number) => {
   return data ?? [];
 };
 
-// ─── UPSERT ───────────────────────────────────────────────────────────────────
+
 export const upsertCompetitiveExams = async (payload: CompetitiveExamPayload[]) => {
   const timestamp = now();
 
@@ -40,8 +40,8 @@ export const upsertCompetitiveExams = async (payload: CompetitiveExamPayload[]) 
   const { data, error } = await supabase
     .from("resume_competitive_exams")
     .upsert(rows, {
-      onConflict: "studentId,examName",   // requires UNIQUE("studentId","examName")
-      ignoreDuplicates: false,            // update on conflict
+      onConflict: "studentId,examName",   
+      ignoreDuplicates: false,            
     })
     .select();
 
@@ -53,7 +53,7 @@ export const upsertCompetitiveExams = async (payload: CompetitiveExamPayload[]) 
   return data;
 };
 
-// ─── SOFT DELETE ──────────────────────────────────────────────────────────────
+
 export const softDeleteExam = async (studentId: number, examName: string) => {
   const { error } = await supabase
     .from("resume_competitive_exams")

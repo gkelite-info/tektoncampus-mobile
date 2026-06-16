@@ -41,7 +41,7 @@ export default function ProfileKeySkills() {
     const handleAddSkill = async (category: string, name: string) => {
         setIsAdding(true);
         try {
-            // Map category names back to section
+            
             const categoryMap: Record<string, "technical" | "soft" | "tools"> = {
                 "Technical Skills": "technical",
                 "Soft Skills": "soft",
@@ -105,7 +105,7 @@ export default function ProfileKeySkills() {
             </View>
 
             <View className="gap-6 mb-10">
-                {/* Technical Skills */}
+                {}
                 <View>
                     <View className="flex-row items-center justify-between mb-3">
                         <Text className="text-lg text-[#43C17A] font-medium">Technical Skills</Text>
@@ -116,7 +116,7 @@ export default function ProfileKeySkills() {
                     </View>
                 </View>
 
-                {/* Soft Skills */}
+                {}
                 <View>
                     <View className="flex-row items-center justify-between mb-3">
                         <Text className="text-lg text-[#43C17A] font-medium">Soft Skills</Text>
@@ -127,7 +127,7 @@ export default function ProfileKeySkills() {
                     </View>
                 </View>
 
-                {/* Tools */}
+                {}
                 <View>
                     <View className="flex-row items-center justify-between mb-3">
                         <Text className="text-lg text-[#43C17A] font-medium">Tools & Frameworks</Text>

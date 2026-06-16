@@ -165,12 +165,7 @@ function UnitCard({ unit, onOpenTopicPdf }: UnitCardProps) {
                 </View>
 
                 <View className="flex-row items-center justify-end mt-1 mb-2">
-                    {/* <View className="flex-row items-center gap-1">
-                        <Clock size={12} color={colors.solidEnd} weight="fill" />
-                        <Text className={`text-[10px] font-semibold ${colors.title}`}>
-                            {unit.dateRange}
-                        </Text>
-                    </View> */}
+                    {}
                     <Text className={`text-base ${colors.title}`} style={{ fontFamily: fonts.bold }}>
                         {percentage}%
                     </Text>

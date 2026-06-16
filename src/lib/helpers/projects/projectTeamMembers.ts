@@ -65,7 +65,7 @@ export async function fetchExistingProjectTeamMember(
         .single();
 
     if (error) {
-        // no row found
+        
         if (error.code === "PGRST116") {
             return { success: true, data: null };
         }

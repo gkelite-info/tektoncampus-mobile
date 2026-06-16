@@ -33,7 +33,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
     const scrollViewRef = useRef<ScrollView>(null);
     const [workStatus, setWorkStatus] = useState<string | null>(null);
 
-    // Filter out employment if fresher (can connect to actual user state later)
+    
     const filteredSteps = useMemo(() => {
         if (!workStatus) return RESUME_STEP_DATA;
         if (workStatus.toLowerCase() === "fresher") {
@@ -44,7 +44,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
 
     const activeIndex = filteredSteps.findIndex(s => s.id === currentStepId);
 
-    // Auto-scroll logic could go here based on step width (~80px per step)
+    
     useEffect(() => {
         if (scrollViewRef.current && activeIndex >= 0) {
             scrollViewRef.current.scrollTo({
@@ -69,7 +69,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
     return (
         <View className="w-full bg-white rounded-xl  p-4 mb-4">
             <View className="flex-row items-center gap-2">
-                {/* Left Arrow */}
+                {}
                 <TouchableOpacity
                     onPress={handlePrev}
                     disabled={activeIndex === 0}
@@ -78,7 +78,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
                     <CaretLeft size={14} color="#525252" />
                 </TouchableOpacity>
 
-                {/* Scrollable steps */}
+                {}
                 <ScrollView
                     ref={scrollViewRef}
                     horizontal
@@ -126,7 +126,7 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
                     </View>
                 </ScrollView>
 
-                {/* Right Arrow */}
+                {}
                 <TouchableOpacity
                     onPress={handleNext}
                     disabled={activeIndex === filteredSteps.length - 1}

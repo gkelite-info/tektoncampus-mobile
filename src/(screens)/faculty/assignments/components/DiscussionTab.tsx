@@ -123,7 +123,7 @@ export default function DiscussionTab() {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Sub-tabs for Active / Completed */}
+      {}
       <View className="flex-row border-b border-gray-200 mb-4 bg-white rounded-lg p-1 shadow-sm mx-1">
         <TouchableOpacity
           onPress={() => setActiveView('active')}
@@ -143,7 +143,7 @@ export default function DiscussionTab() {
         </TouchableOpacity>
       </View>
 
-      {/* Add Button */}
+      {}
       {activeView === 'active' && (
         <TouchableOpacity
           className="bg-[#16284F] rounded-lg py-3 items-center mb-4"
@@ -153,7 +153,7 @@ export default function DiscussionTab() {
         </TouchableOpacity>
       )}
 
-      {/* List */}
+      {}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         {isLoading ? (
           <View className="mt-4">

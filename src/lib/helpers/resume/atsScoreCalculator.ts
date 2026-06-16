@@ -1,15 +1,15 @@
 import { ResumeData } from "./Resumedatafetcher";
 
 export type ATSBreakdown = {
-  contact: number;       // 8pts  - contact info completeness
-  hardSkills: number;    // 25pts - technical/domain skills
-  softSkills: number;    // 8pts  - interpersonal skills
-  summary: number;       // 15pts - keyword density + action verbs + length
-  experience: number;    // 15pts - internships with descriptions & achievements
-  education: number;     // 10pts - completeness of education
-  certifications: number;// 7pts  - certs presence
-  projects: number;      // 7pts  - projects with tools & descriptions
-  extras: number;        // 5pts  - awards + exams + languages
+  contact: number;       
+  hardSkills: number;    
+  softSkills: number;    
+  summary: number;       
+  experience: number;    
+  education: number;     
+  certifications: number;
+  projects: number;      
+  extras: number;        
 };
 
 export type ATSResult = {
@@ -17,27 +17,27 @@ export type ATSResult = {
   breakdown: ATSBreakdown;
   label: "Poor" | "Average" | "Good" | "Excellent";
   color: string;
-  tips: string[]; // actionable improvement tips
+  tips: string[]; 
 };
 
-// ─── Keyword Banks ────────────────────────────────────────────────────────────
+
 
 const HARD_SKILL_KEYWORDS = [
-  // Programming Languages
+  
   "java","python","c++","c#","javascript","typescript","kotlin","swift","go","rust","php","ruby","scala","r programming",
-  // Web
+  
   "react","angular","vue","node.js","next.js","html","css","rest api","graphql","spring boot","django","flask","express",
-  // Data & AI
+  
   "machine learning","deep learning","data science","tensorflow","pytorch","numpy","pandas","sql","mongodb","postgresql","mysql",
   "data structures","algorithms","algorithm design","nlp","computer vision",
-  // Cloud & DevOps
+  
   "aws","azure","gcp","docker","kubernetes","git","ci/cd","jenkins","linux","microservices","terraform",
-  // Engineering/Domain
+  
   "circuit analysis","power systems","control systems","embedded systems","microcontrollers","digital logic design",
   "electrical design","switchgear","matlab","embedded","j2ee","spring","hibernate",
-  // Tools
+  
   "vs code","postman","jira","figma","tableau","power bi","excel","servicenow","active directory",
-  // Other Tech
+  
   "web development","mobile development","cybersecurity","networking","blockchain",
 ];
 
@@ -56,20 +56,20 @@ const ACTION_VERBS = [
 ];
 
 const MEASURABLE_PATTERNS = [
-  /\d+\s*%/,           // 30%
-  /\d+\s*x\b/i,        // 3x
+  /\d+\s*%/,           
+  /\d+\s*x\b/i,        
   /increased by/i,
   /reduced by/i,
   /improved by/i,
-  /\$\s*\d+/,          // $500
+  /\$\s*\d+/,          
   /\d+\s*(users|students|clients|projects|teams|members)/i,
-  /top\s*\d+/i,        // top 5
+  /top\s*\d+/i,        
   /\d+\s*(hours|days|weeks)/i,
   /saved\s*\d+/i,
   /rank(ed)?\s*\d+/i,
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 
 function matchKeywords(text: string, keywords: string[]): number {
   const lower = text.toLowerCase();
@@ -84,7 +84,7 @@ function countActionVerbs(text: string): number {
   return matchKeywords(text, ACTION_VERBS);
 }
 
-// ─── Main Calculator ──────────────────────────────────────────────────────────
+
 
 export function calculateATSScore(data: ResumeData): ATSResult {
   const b: ATSBreakdown = {
@@ -101,8 +101,8 @@ export function calculateATSScore(data: ResumeData): ATSResult {
 
   const tips: string[] = [];
 
-  // ── 1. CONTACT INFO (8pts) ────────────────────────────────────────────────
-  // Real ATS: checks name, email, phone, location, LinkedIn as must-haves
+  
+  
   const p = data.personal;
   if (p) {
     if (p.fullName?.trim())     b.contact += 2;
@@ -113,8 +113,8 @@ export function calculateATSScore(data: ResumeData): ATSResult {
   }
   if (b.contact < 8) tips.push("Complete all contact details including LinkedIn profile.");
 
-  // ── 2. HARD SKILLS (25pts) ────────────────────────────────────────────────
-  // Real ATS: hard skills are most heavily weighted, keyword matching against job roles
+  
+  
   const hardSkillsList = data.skillGroups
     .filter(g => {
       const cat = g.categoryName?.toLowerCase() ?? "";
@@ -127,13 +127,13 @@ export function calculateATSScore(data: ResumeData): ATSResult {
   const recognizedHardSkills = matchKeywords(hardSkillsText, HARD_SKILL_KEYWORDS);
   const totalHardSkills = hardSkillsList.length;
 
-  // Quantity check (10pts)
+  
   if (totalHardSkills >= 3)  b.hardSkills += 3;
   if (totalHardSkills >= 6)  b.hardSkills += 3;
   if (totalHardSkills >= 10) b.hardSkills += 2;
   if (totalHardSkills >= 15) b.hardSkills += 2;
 
-  // Keyword relevance check (15pts) — this is the real ATS differentiator
+  
   if (recognizedHardSkills >= 2)  b.hardSkills += 3;
   if (recognizedHardSkills >= 5)  b.hardSkills += 3;
   if (recognizedHardSkills >= 8)  b.hardSkills += 3;
@@ -143,8 +143,8 @@ export function calculateATSScore(data: ResumeData): ATSResult {
   if (totalHardSkills < 6) tips.push("Add more technical hard skills (aim for 10+).");
   if (recognizedHardSkills < 5) tips.push("Include industry-standard keywords like AWS, Python, Git, Docker.");
 
-  // ── 3. SOFT SKILLS (8pts) ─────────────────────────────────────────────────
-  // Real ATS: checks for interpersonal/behavioral keywords
+  
+  
   const softSkillsList = data.skillGroups
     .filter(g => {
       const cat = g.categoryName?.toLowerCase() ?? "";
@@ -152,7 +152,7 @@ export function calculateATSScore(data: ResumeData): ATSResult {
     })
     .flatMap(g => g.skills.map(s => s.toLowerCase()));
 
-  // Also check all skills against soft keyword bank
+  
   const allSkillsText = data.skillGroups.flatMap(g => g.skills).join(" ").toLowerCase();
   const recognizedSoftSkills = matchKeywords(allSkillsText, SOFT_SKILL_KEYWORDS);
 
@@ -162,8 +162,8 @@ export function calculateATSScore(data: ResumeData): ATSResult {
 
   if (recognizedSoftSkills < 2) tips.push("Add soft skills like Communication, Leadership, Problem Solving.");
 
-  // ── 4. SUMMARY (15pts) ───────────────────────────────────────────────────
-  // Real ATS: summary must have keywords, action verbs, measurable results, adequate length
+  
+  
   const summaryText = data.summary?.trim() ?? "";
   const wordCount = summaryText.split(/\s+/).filter(Boolean).length;
 

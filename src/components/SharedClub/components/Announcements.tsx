@@ -249,7 +249,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
         );
     }
 
-    // Only authorized roles can post: Presidents, Vice Presidents, Mentors, Responsible Faculty
+    
     const canPost = ["president", "vicepresident", "mentor", "responsiblefaculty"].includes(userRole.toLowerCase());
 
     return (

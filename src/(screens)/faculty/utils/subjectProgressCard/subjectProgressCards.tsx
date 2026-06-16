@@ -65,15 +65,7 @@ function SubjectCardRow({ subject }: { subject: SubjectProgressCard }) {
                 </View>
 
                 <View className="w-[50px] h-[50px] items-center justify-center">
-                    {/* <TinyDonut
-              percentage={subject.percentage}
-              width={50}
-              height={50}
-              radialStart={subject.radialStart}
-              radialEnd={subject.radialEnd}
-              remainingColor={subject.remainingColor}
-            />
-          */}
+                    {}
                     <Text className="text-base text-[#16284F]" style={{ fontFamily: fonts.semiBold }}>{subject.percentage}%</Text>
                 </View>
             </View>

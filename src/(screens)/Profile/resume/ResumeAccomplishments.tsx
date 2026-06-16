@@ -71,7 +71,7 @@ export default function ResumeAccomplishments() {
                     <Text className="text-lg font-semibold text-[#000000]">Accomplishments</Text>
                 </View>
 
-                {/* Awards */}
+                {}
                 <View className="mb-8">
                     <Text className="text-md font-semibold text-[#43C17A] mb-3">Awards</Text>
                     {awards.map(aw => (
@@ -90,7 +90,7 @@ export default function ResumeAccomplishments() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Certifications */}
+                {}
                 <View className="mb-8">
                     <Text className="text-md font-semibold text-[#43C17A] mb-3">Certifications</Text>
                     {certs.map(cert => (
@@ -109,7 +109,7 @@ export default function ResumeAccomplishments() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Clubs & Committees */}
+                {}
                 <View className="mb-4">
                     <Text className="text-md font-semibold text-[#43C17A] mb-3">Clubs & Committees</Text>
                     {clubs.map(club => (

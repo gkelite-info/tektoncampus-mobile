@@ -4,7 +4,7 @@ export interface AwardPayload {
   studentId: number;
   awardName: string;
   issuedBy: string;
-  dateReceived: string; // YYYY-MM-DD (date column)
+  dateReceived: string; 
   category: string;
   description: string;
 }

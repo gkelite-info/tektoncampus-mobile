@@ -21,7 +21,7 @@ export function AttendanceList({ data }: AttendanceListProps) {
     const t = useTranslations("Progress.student");
 
     return (
-        <View className="w-full h-[400px] flex flex-col bg-white rounded-2xl overflow-hidden">
+        <View className="w-full min-h-[300px] max-h-[500px] flex flex-col bg-white rounded-2xl overflow-hidden">
             <Text className="p-5 pb-2 text-lg text-gray-800" style={{ fontFamily: fonts.bold }}>
                 {t("Attendance by Subject")}
             </Text>

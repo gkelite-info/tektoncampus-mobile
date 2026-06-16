@@ -141,7 +141,7 @@ export default function AttendanceClient() {
                     setTotalRecords(data.totalCount || 0);
                 }
             } catch {
-                // silent
+                
             } finally {
                 if (isMounted) { setDataLoading(false); setTableLoading(false); }
             }
@@ -166,7 +166,7 @@ export default function AttendanceClient() {
             setDashboardData(data);
             setTotalRecords(data.totalCount || 0);
         } catch {
-            // silent
+            
         } finally {
             setRefreshing(false);
         }

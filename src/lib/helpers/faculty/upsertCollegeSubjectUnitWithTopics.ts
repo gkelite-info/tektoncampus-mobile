@@ -22,7 +22,7 @@ export type SavedTopic = {
   collegeId: number;
 };
 
-// Convert DD/MM/YYYY -> YYYY-MM-DD (safe)
+
 function toISODate(date?: string | null) {
   if (!date) return null;
   if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
@@ -59,9 +59,7 @@ export async function upsertCollegeSubjectUnitWithTopics(
 
   const now = new Date().toISOString();
 
-  /* -------------------------------
-   * 1. UPSERT SUBJECT UNIT
-   * ------------------------------- */
+  
 
   const { data: unit, error: unitError } = await supabase
     .from("college_subject_units")
@@ -95,9 +93,7 @@ export async function upsertCollegeSubjectUnitWithTopics(
 
   const collegeSubjectUnitId = unit.collegeSubjectUnitId;
 
-  /* -------------------------------
-   * 2. UPSERT TOPICS
-   * ------------------------------- */
+  
 
   if (topics.length > 0) {
     const topicRows = topics.map((topic, index) => ({

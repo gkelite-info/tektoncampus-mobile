@@ -4,7 +4,7 @@ export interface ClubPayload {
   studentId: number;
   clubName: string;
   role: string;
-  fromDate: string; // ISO string for timestamptz
+  fromDate: string; 
   toDate: string;
   description: string;
 }

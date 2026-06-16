@@ -27,10 +27,10 @@ export default function ProfileSteps({ currentStepId, onStepChange }: ProfileSte
     const { width: windowWidth } = Dimensions.get('window');
 
     useEffect(() => {
-        // Automatically scroll to keep the active step somewhat centered
+        
         const activeIndex = PROFILE_STEP_DATA.findIndex(s => s.id === currentStepId);
         if (activeIndex !== -1 && scrollViewRef.current) {
-            // Rough estimation: each step takes about 100px width
+            
             const ITEM_WIDTH = 100;
             const scrollX = Math.max(0, (activeIndex * ITEM_WIDTH) - (windowWidth / 2) + (ITEM_WIDTH / 2));
             scrollViewRef.current.scrollTo({ x: scrollX, animated: true });
@@ -81,7 +81,7 @@ export default function ProfileSteps({ currentStepId, onStepChange }: ProfileSte
 
                                 {index !== PROFILE_STEP_DATA.length - 1 && (
                                     <View className="w-[40px] items-center justify-center mb-5 -mx-2 z-[-1]">
-                                        {/* Dashed line effect using small dots or simple line */}
+                                        {}
                                         <View 
                                             className="h-[2px] w-full"
                                             style={{

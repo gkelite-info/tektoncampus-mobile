@@ -43,10 +43,10 @@ export default function ChangePasswordModal({ visible, onClose }: Props) {
 
         setIsLoading(true);
         try {
-            // 1. Verify current password
+            
             await verifyCurrentPassword(email, currentPassword);
             
-            // 2. Update to new password
+            
             await updateUserPassword(newPassword);
 
             Toast.show({ type: "success", text1: "Success", text2: "Password updated successfully!" });

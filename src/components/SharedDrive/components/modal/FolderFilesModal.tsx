@@ -203,7 +203,7 @@ export default function FolderFilesModal({
 
       const res = await saveDriveFile(
         {
-          driveFileId: fileId, // passing this tells saveDriveFile it's an update
+          driveFileId: fileId, 
           driveFolderId,
           collegeId,
           fileName: newFile.name,
@@ -241,7 +241,7 @@ export default function FolderFilesModal({
     setIsDeletingFile(true);
     const toDelete = files.filter((f) => filesToDelete.includes(f.driveFileId));
     
-    // Optimistic update
+    
     setFiles((prev) => prev.filter((f) => !filesToDelete.includes(f.driveFileId)));
 
     try {
@@ -326,7 +326,7 @@ export default function FolderFilesModal({
   return (
     <Modal visible={open} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       <View className="flex-1 bg-[#F8FAFC]">
-        {/* Header */}
+        {}
         <View className="bg-[#43C17A] px-4 py-4 flex-row items-center justify-between shadow-sm z-10 pt-12">
           <View className="flex-row items-center flex-1 pr-4">
             <TouchableOpacity onPress={onClose} className="p-2 mr-2">
@@ -362,7 +362,7 @@ export default function FolderFilesModal({
           </View>
         </View>
 
-        {/* Upload Progress */}
+        {}
         {uploadItems.length > 0 && (
           <View className="bg-white border-b border-gray-200 px-4 py-3">
             {uploadItems.map((item, idx) => (
@@ -390,7 +390,7 @@ export default function FolderFilesModal({
           </View>
         )}
 
-        {/* Bulk Actions */}
+        {}
         {selectedFileIds.length > 0 && (
           <View className="bg-white border-b border-gray-200 px-4 py-3 flex-row justify-between items-center">
             <Text className="text-sm font-medium text-gray-700">
@@ -406,7 +406,7 @@ export default function FolderFilesModal({
           </View>
         )}
 
-        {/* File List */}
+        {}
         {loading ? (
           <View className="flex-1 justify-center items-center">
             <ActivityIndicator size="large" color="#43C17A" />

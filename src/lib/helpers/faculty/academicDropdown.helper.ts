@@ -69,7 +69,7 @@ export function fetchAcademicDropdowns(params: {
     collegeId: number;
     educationId: number;
     academicYearId: number;
-    branchId?: number; // ✅ allow extra param
+    branchId?: number; 
 }): Promise<AcademicDropdownMap["semester"][]>;
  
 export function fetchAcademicDropdowns(params: {

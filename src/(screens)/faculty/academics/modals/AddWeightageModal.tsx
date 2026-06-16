@@ -197,7 +197,7 @@ export default function AddWeightageModal({ visible, onClose, subjectDetails }: 
                     <Text className={`font-bold ${isTotalValid ? 'text-green-700' : 'text-red-500'}`}>Total: {totalPercentage}%</Text>
                 </View>
 
-                {/* Read-only Context */}
+                {}
                 <View className="flex-col gap-3 mb-6">
                     <View className="flex-row gap-3">
                         <View className="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">

@@ -163,9 +163,7 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
                                 <Megaphone size={21} color="#282828" />
                             </TouchableOpacity>
 
-                            {/* <TouchableOpacity className="flex-row items-center ml-1 bg-gray-200 rounded-full px-2.5 py-1.5">
-                                <Text className="text-[11px] text-gray-700 font-medium">ID - {identifierId || 'N/A'}</Text>
-                            </TouchableOpacity> */}
+                            {}
                         </View>
                     </View>
 

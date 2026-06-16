@@ -158,7 +158,7 @@ export async function fetchFacultyContext(userId: number) {
         isActive: faculty.isActive,
         sections,
         faculty_subject,
-        // sectionIds: [...new Set((facultySections ?? []).map(s => s.collegeSectionsId))],
+        
         collegeAcademicYears,
         collegeAcademicYear:
             collegeAcademicYears.map(y => y.collegeAcademicYear).join(", ") || null,

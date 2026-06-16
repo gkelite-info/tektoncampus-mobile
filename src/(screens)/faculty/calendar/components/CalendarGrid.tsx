@@ -62,7 +62,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
   return (
     <View className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      {/* HEADER */}
+      {}
       <View className="flex-row items-center border-b border-gray-200 py-3 bg-gray-50">
         <TouchableOpacity onPress={handlePrevDay} className="p-3 mx-2">
           <CaretLeft size={20} color="#374151" weight="bold" />
@@ -84,10 +84,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* GRID */}
+      {}
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 20 }}>
         <View className="flex-row min-h-[720px]">
-          {/* TIME SLOTS COL */}
+          {}
           <View className="w-16 border-r border-gray-200 bg-white">
             {TIME_SLOTS.map((time, i) => (
               <View
@@ -101,9 +101,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             ))}
           </View>
 
-          {/* EVENTS COL (SINGLE DAY VIEW FOR MOBILE) */}
+          {}
           <View className="flex-1 relative">
-            {/* Background grid lines */}
+            {}
             <View className="absolute inset-0 z-0">
               {TIME_SLOTS.map((_, i) => (
                 <View
@@ -113,7 +113,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
               ))}
             </View>
 
-            {/* Events for selected day */}
+            {}
             {selectedDayObj && (
               <View className="absolute inset-0 z-10">
                 {getOverlappingEvents(

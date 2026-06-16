@@ -8,8 +8,8 @@ export interface CertificationPayload {
     certificationCompletionId: string;
     certificateLink: string;
     uploadCertificate: string;
-    startDate: string;       // ISO string e.g. "2026-04-06T00:00:00+00:00"
-    endDate: string | null;  // optional
+    startDate: string;       
+    endDate: string | null;  
 }
 
 export async function uploadCertificateFile(

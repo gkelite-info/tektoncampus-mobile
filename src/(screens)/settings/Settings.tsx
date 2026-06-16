@@ -219,7 +219,7 @@ const FontScaleSlider = React.memo(
             className="absolute h-1.5 rounded-full bg-[#16284F]"
             style={{ width: thumbLeft }}
           />
-          {/* Thumb */}
+          {}
           <View
             className="absolute h-6 w-6 rounded-full border-4 border-white bg-[#16284F] shadow-sm"
             style={{ left: thumbLeft - 12 }}
@@ -258,7 +258,7 @@ function SettingsScreen() {
           paddingBottom: Math.max(insets.bottom, 16) + 40,
         }}>
         
-        {/* Header */}
+        {}
         <View className="flex-row items-center gap-4 mb-8 pl-2">
           <View className="h-12 w-12 items-center justify-center rounded-2xl bg-[#43C17A26]">
             <GearSix size={26} color={COLORS.green} weight="fill" />
@@ -273,7 +273,7 @@ function SettingsScreen() {
           </View>
         </View>
 
-        {/* Section: Preferences */}
+        {}
         <SectionHeader title="App Preferences" />
         <SettingsGroup>
           <SettingsRow
@@ -320,7 +320,7 @@ function SettingsScreen() {
           </SettingsRow>
         </SettingsGroup>
 
-        {/* Section: Account & Security */}
+        {}
         <SectionHeader title="Account & Security" />
         <SettingsGroup>
           <SettingsRow
@@ -345,7 +345,7 @@ function SettingsScreen() {
           />
         </SettingsGroup>
 
-        {/* Section: About */}
+        {}
         <SectionHeader title="About" />
         <SettingsGroup>
           <SettingsRow
@@ -357,7 +357,7 @@ function SettingsScreen() {
         </SettingsGroup>
       </ScrollView>
 
-      {/* Language Modal */}
+      {}
       <Modal
         visible={languageModalVisible}
         transparent

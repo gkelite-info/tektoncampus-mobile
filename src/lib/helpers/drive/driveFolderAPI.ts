@@ -7,7 +7,7 @@ export type DriveFolderRow = {
   collegeId: number;
   parentFolderId: number | null;
   folderName: string;
-  color?: string | null; // Added color field for cross-device consistency
+  color?: string | null; 
   createdBy: number;
   is_deleted: boolean | null;
   createdAt: string;
@@ -178,7 +178,7 @@ export async function deleteDriveFolder(
 ) {
   const now = new Date().toISOString();
 
-  // 1. Soft delete the folder
+  
   const { error: folderError } = await supabase
     .from("drive_folders")
     .update({
@@ -192,7 +192,7 @@ export async function deleteDriveFolder(
     return { success: false };
   }
 
-  // 🟢 2. NEW: Cascade soft delete to all files inside this folder
+  
   const { error: fileError } = await supabase
     .from("drive_files")
     .update({
@@ -206,7 +206,7 @@ export async function deleteDriveFolder(
     console.error("deleteDriveFolder (files cascade) error:", fileError);
   }
 
-  // 3. Remove all files inside this folder from bucket physically
+  
   const folderPath = `${collegeId}/${driveFolderId}`;
   const { data: files, error: listError } = await supabase.storage
     .from(BUCKET)

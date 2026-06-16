@@ -146,19 +146,7 @@ export default function RoleSideMenu({
                                         );
                                     })}
 
-                                    {/* <View className="mb-8">
-                                        <TouchableOpacity
-                                            activeOpacity={0.7}
-                                            className="flex-row items-center py-3 px-6 mx-0 my-1 rounded-r-full mt-4 border-t border-green-500/30 pt-4"
-                                        >
-                                            <View className="mr-4">
-                                                <SignOut size={24} color="#ef4444" weight="bold" />
-                                            </View>
-                                            <Text className="text-base font-semibold text-[#ef4444]">
-                                                Logout
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View> */}
+                                    {}
                                 </ScrollView>
                             </SafeAreaView>
                         </MotiView>

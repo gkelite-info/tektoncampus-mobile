@@ -184,11 +184,11 @@ export default function TaskPanelModal({
                 await onDeleteTask?.(taskId);
                 Toast.show({ type: "success", text1: t("Task deleted successfully") });
                 
-                // Reload data immediately
+                
                 if (role === "student") {
                     loadStudentTasks();
                 } else {
-                    // For faculty logic if needed
+                    
                 }
             } else {
                 Toast.show({ type: "error", text1: t("Failed to delete task") });
@@ -203,7 +203,7 @@ export default function TaskPanelModal({
 
     const tasksToShow =
         role === "faculty"
-            ? [] // Assuming faculty doesn't use TaskPanelModal to list their tasks here, they just add via TaskModal, but we can pass facultyTasks if needed
+            ? [] 
             : activeView === "student"
                 ? studentTaskData
                 : facultyTaskData;
@@ -221,7 +221,7 @@ export default function TaskPanelModal({
         <Modal visible={open} transparent animationType="slide">
             <View className="flex-1 bg-black/50 justify-end">
                 <View className="bg-[#F4F4F4] rounded-t-3xl h-[85%] overflow-hidden flex-col">
-                    {/* HEADER */}
+                    {}
                     <View className="bg-white border-b border-gray-200 px-5 py-4 flex-row items-center justify-between shrink-0">
                         <View className="flex-row items-center gap-3">
                             <View className="bg-[#E7F7EE] rounded-full p-1.5">
@@ -248,7 +248,7 @@ export default function TaskPanelModal({
                         </View>
                     </View>
 
-                    {/* CONTENT */}
+                    {}
                     <View className="flex-1 px-4 pt-4 pb-10">
                         <View className="bg-white rounded-2xl shadow-sm p-4 flex-1">
                             <View className="flex-row justify-between items-center mb-4">

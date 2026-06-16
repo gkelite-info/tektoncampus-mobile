@@ -30,7 +30,7 @@ export default function MyAttendanceScreen() {
                 contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
+                {}
                 <View className="mb-6">
                     <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
                         Attendance Analytics
@@ -40,7 +40,7 @@ export default function MyAttendanceScreen() {
                     </Text>
                 </View>
 
-                {/* Overall Attendance Card */}
+                {}
                 <View className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6">
                     <View className="flex-row justify-between items-center mb-4">
                         <View>
@@ -56,7 +56,7 @@ export default function MyAttendanceScreen() {
                         </View>
                     </View>
 
-                    {/* Breakdown counts */}
+                    {}
                     <View className="flex-row justify-between bg-slate-50 p-3 rounded-xl">
                         <View className="items-center flex-1">
                             <Text className="text-slate-400 text-[10px]" style={{ fontFamily: fonts.regular }}>Total Classes</Text>
@@ -73,7 +73,7 @@ export default function MyAttendanceScreen() {
                     </View>
                 </View>
 
-                {/* Attendance Alert warning */}
+                {}
                 {subjectWiseAttendance.some(sub => sub.percent < 75) && (
                     <View className="bg-rose-50 border border-rose-100 p-4 rounded-xl flex-row items-start mb-6">
                         <View className="mr-3 mt-0.5">
@@ -90,7 +90,7 @@ export default function MyAttendanceScreen() {
                     </View>
                 )}
 
-                {/* Subject Wise breakdown */}
+                {}
                 <View>
                     <Text className="text-[#1E293B] text-[16px] mb-4" style={{ fontFamily: fonts.bold }}>
                         Subject-wise Breakdown
@@ -112,12 +112,12 @@ export default function MyAttendanceScreen() {
                                     </Text>
                                 </View>
 
-                                {/* Progress Bar */}
+                                {}
                                 <View className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-2">
                                     <View className={`h-full rounded-full ${barColor}`} style={{ width: `${item.percent}%` }} />
                                 </View>
 
-                                {/* Ratio */}
+                                {}
                                 <Text className="text-slate-400 text-[10px]" style={{ fontFamily: fonts.regular }}>
                                     Attended: {item.present} / {item.total} lectures
                                 </Text>

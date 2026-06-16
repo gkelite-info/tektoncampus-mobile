@@ -71,7 +71,7 @@ export default function FacultyLeaveDetailsModal({ isOpen, onClose, leaveData, f
         { event: "INSERT", schema: "public", table: "leave_request_chats", filter: `studentLeaveId=eq.${leaveData.id}` },
         async (payload) => {
           if (payload.new.senderRole !== "FACULTY") {
-             reloadHistory(); // simpler for mobile to just reload for now
+             reloadHistory(); 
           }
         }
       )
@@ -190,7 +190,7 @@ export default function FacultyLeaveDetailsModal({ isOpen, onClose, leaveData, f
     <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 bg-black/40">
         <View className="bg-[#F5F7FA] mt-10 flex-1 rounded-t-3xl overflow-hidden shadow-2xl">
-          {/* Header */}
+          {}
           <View className="bg-white flex-row items-center justify-between p-4 border-b border-gray-100 shadow-sm z-10">
             <Text className="text-lg font-bold text-[#282828]">Leave Details</Text>
             <TouchableOpacity onPress={onClose} className="p-1 bg-gray-100 rounded-full">
@@ -198,7 +198,7 @@ export default function FacultyLeaveDetailsModal({ isOpen, onClose, leaveData, f
             </TouchableOpacity>
           </View>
 
-          {/* Leave Info Context (Scrollable Header) */}
+          {}
           <View className="bg-white border-b border-gray-200 p-4">
              <View className="flex-row items-center gap-3 mb-3">
                <Avatar src={leaveData?.photo} size={48} />
@@ -226,7 +226,7 @@ export default function FacultyLeaveDetailsModal({ isOpen, onClose, leaveData, f
              </View>
           </View>
 
-          {/* Chat List */}
+          {}
           {isInitialLoading ? (
             <View className="flex-1 items-center justify-center">
               <ActivityIndicator size="large" color="#43C17A" />
@@ -249,7 +249,7 @@ export default function FacultyLeaveDetailsModal({ isOpen, onClose, leaveData, f
             />
           )}
 
-          {/* Chat Input */}
+          {}
           <View className="bg-white p-3 border-t border-gray-100 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
             {selectedFile && (
               <View className="flex-row items-center bg-gray-100 rounded-lg p-2 mb-2 self-start border border-gray-200 max-w-[200px]">

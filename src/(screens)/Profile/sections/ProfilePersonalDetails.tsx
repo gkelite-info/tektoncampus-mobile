@@ -4,7 +4,7 @@ import { Lock } from "phosphor-react-native";
 import Toast from "react-native-toast-message";
 import { useUser } from "@/utils/context/UserContext";
 
-// Make sure these API calls exist, or we assume they do because they were ported / shared
+
 import { fetchCollegeCode, fetchPersonalDetails, savePersonalDetails, updateUserBasic } from "../../../lib/helpers/profile/profilePersonalDetailsAPI";
 
 export default function ProfilePersonalDetails() {
@@ -128,7 +128,7 @@ export default function ProfilePersonalDetails() {
             <Text className="text-lg font-semibold text-[#000000] mb-6">Personal Details</Text>
 
             <View className="gap-5">
-                {/* Full Name */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">
                         Full Name<Text className="text-red-500">*</Text>
@@ -141,7 +141,7 @@ export default function ProfilePersonalDetails() {
                     />
                 </View>
 
-                {/* Mobile */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">
                         Mobile Number<Text className="text-red-500">*</Text>
@@ -158,7 +158,7 @@ export default function ProfilePersonalDetails() {
                     </View>
                 </View>
 
-                {/* Email */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">
                         Email ID<Text className="text-red-500">*</Text>
@@ -175,7 +175,7 @@ export default function ProfilePersonalDetails() {
                     </View>
                 </View>
 
-                {/* College Code */}
+                {}
                 {!isSuperAdmin && (
                     <View>
                         <Text className="text-sm font-medium text-[#282828] mb-1">College Code</Text>
@@ -192,7 +192,7 @@ export default function ProfilePersonalDetails() {
                     </View>
                 )}
 
-                {/* LinkedIn */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">LinkedIn ID</Text>
                     <TextInput
@@ -205,7 +205,7 @@ export default function ProfilePersonalDetails() {
                     />
                 </View>
 
-                {/* Current City */}
+                {}
                 <View>
                     <Text className="text-sm font-medium text-[#282828] mb-1">Current City</Text>
                     <TextInput
@@ -216,7 +216,7 @@ export default function ProfilePersonalDetails() {
                     />
                 </View>
 
-                {/* College ID */}
+                {}
                 {!isSuperAdmin && (
                     <View>
                         <Text className="text-sm font-medium text-[#282828] mb-1">
@@ -235,7 +235,7 @@ export default function ProfilePersonalDetails() {
                     </View>
                 )}
 
-                {/* Work Status */}
+                {}
                 {role !== "Parent" && (
                     <View className="mt-2">
                         <Text className="text-sm font-medium text-[#282828] mb-2">Work Status</Text>

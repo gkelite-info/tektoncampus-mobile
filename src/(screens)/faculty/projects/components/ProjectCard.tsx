@@ -4,7 +4,7 @@ import { ProjectCardProps } from "@/lib/types/project";
 import tw from "twrnc";
 import { CaretLeft } from "phosphor-react-native";
 
-// Since Avatar is used in the source, we can mock it or use an existing one. 
+
 import { Avatar } from "@/components/Avatar";
 
 type ProjectCardListProps = {

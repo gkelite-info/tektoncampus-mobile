@@ -7,7 +7,7 @@ import ProfileSteps from "./components/ProfileSteps";
 import ResumeSteps from "./components/ResumeSteps";
 import ProfileDashboard from "./ProfileDashboard";
 
-// Profile Sections
+
 import ProfileInfo from "./sections/ProfileInfo";
 import ProfilePersonalDetails from "./sections/ProfilePersonalDetails";
 import ProfileEducation from "./sections/ProfileEducation";
@@ -15,7 +15,7 @@ import ProfileKeySkills from "./sections/ProfileKeySkills";
 import ProfileLanguages from "./sections/ProfileLanguages";
 import ProfileSummary from "./sections/ProfileSummary";
 
-// Resume Sections
+
 import ResumePersonalDetails from "./resume/ResumePersonalDetails";
 import ResumeEducation from "./resume/ResumeEducation";
 import ResumeEmployment from "./resume/ResumeEmployment";
@@ -35,7 +35,7 @@ export default function ProfileContainer() {
     const [showDashboard, setShowDashboard] = useState(true);
     const [isProfileMode, setIsProfileMode] = useState(true);
     
-    // Track active steps for the top visual indicators
+    
     const [profileStepId, setProfileStepId] = useState(1);
     const [resumeStepId, setResumeStepId] = useState(1);
 
@@ -45,17 +45,17 @@ export default function ProfileContainer() {
     const insets = useSafeAreaInsets();
     const headerHeight = insets.top + 60; 
 
-    // Handle jumping between Profile tabs
+    
     const handleProfileStepChange = (step: any) => {
         setProfileStepId(step.id);
         profileScrollRef.current?.scrollTo({ x: SCREEN_WIDTH * (step.id - 1), animated: true });
     };
 
-    // Handle jumping between Resume tabs
+    
     const handleResumeStepChange = (step: any) => {
         setResumeStepId(step.id);
-        // Note: if ResumeSteps filters out Employment based on fresher status, 
-        // the step.id might skip 9, but we always render all 12 blocks sequentially in the ScrollView to prevent unmounts.
+        
+        
         resumeScrollRef.current?.scrollTo({ x: SCREEN_WIDTH * (step.id - 1), animated: true });
     };
 
@@ -70,7 +70,7 @@ export default function ProfileContainer() {
     return (
         <View className="flex-1 bg-[#F4F4F4]" style={{ paddingTop: headerHeight + 30, paddingBottom: 130 }}>
             <View className="flex-1 pt-4">
-                {/* Mode Toggles with Back Button */}
+                {}
                 <View className="flex-row items-center mb-4 px-4">
                     <TouchableOpacity onPress={() => setShowDashboard(true)} className="p-2 mr-2">
                         <ArrowLeft size={24} color="#282828" />
@@ -88,7 +88,7 @@ export default function ProfileContainer() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Profile Flow */}
+                {}
                 <View style={{ flex: 1, display: isProfileMode ? 'flex' : 'none' }}>
                     <View className="px-4 z-10">
                         <ProfileSteps currentStepId={profileStepId} onStepChange={handleProfileStepChange} />
@@ -98,7 +98,7 @@ export default function ProfileContainer() {
                             ref={profileScrollRef}
                             horizontal
                             pagingEnabled
-                            scrollEnabled={false} // Controlled exclusively via Top Tabs
+                            scrollEnabled={false} 
                             showsHorizontalScrollIndicator={false}
                             bounces={false}
                         >
@@ -124,7 +124,7 @@ export default function ProfileContainer() {
                     </View>
                 </View>
 
-                {/* Resume Flow */}
+                {}
                 <View style={{ flex: 1, display: !isProfileMode ? 'flex' : 'none' }}>
                     <View className="px-4 z-10">
                         <ResumeSteps currentStepId={resumeStepId} onStepChange={handleResumeStepChange} />
@@ -134,7 +134,7 @@ export default function ProfileContainer() {
                             ref={resumeScrollRef}
                             horizontal
                             pagingEnabled
-                            scrollEnabled={false} // Controlled exclusively via Top Tabs
+                            scrollEnabled={false} 
                             showsHorizontalScrollIndicator={false}
                             bounces={false}
                         >

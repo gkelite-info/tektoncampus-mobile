@@ -172,7 +172,7 @@ export type StudentDiscussionUploadRow = {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  marksObtained: number | null; // 🟢 Added marksObtained
+  marksObtained: number | null; 
 };
 
 export async function fetchDiscussionUploads(
@@ -221,7 +221,7 @@ export async function fetchDiscussionUploads(
     throw error;
   }
 
-  // 🟢 GROUP UPLOADS BY STUDENT ID
+  
   const studentMap = new Map<number, any>();
 
   (data ?? []).forEach((row: any) => {
@@ -230,10 +230,10 @@ export async function fetchDiscussionUploads(
     );
 
     if (!studentMap.has(row.studentId)) {
-      // First time seeing this student, create their base record
+      
       studentMap.set(row.studentId, {
         studentId: row.studentId,
-        // We use the array to hold all file URLs for this student
+        
         files: [{ id: row.studentDiscussionUploadId, url: row.fileUrl }],
         submittedAt: row.submittedAt,
         marksObtained: row.marksObtained,
@@ -245,13 +245,13 @@ export async function fetchDiscussionUploads(
         },
       });
     } else {
-      // Student already exists, just push the new file to their array
+      
       const existing = studentMap.get(row.studentId);
       existing.files.push({
         id: row.studentDiscussionUploadId,
         url: row.fileUrl,
       });
-      // Ensure we keep the most recent submission time if there are multiple
+      
       if (new Date(row.submittedAt) > new Date(existing.submittedAt)) {
         existing.submittedAt = row.submittedAt;
       }
@@ -261,7 +261,7 @@ export async function fetchDiscussionUploads(
   return Array.from(studentMap.values());
 }
 
-// 🟢 NEW: Update Marks for a Student's Discussion
+
 export async function updateStudentDiscussionMarks(
   studentId: number,
   discussionId: number,
@@ -283,4 +283,4 @@ export async function updateStudentDiscussionMarks(
   return { success: true };
 }
 
-// ... (keep the rest of your student_discussion_uploadsAPI.ts functions exactly the same) ...
+

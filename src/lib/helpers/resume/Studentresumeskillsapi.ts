@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+
 
 export type SkillCategory = {
   resumeSkillCategoryId: number;
@@ -18,7 +18,7 @@ export type GroupedSkills = {
   skills: SkillMaster[];
 };
 
-// ─── Fetch all skill categories ───────────────────────────────────────────────
+
 
 export async function getSkillCategories(): Promise<SkillCategory[]> {
   const { data, error } = await supabase
@@ -34,7 +34,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
   return data ?? [];
 }
 
-// ─── Fetch all skills from master ─────────────────────────────────────────────
+
 
 export async function getAllSkillsMaster(): Promise<SkillMaster[]> {
   const { data, error } = await supabase
@@ -50,7 +50,7 @@ export async function getAllSkillsMaster(): Promise<SkillMaster[]> {
   return data ?? [];
 }
 
-// ─── Fetch skills grouped by category ────────────────────────────────────────
+
 
 export async function getGroupedSkills(): Promise<GroupedSkills[]> {
   const [categories, skills] = await Promise.all([
@@ -66,7 +66,7 @@ export async function getGroupedSkills(): Promise<GroupedSkills[]> {
   }));
 }
 
-// ─── Fetch student's saved skill IDs ─────────────────────────────────────────
+
 
 export async function getStudentResumeSkillIds(
   studentId: number
@@ -83,13 +83,13 @@ export async function getStudentResumeSkillIds(
   return (data ?? []).map((r: { resumeSkillId: number }) => r.resumeSkillId);
 }
 
-// ─── Save student skills (replace all) ───────────────────────────────────────
+
 
 export async function saveStudentResumeSkills(
   studentId: number,
   skillIds: number[]
 ): Promise<void> {
-  // 1. Delete existing
+  
   const { error: deleteError } = await supabase
     .from("student_resume_skills")
     .delete()
@@ -102,7 +102,7 @@ export async function saveStudentResumeSkills(
 
   if (skillIds.length === 0) return;
 
-  // 2. Insert new
+  
   const now = new Date().toISOString();
   const rows = skillIds.map((resumeSkillId) => ({
     studentId,

@@ -71,7 +71,7 @@ export async function checkSectionConflict(params: {
   for (const event of events) {
     if (ignoreEventId && event.calendarEventId === ignoreEventId) continue;
 
-    // Check time overlap
+    
     const overlaps = fromTime < event.toTime && toTime > event.fromTime;
     if (!overlaps) continue;
 

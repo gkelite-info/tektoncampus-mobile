@@ -155,190 +155,190 @@ export async function deactivateDiscussionForum(discussionId: number) {
   return { success: true };
 }
 
-// export async function fetchDiscussionsByFacultyId(facultyId: number) {
-//     const today = new Date().toISOString().split("T")[0];
-//     await supabase
-//         .from("discussion_forum")
-//         .update({
-//             isActive: false,
-//             is_deleted: true,
-//             deletedAt: new Date().toISOString(),
-//         })
-//         .lt("deadline", today)
-//         .eq("isActive", true);
 
-//     const { data, error } = await supabase
-//         .from("discussion_forum")
-//         .select(`
-//       discussionId,
-//       title,
-//       description,
-//       deadline,
-//       createdAt,
-//       discussion_file_uploads (
-//             fileUrl,
-//             isActive,
-//             is_deleted,
-//             deletedAt
-//      )
-//     `)
-//         .eq("createdBy", facultyId)
-//         .eq("isActive", true)
-//         .is("deletedAt", null)
-//         .order("deadline", { ascending: true });
 
-//     if (error) {
-//         console.error("fetchDiscussionsByFacultyId error:", error);
-//         throw error;
-//     }
 
-//     // return data ?? [];
-//     return (data ?? []).map(d => ({
-//         ...d,
-//         discussion_file_uploads:
-//             (d.discussion_file_uploads ?? [])
-//                 .filter(f => f.isActive && !f.is_deleted && !f.deletedAt)
-//     }));
-// }
 
-// export async function fetchCompletedDiscussionsByFacultyId(facultyId: number) {
-//     const { data, error } = await supabase
-//         .from("discussion_forum")
-//         .select(`
-//             discussionId,
-//             title,
-//             description,
-//             deadline,
-//             createdAt,
-//             discussion_file_uploads (
-//                 fileUrl,
-//                 isActive,
-//                 is_deleted,
-//                 deletedAt
-//             )
-//         `)
-//         .eq("createdBy", facultyId)
-//         .eq("isActive", false)
-//         .order("deadline", { ascending: false });
 
-//     if (error) {
-//         console.error("fetchCompletedDiscussionsByFacultyId error:", error);
-//         throw error;
-//     }
 
-//     // return data ?? [];
 
-//     return (data ?? []).map(d => ({
-//         ...d,
-//         discussion_file_uploads:
-//             (d.discussion_file_uploads ?? [])
-//                 .filter(f => f.isActive && !f.is_deleted && !f.deletedAt) // CHANGED
-//     }));
-// }
 
-// export async function fetchDiscussionsByFacultyId(
-//   facultyId: number,
-//   page: number = 1,
-//   limit: number = 10,
-// ) {
-//   const today = new Date().toISOString().split("T")[0];
-//   const from = (page - 1) * limit;
-//   const to = from + limit - 1;
 
-//   await supabase
-//     .from("discussion_forum")
-//     .update({
-//       isActive: false,
-//       is_deleted: true,
-//       deletedAt: new Date().toISOString(),
-//     })
-//     .lt("deadline", today)
-//     .eq("isActive", true);
 
-//   const { data, error, count } = await supabase
-//     .from("discussion_forum")
-//     .select(
-//       `
-//             discussionId,
-//             title,
-//             description,
-//             deadline,
-//             createdAt,
-//             discussion_file_uploads (
-//                 fileUrl,
-//                 isActive,
-//                 is_deleted,
-//                 deletedAt
-//             )
-//         `,
-//       { count: "exact" },
-//     )
-//     .eq("createdBy", facultyId)
-//     .eq("isActive", true)
-//     .is("deletedAt", null)
-//     .order("deadline", { ascending: true })
-//     .range(from, to);
 
-//   if (error) {
-//     console.error("fetchDiscussionsByFacultyId error:", error);
-//     throw error;
-//   }
 
-//   const mappedData = (data ?? []).map((d) => ({
-//     ...d,
-//     discussion_file_uploads: (d.discussion_file_uploads ?? []).filter(
-//       (f: any) => f.isActive && !f.is_deleted && !f.deletedAt,
-//     ),
-//   }));
 
-//   return { data: mappedData, totalCount: count ?? 0 };
-// }
 
-// export async function fetchCompletedDiscussionsByFacultyId(
-//   facultyId: number,
-//   page: number = 1,
-//   limit: number = 10,
-// ) {
-//   const from = (page - 1) * limit;
-//   const to = from + limit - 1;
 
-//   const { data, error, count } = await supabase
-//     .from("discussion_forum")
-//     .select(
-//       `
-//             discussionId,
-//             title,
-//             description,
-//             deadline,
-//             createdAt,
-//             discussion_file_uploads (
-//                 fileUrl,
-//                 isActive,
-//                 is_deleted,
-//                 deletedAt
-//             )
-//         `,
-//       { count: "exact" },
-//     )
-//     .eq("createdBy", facultyId)
-//     .eq("isActive", false)
-//     .order("deadline", { ascending: false })
-//     .range(from, to);
 
-//   if (error) {
-//     console.error("fetchCompletedDiscussionsByFacultyId error:", error);
-//     throw error;
-//   }
 
-//   const mappedData = (data ?? []).map((d) => ({
-//     ...d,
-//     discussion_file_uploads: (d.discussion_file_uploads ?? []).filter(
-//       (f: any) => f.isActive && !f.is_deleted && !f.deletedAt,
-//     ),
-//   }));
 
-//   return { data: mappedData, totalCount: count ?? 0 };
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export async function fetchDiscussionById(discussionId: number) {
   const { data, error } = await supabase
@@ -416,7 +416,7 @@ export async function fetchDiscussionsByFacultyId(
     )
     .eq("createdBy", facultyId)
     .eq("isActive", true)
-    .eq("is_deleted", false) // 🟢 ADDED: Exclude deleted
+    .eq("is_deleted", false) 
     .is("deletedAt", null)
     .order("deadline", { ascending: true })
     .range(from, to);
@@ -464,7 +464,7 @@ export async function fetchCompletedDiscussionsByFacultyId(
     )
     .eq("createdBy", facultyId)
     .eq("isActive", false)
-    .eq("is_deleted", false) // 🟢 ADDED: Exclude deleted
+    .eq("is_deleted", false) 
     .order("deadline", { ascending: false })
     .range(from, to);
 

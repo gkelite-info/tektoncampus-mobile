@@ -228,7 +228,7 @@ export default function CalendarScreen() {
     const conflict = await hasDbConflict(payload, editingEventId ? Number(editingEventId) : undefined);
     if (conflict) {
       setPendingEvent(payload);
-      // Removed Alert; consider custom confirmation UI if needed
+      
       return await executeSave(payload);
     }
     return executeSave(payload);

@@ -12,7 +12,7 @@ export const detailedStudentsData: DetailedStudent[] = [
   {
     rollNo: "21CSE001",
     studentName: "Rohan Patel",
-    photo: "https://i.pravatar.cc/150?img=1", // Modified local path to network
+    photo: "https://i.pravatar.cc/150?img=1", 
     attendancePercent: 92,
     internalMarks: "45/50",
     assignmentsDone: "5/5",

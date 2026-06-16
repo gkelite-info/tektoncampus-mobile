@@ -157,7 +157,7 @@ export async function sendEmailLocally({
     );
     if (uniqueUsers.length === 0) throw new Error("No recipients found.");
 
-    // GATEKEEPER: THE DIVERT TRICK
+    
     const realUserIds = uniqueUsers.map((u) => u.userId).filter((id) => id !== 0);
     let preferences: any[] = [];
 

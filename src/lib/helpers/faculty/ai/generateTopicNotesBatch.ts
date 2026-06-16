@@ -46,7 +46,7 @@ function getErrorMessage(error: unknown) {
         return serialized;
       }
     } catch {
-      // Fall through to the generic message below.
+      
     }
   }
 

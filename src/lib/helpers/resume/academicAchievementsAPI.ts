@@ -2,13 +2,13 @@ import { supabase } from "@/lib/supabaseClient";
 
 const now = () => new Date().toISOString();
 
-// ─── TYPES ────────────────────────────────────────────────────────────────────
+
 export interface AcademicAchievementPayload {
   studentId: number;
   achievementName: string;
 }
 
-// ─── GET ──────────────────────────────────────────────────────────────────────
+
 export const getAcademicAchievements = async (studentId: number) => {
   const { data, error } = await supabase
     .from("resume_academic_achievements")
@@ -24,7 +24,7 @@ export const getAcademicAchievements = async (studentId: number) => {
   return data ?? [];
 };
 
-// ─── UPSERT ───────────────────────────────────────────────────────────────────
+
 export const upsertAcademicAchievements = async (
   payload: AcademicAchievementPayload[]
 ) => {
@@ -41,7 +41,7 @@ export const upsertAcademicAchievements = async (
   const { data, error } = await supabase
     .from("resume_academic_achievements")
     .upsert(rows, {
-      onConflict: "studentId,achievementName", // ⚠️ IMPORTANT (add unique constraint)
+      onConflict: "studentId,achievementName", 
       ignoreDuplicates: false,
     })
     .select();
@@ -54,7 +54,7 @@ export const upsertAcademicAchievements = async (
   return data;
 };
 
-// ─── SOFT DELETE ──────────────────────────────────────────────────────────────
+
 export const softDeleteAcademicAchievement = async (
   studentId: number,
   achievementName: string

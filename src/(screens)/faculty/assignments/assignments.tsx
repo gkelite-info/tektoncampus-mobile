@@ -24,7 +24,7 @@ export default function FacultyAssignments() {
   return (
     <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
       <View style={{ flex: 1, paddingTop: headerHeight + 16, paddingHorizontal: 16 }}>
-        {/* Header Text */}
+        {}
         <View className="mb-3 mt-0">
           <Text className="font-bold text-2xl mb-1 text-[#282828]">
             {activeTab === 'assignments' && t('Assignments')}
@@ -74,7 +74,7 @@ export default function FacultyAssignments() {
           </ScrollView>
         </View>
 
-        {/* Tab Content */}
+        {}
         <View style={{ flex: 1 }}>
           {activeTab === 'assignments' && <AssignmentTab />}
           {activeTab === 'quiz' && <QuizTab />}

@@ -117,7 +117,7 @@ export default function AssignmentTab() {
 
   const handleSaveForm = () => {
     setShowForm(false);
-    loadAssignments(1, activeView); // reload to get new data
+    loadAssignments(1, activeView); 
   };
 
   if (showForm) {
@@ -134,7 +134,7 @@ export default function AssignmentTab() {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Sub-tabs for Active / Evaluated */}
+      {}
       <View className="flex-row border-b border-gray-200 mb-4">
         <TouchableOpacity
           onPress={() => setActiveView('active')}
@@ -154,7 +154,7 @@ export default function AssignmentTab() {
         </TouchableOpacity>
       </View>
 
-      {/* Add Button */}
+      {}
       {activeView === 'active' && (
         <TouchableOpacity
           className="bg-[#16284F] rounded-lg py-3 items-center mb-4"
@@ -164,7 +164,7 @@ export default function AssignmentTab() {
         </TouchableOpacity>
       )}
 
-      {/* List */}
+      {}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         {isLoading && currentPage === 1 ? (
           <View className="mt-4">

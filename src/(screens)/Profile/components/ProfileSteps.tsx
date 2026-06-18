@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useRef, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { CheckCircle } from "phosphor-react-native";
 
 export type StepItem = {

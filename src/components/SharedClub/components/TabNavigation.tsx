@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from 'react-native';
 import tw from "twrnc";
 
 interface TabNavigationProps {

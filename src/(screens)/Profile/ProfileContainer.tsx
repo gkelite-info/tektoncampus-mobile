@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft } from "phosphor-react-native";
 
@@ -31,44 +32,44 @@ import ResumeTemplates from "./resume/ResumeTemplates";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function ProfileContainer() {
-    const [showDashboard, setShowDashboard] = useState(true);
-    const [isProfileMode, setIsProfileMode] = useState(true);
-    
-    
-    const [profileStepId, setProfileStepId] = useState(1);
-    const [resumeStepId, setResumeStepId] = useState(1);
+export default function ProfileContainer() {const { t } = useTranslation();
+  const [showDashboard, setShowDashboard] = useState(true);
+  const [isProfileMode, setIsProfileMode] = useState(true);
 
-    const profileScrollRef = useRef<ScrollView>(null);
-    const resumeScrollRef = useRef<ScrollView>(null);
 
-    const insets = useSafeAreaInsets();
-    const headerHeight = insets.top + 60; 
+  const [profileStepId, setProfileStepId] = useState(1);
+  const [resumeStepId, setResumeStepId] = useState(1);
 
-    
-    const handleProfileStepChange = (step: any) => {
-        setProfileStepId(step.id);
-        profileScrollRef.current?.scrollTo({ x: SCREEN_WIDTH * (step.id - 1), animated: true });
-    };
+  const profileScrollRef = useRef<ScrollView>(null);
+  const resumeScrollRef = useRef<ScrollView>(null);
 
-    
-    const handleResumeStepChange = (step: any) => {
-        setResumeStepId(step.id);
-        
-        
-        resumeScrollRef.current?.scrollTo({ x: SCREEN_WIDTH * (step.id - 1), animated: true });
-    };
+  const insets = useSafeAreaInsets();
+  const headerHeight = insets.top + 60;
 
-    const handleModeSwitch = (toProfile: boolean) => {
-        setIsProfileMode(toProfile);
-    };
 
-    if (showDashboard) {
-        return <ProfileDashboard onOpenProfileDetails={() => setShowDashboard(false)} />;
-    }
+  const handleProfileStepChange = (step: any) => {
+    setProfileStepId(step.id);
+    profileScrollRef.current?.scrollTo({ x: SCREEN_WIDTH * (step.id - 1), animated: true });
+  };
 
-    return (
-        <View className="flex-1 bg-[#F4F4F4]" style={{ paddingTop: headerHeight + 30, paddingBottom: 130 }}>
+
+  const handleResumeStepChange = (step: any) => {
+    setResumeStepId(step.id);
+
+
+    resumeScrollRef.current?.scrollTo({ x: SCREEN_WIDTH * (step.id - 1), animated: true });
+  };
+
+  const handleModeSwitch = (toProfile: boolean) => {
+    setIsProfileMode(toProfile);
+  };
+
+  if (showDashboard) {
+    return <ProfileDashboard onOpenProfileDetails={() => setShowDashboard(false)} />;
+  }
+
+  return (
+    <View className="flex-1 bg-[#F4F4F4]" style={{ paddingTop: headerHeight + 30, paddingBottom: 130 }}>
             <View className="flex-1 pt-4">
                 {}
                 <View className="flex-row items-center mb-4 px-4">
@@ -76,15 +77,15 @@ export default function ProfileContainer() {
                         <ArrowLeft size={24} color="#282828" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleModeSwitch(true)}>
-                        <Text className={`text-lg font-bold ${isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>
-                            Profile
-                        </Text>
+                        <Text className={`text-lg font-bold ${isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>{t("Auto.Common.Profile", "Profile")}
+
+            </Text>
                     </TouchableOpacity>
                     <Text className="text-gray-400 mx-3 text-lg">/</Text>
                     <TouchableOpacity onPress={() => handleModeSwitch(false)}>
-                        <Text className={`text-lg font-bold ${!isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>
-                            Resume
-                        </Text>
+                        <Text className={`text-lg font-bold ${!isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>{t("Auto.Common.Resume", "Resume")}
+
+            </Text>
                     </TouchableOpacity>
                 </View>
 
@@ -94,14 +95,14 @@ export default function ProfileContainer() {
                         <ProfileSteps currentStepId={profileStepId} onStepChange={handleProfileStepChange} />
                     </View>
                     <View className="flex-1 mt-2">
-                        <ScrollView 
-                            ref={profileScrollRef}
-                            horizontal
-                            pagingEnabled
-                            scrollEnabled={false} 
-                            showsHorizontalScrollIndicator={false}
-                            bounces={false}
-                        >
+                        <ScrollView
+              ref={profileScrollRef}
+              horizontal
+              pagingEnabled
+              scrollEnabled={false}
+              showsHorizontalScrollIndicator={false}
+              bounces={false}>
+              
                             <View style={{ width: SCREEN_WIDTH, paddingHorizontal: 16 }}>
                                 <ProfileInfo onNext={() => handleProfileStepChange({ id: 2 })} />
                             </View>
@@ -130,14 +131,14 @@ export default function ProfileContainer() {
                         <ResumeSteps currentStepId={resumeStepId} onStepChange={handleResumeStepChange} />
                     </View>
                     <View className="flex-1 mt-2">
-                        <ScrollView 
-                            ref={resumeScrollRef}
-                            horizontal
-                            pagingEnabled
-                            scrollEnabled={false} 
-                            showsHorizontalScrollIndicator={false}
-                            bounces={false}
-                        >
+                        <ScrollView
+              ref={resumeScrollRef}
+              horizontal
+              pagingEnabled
+              scrollEnabled={false}
+              showsHorizontalScrollIndicator={false}
+              bounces={false}>
+              
                             <View style={{ width: SCREEN_WIDTH, paddingHorizontal: 16 }}>
                                 <ResumePersonalDetails />
                             </View>
@@ -179,9 +180,6 @@ export default function ProfileContainer() {
                 </View>
 
             </View>
-        </View>
-    );
+        </View>);
+
 }
-
-
-

@@ -1,14 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-  Platform,
-  Alert,
-} from "react-native";
+import { Modal, View, TouchableOpacity, ActivityIndicator, FlatList, Platform, Alert } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, UploadSimple, X, Trash, FilePdf, FileXls, FileDoc, FileText, DownloadSimple, ArrowsClockwise } from "phosphor-react-native";
 import * as DocumentPicker from "expo-document-picker";
@@ -21,8 +13,8 @@ import {
   fetchDriveFilesByFolder,
   saveDriveFile,
   deleteDriveFile,
-  DriveFileRow,
-} from "@/lib/helpers/drive/driveFilesAPI";
+  DriveFileRow } from
+"@/lib/helpers/drive/driveFilesAPI";
 import { useUser } from "@/utils/context/UserContext";
 import DeleteFileModal from "./DeleteFileModal";
 
@@ -33,10 +25,10 @@ type FolderFilesModalProps = {
   driveFolderId: number | null;
   collegeId: number | null;
   onFilesChanged?: (
-    driveFolderId: number,
-    fileCount: number,
-    totalSizeBytes: number,
-  ) => void;
+  driveFolderId: number,
+  fileCount: number,
+  totalSizeBytes: number)
+  => void;
 };
 
 type UploadItem = {
@@ -55,7 +47,7 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
-    year: "numeric",
+    year: "numeric"
   });
 }
 
@@ -73,9 +65,8 @@ export default function FolderFilesModal({
   folderName,
   driveFolderId,
   collegeId,
-  onFilesChanged,
-}: FolderFilesModalProps) {
-  const t = (key: string) => undefined;
+  onFilesChanged
+}: FolderFilesModalProps) {const { t } = useTranslation();
   const { userId } = useUser();
 
   const [files, setFiles] = useState<DriveFileRow[]>([]);
@@ -96,18 +87,18 @@ export default function FolderFilesModal({
       return;
     }
     setLoading(true);
-    fetchDriveFilesByFolder(driveFolderId)
-      .then((data) => {
-        const fetched = data as DriveFileRow[];
-        setFiles(fetched);
-        const totalBytes = fetched.reduce(
-          (acc, f) => acc + (f.fileSize ?? 0),
-          0,
-        );
-        onFilesChanged?.(driveFolderId, fetched.length, totalBytes);
-      })
-      .catch(() => Toast.show({ type: "error", text1: "Failed to load files" }))
-      .finally(() => setLoading(false));
+    fetchDriveFilesByFolder(driveFolderId).
+    then((data) => {
+      const fetched = data as DriveFileRow[];
+      setFiles(fetched);
+      const totalBytes = fetched.reduce(
+        (acc, f) => acc + (f.fileSize ?? 0),
+        0
+      );
+      onFilesChanged?.(driveFolderId, fetched.length, totalBytes);
+    }).
+    catch(() => Toast.show({ type: "error", text1: "Failed to load files" })).
+    finally(() => setLoading(false));
   }, [open, driveFolderId]);
 
   useEffect(() => {
@@ -121,7 +112,7 @@ export default function FolderFilesModal({
     try {
       const result = await DocumentPicker.getDocumentAsync({
         multiple: true,
-        copyToCacheDirectory: true,
+        copyToCacheDirectory: true
       });
 
       if (result.canceled) return;
@@ -129,7 +120,7 @@ export default function FolderFilesModal({
       const items: UploadItem[] = result.assets.map((f) => ({
         name: f.name,
         progress: 0,
-        status: "uploading",
+        status: "uploading"
       }));
       setUploadItems(items);
       setUploading(true);
@@ -144,9 +135,9 @@ export default function FolderFilesModal({
               fileName: file.name,
               fileType: file.mimeType || "application/octet-stream",
               fileSize: file.size,
-              fileUri: file.uri,
+              fileUri: file.uri
             },
-            userId,
+            userId
           );
 
           if (!res.success) throw new Error("Upload failed");
@@ -155,22 +146,22 @@ export default function FolderFilesModal({
           setFiles(updated as DriveFileRow[]);
 
           setUploadItems((prev) =>
-            prev.map((item, idx) =>
-              idx === i ? { ...item, progress: 100, status: "done" } : item,
-            ),
+          prev.map((item, idx) =>
+          idx === i ? { ...item, progress: 100, status: "done" } : item
+          )
           );
         } catch (e) {
           setUploadItems((prev) =>
-            prev.map((item, idx) =>
-              idx === i ? { ...item, status: "error" } : item,
-            ),
+          prev.map((item, idx) =>
+          idx === i ? { ...item, status: "error" } : item
+          )
           );
         }
       }
 
       Toast.show({
         type: "success",
-        text1: result.assets.length > 1 ? `${result.assets.length} files uploaded` : "File uploaded",
+        text1: result.assets.length > 1 ? `${result.assets.length} files uploaded` : "File uploaded"
       });
       setUploading(false);
       setTimeout(() => setUploadItems([]), 3000);
@@ -186,7 +177,7 @@ export default function FolderFilesModal({
     try {
       const result = await DocumentPicker.getDocumentAsync({
         multiple: false,
-        copyToCacheDirectory: true,
+        copyToCacheDirectory: true
       });
 
       if (result.canceled) return;
@@ -203,15 +194,15 @@ export default function FolderFilesModal({
 
       const res = await saveDriveFile(
         {
-          driveFileId: fileId, 
+          driveFileId: fileId,
           driveFolderId,
           collegeId,
           fileName: newFile.name,
           fileType: newFile.mimeType || "application/octet-stream",
           fileSize: newFile.size,
-          fileUri: newFile.uri,
+          fileUri: newFile.uri
         },
-        userId,
+        userId
       );
 
       if (!res.success) throw new Error("Replace failed");
@@ -240,17 +231,17 @@ export default function FolderFilesModal({
 
     setIsDeletingFile(true);
     const toDelete = files.filter((f) => filesToDelete.includes(f.driveFileId));
-    
-    
+
+
     setFiles((prev) => prev.filter((f) => !filesToDelete.includes(f.driveFileId)));
 
     try {
       const results = await Promise.all(
         toDelete.map((f) =>
-          deleteDriveFile(f.driveFileId, collegeId, f.driveFolderId, f.fileName)
+        deleteDriveFile(f.driveFileId, collegeId, f.driveFolderId, f.fileName)
         )
       );
-      
+
       const anyFailed = results.some((r) => !r.success);
       if (anyFailed) {
         setFiles((prev) => [...toDelete, ...prev]);
@@ -258,7 +249,7 @@ export default function FolderFilesModal({
       } else {
         Toast.show({
           type: "success",
-          text1: toDelete.length > 1 ? `${toDelete.length} files deleted` : "File deleted",
+          text1: toDelete.length > 1 ? `${toDelete.length} files deleted` : "File deleted"
         });
         setSelectedFileIds([]);
       }
@@ -276,10 +267,10 @@ export default function FolderFilesModal({
     if (!collegeId) return;
     try {
       const storagePath = `${collegeId}/${file.driveFolderId}/${file.fileName.trim()}`;
-      const { data, error } = await supabase.storage
-        .from("college-drive")
-        .createSignedUrl(storagePath, 120);
-        
+      const { data, error } = await supabase.storage.
+      from("college-drive").
+      createSignedUrl(storagePath, 120);
+
       if (error || !data?.signedUrl) throw new Error("Could not get url");
 
       Toast.show({ type: "info", text1: "Downloading..." });
@@ -317,7 +308,7 @@ export default function FolderFilesModal({
 
   const toggleSelectFile = (id: number) => {
     setSelectedFileIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
@@ -346,14 +337,14 @@ export default function FolderFilesModal({
             <TouchableOpacity
               onPress={handleUpload}
               disabled={uploading}
-              className={`flex-row items-center gap-1.5 bg-white/20 px-3 py-1.5 rounded-lg ${uploading ? "opacity-50" : ""}`}
-            >
-              {uploading ? (
-                <ActivityIndicator size="small" color="#FFF" />
-              ) : (
-                <UploadSimple size={16} color="#FFF" weight="bold" />
-              )}
-              <Text className="text-white font-medium text-sm">Upload</Text>
+              className={`flex-row items-center gap-1.5 bg-white/20 px-3 py-1.5 rounded-lg ${uploading ? "opacity-50" : ""}`}>
+              
+              {uploading ?
+              <ActivityIndicator size="small" color="#FFF" /> :
+
+              <UploadSimple size={16} color="#FFF" weight="bold" />
+              }
+              <Text className="text-white font-medium text-sm">{t("Auto.Common.Upload", "Upload")}</Text>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={onClose} className="p-1">
@@ -363,10 +354,10 @@ export default function FolderFilesModal({
         </View>
 
         {}
-        {uploadItems.length > 0 && (
-          <View className="bg-white border-b border-gray-200 px-4 py-3">
-            {uploadItems.map((item, idx) => (
-              <View key={idx} className="mb-3 last:mb-0">
+        {uploadItems.length > 0 &&
+        <View className="bg-white border-b border-gray-200 px-4 py-3">
+            {uploadItems.map((item, idx) =>
+          <View key={idx} className="mb-3 last:mb-0">
                 <View className="flex-row justify-between mb-1.5">
                   <Text className="text-xs text-gray-600 flex-1 pr-4" numberOfLines={1}>
                     {item.name}
@@ -376,65 +367,65 @@ export default function FolderFilesModal({
                   </Text>
                 </View>
                 <View className="h-1.5 rounded-full bg-gray-200 overflow-hidden">
-                  {item.status === 'uploading' ? (
-                     <View className="h-full bg-blue-400 rounded-full w-1/2" />
-                  ) : (
-                     <View 
-                        className={`h-full rounded-full ${item.status === 'error' ? 'bg-red-500' : 'bg-[#43C17A]'}`} 
-                        style={{ width: `${item.progress}%` }} 
-                     />
-                  )}
+                  {item.status === 'uploading' ?
+              <View className="h-full bg-blue-400 rounded-full w-1/2" /> :
+
+              <View
+                className={`h-full rounded-full ${item.status === 'error' ? 'bg-red-500' : 'bg-[#43C17A]'}`}
+                style={{ width: `${item.progress}%` }} />
+
+              }
                 </View>
               </View>
-            ))}
+          )}
           </View>
-        )}
+        }
 
         {}
-        {selectedFileIds.length > 0 && (
-          <View className="bg-white border-b border-gray-200 px-4 py-3 flex-row justify-between items-center">
+        {selectedFileIds.length > 0 &&
+        <View className="bg-white border-b border-gray-200 px-4 py-3 flex-row justify-between items-center">
             <Text className="text-sm font-medium text-gray-700">
-              {selectedFileIds.length} selected
-            </Text>
+              {selectedFileIds.length}{t("Auto.Common.selected", "selected")}
+          </Text>
             <TouchableOpacity
-              onPress={() => openDeleteModal(selectedFileIds)}
-              className="flex-row items-center gap-1.5"
-            >
+            onPress={() => openDeleteModal(selectedFileIds)}
+            className="flex-row items-center gap-1.5">
+            
               <Trash size={18} color="#EF4444" weight="fill" />
-              <Text className="text-red-500 font-medium text-sm">Delete Selected</Text>
+              <Text className="text-red-500 font-medium text-sm">{t("Auto.Common.DeleteSelected", "Delete Selected")}</Text>
             </TouchableOpacity>
           </View>
-        )}
+        }
 
         {}
-        {loading ? (
-          <View className="flex-1 justify-center items-center">
+        {loading ?
+        <View className="flex-1 justify-center items-center">
             <ActivityIndicator size="large" color="#43C17A" />
-          </View>
-        ) : files.length === 0 ? (
-          <View className="flex-1 justify-center items-center p-8">
-            <UploadSimple size={48} color="#D1D5DB" weight="light" className="mb-4" />
-            <Text className="text-gray-500 text-center">
-              No files yet. Tap Upload to add files here.
-            </Text>
-          </View>
-        ) : (
-          <FlatList
-            data={files}
-            keyExtractor={(item) => item.driveFileId.toString()}
-            contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
-            renderItem={({ item }) => {
-              const isSelected = selectedFileIds.includes(item.driveFileId);
-              const isReplacing = replacingFileId === item.driveFileId;
-              
-              return (
-                <TouchableOpacity
-                  onPress={() => toggleSelectFile(item.driveFileId)}
-                  className={`bg-white rounded-xl mb-3 p-4 flex-row items-center border ${
-                    isSelected ? "border-[#43C17A] bg-green-50/30" : "border-gray-200"
-                  }`}
-                  style={{ opacity: isReplacing ? 0.6 : 1 }}
-                >
+          </View> :
+        files.length === 0 ?
+        <View className="flex-1 justify-center items-center p-8">
+            <UploadSimple size={48} color="#D1D5DB" weight="light" style={{ marginBottom: 16 }} />
+            <Text className="text-gray-500 text-center">{t("Auto.Common.NofilesyetTapUp", "No files yet. Tap Upload to add files here.")}
+
+          </Text>
+          </View> :
+
+        <FlatList
+          data={files}
+          keyExtractor={(item) => item.driveFileId.toString()}
+          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+          renderItem={({ item }) => {
+            const isSelected = selectedFileIds.includes(item.driveFileId);
+            const isReplacing = replacingFileId === item.driveFileId;
+
+            return (
+              <TouchableOpacity
+                onPress={() => toggleSelectFile(item.driveFileId)}
+                className={`bg-white rounded-xl mb-3 p-4 flex-row items-center border ${
+                isSelected ? "border-[#43C17A] bg-green-50/30" : "border-gray-200"}`
+                }
+                style={{ opacity: isReplacing ? 0.6 : 1 }}>
+                
                   <View className="bg-gray-50 p-2 rounded-lg mr-3">
                     {getFileIcon(item.fileName)}
                   </View>
@@ -463,11 +454,11 @@ export default function FolderFilesModal({
                       <Trash size={20} color="#EF4444" />
                     </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
-        )}
+                </TouchableOpacity>);
+
+          }} />
+
+        }
       </View>
       <DeleteFileModal
         open={deleteModalOpen}
@@ -477,8 +468,8 @@ export default function FolderFilesModal({
           setFilesToDelete([]);
         }}
         onConfirm={handleDeleteConfirm}
-        loading={isDeletingFile}
-      />
-    </Modal>
-  );
+        loading={isDeletingFile} />
+      
+    </Modal>);
+
 }

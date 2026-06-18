@@ -1,19 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Easing,
-  Image,
-  ImageBackground,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Dimensions, Easing, Image, ImageBackground, Platform, ScrollView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   ArrowLeft,
@@ -24,8 +11,8 @@ import {
   GraduationCap,
   Info,
   Lock,
-  SpinnerGap,
-} from 'phosphor-react-native';
+  SpinnerGap } from
+'phosphor-react-native';
 import { BlurView } from 'expo-blur';
 import { loginUser } from '@/services/auth/login';
 import Toast from 'react-native-toast-message';
@@ -37,7 +24,7 @@ const SAFE_TOP = Platform.OS === 'ios' ? 56 : 40;
 
 
 const T = {
-  
+
   s0_5: 2,
   s1: 4,
   s1_5: 6,
@@ -52,12 +39,12 @@ const T = {
   s9: 36,
   s10: 40,
   s12: 48,
-  
+
   rLg: 8,
   rXl: 12,
   r2Xl: 16,
   r3Xl: 20,
-  
+
   f11: 11,
   f13: 13,
   f13_5: 13.5,
@@ -66,11 +53,11 @@ const T = {
   f16: 16,
   f19: 19,
   f20: 20,
-  
+
   lh16: 16,
   lh18: 18,
   lh20: 20,
-  lh24: 24,
+  lh24: 24
 };
 
 
@@ -84,7 +71,7 @@ const C = {
   gray700: '#374151',
   amber300: '#FCD34D',
   white: '#FFFFFF',
-  
+
   white90: 'rgba(255,255,255,0.90)',
   white80: 'rgba(255,255,255,0.80)',
   white70: 'rgba(255,255,255,0.70)',
@@ -96,80 +83,80 @@ const C = {
   black40: 'rgba(0,0,0,0.40)',
   black30: 'rgba(0,0,0,0.30)',
   black20: 'rgba(0,0,0,0.20)',
-  black10: 'rgba(0,0,0,0.10)',
+  black10: 'rgba(0,0,0,0.10)'
 };
 
 const F = {
   regular: 'Jost-Regular',
   medium: 'Jost-Medium',
   semibold: 'Jost-SemiBold',
-  bold: 'Jost-Bold',
+  bold: 'Jost-Bold'
 };
 
 const SLIDES = [
-  {
-    heading: 'Managing Campus Excellence and Operations',
-    para: 'Oversee students, faculty, academics, and daily campus activities — all in one place.',
-    image: require('../../../assets/loginslide1.png'),
-  },
-  {
-    heading: 'Managing Operations and User Activities',
-    para: 'Handle day-to-day tasks, manage users, and ensure smooth system operations — all in one place.',
-    image: require('../../../assets/loginslide2.png'),
-  },
-  {
-    heading: 'Handling Faculty and Staff Operations',
-    para: 'Track attendance, manage records, and streamline HR processes with ease.',
-    image: require('../../../assets/loginslide3.png'),
-  },
-  {
-    heading: 'Managing Financial Operations and Transparency',
-    para: 'Oversee budgets, track expenses, and manage financial records — all in one place.',
-    image: require('../../../assets/loginslide4.png'),
-  },
-  {
-    heading: 'Handling Financial Transactions and Operations',
-    para: 'Manage fee collections, track payments, and maintain financial records — all in one place.',
-    image: require('../../../assets/loginslide5.png'),
-  },
-  {
-    heading: 'Driving Student Placements and Success',
-    para: 'Manage job opportunities, campus drives, and student career growth efficiently.',
-    image: require('../../../assets/loginslide6.png'),
-  },
-  {
-    heading: 'Empowering Teaching and Student Success',
-    para: 'Manage classes, track student progress, and deliver quality education — all in one place.',
-    image: require('../../../assets/loginslide7.png'),
-  },
-  {
-    heading: 'Managing Learning and Academic Progress',
-    para: 'Track attendance, assignments, and academic performance — all in one place.',
-    image: require('../../../assets/loginslide8.png'),
-  },
-  {
-    heading: "Staying Connected to Your Child's Academic Journey",
-    para: 'Track attendance, monitor performance, and stay updated — all in one place',
-    image: require('../../../assets/loginslide9.png'),
-  },
-  {
-    heading: 'Managing Student Well-Being Activities',
-    para: 'Track issues, handle requests, and ensure student support with ease.',
-    image: require('../../../assets/loginslide10.png'),
-  },
-];
+{
+  heading: 'Managing Campus Excellence and Operations',
+  para: 'Oversee students, faculty, academics, and daily campus activities — all in one place.',
+  image: require('../../../assets/loginslide1.png')
+},
+{
+  heading: 'Managing Operations and User Activities',
+  para: 'Handle day-to-day tasks, manage users, and ensure smooth system operations — all in one place.',
+  image: require('../../../assets/loginslide2.png')
+},
+{
+  heading: 'Handling Faculty and Staff Operations',
+  para: 'Track attendance, manage records, and streamline HR processes with ease.',
+  image: require('../../../assets/loginslide3.png')
+},
+{
+  heading: 'Managing Financial Operations and Transparency',
+  para: 'Oversee budgets, track expenses, and manage financial records — all in one place.',
+  image: require('../../../assets/loginslide4.png')
+},
+{
+  heading: 'Handling Financial Transactions and Operations',
+  para: 'Manage fee collections, track payments, and maintain financial records — all in one place.',
+  image: require('../../../assets/loginslide5.png')
+},
+{
+  heading: 'Driving Student Placements and Success',
+  para: 'Manage job opportunities, campus drives, and student career growth efficiently.',
+  image: require('../../../assets/loginslide6.png')
+},
+{
+  heading: 'Empowering Teaching and Student Success',
+  para: 'Manage classes, track student progress, and deliver quality education — all in one place.',
+  image: require('../../../assets/loginslide7.png')
+},
+{
+  heading: 'Managing Learning and Academic Progress',
+  para: 'Track attendance, assignments, and academic performance — all in one place.',
+  image: require('../../../assets/loginslide8.png')
+},
+{
+  heading: "Staying Connected to Your Child's Academic Journey",
+  para: 'Track attendance, monitor performance, and stay updated — all in one place',
+  image: require('../../../assets/loginslide9.png')
+},
+{
+  heading: 'Managing Student Well-Being Activities',
+  para: 'Track issues, handle requests, and ensure student support with ease.',
+  image: require('../../../assets/loginslide10.png')
+}];
+
 
 const N = SLIDES.length;
 
 interface SlideCardProps {
   slide: (typeof SLIDES)[0];
   position: 'center' | 'left' | 'right' | 'hidden';
-  
+
   containerWidth: number;
 }
 
 const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProps) => {
-  
+
   const floatAnim = useRef(new Animated.Value(0)).current;
   const floatLoopRef = useRef<Animated.CompositeAnimation | null>(null);
 
@@ -177,19 +164,19 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
     if (position === 'center') {
       floatLoopRef.current = Animated.loop(
         Animated.sequence([
-          Animated.timing(floatAnim, {
-            toValue: -8,
-            duration: 1800,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-          Animated.timing(floatAnim, {
-            toValue: 0,
-            duration: 1800,
-            easing: Easing.inOut(Easing.sin),
-            useNativeDriver: true,
-          }),
-        ])
+        Animated.timing(floatAnim, {
+          toValue: -8,
+          duration: 1800,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true
+        }),
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 1800,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true
+        })]
+        )
       );
       floatLoopRef.current.start();
     } else {
@@ -201,7 +188,7 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
 
   const cardWidth = containerWidth * 1;
 
-  const TRANSFORM: Record<string, { tx: number; ty: number; rot: string; sc: number; op: number }> =
+  const TRANSFORM: Record<string, {tx: number;ty: number;rot: string;sc: number;op: number;}> =
   {
     center: { tx: 0, ty: 0, rot: '0deg', sc: 1, op: 1 },
     right: {
@@ -209,16 +196,16 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
       ty: -(containerWidth * 0.1),
       rot: '25deg',
       sc: 0.85,
-      op: 0,
+      op: 0
     },
     left: {
       tx: -containerWidth * 0.3,
       ty: -(containerWidth * 0.1),
       rot: '-25deg',
       sc: 0.85,
-      op: 0,
+      op: 0
     },
-    hidden: { tx: 0, ty: containerWidth * 0.06, rot: '0deg', sc: 0.75, op: 0 },
+    hidden: { tx: 0, ty: containerWidth * 0.06, rot: '0deg', sc: 0.75, op: 0 }
   };
 
   const { tx, ty, rot, sc, op } = TRANSFORM[position] || TRANSFORM.hidden;
@@ -227,23 +214,23 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
     <View
       pointerEvents="none"
       style={[
-        sCard.wrapper,
-        {
-          width: cardWidth,
-          
-          height: cardWidth * 0.75,
-          opacity: op,
-          zIndex: position === 'center' ? 10 : 0,
-          transform: [{ translateX: tx }, { translateY: ty }, { rotate: rot }, { scale: sc }],
-        },
-      ]}>
+      sCard.wrapper,
+      {
+        width: cardWidth,
+
+        height: cardWidth * 0.75,
+        opacity: op,
+        zIndex: position === 'center' ? 10 : 0,
+        transform: [{ translateX: tx }, { translateY: ty }, { rotate: rot }, { scale: sc }]
+      }]
+      }>
       {}
       <Animated.View
         style={[StyleSheet.absoluteFillObject, { transform: [{ translateY: floatAnim }] }]}>
         <Image source={slide.image} style={sCard.image} resizeMode="cover" />
       </Animated.View>
-    </View>
-  );
+    </View>);
+
 });
 
 const sCard = StyleSheet.create({
@@ -254,19 +241,19 @@ const sCard = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.22,
-    shadowRadius: 18,
+    shadowRadius: 18
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 14,
-  },
+    borderRadius: 14
+  }
 });
 
 
 
 
-export default function LoginScreen() {
+export default function LoginScreen() {const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -278,38 +265,38 @@ export default function LoginScreen() {
     (state) => state.setUser
   );
 
-  
-  
-  
-  
+
+
+
+
   const textOpacity = useRef(new Animated.Value(1)).current;
   const textSlideX = useRef(new Animated.Value(0)).current;
 
-  
+
   const leftX = useRef(new Animated.Value(0)).current;
   const rightX = useRef(new Animated.Value(SW)).current;
 
-  
+
   const spinVal = useRef(new Animated.Value(0)).current;
   const spinLoopRef = useRef<Animated.CompositeAnimation | null>(null);
 
-  
+
   const btnEntrance = useRef(new Animated.Value(0)).current;
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  
+
   useEffect(() => {
     Animated.timing(btnEntrance, {
       toValue: 1,
       duration: 700,
       delay: 400,
       easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start();
   }, []);
 
-  
+
   useEffect(() => {
     if (loading) {
       spinLoopRef.current = Animated.loop(
@@ -317,7 +304,7 @@ export default function LoginScreen() {
           toValue: 1,
           duration: 700,
           easing: Easing.linear,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
       spinLoopRef.current.start();
@@ -330,34 +317,34 @@ export default function LoginScreen() {
 
   const spinDeg = spinVal.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
 
-  
-  
+
+
   const advanceSlide = useCallback(() => {
     Animated.parallel([
-      Animated.timing(textOpacity, { toValue: 0, duration: 250, useNativeDriver: true }),
-      Animated.timing(textSlideX, {
-        toValue: 60,
-        duration: 250,
-        easing: Easing.in(Easing.quad),
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    Animated.timing(textOpacity, { toValue: 0, duration: 250, useNativeDriver: true }),
+    Animated.timing(textSlideX, {
+      toValue: 60,
+      duration: 250,
+      easing: Easing.in(Easing.quad),
+      useNativeDriver: true
+    })]
+    ).start(() => {
       setCurrent((prev) => (prev + 1) % N);
       textSlideX.setValue(60);
       Animated.parallel([
-        Animated.timing(textOpacity, {
-          toValue: 1,
-          duration: 500,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
-        }),
-        Animated.timing(textSlideX, {
-          toValue: 0,
-          duration: 500,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
-        }),
-      ]).start();
+      Animated.timing(textOpacity, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true
+      }),
+      Animated.timing(textSlideX, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true
+      })]
+      ).start();
     });
   }, []);
 
@@ -368,41 +355,41 @@ export default function LoginScreen() {
     };
   }, [advanceSlide]);
 
- 
+
   const handleProceed = useCallback(() => {
     setPanelState('login');
     Animated.parallel([
-      Animated.timing(leftX, {
-        toValue: -SW,
-        duration: 500,
-        easing: Easing.inOut(Easing.quad),
-        useNativeDriver: true,
-      }),
-      Animated.timing(rightX, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.inOut(Easing.quad),
-        useNativeDriver: true,
-      }),
-    ]).start();
+    Animated.timing(leftX, {
+      toValue: -SW,
+      duration: 500,
+      easing: Easing.inOut(Easing.quad),
+      useNativeDriver: true
+    }),
+    Animated.timing(rightX, {
+      toValue: 0,
+      duration: 500,
+      easing: Easing.inOut(Easing.quad),
+      useNativeDriver: true
+    })]
+    ).start();
   }, []);
-  
+
 
   const handleBack = useCallback(() => {
     Animated.parallel([
-      Animated.timing(leftX, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.inOut(Easing.quad),
-        useNativeDriver: true,
-      }),
-      Animated.timing(rightX, {
-        toValue: SW,
-        duration: 500,
-        easing: Easing.inOut(Easing.quad),
-        useNativeDriver: true,
-      }),
-    ]).start(() => setPanelState('slides'));
+    Animated.timing(leftX, {
+      toValue: 0,
+      duration: 500,
+      easing: Easing.inOut(Easing.quad),
+      useNativeDriver: true
+    }),
+    Animated.timing(rightX, {
+      toValue: SW,
+      duration: 500,
+      easing: Easing.inOut(Easing.quad),
+      useNativeDriver: true
+    })]
+    ).start(() => setPanelState('slides'));
   }, []);
 
   const handleLogin = async () => {
@@ -413,7 +400,7 @@ export default function LoginScreen() {
           text1: "Email Required",
           text2: "Please enter your email address",
           visibilityTime: 1500,
-          position: "top",
+          position: "top"
         });
 
         return;
@@ -425,7 +412,7 @@ export default function LoginScreen() {
           text1: "Password Required",
           text2: "Please enter your password",
           visibilityTime: 1500,
-          position: "top",
+          position: "top"
         });
 
         return;
@@ -435,7 +422,7 @@ export default function LoginScreen() {
 
       const response = await loginUser(
         email.trim(),
-        password,
+        password
       );
 
       if (!response.success) {
@@ -444,7 +431,7 @@ export default function LoginScreen() {
           text1: "Login Failed",
           text2: response.error,
           visibilityTime: 2000,
-          position: "top",
+          position: "top"
         });
 
         return;
@@ -459,7 +446,7 @@ export default function LoginScreen() {
         text1: "Login Successful",
         text2: `Welcome ${response.user.fullName}`,
         visibilityTime: 2000,
-        position: "top",
+        position: "top"
       });
 
     } catch (error) {
@@ -468,7 +455,7 @@ export default function LoginScreen() {
         text1: "Something went wrong",
         text2: "Please try again later",
         visibilityTime: 2000,
-        position: "top",
+        position: "top"
       });
     } finally {
       setLoading(false);
@@ -494,16 +481,16 @@ export default function LoginScreen() {
             <Image
               source={require('../../../assets/login-logo.png')}
               style={s.logoImg}
-              resizeMode="contain"
-            />
-            <Text style={s.logoSubtext}>Powered by GK Elite-Info</Text>
+              resizeMode="contain" />
+            
+            <Text style={s.logoSubtext}>{t("Auto.Common.PoweredbyGKElit", "Powered by GK Elite-Info")}</Text>
           </View>
 
           <View style={s.headingWrapper}>
             <Animated.View
               style={{
                 opacity: textOpacity,
-                transform: [{ translateX: textSlideX }],
+                transform: [{ translateX: textSlideX }]
               }}>
               {}
               <Text style={s.slideHeading}>{SLIDES[current].heading}</Text>
@@ -515,41 +502,41 @@ export default function LoginScreen() {
           <View style={s.carouselContainer} onLayout={onCarouselLayout}>
             {SLIDES.map((slide, idx) => {
               let position: 'center' | 'left' | 'right' | 'hidden' = 'hidden';
-              if (idx === current) position = 'center';
-              else if (idx === (current - 1 + N) % N) position = 'left';
-              else if (idx === (current + 1) % N) position = 'right';
+              if (idx === current) position = 'center';else
+              if (idx === (current - 1 + N) % N) position = 'left';else
+              if (idx === (current + 1) % N) position = 'right';
 
               return (
-                <SlideCard key={idx} slide={slide} position={position} containerWidth={carouselW} />
-              );
+                <SlideCard key={idx} slide={slide} position={position} containerWidth={carouselW} />);
+
             })}
           </View>
 
           {}
           <View style={s.dotsRow}>
-            {SLIDES.map((_, i) => (
-              <View key={i} style={[s.dot, i === current ? s.dotActive : s.dotInactive]} />
-            ))}
+            {SLIDES.map((_, i) =>
+            <View key={i} style={[s.dot, i === current ? s.dotActive : s.dotInactive]} />
+            )}
           </View>
 
           {}
           <Animated.View
             style={[
-              s.proceedWrapper,
+            s.proceedWrapper,
+            {
+              opacity: btnEntrance,
+              transform: [
               {
-                opacity: btnEntrance,
-                transform: [
-                  {
-                    translateY: btnEntrance.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [20, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}>
+                translateY: btnEntrance.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0]
+                })
+              }]
+
+            }]
+            }>
             <TouchableOpacity activeOpacity={0.85} onPress={handleProceed} style={s.proceedBtn}>
-              <Text style={s.proceedBtnText}>Proceed to Login</Text>
+              <Text style={s.proceedBtnText}>{t("Auto.Common.ProceedtoLogin", "Proceed to Login")}</Text>
               <ArrowRight size={20} color={C.white} weight="bold" />
             </TouchableOpacity>
           </Animated.View>
@@ -572,7 +559,7 @@ export default function LoginScreen() {
           {}
           <TouchableOpacity activeOpacity={0.8} onPress={handleBack} style={s.backBtn}>
             <ArrowLeft size={16} color={C.white} weight="bold" />
-            <Text style={s.backBtnText}>Back to slides</Text>
+            <Text style={s.backBtnText}>{t("Auto.Common.Backtoslides", "Back to slides")}</Text>
           </TouchableOpacity>
 
           {}
@@ -587,8 +574,8 @@ export default function LoginScreen() {
               <BlurView
                 intensity={35}
                 tint="light"
-                style={StyleSheet.absoluteFillObject} 
-              />
+                style={StyleSheet.absoluteFillObject} />
+              
 
               {}
               <View style={s.iconCircleRow}>
@@ -598,12 +585,12 @@ export default function LoginScreen() {
               </View>
 
               {}
-              <Text style={s.cardTitle}>Login to Your Account</Text>
-              <Text style={s.cardSubtitle}>Please enter your credentials to proceed.</Text>
+              <Text style={s.cardTitle}>{t("Auto.Common.LogintoYourAcco", "Login to Your Account")}</Text>
+              <Text style={s.cardSubtitle}>{t("Auto.Common.Pleaseenteryour", "Please enter your credentials to proceed.")}</Text>
 
               {}
               <View>
-                <Text style={s.fieldLabel}>Email</Text>
+                <Text style={s.fieldLabel}>{t("Auto.Common.Email", "Email")}</Text>
                 <View style={s.inputRow}>
                   <View style={s.inputIconLeft}>
                     <EnvelopeSimple size={17} color={C.white70} />
@@ -611,19 +598,19 @@ export default function LoginScreen() {
                   <TextInput
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="Enter your registered email"
+                    placeholder={t("Auto.Attr.Enteryourregist", "Enter your registered email")}
                     placeholderTextColor={C.white60}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    style={s.textInput}
-                  />
+                    style={s.textInput} />
+                  
                 </View>
               </View>
 
               {}
               <View style={{ marginTop: T.s5 }}>
-                <Text style={s.fieldLabel}>Password</Text>
+                <Text style={s.fieldLabel}>{t("Auto.Common.Password", "Password")}</Text>
                 <View style={s.inputRow}>
                   <View style={s.inputIconLeft}>
                     <Lock size={17} color={C.white70} />
@@ -631,20 +618,20 @@ export default function LoginScreen() {
                   <TextInput
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Enter your password"
+                    placeholder={t("Auto.Attr.Enteryourpasswo", "Enter your password")}
                     placeholderTextColor={C.white60}
                     secureTextEntry={!showPassword}
-                    style={[s.textInput, { paddingRight: T.s12 }]}
-                  />
+                    style={[s.textInput, { paddingRight: T.s12 }]} />
+                  
                   <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setShowPassword((v) => !v)}
                     style={s.eyeBtn}>
-                    {showPassword ? (
-                      <EyeSlash size={20} color={C.white60} />
-                    ) : (
-                      <Eye size={20} color={C.white60} />
-                    )}
+                    {showPassword ?
+                    <EyeSlash size={20} color={C.white60} /> :
+
+                    <Eye size={20} color={C.white60} />
+                    }
                   </TouchableOpacity>
                 </View>
               </View>
@@ -652,13 +639,13 @@ export default function LoginScreen() {
               {}
               <View style={s.infoRow}>
                 <TouchableOpacity activeOpacity={0.7} style={s.forgotBtn}>
-                  <Text style={s.forgotText}>Forgot Password?</Text>
+                  <Text style={s.forgotText}>{t("Auto.Common.ForgotPassword", "Forgot Password?")}</Text>
                 </TouchableOpacity>
 
                 <View style={s.infoBlock}>
                   <Info size={15} color={C.amber300} style={{ marginTop: 2 }} />
-                  <Text style={s.infoText}>
-                    New account? Verify your email before logging in. Check inbox or spam.
+                  <Text style={s.infoText}>{t("Auto.Common.NewaccountVerif", "New account? Verify your email before logging in. Check inbox or spam.")}
+
                   </Text>
                 </View>
               </View>
@@ -668,8 +655,8 @@ export default function LoginScreen() {
                 colors={['transparent', C.white20, 'transparent']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={s.divider}
-              />
+                style={s.divider} />
+              
 
               {}
               <TouchableOpacity
@@ -677,16 +664,16 @@ export default function LoginScreen() {
                 disabled={loading}
                 onPress={handleLogin}
                 style={[s.loginBtn, loading && s.loginBtnDisabled]}>
-                {loading ? (
-                  <View style={s.loadingRow}>
+                {loading ?
+                <View style={s.loadingRow}>
                     <Animated.View style={{ transform: [{ rotate: spinDeg }], marginRight: 8 }}>
                       <SpinnerGap size={18} color={C.white} />
                     </Animated.View>
-                    <Text style={s.loginBtnText}>Logging in...</Text>
-                  </View>
-                ) : (
-                  <Text style={s.loginBtnText}>Login</Text>
-                )}
+                    <Text style={s.loginBtnText}>{t("Auto.Common.Loggingin", "Logging in...")}</Text>
+                  </View> :
+
+                <Text style={s.loginBtnText}>{t("Auto.Common.Login", "Login")}</Text>
+                }
               </TouchableOpacity>
             </View>
             {}
@@ -695,19 +682,19 @@ export default function LoginScreen() {
         </ImageBackground>
       </Animated.View>
       {}
-    </View>
-  );
+    </View>);
+
 }
 
 
 
 
 const s = StyleSheet.create({
-  
+
   root: {
     flex: 1,
     backgroundColor: '#000',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
 
   panel: {
@@ -716,355 +703,355 @@ const s = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 10,
+    zIndex: 10
   },
 
-  
-  
-  
+
+
+
   leftGradient: {
     flex: 1,
     paddingTop: SAFE_TOP,
-    paddingBottom: T.s4, 
-    paddingHorizontal: T.s8, 
-    flexDirection: 'column',
+    paddingBottom: T.s4,
+    paddingHorizontal: T.s8,
+    flexDirection: 'column'
   },
 
-  
+
   logoBlock: {
     alignItems: 'center',
     flexShrink: 0,
-    marginTop: 10,
+    marginTop: 10
   },
   logoImg: {
     width: 85,
     height: 85,
     borderRadius: 42.5,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   logoSubtext: {
     fontFamily: F.bold,
-    color: C.gray700, 
-    fontSize: T.f11, 
-    letterSpacing: 0.8, 
-    marginTop: T.s1, 
+    color: C.gray700,
+    fontSize: T.f11,
+    letterSpacing: 0.8,
+    marginTop: T.s1
   },
 
-  
+
   headingWrapper: {
-    marginTop: T.s5, 
-    minHeight: 95, 
+    marginTop: T.s5,
+    minHeight: 95,
     width: '100%',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   slideHeading: {
     fontFamily: F.bold,
-    fontSize: T.f19, 
-    lineHeight: T.lh24, 
-    color: C.darkGreen, 
-    textAlign: 'center',
+    fontSize: T.f19,
+    lineHeight: T.lh24,
+    color: C.darkGreen,
+    textAlign: 'center'
   },
   slidePara: {
     fontFamily: F.regular,
-    fontSize: T.f13_5, 
-    color: C.darkGreen2, 
+    fontSize: T.f13_5,
+    color: C.darkGreen2,
     textAlign: 'center',
-    marginTop: T.s2, 
-    opacity: 0.9, 
-    lineHeight: T.lh20, 
+    marginTop: T.s2,
+    opacity: 0.9,
+    lineHeight: T.lh20
   },
 
-  
+
   carouselContainer: {
     flex: 1,
     width: '100%',
-    minHeight: 250, 
-    marginTop: T.s4, 
-    marginBottom: T.s4, 
+    minHeight: 250,
+    marginTop: T.s4,
+    marginBottom: T.s4,
     overflow: 'hidden',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 
-  
+
   dotsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: T.s3, 
+    gap: T.s3,
     flexShrink: 0,
-    marginTop: T.s1, 
-    paddingHorizontal: T.s4, 
-    zIndex: 20,
+    marginTop: T.s1,
+    paddingHorizontal: T.s4,
+    zIndex: 20
   },
   dot: {
-    height: 8, 
-    borderRadius: 4,
+    height: 8,
+    borderRadius: 4
   },
   dotActive: {
-    width: 40, 
-    backgroundColor: C.darkGreen3, 
+    width: 40,
+    backgroundColor: C.darkGreen3
   },
   dotInactive: {
-    width: 12, 
-    backgroundColor: C.white60, 
+    width: 12,
+    backgroundColor: C.white60,
     borderWidth: 1,
-    borderColor: C.white40, 
+    borderColor: C.white40
   },
 
-  
+
   proceedWrapper: {
-    marginTop: 'auto', 
-    paddingTop: T.s6, 
-    paddingBottom: T.s3, 
+    marginTop: 'auto',
+    paddingTop: T.s6,
+    paddingBottom: T.s3,
     flexShrink: 0,
-    zIndex: 20,
+    zIndex: 20
   },
   proceedBtn: {
-    backgroundColor: C.navy, 
+    backgroundColor: C.navy,
     width: '100%',
-    paddingVertical: T.s2_5, 
-    borderRadius: T.rXl, 
+    paddingVertical: T.s2_5,
+    borderRadius: T.rXl,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: T.s2, 
-    
+    gap: T.s2,
+
     shadowColor: 'rgba(27,77,62,1)',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.5,
     shadowRadius: 14,
-    elevation: 10,
+    elevation: 10
   },
   proceedBtnText: {
     fontFamily: F.bold,
-    color: C.white, 
-    fontSize: T.f16, 
-    letterSpacing: 0.4, 
-    marginRight: T.s1,
+    color: C.white,
+    fontSize: T.f16,
+    letterSpacing: 0.4,
+    marginRight: T.s1
   },
 
-  
-  
-  
+
+
+
   rightBg: {
-    flex: 1,
+    flex: 1
   },
   rightOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: C.black30, 
+    backgroundColor: C.black30
   },
 
-  
+
   backBtn: {
     position: 'absolute',
     top: SAFE_TOP,
-    left: T.s4, 
+    left: T.s4,
     zIndex: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: T.s1_5, 
-    backgroundColor: C.black20, 
-    paddingHorizontal: T.s3, 
-    paddingVertical: T.s2, 
-    borderRadius: T.rXl, 
+    gap: T.s1_5,
+    backgroundColor: C.black20,
+    paddingHorizontal: T.s3,
+    paddingVertical: T.s2,
+    borderRadius: T.rXl,
     borderWidth: 1,
-    borderColor: C.white10, 
-    
+    borderColor: C.white10,
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    
+    shadowRadius: 8
+
   },
 
   backBtnText: {
     fontFamily: F.semibold,
-    color: C.white90, 
-    fontSize: T.f13, 
-    letterSpacing: 0.3, 
-    marginLeft: T.s1_5,
+    color: C.white90,
+    fontSize: T.f13,
+    letterSpacing: 0.3,
+    marginLeft: T.s1_5
   },
 
-  
+
   formScroll: {
-    flex: 1,
+    flex: 1
   },
   formScrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: T.s5, 
-    paddingTop: SAFE_TOP + T.s12, 
-    paddingBottom: T.s10, 
+    paddingHorizontal: T.s5,
+    paddingTop: SAFE_TOP + T.s12,
+    paddingBottom: T.s10
   },
 
-  
-  
-  
-  
-  
+
+
+
+
+
   glassCard: {
-    width: '90%', 
-    alignSelf: 'center', 
-    overflow: 'hidden', 
+    width: '90%',
+    alignSelf: 'center',
+    overflow: 'hidden',
     borderRadius: 20,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
 
-    
-    paddingHorizontal: 20, 
+
+    paddingHorizontal: 20,
     paddingVertical: 24,
 
-    
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
-    shadowRadius: 32,
-    
+    shadowRadius: 32
+
   },
 
-  
+
   iconCircleRow: {
     alignItems: 'center',
-    marginBottom: T.s6, 
+    marginBottom: T.s6
   },
   iconCircle: {
-    width: T.s12, 
-    height: T.s12, 
-    borderRadius: T.rXl, 
+    width: T.s12,
+    height: T.s12,
+    borderRadius: T.rXl,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: C.white10, 
+    backgroundColor: C.white10,
     borderWidth: 1,
-    borderColor: C.white20, 
+    borderColor: C.white20
   },
 
-  
+
   cardTitle: {
     fontFamily: F.semibold,
-    fontSize: T.f20, 
+    fontSize: T.f20,
     color: C.white,
     textAlign: 'center',
-    letterSpacing: -0.3, 
+    letterSpacing: -0.3
   },
   cardSubtitle: {
     fontFamily: F.regular,
-    fontSize: T.f13, 
-    color: C.white80, 
+    fontSize: T.f13,
+    color: C.white80,
     textAlign: 'center',
-    marginTop: T.s1, 
-    marginBottom: T.s6, 
+    marginTop: T.s1,
+    marginBottom: T.s6
   },
 
-  
+
   fieldLabel: {
     fontFamily: F.semibold,
-    fontSize: T.f13, 
+    fontSize: T.f13,
     color: C.white,
-    marginBottom: T.s1_5, 
-    letterSpacing: 0.9, 
-    textTransform: 'uppercase',
+    marginBottom: T.s1_5,
+    letterSpacing: 0.9,
+    textTransform: 'uppercase'
   },
 
-  
+
   inputRow: {
     position: 'relative',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   inputIconLeft: {
     position: 'absolute',
-    left: 14, 
+    left: 14,
     zIndex: 5,
-    
-    top: 15, 
+
+    top: 15
   },
   textInput: {
     fontFamily: F.regular,
-    height: T.s12, 
-    backgroundColor: C.white10, 
+    height: T.s12,
+    backgroundColor: C.white10,
     borderWidth: 1,
-    borderColor: C.white20, 
-    borderRadius: T.rLg, 
-    paddingLeft: 44, 
-    paddingRight: T.s4, 
+    borderColor: C.white20,
+    borderRadius: T.rLg,
+    paddingLeft: 44,
+    paddingRight: T.s4,
     color: C.white,
-    fontSize: T.f14, 
+    fontSize: T.f14
   },
   eyeBtn: {
     position: 'absolute',
-    right: 14, 
+    right: 14,
     top: 14,
-    zIndex: 5,
+    zIndex: 5
   },
 
-  
+
   infoRow: {
-    flexDirection: 'column-reverse', 
-    marginTop: T.s4, 
-    gap: T.s3, 
+    flexDirection: 'column-reverse',
+    marginTop: T.s4,
+    gap: T.s3
   },
   forgotBtn: {
     alignSelf: 'flex-end',
-    paddingBottom: T.s1, 
+    paddingBottom: T.s1
   },
   forgotText: {
     fontFamily: F.medium,
-    fontSize: 12.5, 
+    fontSize: 12.5,
     color: C.white,
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
   infoBlock: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: T.s1_5, 
-    width: '100%',
+    gap: T.s1_5,
+    width: '100%'
   },
   infoText: {
     fontFamily: F.regular,
-    fontSize: 11.5, 
-    color: C.white70, 
-    lineHeight: T.lh16, 
+    fontSize: 11.5,
+    color: C.white70,
+    lineHeight: T.lh16,
     flex: 1,
-    marginLeft: T.s1_5,
+    marginLeft: T.s1_5
   },
 
-  
+
   divider: {
     height: 1,
-    marginVertical: T.s6, 
-    width: '100%',
+    marginVertical: T.s6,
+    width: '100%'
   },
 
-  
+
   loginBtn: {
     width: '100%',
-    height: T.s12, 
-    borderRadius: 10, 
-    backgroundColor: C.white10, 
+    height: T.s12,
+    borderRadius: 10,
+    backgroundColor: C.white10,
     borderWidth: 1,
-    borderColor: C.white30, 
+    borderColor: C.white30,
     alignItems: 'center',
     justifyContent: 'center',
-    
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
-    shadowRadius: 24,
-    
+    shadowRadius: 24
+
   },
   loginBtnDisabled: {
-    opacity: 0.5,
+    opacity: 0.5
   },
   loginBtnText: {
     fontFamily: F.semibold,
     color: C.white,
-    fontSize: T.f15, 
-    letterSpacing: 0.3, 
+    fontSize: T.f15,
+    letterSpacing: 0.3
   },
   loadingRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });

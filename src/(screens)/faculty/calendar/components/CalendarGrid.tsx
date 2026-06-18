@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { CaretLeft, CaretRight } from "phosphor-react-native";
 import { CalendarEvent, WeekDay } from "../types";
 import { getEventStyle, getOverlappingEvents } from "../utils";

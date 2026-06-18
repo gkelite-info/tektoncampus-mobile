@@ -11,6 +11,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { getStudentId } from "@/lib/helpers/studentAPI";
 import { fetchStudentContext } from "./student/studentContextAPI";
 import { getUserProfilePhoto } from "@/lib/helpers/profile/profileInfo";
+import { getUserPreferences } from "@/lib/helpers/settings/preferencesAPI";
 import { fetchAdminContext } from "./admin/adminContextAPI";
 import { fetchFinanceManagerContext } from "./financeManager/financeManagerContextAPI";
 import { getEmployeeEmpId, getStudentRollNo } from "@/lib/helpers/identifiers/upsertIdentifier";
@@ -51,6 +52,8 @@ type UserContextType = {
     dateOfJoining: string | null;
     professionalExperienceYears: number | null;
     identifierId: string | null;
+    fontScale: number;
+    setFontScale: React.Dispatch<React.SetStateAction<number>>;
     refreshUserContext: () => Promise<void>;
 };
 
@@ -114,6 +117,8 @@ const UserContext = createContext<UserContextType>({
     dateOfJoining: null,
     professionalExperienceYears: null,
     identifierId: null,
+    fontScale: 100,
+    setFontScale: () => { },
     refreshUserContext: async () => { },
 });
 
@@ -150,6 +155,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [dateOfJoining, setDateOfJoining] = useState<string | null>(null);
     const [professionalExperienceYears, setProfessionalExperienceYears] = useState<number | null>(null);
     const [identifierId, setIdentifierId] = useState<string | null>(null);
+    const [fontScale, setFontScale] = useState<number>(100);
 
     const lastAuthUserId = useRef<string | null>(null);
     const isContextLoaded = useRef(false);
@@ -188,6 +194,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setDateOfJoining,
         setProfessionalExperienceYears,
         setIdentifierId,
+        setFontScale,
         setLoading,
     });
 
@@ -554,6 +561,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                     const photoData = await getUserProfilePhoto(userData.userId);
                     s.setProfilePhoto(photoData?.profileUrl ?? null);
                 } catch { }
+
+                try {
+                    const prefs = await getUserPreferences(userData.userId);
+                    s.setFontScale(prefs?.font_scale ?? 100);
+                } catch { }
+
                 const loader = roleLoadersRef.current[userData.role];
                 const cid = Number(userData.collegeId);
                 if (loader && cid) {
@@ -653,6 +666,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             dateOfJoining,
             professionalExperienceYears,
             identifierId,
+            fontScale,
+            setFontScale,
             refreshUserContext,
         }),
         [
@@ -688,6 +703,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             dateOfJoining,
             professionalExperienceYears,
             identifierId,
+            fontScale,
             refreshUserContext,
         ]
     );

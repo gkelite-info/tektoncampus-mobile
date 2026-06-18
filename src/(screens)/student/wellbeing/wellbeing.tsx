@@ -1,48 +1,49 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Heart, Smiley, SmileySad, Phone, BookOpen, Clock } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
 
-export default function WellbeingScreen() {
-    const headerHeight = useHeaderHeight();
-    const [selectedMood, setSelectedMood] = useState<string | null>(null);
+export default function WellbeingScreen() {const { t } = useTranslation();
+  const headerHeight = useHeaderHeight();
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
 
-    const quote = {
-        text: "“You don't have to control your thoughts. You just have to stop letting them control you.”",
-        author: "Dan Millman",
-    };
+  const quote = {
+    text: "“You don't have to control your thoughts. You just have to stop letting them control you.”",
+    author: "Dan Millman"
+  };
 
-    const resources = [
-        { title: "Managing Exam Stress & Anxiety", readTime: "5 mins read", iconBg: "#E0F2FE", iconColor: "#0284C7" },
-        { title: "Healthy Sleep Cycles during College", readTime: "4 mins read", iconBg: "#F3E8FF", iconColor: "#7C3AED" },
-        { title: "Building Mindful Study Habits", readTime: "6 mins read", iconBg: "#ECFDF5", iconColor: "#059669" },
-    ];
+  const resources = [
+  { title: "Managing Exam Stress & Anxiety", readTime: "5 mins read", iconBg: "#E0F2FE", iconColor: "#0284C7" },
+  { title: "Healthy Sleep Cycles during College", readTime: "4 mins read", iconBg: "#F3E8FF", iconColor: "#7C3AED" },
+  { title: "Building Mindful Study Habits", readTime: "6 mins read", iconBg: "#ECFDF5", iconColor: "#059669" }];
 
-    const moods = [
-        { label: "Great", emoji: "😊", value: "great" },
-        { label: "Good", emoji: "🙂", value: "good" },
-        { label: "Neutral", emoji: "😐", value: "neutral" },
-        { label: "Tired", emoji: "😴", value: "tired" },
-        { label: "Stressed", emoji: "😟", value: "stressed" },
-    ];
 
-    return (
-        <SafeAreaView edges={["left", "right", "bottom"]} className="flex-1 bg-[#F8FAFC]">
+  const moods = [
+  { label: "Great", emoji: "😊", value: "great" },
+  { label: "Good", emoji: "🙂", value: "good" },
+  { label: "Neutral", emoji: "😐", value: "neutral" },
+  { label: "Tired", emoji: "😴", value: "tired" },
+  { label: "Stressed", emoji: "😟", value: "stressed" }];
+
+
+  return (
+    <SafeAreaView edges={["left", "right", "bottom"]} className="flex-1 bg-[#F8FAFC]">
             <ScrollView
-                className="flex-1"
-                contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
-                showsVerticalScrollIndicator={false}
-            >
+        className="flex-1"
+        contentContainerStyle={{ padding: 16, paddingTop: headerHeight + 16, paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}>
+        
                 {}
                 <View className="mb-6">
-                    <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
-                        Wellbeing Center
-                    </Text>
-                    <Text className="text-sm text-gray-500 mt-1" style={{ fontFamily: fonts.regular }}>
-                        Support tools, daily check-ins, and campus wellness
-                    </Text>
+                    <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.WellbeingCenter", "Wellbeing Center")}
+
+          </Text>
+                    <Text className="text-sm text-gray-500 mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Supporttoolsdai", "Support tools, daily check-ins, and campus wellness")}
+
+          </Text>
                 </View>
 
                 {}
@@ -60,25 +61,25 @@ export default function WellbeingScreen() {
 
                 {}
                 <View className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                    <Text className="text-[#1E293B] text-[15px] mb-3.5" style={{ fontFamily: fonts.bold }}>
-                        How are you feeling today?
-                    </Text>
+                    <Text className="text-[#1E293B] text-[15px] mb-3.5" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Howareyoufeelin", "How are you feeling today?")}
+
+          </Text>
                     <View className="flex-row justify-between">
                         {moods.map((mood) => {
-                            const isSelected = selectedMood === mood.value;
-                            return (
-                                <TouchableOpacity 
-                                    key={mood.value}
-                                    onPress={() => setSelectedMood(mood.value)}
-                                    className={`items-center p-2 rounded-xl flex-1 mx-0.5 ${
-                                        isSelected ? "bg-emerald-50 border border-emerald-200" : ""
-                                    }`}
-                                >
+              const isSelected = selectedMood === mood.value;
+              return (
+                <TouchableOpacity
+                  key={mood.value}
+                  onPress={() => setSelectedMood(mood.value)}
+                  className={`items-center p-2 rounded-xl flex-1 mx-0.5 ${
+                  isSelected ? "bg-emerald-50 border border-emerald-200" : ""}`
+                  }>
+                  
                                     <Text className="text-2xl">{mood.emoji}</Text>
                                     <Text className="text-slate-500 text-[10px] mt-1" style={{ fontFamily: fonts.medium }}>{mood.label}</Text>
-                                </TouchableOpacity>
-                            );
-                        })}
+                                </TouchableOpacity>);
+
+            })}
                     </View>
                 </View>
 
@@ -88,39 +89,39 @@ export default function WellbeingScreen() {
                         <View className="mb-2">
                             <Phone size={24} color="#EF4444" weight="fill" />
                         </View>
-                        <Text className="text-slate-700 text-xs font-bold text-center" style={{ fontFamily: fonts.bold }}>
-                            Talk to Counselor
-                        </Text>
-                        <Text className="text-slate-400 text-[9px] text-center mt-1" style={{ fontFamily: fonts.regular }}>
-                            Confidential 24/7 Helpline
-                        </Text>
+                        <Text className="text-slate-700 text-xs font-bold text-center" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TalktoCounselor", "Talk to Counselor")}
+
+            </Text>
+                        <Text className="text-slate-400 text-[9px] text-center mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Confidential247", "Confidential 24/7 Helpline")}
+
+            </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity className="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 items-center justify-center">
                         <View className="mb-2">
                             <Clock size={24} color="#10B981" weight="fill" />
                         </View>
-                        <Text className="text-slate-700 text-xs font-bold text-center" style={{ fontFamily: fonts.bold }}>
-                            Breathing Guide
-                        </Text>
-                        <Text className="text-slate-400 text-[9px] text-center mt-1" style={{ fontFamily: fonts.regular }}>
-                            1-minute relaxation
-                        </Text>
+                        <Text className="text-slate-700 text-xs font-bold text-center" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.BreathingGuide", "Breathing Guide")}
+
+            </Text>
+                        <Text className="text-slate-400 text-[9px] text-center mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.1minuterelaxati", "1-minute relaxation")}
+
+            </Text>
                     </TouchableOpacity>
                 </View>
 
                 {}
                 <View>
-                    <Text className="text-[#1E293B] text-[16px] mb-3" style={{ fontFamily: fonts.bold }}>
-                        Recommended Reads
-                    </Text>
+                    <Text className="text-[#1E293B] text-[16px] mb-3" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.RecommendedRead", "Recommended Reads")}
 
-                    {resources.map((res, idx) => (
-                        <View key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex-row items-center mb-3">
-                            <View 
-                                className="w-10 h-10 rounded-lg items-center justify-center mr-3"
-                                style={{ backgroundColor: res.iconBg }}
-                            >
+          </Text>
+
+                    {resources.map((res, idx) =>
+          <View key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex-row items-center mb-3">
+                            <View
+              className="w-10 h-10 rounded-lg items-center justify-center mr-3"
+              style={{ backgroundColor: res.iconBg }}>
+              
                                 <BookOpen size={20} color={res.iconColor} />
                             </View>
                             <View className="flex-1 mr-2">
@@ -132,9 +133,9 @@ export default function WellbeingScreen() {
                                 </Text>
                             </View>
                         </View>
-                    ))}
+          )}
                 </View>
             </ScrollView>
-        </SafeAreaView>
-    );
+        </SafeAreaView>);
+
 }

@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { PencilSimple, Trash } from 'phosphor-react-native';
 
 interface FacultyQuizCardProps {
@@ -15,22 +16,22 @@ export default function FacultyQuizCard({
   onViewSubmissions,
   onEdit,
   onDelete,
-  onPublish,
-}: FacultyQuizCardProps) {
+  onPublish
+}: FacultyQuizCardProps) {const { t } = useTranslation();
   return (
     <View className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex-col gap-3 relative mb-3">
       {}
       <View className="absolute top-4 right-4 flex-row items-center gap-3 z-10">
-        {onEdit && (
-          <TouchableOpacity onPress={() => onEdit(data.quizId)} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+        {onEdit &&
+        <TouchableOpacity onPress={() => onEdit(data.quizId)} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
             <PencilSimple size={18} color="#9CA3AF" weight="bold" />
           </TouchableOpacity>
-        )}
-        {onDelete && (
-          <TouchableOpacity onPress={() => onDelete(data.quizId)} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+        }
+        {onDelete &&
+        <TouchableOpacity onPress={() => onDelete(data.quizId)} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
             <Trash size={18} color="#9CA3AF" weight="bold" />
           </TouchableOpacity>
-        )}
+        }
       </View>
 
       <View className="pr-16">
@@ -40,34 +41,34 @@ export default function FacultyQuizCard({
 
       <View className="flex-col gap-2.5 mt-2">
         <View className="flex-row items-center gap-4">
-          <Text className="font-bold text-[#282828] w-28 text-sm">Duration</Text>
+          <Text className="font-bold text-[#282828] w-28 text-sm">{t("Auto.Common.Duration", "Duration")}</Text>
           <View className="bg-[#F3F0FF] px-2 py-0.5 rounded-md">
             <Text className="text-[#8B5CF6] text-xs font-semibold">{data.duration}</Text>
           </View>
         </View>
 
         <View className="flex-row items-center gap-4">
-          <Text className="font-bold text-[#282828] w-28 text-sm">Total Questions</Text>
+          <Text className="font-bold text-[#282828] w-28 text-sm">{t("Auto.Common.TotalQuestions", "Total Questions")}</Text>
           <Text className="text-gray-600 font-medium text-sm">{data.totalQuestions}</Text>
         </View>
 
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center gap-4">
-            <Text className="font-bold text-[#282828] w-28 text-sm">Total Marks</Text>
+            <Text className="font-bold text-[#282828] w-28 text-sm">{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
             <Text className="text-gray-600 font-medium text-sm">{data.totalMarks}</Text>
           </View>
 
-          {data.status === 'Draft' ? (
-            <TouchableOpacity onPress={() => onPublish?.(data.quizId)}>
-              <Text className="text-[#8B5CF6] font-semibold text-sm underline">Publish</Text>
+          {data.status === 'Draft' ?
+          <TouchableOpacity onPress={() => onPublish?.(data.quizId)}>
+              <Text className="text-[#8B5CF6] font-semibold text-sm underline">{t("Auto.Common.Publish", "Publish")}</Text>
+            </TouchableOpacity> :
+
+          <TouchableOpacity onPress={() => onViewSubmissions?.(data.quizId)}>
+              <Text className="text-[#43C17A] font-semibold text-sm underline">{t("Auto.Common.ViewSubmissions", "View Submissions")}</Text>
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => onViewSubmissions?.(data.quizId)}>
-              <Text className="text-[#43C17A] font-semibold text-sm underline">View Submissions</Text>
-            </TouchableOpacity>
-          )}
+          }
         </View>
       </View>
-    </View>
-  );
+    </View>);
+
 }

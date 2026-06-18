@@ -1,47 +1,48 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { Plus, CaretDown, CaretUp } from 'phosphor-react-native';
 
 type CalendarHeaderProps = {
-    onAddClick: () => void;
-    currentDate: Date;
-    onMonthYearChange: (month: number, year: number) => void;
+  onAddClick: () => void;
+  currentDate: Date;
+  onMonthYearChange: (month: number, year: number) => void;
 };
 
 const MONTHS = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-];
+"January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"];
+
 
 const CalendarHeader = ({
-    onAddClick,
-    currentDate,
-    onMonthYearChange,
-}: CalendarHeaderProps) => {
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
+  onAddClick,
+  currentDate,
+  onMonthYearChange
+}: CalendarHeaderProps) => {const { t } = useTranslation();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
 
-    const BASE_YEAR = 2026;
-    const currentRealYear = new Date().getFullYear();
-    const endYear = currentRealYear + 3;
+  const BASE_YEAR = 2026;
+  const currentRealYear = new Date().getFullYear();
+  const endYear = currentRealYear + 3;
 
-    const years = Array.from(
-        { length: endYear - BASE_YEAR + 1 },
-        (_, i) => BASE_YEAR + i
-    );
+  const years = Array.from(
+    { length: endYear - BASE_YEAR + 1 },
+    (_, i) => BASE_YEAR + i
+  );
 
-    const [isMonthModalOpen, setIsMonthModalOpen] = useState(false);
-    const [isYearModalOpen, setIsYearModalOpen] = useState(false);
+  const [isMonthModalOpen, setIsMonthModalOpen] = useState(false);
+  const [isYearModalOpen, setIsYearModalOpen] = useState(false);
 
-    return (
-        <View className="flex-row items-center justify-between gap-2 mb-4">
+  return (
+    <View className="flex-row items-center justify-between gap-2 mb-4">
             <View className="flex-row items-center bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
                 
                 {}
-                <TouchableOpacity 
-                    className="flex-row items-center justify-between px-3 py-1.5"
-                    onPress={() => setIsMonthModalOpen(true)}
-                >
+                <TouchableOpacity
+          className="flex-row items-center justify-between px-3 py-1.5"
+          onPress={() => setIsMonthModalOpen(true)}>
+          
                     <Text className="text-sm font-semibold text-gray-700 mr-2">
                         {MONTHS[currentMonth]}
                     </Text>
@@ -51,10 +52,10 @@ const CalendarHeader = ({
                 <View className="w-px h-5 bg-gray-300 mx-1" />
 
                 {}
-                <TouchableOpacity 
-                    className="flex-row items-center justify-between px-3 py-1.5"
-                    onPress={() => setIsYearModalOpen(true)}
-                >
+                <TouchableOpacity
+          className="flex-row items-center justify-between px-3 py-1.5"
+          onPress={() => setIsYearModalOpen(true)}>
+          
                     <Text className="text-sm font-semibold text-gray-700 mr-2">
                         {currentYear}
                     </Text>
@@ -63,70 +64,70 @@ const CalendarHeader = ({
             </View>
 
             <TouchableOpacity
-                onPress={onAddClick}
-                className="flex-row items-center gap-1.5 px-4 py-2 bg-[#43C17A] rounded-lg shadow-sm"
-            >
+        onPress={onAddClick}
+        className="flex-row items-center gap-1.5 px-4 py-2 bg-[#43C17A] rounded-lg shadow-sm">
+        
                 <Plus size={16} color="white" weight="bold" />
-                <Text className="text-white text-sm font-bold">Add New</Text>
+                <Text className="text-white text-sm font-bold">{t("Auto.Common.AddNew", "Add New")}</Text>
             </TouchableOpacity>
 
             {}
             <Modal visible={isMonthModalOpen} transparent animationType="fade">
-                <TouchableOpacity 
-                    className="flex-1 bg-black/50 justify-center items-center"
-                    onPress={() => setIsMonthModalOpen(false)}
-                >
+                <TouchableOpacity
+          className="flex-1 bg-black/50 justify-center items-center"
+          onPress={() => setIsMonthModalOpen(false)}>
+          
                     <View className="bg-white w-4/5 rounded-xl max-h-[60%]">
                         <FlatList
-                            data={MONTHS}
-                            keyExtractor={(item) => item}
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity
-                                    className={`p-4 border-b border-gray-100 ${index === currentMonth ? 'bg-emerald-50' : ''}`}
-                                    onPress={() => {
-                                        onMonthYearChange(index, currentYear);
-                                        setIsMonthModalOpen(false);
-                                    }}
-                                >
+              data={MONTHS}
+              keyExtractor={(item) => item}
+              renderItem={({ item, index }) =>
+              <TouchableOpacity
+                className={`p-4 border-b border-gray-100 ${index === currentMonth ? 'bg-emerald-50' : ''}`}
+                onPress={() => {
+                  onMonthYearChange(index, currentYear);
+                  setIsMonthModalOpen(false);
+                }}>
+                
                                     <Text className={`text-center ${index === currentMonth ? 'text-emerald-600 font-bold' : 'text-gray-700'}`}>
                                         {item}
                                     </Text>
                                 </TouchableOpacity>
-                            )}
-                        />
+              } />
+            
                     </View>
                 </TouchableOpacity>
             </Modal>
 
             {}
             <Modal visible={isYearModalOpen} transparent animationType="fade">
-                <TouchableOpacity 
-                    className="flex-1 bg-black/50 justify-center items-center"
-                    onPress={() => setIsYearModalOpen(false)}
-                >
+                <TouchableOpacity
+          className="flex-1 bg-black/50 justify-center items-center"
+          onPress={() => setIsYearModalOpen(false)}>
+          
                     <View className="bg-white w-4/5 rounded-xl max-h-[60%]">
                         <FlatList
-                            data={years}
-                            keyExtractor={(item) => item.toString()}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    className={`p-4 border-b border-gray-100 ${item === currentYear ? 'bg-emerald-50' : ''}`}
-                                    onPress={() => {
-                                        onMonthYearChange(currentMonth, item);
-                                        setIsYearModalOpen(false);
-                                    }}
-                                >
+              data={years}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) =>
+              <TouchableOpacity
+                className={`p-4 border-b border-gray-100 ${item === currentYear ? 'bg-emerald-50' : ''}`}
+                onPress={() => {
+                  onMonthYearChange(currentMonth, item);
+                  setIsYearModalOpen(false);
+                }}>
+                
                                     <Text className={`text-center ${item === currentYear ? 'text-emerald-600 font-bold' : 'text-gray-700'}`}>
                                         {item}
                                     </Text>
                                 </TouchableOpacity>
-                            )}
-                        />
+              } />
+            
                     </View>
                 </TouchableOpacity>
             </Modal>
-        </View>
-    );
+        </View>);
+
 };
 
 export default CalendarHeader;

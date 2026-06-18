@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { ReactNode } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Image } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 
 interface NotificationBannerProps {

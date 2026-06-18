@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions } from "react-native";
+import { View, TouchableOpacity, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { createBottomTabNavigator, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { House, ClipboardText, BookOpen, User, Calendar } from "phosphor-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

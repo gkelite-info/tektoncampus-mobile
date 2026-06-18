@@ -1,13 +1,7 @@
+import { useTranslation } from 'react-i18next';
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect, useCallback } from "react";
-import {
-    View,
-    Text,
-    ScrollView,
-    TouchableOpacity,
-    ActivityIndicator,
-    Linking,
-    RefreshControl,
-} from "react-native";
+import { View, ScrollView, TouchableOpacity, ActivityIndicator, Linking, RefreshControl } from 'react-native';
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -27,66 +21,56 @@ import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studen
 import { BookOpenIcon, CaretRightIcon, Chalkboard, ClockIcon, UsersIcon } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
 import { useUpcomingClasses } from "@/features/student/hooks/useUpcomingClasses";
-
 const nativeToast = {
-    error: (msg: string) => console.log(`Toast Error: ${msg}`),
+  error: (msg: string) => console.log(`Toast Error: ${msg}`)
 };
-
 const formatTimeToAMPM = (time24: string) => {
-    if (!time24) return '';
-    const [h, m] = time24.split(':');
-    let hour = Number(h);
-    const period = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12 || 12;
-    return `${hour}:${m} ${period}`;
+  if (!time24) return '';
+  const [h, m] = time24.split(':');
+  let hour = Number(h);
+  const period = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12 || 12;
+  return `${hour}:${m} ${period}`;
 };
-
 export default function StudentHome() {
-    const [view, setView] = useState<'dashboard' | 'exams'>('dashboard');
-    const navigation = useNavigation<any>();
-    const headerHeight = useHeaderHeight();
-
-    const [dueAssignmentsCount, setDueAssignmentsCount] = useState(0);
-    const [attendancePercent, setAttendancePercent] = useState<number | null>(null);
-    const [assignmentsLoading, setAssignmentsLoading] = useState(true);
-    const [pendingFeeAmount, setPendingFeeAmount] = useState<number | null>(null);
-    const [feeLoading, setFeeLoading] = useState(true);
-    const [subjects, setSubjects] = useState<any[]>([]);
-    const [subjectsLoading, setSubjectsLoading] = useState(true);
-    const {
-        loading: studentLoading,
-        userId: studentUserId,
-        studentId,
-        collegeEducationType,
-        collegeEducationId,
-        collegeBranchId,
-        collegeAcademicYearId,
-        collegeSemesterId,
-        collegeSectionsId,
-    } = useStudent();
-
-    const t = useTranslations("Dashboard.student");
-
-    const {
-        data: lectures = [],
-        isLoading: loadingLectures,
-        error,
-        refetch,
-    } = useUpcomingClasses();
-
-    const loadSubjects = useCallback(async () => {
-        try {
-            setSubjectsLoading(true);
-
-            if (!collegeEducationId || !collegeBranchId || !collegeAcademicYearId) {
-                setSubjects([]);
-                return;
-            }
-
-            let query = supabase
-                .from('college_subjects')
-                .select(
-                    `
+  const {
+    t
+  } = useTranslation();
+  const [view, setView] = useState<'dashboard' | 'exams'>('dashboard');
+  const navigation = useNavigation<any>();
+  const headerHeight = useHeaderHeight();
+  const [dueAssignmentsCount, setDueAssignmentsCount] = useState(0);
+  const [attendancePercent, setAttendancePercent] = useState<number | null>(null);
+  const [assignmentsLoading, setAssignmentsLoading] = useState(true);
+  const [pendingFeeAmount, setPendingFeeAmount] = useState<number | null>(null);
+  const [feeLoading, setFeeLoading] = useState(true);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [subjectsLoading, setSubjectsLoading] = useState(true);
+  const {
+    loading: studentLoading,
+    userId: studentUserId,
+    studentId,
+    collegeEducationType,
+    collegeEducationId,
+    collegeBranchId,
+    collegeAcademicYearId,
+    collegeSemesterId,
+    collegeSectionsId
+  } = useStudent();
+  const {
+    data: lectures = [],
+    isLoading: loadingLectures,
+    error,
+    refetch
+  } = useUpcomingClasses();
+  const loadSubjects = useCallback(async () => {
+    try {
+      setSubjectsLoading(true);
+      if (!collegeEducationId || !collegeBranchId || !collegeAcademicYearId) {
+        setSubjects([]);
+        return;
+      }
+      let query = supabase.from('college_subjects').select(`
           collegeSubjectId,
           subjectName,
           image,
@@ -94,276 +78,199 @@ export default function StudentHome() {
             completionPercentage,
             createdBy
           )
-        `
-                )
-                .eq('collegeBranchId', collegeBranchId)
-                .eq('collegeEducationId', collegeEducationId)
-                .eq('collegeAcademicYearId', collegeAcademicYearId)
-                .eq('isActive', true)
-                .is('deletedAt', null);
-
-            const { data: subjectData } = await query;
-            if (!subjectData) {
-                setSubjects([]);
-                return;
-            }
-
-            const facultyIds = new Set<number>();
-            subjectData.forEach((sub: any) => {
-                sub.college_subject_units?.forEach((unit: any) => {
-                    if (unit.createdBy) facultyIds.add(unit.createdBy);
-                });
-            });
-
-            const facultyMap: Record<number, string> = {};
-            if (facultyIds.size > 0) {
-                const { data: facultyData } = await supabase
-                    .from('faculty')
-                    .select('facultyId, fullName')
-                    .in('facultyId', Array.from(facultyIds));
-                facultyData?.forEach((f: any) => {
-                    facultyMap[f.facultyId] = f.fullName;
-                });
-            }
-
-            const colorPalettes = [
-                { radialStart: '#10FD77', radialEnd: '#1C6B3F', remainingColor: '#A1FFCA' },
-                { radialStart: '#EFEDFF', radialEnd: '#705CFF', remainingColor: '#E8E4FF' },
-                { radialStart: '#FFFFFF', radialEnd: '#FFBE48', remainingColor: '#F7EBD5' },
-                { radialStart: '#FEFFFF', radialEnd: '#008993', remainingColor: '#C4FBFF' },
-            ];
-
-            const mappedSubjects = subjectData.map((sub: any, index: number) => {
-                const units = sub.college_subject_units || [];
-                const totalUnits = units.length;
-
-                const avgPercentage =
-                    totalUnits > 0
-                        ? Math.round(
-                            units.reduce(
-                                (acc: number, curr: any) => acc + (curr.completionPercentage || 0),
-                                0
-                            ) / totalUnits
-                        )
-                        : 0;
-
-                const firstUnit = units[0];
-                const professor =
-                    firstUnit && facultyMap[firstUnit.createdBy]
-                        ? t('Prof {name}', { name: facultyMap[firstUnit.createdBy] })
-                        : t('Faculty not assigned');
-                const colors = colorPalettes[index % colorPalettes.length];
-
-                return {
-                    title: sub.subjectName,
-                    professor: professor,
-                    image: sub.image || '',
-                    percentage: avgPercentage,
-                    radialStart: colors.radialStart,
-                    radialEnd: colors.radialEnd,
-                    remainingColor: colors.remainingColor,
-                };
-            });
-
-            setSubjects(mappedSubjects);
-        } catch {
-            nativeToast.error('Failed to load subjects');
-        } finally {
-            setSubjectsLoading(false);
-        }
-    }, [collegeAcademicYearId, collegeBranchId, collegeEducationId, collegeSemesterId, t]);
-
-    const loadPendingFee = useCallback(async () => {
-        try {
-            setFeeLoading(true);
-
-            if (!studentUserId) return;
-
-            const plan = await fetchStudentFeePlan(studentUserId);
-            setPendingFeeAmount(plan?.pendingAmount ?? 0);
-        } catch (err) {
-            console.error('Failed to load pending fee', err);
-        } finally {
-            setFeeLoading(false);
-        }
-    }, [studentUserId]);
-
-    const loadAttendancePercent = useCallback(async () => {
-        try {
-            if (!studentUserId) return;
-
-            const today = new Date().toISOString().split('T')[0];
-
-            const res = await getStudentDashboardData(
-                studentUserId,
-                today,
-                1,
-                1,
-                collegeEducationType === 'Inter'
-            );
-
-            setAttendancePercent(res?.cards?.percentage ?? 0);
-        } catch (err) {
-            console.error('Failed to load attendance percent', err);
-            setAttendancePercent(0);
-        }
-    }, [collegeEducationType, studentUserId]);
-
-    const loadAssignmentCount = useCallback(async () => {
-        try {
-            if (!collegeBranchId || !collegeAcademicYearId || !collegeSectionsId) {
-                setDueAssignmentsCount(0);
-                return;
-            }
-
-            const res = await fetchAssignmentsForStudent({
-                collegeBranchId,
-                collegeAcademicYearId,
-                collegeSectionsId,
-            },
-                1,
-                1,
-                'active'
-            );
-
-            if (res.success) {
-                setDueAssignmentsCount(res.totalCount);
-            }
-        } catch (err) {
-            console.error('Failed to load assignment count', err);
-        } finally {
-            setAssignmentsLoading(false);
-        }
-    }, [collegeAcademicYearId, collegeBranchId, collegeSectionsId]);
-
-    const [refreshing, setRefreshing] = useState(false);
-
-    const onRefresh = useCallback(async () => {
-        setRefreshing(true);
-        try {
-            await Promise.all([
-                loadAssignmentCount(),
-                loadAttendancePercent(),
-                loadPendingFee(),
-                loadSubjects(),
-                refetch(),
-            ]);
-        } catch (err) {
-            console.error("Refresh error:", err);
-        } finally {
-            setRefreshing(false);
-        }
-    }, [loadAssignmentCount, loadAttendancePercent, loadPendingFee, loadSubjects, refetch]);
-
-    useEffect(() => {
-        if (studentLoading) return;
-
+        `).eq('collegeBranchId', collegeBranchId).eq('collegeEducationId', collegeEducationId).eq('collegeAcademicYearId', collegeAcademicYearId).eq('isActive', true).is('deletedAt', null);
+      const {
+        data: subjectData
+      } = await query;
+      if (!subjectData) {
+        setSubjects([]);
+        return;
+      }
+      const facultyIds = new Set<number>();
+      subjectData.forEach((sub: any) => {
+        sub.college_subject_units?.forEach((unit: any) => {
+          if (unit.createdBy) facultyIds.add(unit.createdBy);
+        });
+      });
+      const facultyMap: Record<number, string> = {};
+      if (facultyIds.size > 0) {
+        const {
+          data: facultyData
+        } = await supabase.from('faculty').select('facultyId, fullName').in('facultyId', Array.from(facultyIds));
+        facultyData?.forEach((f: any) => {
+          facultyMap[f.facultyId] = f.fullName;
+        });
+      }
+      const colorPalettes = [{
+        radialStart: '#10FD77',
+        radialEnd: '#1C6B3F',
+        remainingColor: '#A1FFCA'
+      }, {
+        radialStart: '#EFEDFF',
+        radialEnd: '#705CFF',
+        remainingColor: '#E8E4FF'
+      }, {
+        radialStart: '#FFFFFF',
+        radialEnd: '#FFBE48',
+        remainingColor: '#F7EBD5'
+      }, {
+        radialStart: '#FEFFFF',
+        radialEnd: '#008993',
+        remainingColor: '#C4FBFF'
+      }];
+      const mappedSubjects = subjectData.map((sub: any, index: number) => {
         
-        loadAssignmentCount();
-        loadAttendancePercent();
-        loadPendingFee();
-        loadSubjects();
-    }, [
-        studentLoading,
-        
-        loadAssignmentCount,
-        loadAttendancePercent,
-        loadPendingFee,
-        loadSubjects,
-    ]);
-
-    const cardData = [
-        {
-            style: 'bg-[#E2DAFF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
-            icon: <Chalkboard size={32} color="#714EF2" weight="fill" />,
-            value: attendancePercent === null ? <ValueShimmer /> : `${attendancePercent}%`,
-            label: t('Attendance'),
-            to: 'Attendance',
-        },
-        {
-            style: 'bg-[#FFEDDA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
-            icon: <UsersIcon size={32} color="#FFBB70" weight="fill" />,
-            value: assignmentsLoading ? (
-                <ValueShimmer />
-            ) : (
-                t('{count} Due', { count: String(dueAssignmentsCount) })
-            ),
-            label: t('Assignments'),
-            to: 'Assignments',
-        },
-        {
-            style: 'bg-[#E6FBEA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
-            icon: <BookOpenIcon size={32} color="#74FF8F" weight="fill" />,
-            value: t('Mid Exams'),
-            label: t('N/A'),
-            onClick: () => setView('exams'),
-        },
-        {
-            style: 'bg-[#CEE6FF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
-            icon: <ClockIcon size={32} color="#60AEFF" weight="fill" />,
-            value: feeLoading ? <ValueShimmer /> : `₹${pendingFeeAmount?.toLocaleString('en-IN')}`,
-            label: t('Fee Due'),
-            to: 'Payments',
-        },
-    ];
-
-    const formatDate = (dateStr: string) => {
-        const date = new Date(dateStr);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-    };
-
-    const handleUpcomingClasses = () => {
-        navigation.navigate('Calendar');
-    };
-
-    const handleSubjectProgress = () => {
-        navigation.navigate('Academics');
-    };
-
-    const handleLinkPress = async (url: string) => {
-        const supported = await Linking.canOpenURL(url);
-        if (supported) {
-            await Linking.openURL(url);
-        }
-    };
-
-    if (view === 'exams') {
-        return <MidExams onBack={() => setView('dashboard')} />;
+        const units = sub.college_subject_units || [];
+        const totalUnits = units.length;
+        const avgPercentage = totalUnits > 0 ? Math.round(units.reduce((acc: number, curr: any) => acc + (curr.completionPercentage || 0), 0) / totalUnits) : 0;
+        const firstUnit = units[0];
+        const professor = firstUnit && facultyMap[firstUnit.createdBy] ? t('Prof {name}', {
+          name: facultyMap[firstUnit.createdBy]
+        }) : t('Faculty not assigned');
+        const colors = colorPalettes[index % colorPalettes.length];
+        return {
+          title: sub.subjectName,
+          professor: professor,
+          image: sub.image || '',
+          percentage: avgPercentage,
+          radialStart: colors.radialStart,
+          radialEnd: colors.radialEnd,
+          remainingColor: colors.remainingColor
+        };
+      });
+      setSubjects(mappedSubjects);
+    } catch {
+      nativeToast.error('Failed to load subjects');
+    } finally {
+      setSubjectsLoading(false);
     }
-
-    return (
-        <ScrollView
-            style={tw`flex-1 bg-[#f4f5f6]`}
-            contentContainerStyle={[tw`p-4 gap-5 pb-30`, { paddingTop: headerHeight + 16 }]}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            alwaysBounceVertical={true}
-            overScrollMode="always"
-        >
+  }, [collegeAcademicYearId, collegeBranchId, collegeEducationId, collegeSemesterId, t]);
+  const loadPendingFee = useCallback(async () => {
+    try {
+      setFeeLoading(true);
+      if (!studentUserId) return;
+      const plan = await fetchStudentFeePlan(studentUserId);
+      setPendingFeeAmount(plan?.pendingAmount ?? 0);
+    } catch (err) {
+      console.error('Failed to load pending fee', err);
+    } finally {
+      setFeeLoading(false);
+    }
+  }, [studentUserId]);
+  const loadAttendancePercent = useCallback(async () => {
+    try {
+      if (!studentUserId) return;
+      const today = new Date().toISOString().split('T')[0];
+      const res = await getStudentDashboardData(studentUserId, today, 1, 1, collegeEducationType === 'Inter');
+      setAttendancePercent(res?.cards?.percentage ?? 0);
+    } catch (err) {
+      console.error('Failed to load attendance percent', err);
+      setAttendancePercent(0);
+    }
+  }, [collegeEducationType, studentUserId]);
+  const loadAssignmentCount = useCallback(async () => {
+    try {
+      if (!collegeBranchId || !collegeAcademicYearId || !collegeSectionsId) {
+        setDueAssignmentsCount(0);
+        return;
+      }
+      const res = await fetchAssignmentsForStudent({
+        collegeBranchId,
+        collegeAcademicYearId,
+        collegeSectionsId
+      }, 1, 1, 'active');
+      if (res.success) {
+        setDueAssignmentsCount(res.totalCount);
+      }
+    } catch (err) {
+      console.error('Failed to load assignment count', err);
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  }, [collegeAcademicYearId, collegeBranchId, collegeSectionsId]);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await Promise.all([loadAssignmentCount(), loadAttendancePercent(), loadPendingFee(), loadSubjects(), refetch()]);
+    } catch (err) {
+      console.error("Refresh error:", err);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [loadAssignmentCount, loadAttendancePercent, loadPendingFee, loadSubjects, refetch]);
+  useEffect(() => {
+    if (studentLoading) return;
+    loadAssignmentCount();
+    loadAttendancePercent();
+    loadPendingFee();
+    loadSubjects();
+  }, [studentLoading, loadAssignmentCount, loadAttendancePercent, loadPendingFee, loadSubjects]);
+  const cardData = [{
+    style: 'bg-[#E2DAFF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
+    icon: <Chalkboard size={32} color="#714EF2" weight="fill" />,
+    value: attendancePercent === null ? <ValueShimmer /> : `${attendancePercent}%`,
+    label: t('Attendance'),
+    to: 'Attendance'
+  }, {
+    style: 'bg-[#FFEDDA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
+    icon: <UsersIcon size={32} color="#FFBB70" weight="fill" />,
+    value: assignmentsLoading ? <ValueShimmer /> : t('{count} Due', {
+      count: String(dueAssignmentsCount)
+    }),
+    label: t('Assignments'),
+    to: 'Assignments'
+  }, {
+    style: 'bg-[#E6FBEA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
+    icon: <BookOpenIcon size={32} color="#74FF8F" weight="fill" />,
+    value: t('Mid Exams'),
+    label: t('N/A'),
+    onClick: () => setView('exams')
+  }, {
+    style: 'bg-[#CEE6FF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
+    icon: <ClockIcon size={32} color="#60AEFF" weight="fill" />,
+    value: feeLoading ? <ValueShimmer /> : `₹${pendingFeeAmount?.toLocaleString('en-IN')}`,
+    label: t('Fee Due'),
+    to: 'Payments'
+  }];
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+  const handleUpcomingClasses = () => {
+    navigation.navigate('Calendar');
+  };
+  const handleSubjectProgress = () => {
+    navigation.navigate('Academics');
+  };
+  const handleLinkPress = async (url: string) => {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    }
+  };
+  if (view === 'exams') {
+    return <MidExams onBack={() => setView('dashboard')} />;
+  }
+  return <ScrollView style={tw`flex-1 bg-[#f4f5f6]`} contentContainerStyle={[tw`p-4 gap-5 pb-30`, {
+    paddingTop: headerHeight + 16
+  }]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} alwaysBounceVertical={true} overScrollMode="always">
             <View>
                 <UserInfoCard />
             </View>
 
             <View style={tw`flex-row flex-wrap justify-between w-full`}>
-                {cardData.map((item: any, index: number) => (
-                    <CardComponent
-                        key={index}
-                        style={item.style}
-                        icon={item.icon}
-                        value={item.value}
-                        label={item.label}
-                        onClick={item.onClick ? item.onClick : () => item.to && navigation.navigate(item.to)}
-                    />
-                ))}
+                {cardData.map((item: any, index: number) => <CardComponent key={index} style={item.style} icon={item.icon} value={item.value} label={item.label} onClick={item.onClick ? item.onClick : () => item.to && navigation.navigate(item.to)} />)}
             </View>
 
             <View style={tw`bg-white rounded-2xl p-4 shadow-sm`}>
                 <View style={tw`flex-row justify-between items-center mb-3`}>
-                    <Text style={[tw`text-[#282828] text-[17px]`, { fontFamily: fonts.bold }]}>
+                    <Text style={[tw`text-[#282828] text-[17px]`, {
+          fontFamily: fonts.bold
+        }]}>
                         {t('Upcoming Events')}
                     </Text>
                     <TouchableOpacity onPress={handleUpcomingClasses}>
@@ -372,40 +279,30 @@ export default function StudentHome() {
                 </View>
 
                 <View style={tw`gap-3`}>
-                    {loadingLectures ? (
-                        <View style={tw`flex-row justify-center items-center h-[120px]`}>
+                    {loadingLectures ? <View style={tw`flex-row justify-center items-center h-[120px]`}>
                             <ActivityIndicator size="small" color="#16284F" />
-                        </View>
-                    ) : lectures.length === 0 ? (
-                        <View style={tw`min-h-[50px] items-center justify-center`}>
-                            <Text style={[tw`text-[#282828] text-sm`, { fontFamily: fonts.regular }]}>
+                        </View> : lectures.length === 0 ? <View style={tw`min-h-[50px] items-center justify-center`}>
+                            <Text style={[tw`text-[#282828] text-sm`, {
+            fontFamily: fonts.regular
+          }]}>
                                 {t('No events scheduled')}
                             </Text>
-                        </View>
-                    ) : (
-                        lectures.map((lec: any) => (
-                            <View key={lec.calendarEventId} style={tw`relative mb-1`}>
-                                <LectureCard
-                                    time={`${formatTimeToAMPM(lec.fromTime)}\n-\n${formatTimeToAMPM(lec.toTime)}`}
-                                    title={lec.eventTitle}
-                                    professor={t('Prof {name}', { name: lec.facultyName })}
-                                    description={`${lec.eventTopic} • ${formatDate(lec.date)}`}
-                                    status={lec.isCancelled ? t('Cancelled') : ''}
-                                />
+                        </View> : lectures.map((lec: any) => {
+          
+          return <View key={lec.calendarEventId} style={tw`relative mb-1`}>
+                                <LectureCard time={`${formatTimeToAMPM(lec.fromTime)}\n-\n${formatTimeToAMPM(lec.toTime)}`} title={lec.eventTitle} professor={t('Prof {name}', {
+              name: lec.facultyName
+            })} description={`${lec.eventTopic} • ${formatDate(lec.date)}`} status={lec.isCancelled ? t('Cancelled') : ''} />
 
-                                {lec.meetingLink && !lec.isCancelled && (
-                                    <TouchableOpacity
-                                        activeOpacity={0.8}
-                                        onPress={() => handleLinkPress(lec.meetingLink)}
-                                        style={tw`absolute right-3 top-1/2 -translate-y-4 bg-[#43C17A] px-3 py-1.5 rounded-md shadow-sm`}>
-                                        <Text style={[tw`text-white text-xs`, { fontFamily: fonts.medium }]}>
+                                {lec.meetingLink && !lec.isCancelled && <TouchableOpacity activeOpacity={0.8} onPress={() => handleLinkPress(lec.meetingLink)} style={tw`absolute right-3 top-1/2 -translate-y-4 bg-[#43C17A] px-3 py-1.5 rounded-md shadow-sm`}>
+                                        <Text style={[tw`text-white text-xs`, {
+                fontFamily: fonts.medium
+              }]}>
                                             {t('Join')}
                                         </Text>
-                                    </TouchableOpacity>
-                                )}
-                            </View>
-                        ))
-                    )}
+                                    </TouchableOpacity>}
+                            </View>;
+        })}
                 </View>
             </View>
 
@@ -414,12 +311,7 @@ export default function StudentHome() {
             </View>
 
             <View style={tw`w-full`}>
-                <SubjectProgressCards
-                    props={subjectsLoading ? [] : subjects}
-                    isLoading={subjectsLoading}
-                    onViewMore={handleSubjectProgress}
-                />
+                <SubjectProgressCards props={subjectsLoading ? [] : subjects} isLoading={subjectsLoading} onViewMore={handleSubjectProgress} />
             </View>
-        </ScrollView>
-    );
+        </ScrollView>;
 }

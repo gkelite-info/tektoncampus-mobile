@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from 'react-native';
 import { IconProps } from "phosphor-react-native";
 
 export interface CardProps {

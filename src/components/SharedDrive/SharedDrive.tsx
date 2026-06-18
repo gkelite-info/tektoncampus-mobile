@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, Alert } from "react-native";
+import { View, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, Alert } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { supabase } from "@/lib/supabaseClient";
@@ -12,13 +13,13 @@ import {
   DriveFolderRow,
   fetchRootDriveFolders,
   saveDriveFolder,
-  deleteDriveFolder,
-} from "@/lib/helpers/drive/driveFolderAPI";
+  deleteDriveFolder } from
+"@/lib/helpers/drive/driveFolderAPI";
 import {
   DriveFileRow,
   fetchFolderStats,
-  fetchRecentDriveFiles,
-} from "@/lib/helpers/drive/driveFilesAPI";
+  fetchRecentDriveFiles } from
+"@/lib/helpers/drive/driveFilesAPI";
 import { useUser } from "@/utils/context/UserContext";
 
 import { FolderCard, FolderItemProps } from "./components/FolderCard";
@@ -45,7 +46,7 @@ type RecentFile = {
 const MAX_RECENT = 10;
 const getRecentKey = (uid: number | null) => `recentlyViewedFiles_${uid ?? "guest"}`;
 
-export default function SharedDrive() {
+export default function SharedDrive() {const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { userId, collegeId } = useUser();
 
@@ -53,26 +54,26 @@ export default function SharedDrive() {
   const [folders, setFolders] = useState<FolderItemProps[]>([]);
   const [recentFiles, setRecentFiles] = useState<DriveFileRow[]>([]);
   const [recentViewed, setRecentViewed] = useState<RecentFile[]>([]);
-  
+
   const [isNewFolderOpen, setIsNewFolderOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isFilesModalOpen, setIsFilesModalOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<FolderItemProps | null>(null);
-  
+
   const [folderToRename, setFolderToRename] = useState<FolderItemProps | null>(null);
   const [folderToDelete, setFolderToDelete] = useState<FolderItemProps | null>(null);
   const [fileToDelete, setFileToDelete] = useState<DriveFileRow | null>(null);
   const [isRenaming, setIsRenaming] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletingFile, setIsDeletingFile] = useState(false);
-  
+
   const [loadingFolders, setLoadingFolders] = useState(true);
   const [loadingFiles, setLoadingFiles] = useState(true);
-  
-  const [isReplaceModalOpen, setIsReplaceModalOpen] = useState(false);
-  const [duplicateFolderData, setDuplicateFolderData] = useState<{ name: string; color: string } | null>(null);
 
-  
+  const [isReplaceModalOpen, setIsReplaceModalOpen] = useState(false);
+  const [duplicateFolderData, setDuplicateFolderData] = useState<{name: string;color: string;} | null>(null);
+
+
   useEffect(() => {
     if (userId) {
       AsyncStorage.getItem(getRecentKey(userId)).then((data) => {
@@ -83,14 +84,14 @@ export default function SharedDrive() {
 
   useEffect(() => {
     if (!collegeId) return;
-    supabase
-      .from("colleges")
-      .select("collegeName")
-      .eq("collegeId", collegeId)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data) setCollegeName(data.collegeName);
-      });
+    supabase.
+    from("colleges").
+    select("collegeName").
+    eq("collegeId", collegeId).
+    maybeSingle().
+    then(({ data }) => {
+      if (data) setCollegeName(data.collegeName);
+    });
   }, [collegeId]);
 
   useEffect(() => {
@@ -100,29 +101,29 @@ export default function SharedDrive() {
     setLoadingFiles(true);
 
     Promise.all([
-      fetchRootDriveFolders(collegeId, userId),
-      fetchFolderStats(collegeId, userId),
-      fetchRecentDriveFiles(collegeId, 1, 20, userId),
-    ])
-      .then(([folderData, stats, filesResult]) => {
-        setFolders(
-          (folderData as DriveFolderRow[]).map((f) => ({
-            driveFolderId: f.driveFolderId,
-            name: f.folderName,
-            color: f.color ?? "#0096A6",
-            filesCount: stats[f.driveFolderId]?.totalFiles ?? 0,
-            sizeLabel: formatSize(stats[f.driveFolderId]?.totalSizeBytes ?? 0),
-          })),
-        );
+    fetchRootDriveFolders(collegeId, userId),
+    fetchFolderStats(collegeId, userId),
+    fetchRecentDriveFiles(collegeId, 1, 20, userId)]
+    ).
+    then(([folderData, stats, filesResult]) => {
+      setFolders(
+        (folderData as DriveFolderRow[]).map((f) => ({
+          driveFolderId: f.driveFolderId,
+          name: f.folderName,
+          color: f.color ?? "#0096A6",
+          filesCount: stats[f.driveFolderId]?.totalFiles ?? 0,
+          sizeLabel: formatSize(stats[f.driveFolderId]?.totalSizeBytes ?? 0)
+        }))
+      );
 
-        const { data } = filesResult as unknown as { data: DriveFileRow[] };
-        setRecentFiles(data);
-      })
-      .catch(() => Toast.show({ type: "error", text1: "Failed to load data" }))
-      .finally(() => {
-        setLoadingFolders(false);
-        setLoadingFiles(false);
-      });
+      const { data } = filesResult as unknown as {data: DriveFileRow[];};
+      setRecentFiles(data);
+    }).
+    catch(() => Toast.show({ type: "error", text1: "Failed to load data" })).
+    finally(() => {
+      setLoadingFolders(false);
+      setLoadingFiles(false);
+    });
   }, [collegeId, userId]);
 
   function formatSize(bytes: number | null): string {
@@ -134,30 +135,30 @@ export default function SharedDrive() {
   const addToRecent = async (file: DriveFileRow, uid: number | null) => {
     const existingStr = await AsyncStorage.getItem(getRecentKey(uid));
     const existing: RecentFile[] = existingStr ? JSON.parse(existingStr) : [];
-    
+
     const filtered = existing.filter((f) => f.driveFileId !== file.driveFileId);
     const updated: RecentFile[] = [
-      {
-        driveFileId: file.driveFileId,
-        driveFolderId: file.driveFolderId,
-        fileName: file.fileName,
-        fileType: file.fileType,
-        fileSize: file.fileSize,
-        createdAt: file.createdAt,
-        accessedAt: new Date().toISOString(),
-      },
-      ...filtered,
-    ].slice(0, MAX_RECENT);
-    
+    {
+      driveFileId: file.driveFileId,
+      driveFolderId: file.driveFolderId,
+      fileName: file.fileName,
+      fileType: file.fileType,
+      fileSize: file.fileSize,
+      createdAt: file.createdAt,
+      accessedAt: new Date().toISOString()
+    },
+    ...filtered].
+    slice(0, MAX_RECENT);
+
     await AsyncStorage.setItem(getRecentKey(uid), JSON.stringify(updated));
     return updated;
   };
 
-  const handleCreateFolder = async (data: { name: string; color: string }) => {
+  const handleCreateFolder = async (data: {name: string;color: string;}) => {
     if (!collegeId || !userId) return;
 
     const existingFolder = folders.find(
-      (f) => f.name.toLowerCase().trim() === data.name.toLowerCase().trim(),
+      (f) => f.name.toLowerCase().trim() === data.name.toLowerCase().trim()
     );
 
     if (existingFolder) {
@@ -170,21 +171,21 @@ export default function SharedDrive() {
     try {
       const result = await saveDriveFolder(
         { collegeId, folderName: data.name, parentFolderId: null, color: data.color },
-        userId,
+        userId
       );
 
       if (!result.success) throw new Error("Failed");
 
       setFolders((prev) => [
-        {
-          driveFolderId: result.driveFolderId!,
-          name: data.name,
-          color: data.color,
-          filesCount: 0,
-          sizeLabel: "0 KB",
-        },
-        ...prev,
-      ]);
+      {
+        driveFolderId: result.driveFolderId!,
+        name: data.name,
+        color: data.color,
+        filesCount: 0,
+        sizeLabel: "0 KB"
+      },
+      ...prev]
+      );
 
       setIsNewFolderOpen(false);
       Toast.show({ type: "success", text1: "Folder created successfully" });
@@ -205,17 +206,17 @@ export default function SharedDrive() {
           driveFolderId: folderToRename.driveFolderId,
           collegeId,
           folderName: newName,
-          parentFolderId: null,
+          parentFolderId: null
         },
-        userId,
+        userId
       );
 
       if (!result.success) throw new Error("Failed to rename");
 
       setFolders((prev) =>
-        prev.map((f) =>
-          f.driveFolderId === folderToRename.driveFolderId ? { ...f, name: newName } : f,
-        ),
+      prev.map((f) =>
+      f.driveFolderId === folderToRename.driveFolderId ? { ...f, name: newName } : f
+      )
       );
       setFolderToRename(null);
       Toast.show({ type: "success", text1: "Folder renamed" });
@@ -234,7 +235,7 @@ export default function SharedDrive() {
 
     try {
       const existing = folders.find(
-        (f) => f.name.toLowerCase().trim() === duplicateFolderData.name.toLowerCase().trim(),
+        (f) => f.name.toLowerCase().trim() === duplicateFolderData.name.toLowerCase().trim()
       );
 
       if (existing) {
@@ -244,7 +245,7 @@ export default function SharedDrive() {
 
       const result = await saveDriveFolder(
         { collegeId, folderName: duplicateFolderData.name, parentFolderId: null },
-        userId,
+        userId
       );
 
       if (!result.success) throw new Error("Save failed");
@@ -252,22 +253,22 @@ export default function SharedDrive() {
       const colorsData = await AsyncStorage.getItem("folderColors");
       const savedColors: Record<number, string> = colorsData ? JSON.parse(colorsData) : {};
       savedColors[result.driveFolderId!] = duplicateFolderData.color;
-      
+
       if (existing) delete savedColors[existing.driveFolderId];
       await AsyncStorage.setItem("folderColors", JSON.stringify(savedColors));
 
       setFolders((prev) => [
-        {
-          driveFolderId: result.driveFolderId!,
-          name: duplicateFolderData.name,
-          color: duplicateFolderData.color,
-          filesCount: 0,
-          sizeLabel: "0 KB",
-        },
-        ...prev.filter(
-          (f) => f.name.toLowerCase().trim() !== duplicateFolderData.name.toLowerCase().trim(),
-        ),
-      ]);
+      {
+        driveFolderId: result.driveFolderId!,
+        name: duplicateFolderData.name,
+        color: duplicateFolderData.color,
+        filesCount: 0,
+        sizeLabel: "0 KB"
+      },
+      ...prev.filter(
+        (f) => f.name.toLowerCase().trim() !== duplicateFolderData.name.toLowerCase().trim()
+      )]
+      );
 
       setIsNewFolderOpen(false);
       Toast.show({ type: "success", text1: "Folder replaced successfully" });
@@ -291,11 +292,11 @@ export default function SharedDrive() {
 
       setFolders((prev) => prev.filter((f) => f.driveFolderId !== folderToDelete.driveFolderId));
       setRecentFiles((prev) => prev.filter((f) => f.driveFolderId !== folderToDelete.driveFolderId));
-      
+
       const existingStr = await AsyncStorage.getItem(getRecentKey(userId));
       const existing: RecentFile[] = existingStr ? JSON.parse(existingStr) : [];
       const updatedRecent = existing.filter((f) => f.driveFolderId !== folderToDelete.driveFolderId);
-      
+
       await AsyncStorage.setItem(getRecentKey(userId), JSON.stringify(updatedRecent));
       setRecentViewed(updatedRecent);
 
@@ -317,14 +318,14 @@ export default function SharedDrive() {
     if (!collegeId) return;
     try {
       const storagePath = `${collegeId}/${file.driveFolderId}/${file.fileName.trim()}`;
-      const { data, error } = await supabase.storage
-        .from("college-drive")
-        .createSignedUrl(storagePath, 120);
+      const { data, error } = await supabase.storage.
+      from("college-drive").
+      createSignedUrl(storagePath, 120);
 
       if (error || !data?.signedUrl) return;
 
       Toast.show({ type: "info", text1: "Downloading..." });
-      
+
       const { Platform } = require("react-native");
       if (Platform.OS === "web") {
         const response = await fetch(data.signedUrl);
@@ -361,25 +362,25 @@ export default function SharedDrive() {
 
   const handleConfirmDeleteFile = async () => {
     if (!collegeId || !fileToDelete) return;
-    
+
     setIsDeletingFile(true);
-    
+
     try {
-      const { error } = await supabase
-        .from("drive_files")
-        .update({ is_deleted: true, deletedAt: new Date().toISOString() })
-        .eq("driveFileId", fileToDelete.driveFileId);
-        
+      const { error } = await supabase.
+      from("drive_files").
+      update({ is_deleted: true, deletedAt: new Date().toISOString() }).
+      eq("driveFileId", fileToDelete.driveFileId);
+
       if (error) throw new Error("Failed");
-      
+
       setRecentFiles((prev) => prev.filter((f) => f.driveFileId !== fileToDelete.driveFileId));
-      
+
       const existingStr = await AsyncStorage.getItem(getRecentKey(userId));
       const existing: RecentFile[] = existingStr ? JSON.parse(existingStr) : [];
       const updatedRecent = existing.filter((f) => f.driveFileId !== fileToDelete.driveFileId);
       await AsyncStorage.setItem(getRecentKey(userId), JSON.stringify(updatedRecent));
       setRecentViewed(updatedRecent);
-      
+
       Toast.show({ type: "success", text1: "File deleted" });
     } catch {
       Toast.show({ type: "error", text1: "Failed to delete file" });
@@ -395,8 +396,8 @@ export default function SharedDrive() {
         open={isNewFolderOpen}
         onCancel={() => !isSaving && setIsNewFolderOpen(false)}
         onSave={handleCreateFolder}
-        loading={isSaving}
-      />
+        loading={isSaving} />
+      
 
       <FolderFilesModal
         open={isFilesModalOpen}
@@ -405,31 +406,31 @@ export default function SharedDrive() {
         driveFolderId={selectedFolder?.driveFolderId ?? null}
         collegeId={collegeId}
         onFilesChanged={(id, count, sizeBytes) => {
-           setFolders((prev) =>
-            prev.map((f) =>
-              f.driveFolderId === id
-                ? { ...f, filesCount: count, sizeLabel: formatSize(sizeBytes) }
-                : f
-            )
+          setFolders((prev) =>
+          prev.map((f) =>
+          f.driveFolderId === id ?
+          { ...f, filesCount: count, sizeLabel: formatSize(sizeBytes) } :
+          f
+          )
           );
-        }}
-      />
+        }} />
+      
 
       <RenameFolderModal
         open={!!folderToRename}
         currentName={folderToRename?.name || ""}
         onCancel={() => setFolderToRename(null)}
         onSave={handleSaveFolderName}
-        loading={isRenaming}
-      />
+        loading={isRenaming} />
+      
 
       <DeleteFolderModal
         open={!!folderToDelete}
         folderName={folderToDelete?.name || ""}
         onCancel={() => setFolderToDelete(null)}
         onConfirm={handleConfirmDeleteFolder}
-        loading={isDeleting}
-      />
+        loading={isDeleting} />
+      
 
       <ReplaceFolderModal
         open={isReplaceModalOpen}
@@ -439,133 +440,133 @@ export default function SharedDrive() {
           setDuplicateFolderData(null);
         }}
         onConfirm={handleConfirmReplace}
-        loading={isSaving}
-      />
+        loading={isSaving} />
+      
       
       <DeleteFileModal
         open={!!fileToDelete}
         fileName={fileToDelete?.fileName || ""}
         onCancel={() => setFileToDelete(null)}
         onConfirm={handleConfirmDeleteFile}
-        loading={isDeletingFile}
-      />
+        loading={isDeletingFile} />
+      
 
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 100 }}>
         <View className="px-4 pt-4 pb-2 flex-row justify-between items-center">
           <View>
-            <Text className="text-2xl font-semibold text-[#282828] mb-1">
-              Drive
+            <Text className="text-2xl font-semibold text-[#282828] mb-1">{t("Auto.Common.Drive", "Drive")}
+
             </Text>
-            <Text className="text-sm text-gray-500">
-              Manage, organize & monitor files
+            <Text className="text-sm text-gray-500">{t("Auto.Common.Manageorganizem", "Manage, organize & monitor files")}
+
             </Text>
           </View>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => setIsNewFolderOpen(true)}
-            className="bg-[#43C17A] p-2 rounded-full shadow-sm"
-          >
+            className="bg-[#43C17A] p-2 rounded-full shadow-sm">
+            
             <Plus size={24} color="#FFF" weight="bold" />
           </TouchableOpacity>
         </View>
 
         {}
         <View className="mt-4 px-4">
-          <Text className="text-base font-semibold text-gray-900 mb-3">
-            Folders
+          <Text className="text-base font-semibold text-gray-900 mb-3">{t("Auto.Common.Folders", "Folders")}
+
           </Text>
-          {loadingFolders ? (
-            <ActivityIndicator size="small" color="#43C17A" />
-          ) : (
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={folders}
-              keyExtractor={(f) => f.driveFolderId.toString()}
-              renderItem={({ item }) => (
-                <FolderCard
-                  {...item}
-                  onRename={() => setFolderToRename(item)}
-                  onDelete={() => setFolderToDelete(item)}
-                  onClick={() => {
-                    setSelectedFolder(item);
-                    setIsFilesModalOpen(true);
-                  }}
-                />
-              )}
-              ListEmptyComponent={
-                <Text className="text-sm text-gray-400 mt-2">
-                  No folders yet
-                </Text>
-              }
-            />
-          )}
+          {loadingFolders ?
+          <ActivityIndicator size="small" color="#43C17A" /> :
+
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={folders}
+            keyExtractor={(f) => f.driveFolderId.toString()}
+            renderItem={({ item }) =>
+            <FolderCard
+              {...item}
+              onRename={() => setFolderToRename(item)}
+              onDelete={() => setFolderToDelete(item)}
+              onClick={() => {
+                setSelectedFolder(item);
+                setIsFilesModalOpen(true);
+              }} />
+
+            }
+            ListEmptyComponent={
+            <Text className="text-sm text-gray-400 mt-2">{t("Auto.Common.Nofoldersyet", "No folders yet")}
+
+            </Text>
+            } />
+
+          }
         </View>
 
         {}
         <View className="mt-6 px-4">
-          <Text className="text-base font-semibold text-gray-900 mb-3">
-            Recent
-          </Text>
-          {recentViewed.length > 0 ? (
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={recentViewed}
-              keyExtractor={(f) => f.driveFileId.toString()}
-              renderItem={({ item }) => (
-                <RecentFileCard
-                  name={item.fileName}
-                  type={item.fileName.split(".").pop()?.toUpperCase() ?? "FILE"}
-                  sizeLabel={formatSize(item.fileSize)}
-                  date={new Date(item.accessedAt).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                  onPress={() => {
+          <Text className="text-base font-semibold text-gray-900 mb-3">{t("Auto.Common.Recent", "Recent")}
 
-                     handleDownloadFile({
-                       ...item,
-                       collegeId: collegeId!,
-                       fileUrl: "",
-                       uploadedBy: 0,
-                       is_deleted: false,
-                       updatedAt: "",
-                       deletedAt: null
-                     });
-                  }}
-                />
-              )}
-            />
-          ) : (
-            <Text className="text-sm text-gray-400">
-              No recently viewed files yet
-            </Text>
-          )}
+          </Text>
+          {recentViewed.length > 0 ?
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={recentViewed}
+            keyExtractor={(f) => f.driveFileId.toString()}
+            renderItem={({ item }) =>
+            <RecentFileCard
+              name={item.fileName}
+              type={item.fileName.split(".").pop()?.toUpperCase() ?? "FILE"}
+              sizeLabel={formatSize(item.fileSize)}
+              date={new Date(item.accessedAt).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short"
+              })}
+              onPress={() => {
+
+                handleDownloadFile({
+                  ...item,
+                  collegeId: collegeId!,
+                  fileUrl: "",
+                  uploadedBy: 0,
+                  is_deleted: false,
+                  updatedAt: "",
+                  deletedAt: null
+                });
+              }} />
+
+            } /> :
+
+
+          <Text className="text-sm text-gray-400">{t("Auto.Common.Norecentlyviewe", "No recently viewed files yet")}
+
+          </Text>
+          }
         </View>
 
         <View className="mt-6 px-4">
-          <Text className="text-base font-semibold text-gray-900 mb-3">
-            All Files
+          <Text className="text-base font-semibold text-gray-900 mb-3">{t("Auto.Common.AllFiles", "All Files")}
+
           </Text>
-          {loadingFiles ? (
-            <ActivityIndicator size="small" color="#43C17A" />
-          ) : recentFiles.length > 0 ? (
-            recentFiles.map((file) => (
-              <FileListItem
-                key={file.driveFileId}
-                file={file}
-                onDownload={handleDownloadFile}
-                onDelete={(file) => setFileToDelete(file)}
-                isDeleting={isDeletingFile && fileToDelete?.driveFileId === file.driveFileId}
-              />
-            ))
-          ) : (
-             <Text className="text-sm text-gray-400">
-               No files found
-             </Text>
-          )}
+          {loadingFiles ?
+          <ActivityIndicator size="small" color="#43C17A" /> :
+          recentFiles.length > 0 ?
+          recentFiles.map((file) =>
+          <FileListItem
+            key={file.driveFileId}
+            file={file}
+            onDownload={handleDownloadFile}
+            onDelete={(file) => setFileToDelete(file)}
+            isDeleting={isDeletingFile && fileToDelete?.driveFileId === file.driveFileId} />
+
+          ) :
+
+          <Text className="text-sm text-gray-400">{t("Auto.Common.Nofilesfound", "No files found")}
+
+          </Text>
+          }
         </View>
       </ScrollView>
-    </View>
-  );
+    </View>);
+
 }

@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, ScrollView, TextInput, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, Modal, ScrollView, TextInput, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { X, Check } from "phosphor-react-native";
 import { fetchFacultyContext } from "@/utils/context/faculty/facultyContextAPI";
@@ -17,12 +18,12 @@ export default function AddEventModal({
   onSave,
   value,
   mode,
-  degreeOptions,
-}: any) {
+  degreeOptions
+}: any) {const { t } = useTranslation();
   const { userId, collegeId, loading } = useUser();
   const [facultyCtx, setFacultyCtx] = useState<any>(null);
 
-  
+
   const [title, setTitle] = useState("");
   const [selectedType, setSelectedType] = useState("class");
   const [meetingPlatform, setMeetingPlatform] = useState("meet");
@@ -30,11 +31,11 @@ export default function AddEventModal({
   const [meetingId, setMeetingId] = useState("");
   const [meetingPassword, setMeetingPassword] = useState("");
   const [date, setDate] = useState(new Date());
-  
+
   const [startHour, setStartHour] = useState("09");
   const [startMinute, setStartMinute] = useState("00");
-  const [startPeriod, setStartPeriod] = useState<"AM"|"PM">("AM");
-  
+  const [startPeriod, setStartPeriod] = useState<"AM" | "PM">("AM");
+
   const [endHour, setEndHour] = useState("10");
   const [endMinute, setEndMinute] = useState("00");
   const [endPeriod, setEndPeriod] = useState<"AM"|"PM">("AM");
@@ -42,7 +43,7 @@ export default function AddEventModal({
   const [collegeRoomId, setCollegeRoomId] = useState<number | null>(null);
   const [rooms, setRooms] = useState<any[]>([]);
   const [topicId, setTopicId] = useState<number | null>(null);
-  
+
   // Academics state
   const [educationId, setEducationId] = useState<number>();
   const [branchId, setBranchId] = useState<number>();
@@ -50,7 +51,7 @@ export default function AddEventModal({
   const [semester, setSemester] = useState<number>();
   const [subjectId, setSubjectId] = useState<number>();
   const [sectionIds, setSectionIds] = useState<number[]>([]);
-  
+
   // Options
   const [educations, setEducations] = useState<any[]>([]);
   const [branches, setBranches] = useState<any[]>([]);
@@ -59,7 +60,7 @@ export default function AddEventModal({
   const [subjects, setSubjects] = useState<any[]>([]);
   const [sections, setSections] = useState<any[]>([]);
   const [topics, setTopics] = useState<any[]>([]);
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -81,36 +82,36 @@ export default function AddEventModal({
       try {
         const edus = await fetchAcademicDropdowns({ type: "education", collegeId });
         setEducations(edus || []);
-        
+
         const brs = await fetchAcademicDropdowns({ type: "branch", collegeId, educationId: facultyCtx.collegeEducationId });
         setBranches(brs || []);
-        
+
         const yrs = await fetchAcademicDropdowns({ type: "academicYear", collegeId, educationId: facultyCtx.collegeEducationId, branchId: facultyCtx.collegeBranchId });
         setAcademicYears(yrs || []);
-        
+
         const sems = await fetchAcademicDropdowns({ type: "semester", collegeId, educationId: facultyCtx.collegeEducationId, branchId: facultyCtx.collegeBranchId, academicYearId: facultyCtx.academicYearIds?.[0] });
         setSemesters(sems || []);
         if (sems?.length === 1) setSemester(sems[0].collegeSemesterId);
-        
+
         const secs = await fetchAcademicDropdowns({ type: "section", collegeId, educationId: facultyCtx.collegeEducationId, branchId: facultyCtx.collegeBranchId, academicYearId: facultyCtx.academicYearIds?.[0] });
         const filteredSecs = (secs || []).filter((s: any) => facultyCtx.sectionIds.includes(s.collegeSectionsId));
         setSections(filteredSecs);
         if (filteredSecs.length === 1) setSectionIds([filteredSecs[0].collegeSectionsId]);
-        
-        const { data: subjectRows } = await supabase
-          .from("college_subjects")
-          .select("collegeSubjectId, subjectName")
-          .eq("collegeId", collegeId)
-          .eq("collegeEducationId", facultyCtx.collegeEducationId)
-          .eq("collegeBranchId", facultyCtx.collegeBranchId)
-          .eq("collegeAcademicYearId", facultyCtx.academicYearIds?.[0])
-          .in("collegeSubjectId", facultyCtx.subjectIds)
-          .eq("isActive", true)
-          .is("deletedAt", null);
-          
+
+        const { data: subjectRows } = await supabase.
+        from("college_subjects").
+        select("collegeSubjectId, subjectName").
+        eq("collegeId", collegeId).
+        eq("collegeEducationId", facultyCtx.collegeEducationId).
+        eq("collegeBranchId", facultyCtx.collegeBranchId).
+        eq("collegeAcademicYearId", facultyCtx.academicYearIds?.[0]).
+        in("collegeSubjectId", facultyCtx.subjectIds).
+        eq("isActive", true).
+        is("deletedAt", null);
+
         setSubjects(subjectRows || []);
         if (subjectRows?.length === 1) setSubjectId(subjectRows[0].collegeSubjectId);
-      } catch (err) { }
+      } catch (err) {}
     };
     loadData();
   }, [collegeId, facultyCtx, isOpen]);
@@ -131,24 +132,24 @@ export default function AddEventModal({
   
   useEffect(() => {
     if (!subjectId || !isOpen) return;
-    supabase
-      .from("college_subject_unit_topics")
-      .select("collegeSubjectUnitTopicId, topicTitle")
-      .eq("collegeSubjectId", subjectId)
-      .eq("collegeId", collegeId)
-      .then(({ data }) => setTopics(data || []));
-      
-    supabase
-      .from("college_subjects")
-      .select("collegeSemesterId")
-      .eq("collegeSubjectId", subjectId)
-      .single()
-      .then(({ data }) => {
-        if (data?.collegeSemesterId) setSemester(data.collegeSemesterId);
-      });
+    supabase.
+    from("college_subject_unit_topics").
+    select("collegeSubjectUnitTopicId, topicTitle").
+    eq("collegeSubjectId", subjectId).
+    eq("collegeId", collegeId).
+    then(({ data }) => setTopics(data || []));
+
+    supabase.
+    from("college_subjects").
+    select("collegeSemesterId").
+    eq("collegeSubjectId", subjectId).
+    single().
+    then(({ data }) => {
+      if (data?.collegeSemesterId) setSemester(data.collegeSemesterId);
+    });
   }, [subjectId, isOpen]);
 
-  
+
   useEffect(() => {
     if (!isOpen || !value || mode !== "edit") return;
     setSelectedType(value.type || "class");
@@ -158,9 +159,9 @@ export default function AddEventModal({
     setMeetingLink(value.meetingLink || "");
     setMeetingId(value.meetingId || "");
     setMeetingPassword(value.meetingPassword || "");
-    if (value.meetingId) setMeetingPlatform("zoom");
-    else if (value.meetingLink?.includes("meet")) setMeetingPlatform("meet");
-    else setMeetingPlatform("others");
+    if (value.meetingId) setMeetingPlatform("zoom");else
+    if (value.meetingLink?.includes("meet")) setMeetingPlatform("meet");else
+    setMeetingPlatform("others");
     setTopicId(value.topicId || null);
     if (value.semesterId) setSemester(value.semesterId);
     if (value.sectionIds) setSectionIds(value.sectionIds);
@@ -180,21 +181,21 @@ export default function AddEventModal({
   };
 
   const handleSave = async () => {
-    if (!semester) { Toast.show({ type: 'error', text1: "Please select semester" }); return; }
-    if (!sectionIds.length) { Toast.show({ type: 'error', text1: "Please select sections" }); return; }
-    if (!topicId) { Toast.show({ type: 'error', text1: "Please select a topic" }); return; }
-    if (selectedType === "meeting" && !title.trim()) { Toast.show({ type: 'error', text1: "Please enter meeting title" }); return; }
+    if (!semester) {Toast.show({ type: 'error', text1: "Please select semester" });return;}
+    if (!sectionIds.length) {Toast.show({ type: 'error', text1: "Please select sections" });return;}
+    if (!topicId) {Toast.show({ type: 'error', text1: "Please select a topic" });return;}
+    if (selectedType === "meeting" && !title.trim()) {Toast.show({ type: 'error', text1: "Please enter meeting title" });return;}
 
     const startTime = to24Hour(startHour, startMinute, startPeriod);
     const endTime = to24Hour(endHour, endMinute, endPeriod);
 
-    if (startTime >= endTime) { Toast.show({ type: 'error', text1: "End time must be after start time" }); return; }
+    if (startTime >= endTime) {Toast.show({ type: 'error', text1: "End time must be after start time" });return;}
 
     const payload = {
       facultyId: userId!,
       subjectId: subjectId!,
       eventTopic: topicId,
-      eventTitle: selectedType === "meeting" ? title : subjects.find(s => s.collegeSubjectId === subjectId)?.subjectName,
+      eventTitle: selectedType === "meeting" ? title : subjects.find((s) => s.collegeSubjectId === subjectId)?.subjectName,
       type: selectedType,
       date: date.toISOString().split("T")[0],
       fromTime: startTime,
@@ -207,7 +208,7 @@ export default function AddEventModal({
       collegeBranchId: branchId!,
       collegeAcademicYearId: academicYearId!,
       collegeSemesterId: semester!,
-      sectionIds,
+      sectionIds
     };
 
     setIsSubmitting(true);
@@ -239,116 +240,116 @@ export default function AddEventModal({
 
           <ScrollView className="flex-1 p-5" contentContainerStyle={{ paddingBottom: 40 }}>
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-2">Type</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-2">{t("Auto.Common.Type", "Type")}</Text>
             <View className="flex-row gap-2 mb-4">
-              {["class", "meeting", "exam"].map((t) => (
-                <TouchableOpacity
-                  key={t}
-                  onPress={() => setSelectedType(t)}
-                  className={`flex-1 py-2.5 rounded-lg border items-center ${
-                    selectedType === t ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"
-                  }`}
-                >
+              {["class", "meeting", "exam"].map((t) =>
+              <TouchableOpacity
+                key={t}
+                onPress={() => setSelectedType(t)}
+                className={`flex-1 py-2.5 rounded-lg border items-center ${
+                selectedType === t ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"}`
+                }>
+                
                   <Text className={`text-sm font-medium ${selectedType === t ? "text-white" : "text-gray-700"}`}>
                     {t.charAt(0).toUpperCase() + t.slice(1)}
                   </Text>
                 </TouchableOpacity>
-              ))}
+              )}
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Subject</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Subject", "Subject")}</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
-              <Picker selectedValue={subjectId} onValueChange={(val) => { setSubjectId(val); setTopicId(null); }}>
-                <Picker.Item label="Select Subject" value={undefined} />
-                {subjects.map(s => <Picker.Item key={s.collegeSubjectId} label={s.subjectName} value={s.collegeSubjectId} />)}
+              <Picker selectedValue={subjectId} onValueChange={(val) => {setSubjectId(val);setTopicId(null);}}>
+                <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value={undefined} />
+                {subjects.map((s) => <Picker.Item key={s.collegeSubjectId} label={s.subjectName} value={s.collegeSubjectId} />)}
               </Picker>
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Topic</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Topic", "Topic")}</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={topicId} onValueChange={setTopicId}>
-                <Picker.Item label="Select Topic" value={null} />
-                {topics.map(t => <Picker.Item key={t.collegeSubjectUnitTopicId} label={t.topicTitle} value={t.collegeSubjectUnitTopicId} />)}
+                <Picker.Item label={t("Auto.Attr.SelectTopic", "Select Topic")} value={null} />
+                {topics.map((t) => <Picker.Item key={t.collegeSubjectUnitTopicId} label={t.topicTitle} value={t.collegeSubjectUnitTopicId} />)}
               </Picker>
             </View>
 
             {}
-            {selectedType === "meeting" && (
-              <>
-                <Text className="text-sm font-medium text-gray-700 mb-1">Meeting Title</Text>
+            {selectedType === "meeting" &&
+            <>
+                <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.MeetingTitle", "Meeting Title")}</Text>
                 <TextInput
-                  value={title}
-                  onChangeText={setTitle}
-                  placeholder="e.g. Parent Meeting"
-                  className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
-                />
+                value={title}
+                onChangeText={setTitle}
+                placeholder={t("Auto.Attr.egParentMeeting", "e.g. Parent Meeting")}
+                className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" />
+              
                 {}
-                <Text className="text-sm font-medium text-gray-700 mb-1">Meeting Link</Text>
+                <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.MeetingLink", "Meeting Link")}</Text>
                 <TextInput
-                  value={meetingLink}
-                  onChangeText={setMeetingLink}
-                  placeholder="https://..."
-                  className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
-                />
+                value={meetingLink}
+                onChangeText={setMeetingLink}
+                placeholder={t("Auto.Attr.https", "https://...")}
+                className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" />
+              
               </>
-            )}
+            }
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Date</Text>
-            <TouchableOpacity 
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Date", "Date")}</Text>
+            <TouchableOpacity
               onPress={() => setDatePickerVisibility(true)}
-              className="border border-gray-300 rounded-lg px-4 py-3 mb-4 bg-gray-50"
-            >
+              className="border border-gray-300 rounded-lg px-4 py-3 mb-4 bg-gray-50">
+              
               <Text className="text-gray-800">{date.toDateString()}</Text>
             </TouchableOpacity>
             
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
-              onConfirm={(d) => { setDate(d); setDatePickerVisibility(false); }}
+              onConfirm={(d) => {setDate(d);setDatePickerVisibility(false);}}
               onCancel={() => setDatePickerVisibility(false)}
-              date={date}
-            />
+              date={date} />
+            
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Start Time</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.StartTime", "Start Time")}</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={startHour} onValueChange={setStartHour}>
-                  {Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')).map(h => <Picker.Item key={h} label={h} value={h} />)}
+                  {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0')).map((h) => <Picker.Item key={h} label={h} value={h} />)}
                 </Picker>
               </View>
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={startMinute} onValueChange={setStartMinute}>
-                  {Array.from({length:12}, (_,i) => String(i*5).padStart(2,'0')).map(m => <Picker.Item key={m} label={m} value={m} />)}
+                  {Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0')).map((m) => <Picker.Item key={m} label={m} value={m} />)}
                 </Picker>
               </View>
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={startPeriod} onValueChange={setStartPeriod}>
-                  <Picker.Item label="AM" value="AM" />
-                  <Picker.Item label="PM" value="PM" />
+                  <Picker.Item label={t("Auto.Attr.AM", "AM")} value="AM" />
+                  <Picker.Item label={t("Auto.Attr.PM", "PM")} value="PM" />
                 </Picker>
               </View>
             </View>
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">End Time</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.EndTime", "End Time")}</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={endHour} onValueChange={setEndHour}>
-                  {Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')).map(h => <Picker.Item key={h} label={h} value={h} />)}
+                  {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0')).map((h) => <Picker.Item key={h} label={h} value={h} />)}
                 </Picker>
               </View>
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={endMinute} onValueChange={setEndMinute}>
-                  {Array.from({length:12}, (_,i) => String(i*5).padStart(2,'0')).map(m => <Picker.Item key={m} label={m} value={m} />)}
+                  {Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0')).map((m) => <Picker.Item key={m} label={m} value={m} />)}
                 </Picker>
               </View>
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={endPeriod} onValueChange={setEndPeriod}>
-                  <Picker.Item label="AM" value="AM" />
-                  <Picker.Item label="PM" value="PM" />
+                  <Picker.Item label={t("Auto.Attr.AM", "AM")} value="AM" />
+                  <Picker.Item label={t("Auto.Attr.PM", "PM")} value="PM" />
                 </Picker>
               </View>
             </View>
@@ -363,53 +364,53 @@ export default function AddEventModal({
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Education Type</Text>
-            <TextInput editable={false} value={educations.find(e => e.collegeEducationId === educationId)?.collegeEducationType || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.EducationType", "Education Type")}</Text>
+            <TextInput editable={false} value={educations.find((e) => e.collegeEducationId === educationId)?.collegeEducationType || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">Branch</Text>
-            <TextInput editable={false} value={branches.find(b => b.collegeBranchId === branchId)?.collegeBranchCode || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Branch", "Branch")}</Text>
+            <TextInput editable={false} value={branches.find((b) => b.collegeBranchId === branchId)?.collegeBranchCode || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">Year</Text>
-            <TextInput editable={false} value={academicYears.find(y => y.collegeAcademicYearId === academicYearId)?.collegeAcademicYear || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Year", "Year")}</Text>
+            <TextInput editable={false} value={academicYears.find((y) => y.collegeAcademicYearId === academicYearId)?.collegeAcademicYear || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">Semester</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Semester", "Semester")}</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={semester} onValueChange={setSemester}>
-                <Picker.Item label="Select Semester" value={undefined} />
-                {semesters.map(s => <Picker.Item key={s.collegeSemesterId} label={`Semester ${s.collegeSemester}`} value={s.collegeSemesterId} />)}
+                <Picker.Item label={t("Auto.Attr.SelectSemester", "Select Semester")} value={undefined} />
+                {semesters.map((s) => <Picker.Item key={s.collegeSemesterId} label={`Semester ${s.collegeSemester}`} value={s.collegeSemesterId} />)}
               </Picker>
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Sections</Text>
+            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Sections", "Sections")}</Text>
             <View className="border border-gray-300 rounded-lg p-2 mb-6">
-              {sections.map(s => {
+              {sections.map((s) => {
                 const isSelected = sectionIds.includes(s.collegeSectionsId);
                 return (
                   <TouchableOpacity
                     key={s.collegeSectionsId}
-                    onPress={() => setSectionIds(prev => isSelected ? prev.filter(id => id !== s.collegeSectionsId) : [...prev, s.collegeSectionsId])}
-                    className="flex-row items-center gap-3 py-2 px-2"
-                  >
+                    onPress={() => setSectionIds((prev) => isSelected ? prev.filter((id) => id !== s.collegeSectionsId) : [...prev, s.collegeSectionsId])}
+                    className="flex-row items-center gap-3 py-2 px-2">
+                    
                     <View className={`w-5 h-5 rounded border items-center justify-center ${isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300'}`}>
                       {isSelected && <Check size={14} color="white" weight="bold" />}
                     </View>
                     <Text className="text-gray-800">{s.collegeSections}</Text>
-                  </TouchableOpacity>
-                )
+                  </TouchableOpacity>);
+
               })}
             </View>
 
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={handleSave}
               disabled={isSubmitting}
-              className={`py-4 rounded-xl items-center ${isSubmitting ? 'bg-emerald-400' : 'bg-emerald-500'}`}
-            >
+              className={`py-4 rounded-xl items-center ${isSubmitting ? 'bg-emerald-400' : 'bg-emerald-500'}`}>
+              
               {isSubmitting ? <ActivityIndicator color="white" /> : <Text className="text-white font-bold text-base">{mode === 'edit' ? 'Update Event' : 'Save Event'}</Text>}
             </TouchableOpacity>
           </ScrollView>
         </View>
       </View>
-    </Modal>
-  );
+    </Modal>);
+
 }

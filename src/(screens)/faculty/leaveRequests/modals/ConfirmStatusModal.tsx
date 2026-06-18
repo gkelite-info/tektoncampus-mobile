@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import { View, TouchableOpacity, Modal } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { updateStudentLeaveStatus } from '@/lib/helpers/faculty/leaveRequests/facultyLeaveAPI';
 
@@ -11,7 +12,7 @@ interface ConfirmStatusModalProps {
   onSuccess: () => void;
 }
 
-export default function ConfirmStatusModal({ isOpen, action, leaveId, onClose, onSuccess }: ConfirmStatusModalProps) {
+export default function ConfirmStatusModal({ isOpen, action, leaveId, onClose, onSuccess }: ConfirmStatusModalProps) {const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isApprove = action === "Approved";
 
@@ -32,27 +33,27 @@ export default function ConfirmStatusModal({ isOpen, action, leaveId, onClose, o
     <Modal visible={isOpen} transparent animationType="fade" onRequestClose={onClose}>
       <View className="flex-1 justify-center items-center bg-black/40 px-4">
         <View className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl flex-col gap-3">
-          <Text className="text-lg font-bold text-gray-800">
-            Confirm {isApprove ? "Approval" : "Rejection"}
+          <Text className="text-lg font-bold text-gray-800">{t("Auto.Common.Confirm", "Confirm")}
+            {isApprove ? "Approval" : "Rejection"}
           </Text>
-          <Text className="text-sm text-gray-600 mt-1 leading-relaxed">
-            Are you sure you want to {isApprove ? "approve" : "reject"} this leave request?
+          <Text className="text-sm text-gray-600 mt-1 leading-relaxed">{t("Auto.Common.Areyousureyouwa", "Are you sure you want to")}
+            {isApprove ? "approve" : "reject"}{t("Auto.Common.thisleavereques", "this leave request?")}
           </Text>
           
           <View className="flex-row gap-3 justify-end mt-4">
-            <TouchableOpacity 
-              onPress={onClose} 
+            <TouchableOpacity
+              onPress={onClose}
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-lg border border-gray-200 justify-center"
-            >
-              <Text className="text-sm font-medium text-gray-600">Cancel</Text>
+              className="px-5 py-2.5 rounded-lg border border-gray-200 justify-center">
+              
+              <Text className="text-sm font-medium text-gray-600">{t("Auto.Common.Cancel", "Cancel")}</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              onPress={handleConfirm} 
+            <TouchableOpacity
+              onPress={handleConfirm}
               disabled={isSubmitting}
-              className={`px-5 py-2.5 rounded-lg justify-center ${isApprove ? 'bg-[#43C17A]' : 'bg-[#FF4B4B]'}`}
-            >
+              className={`px-5 py-2.5 rounded-lg justify-center ${isApprove ? 'bg-[#43C17A]' : 'bg-[#FF4B4B]'}`}>
+              
               <Text className="text-white text-sm font-medium">
                 {isSubmitting ? 'Wait...' : `Yes, ${action}`}
               </Text>
@@ -60,6 +61,6 @@ export default function ConfirmStatusModal({ isOpen, action, leaveId, onClose, o
           </View>
         </View>
       </View>
-    </Modal>
-  );
+    </Modal>);
+
 }

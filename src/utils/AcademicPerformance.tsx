@@ -1,7 +1,8 @@
+import { Text } from '@/components/AppText';
 import { fonts } from "@/constants/fonts";
 import { getStudentAcademicPerformance } from "@/lib/helpers/student/AcademicPerformance/calculations";
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from "react-native";
+import { View, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
 import { BarChart } from "react-native-gifted-charts";
 
 type AcademicPerformanceDatum = {

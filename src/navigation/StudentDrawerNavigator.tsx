@@ -12,7 +12,7 @@ import ClubScreen from "@/(screens)/student/club/club";
 import DriveScreen from "@/(screens)/student/drive/drive";
 import MeetingsScreen from "@/(screens)/student/meetings/meetings";
 import WellbeingScreen from "@/(screens)/student/wellbeing/wellbeing";
-import SettingsScreen from "@/(screens)/student/settings/settings";
+import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 
 export type StudentDrawerParamList = {
     StudentTabs: undefined;
@@ -106,7 +106,7 @@ export default function StudentDrawerNavigator() {
                 <Stack.Screen name="Drive" component={DriveScreen} />
                 <Stack.Screen name="Meetings" component={MeetingsScreen} />
                 <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
-                <Stack.Screen name="Settings" component={SettingsScreen} />
+                <Stack.Screen name="Settings" component={SettingsStackNavigator} />
             </Stack.Navigator>
 
             <RoleSideMenu

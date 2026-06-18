@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Dimensions } from 'react-native';
 import { BarChart } from "react-native-gifted-charts";
 import tw from "twrnc";
 import type { FacultyStudentProgressTrendPoint } from "@/lib/helpers/faculty/studentProgress/getFacultyStudentProgressSummary";
@@ -9,31 +10,31 @@ type PerformanceTrendChartProps = {
 };
 
 export default function PerformanceTrendChart({
-  data,
-}: PerformanceTrendChartProps) {
+  data
+}: PerformanceTrendChartProps) {const { t } = useTranslation();
   const screenWidth = Dimensions.get("window").width;
-  
-  
-  const chartData = data.length > 0 
-    ? data.map((item) => ({
-        value: item.value || 0,
-        label: item.month,
-        frontColor: "#8CCB72",
-        topLabelComponent: () => {
-          if (!item.value && item.value !== 0) return null;
-          return (
-            <View style={tw`bg-[#DFF2D6] rounded-full px-2 py-1 -mt-6 items-center justify-center opacity-95`}>
+
+
+  const chartData = data.length > 0 ?
+  data.map((item) => ({
+    value: item.value || 0,
+    label: item.month,
+    frontColor: "#8CCB72",
+    topLabelComponent: () => {
+      if (!item.value && item.value !== 0) return null;
+      return (
+        <View style={tw`bg-[#DFF2D6] rounded-full px-2 py-1 -mt-6 items-center justify-center opacity-95`}>
               <Text style={tw`text-[#6DB951] text-[10px] font-bold`}>{`${Math.round(item.value)}%`}</Text>
-            </View>
-          );
-        },
-      }))
-    : [{ value: 0, label: "N/A", frontColor: "#8CCB72" }];
+            </View>);
+
+    }
+  })) :
+  [{ value: 0, label: "N/A", frontColor: "#8CCB72" }];
 
   return (
     <View style={tw`w-full flex-col rounded-xl bg-white p-4 shadow-sm border border-gray-100 min-h-[300px]`}>
-      <Text style={tw`mb-4 text-lg font-bold text-[#282828]`}>
-        Performance Trend
+      <Text style={tw`mb-4 text-lg font-bold text-[#282828]`}>{t("Auto.Common.PerformanceTren", "Performance Trend")}
+
       </Text>
 
       <View style={tw`flex-1 w-full mt-2 items-center justify-center`}>
@@ -56,9 +57,9 @@ export default function PerformanceTrendChart({
           showGradient
           gradientColor="#A4DE85"
           showFractionalValues={false}
-          hideRules
-        />
+          hideRules />
+        
       </View>
-    </View>
-  );
+    </View>);
+
 }

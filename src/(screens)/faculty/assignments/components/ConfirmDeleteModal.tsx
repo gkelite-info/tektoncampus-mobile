@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import { WarningCircle } from 'phosphor-react-native';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, TouchableOpacity, Modal, Linking } from "react-native";
+import { View, TouchableOpacity, Modal, Linking } from 'react-native';
 import { CalendarBlank, X } from "phosphor-react-native";
 import { CalendarEvent } from "../types";
 
@@ -9,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function EventDetailsModal({ open, event, onClose }: Props) {
+export default function EventDetailsModal({ open, event, onClose }: Props) {const { t } = useTranslation();
   if (!open || !event) return null;
 
   const start = new Date(event.startTime);
@@ -38,7 +39,7 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {
               <View className="h-9 w-9 rounded-full bg-purple-100 items-center justify-center">
                 <CalendarBlank size={20} color="#9333ea" weight="fill" />
               </View>
-              <Text className="text-lg font-semibold text-gray-900">Event Details</Text>
+              <Text className="text-lg font-semibold text-gray-900">{t("Auto.Common.EventDetails", "Event Details")}</Text>
             </View>
             <TouchableOpacity onPress={onClose} className="p-2 -mr-2 rounded-full bg-gray-50">
               <X size={18} color="#6b7280" weight="bold" />
@@ -48,88 +49,88 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {
           {}
           <Text className="font-semibold text-base mb-1 text-gray-900 leading-tight">
             {event.type.charAt(0).toUpperCase() + event.type.slice(1)} -{" "}
-            {event.subjectName && event.subjectName !== "-"
-              ? event.subjectName
-              : "General"}{" "}
-            {event.subjectKey && (
-              <Text className="text-gray-500 font-medium">[{event.subjectKey}]</Text>
-            )}
+            {event.subjectName && event.subjectName !== "-" ?
+            event.subjectName :
+            "General"}{" "}
+            {event.subjectKey &&
+            <Text className="text-gray-500 font-medium">[{event.subjectKey}]</Text>
+            }
           </Text>
 
-          {event.rawFormData?.topicTitle && (
-            <Text className="text-sm text-gray-600 mb-2 leading-tight">
-              <Text className="font-medium text-gray-800">Event Topic:</Text>{" "}
+          {event.rawFormData?.topicTitle &&
+          <Text className="text-sm text-gray-600 mb-2 leading-tight">
+              <Text className="font-medium text-gray-800">{t("Auto.Common.EventTopic", "Event Topic:")}</Text>{" "}
               {event.rawFormData.topicTitle}
             </Text>
-          )}
+          }
 
-          {event.type === "meeting" && event.title && (
-            <Text className="text-sm text-gray-600 mb-2 leading-tight">
-              <Text className="font-medium text-gray-800">Meeting Title:</Text> {event.title}
+          {event.type === "meeting" && event.title &&
+          <Text className="text-sm text-gray-600 mb-2 leading-tight">
+              <Text className="font-medium text-gray-800">{t("Auto.Common.MeetingTitle", "Meeting Title:")}</Text> {event.title}
             </Text>
-          )}
+          }
 
           {}
           <View className="mt-3 space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
             <DetailRow
-              label="Type"
-              value={event.type.charAt(0).toUpperCase() + event.type.slice(1)}
-            />
-            <DetailRow label="Date" value={dateStr} />
-            <DetailRow label="Room no" value={event.rawFormData?.roomNo || "-"} />
-            <DetailRow label="Time" value={timeStr} />
+              label={t("Auto.Common.Type", "Type")}
+              value={event.type.charAt(0).toUpperCase() + event.type.slice(1)} />
+            
+            <DetailRow label={t("Auto.Common.Date", "Date")} value={dateStr} />
+            <DetailRow label={t("Auto.Attr.Roomno", "Room no")} value={event.rawFormData?.roomNo || "-"} />
+            <DetailRow label={t("Auto.Attr.Time", "Time")} value={timeStr} />
 
-            {event.type === "meeting" && (
-              <>
-                {event.rawFormData?.meetingLink && (
-                  <DetailRow
-                    label="Link"
-                    value={event.rawFormData.meetingLink}
-                    isLink
-                  />
-                )}
-                {event.rawFormData?.meetingId && (
-                  <DetailRow label="Zoom ID" value={event.rawFormData.meetingId} />
-                )}
-                {event.rawFormData?.meetingPassword && (
-                  <DetailRow
-                    label="Password"
-                    value={event.rawFormData.meetingPassword}
-                  />
-                )}
+            {event.type === "meeting" &&
+            <>
+                {event.rawFormData?.meetingLink &&
+              <DetailRow
+                label={t("Auto.Attr.Link", "Link")}
+                value={event.rawFormData.meetingLink}
+                isLink />
+
+              }
+                {event.rawFormData?.meetingId &&
+              <DetailRow label={t("Auto.Attr.ZoomID", "Zoom ID")} value={event.rawFormData.meetingId} />
+              }
+                {event.rawFormData?.meetingPassword &&
+              <DetailRow
+                label={t("Auto.Common.Password", "Password")}
+                value={event.rawFormData.meetingPassword} />
+
+              }
               </>
-            )}
+            }
 
             <View className="mt-3 pt-3 border-t border-gray-200 gap-y-2">
-              <DetailRow label="Branch" value={event.branch} />
-              <DetailRow label="Year" value={event.year} />
-              <DetailRow label="Section" value={event.section} />
+              <DetailRow label={t("Auto.Common.Branch", "Branch")} value={event.branch} />
+              <DetailRow label={t("Auto.Common.Year", "Year")} value={event.year} />
+              <DetailRow label={t("Auto.Common.Section", "Section")} value={event.section} />
             </View>
           </View>
         </View>
       </View>
-    </Modal>
-  );
+    </Modal>);
+
 }
 
-const DetailRow = ({ label, value, isLink }: { label: string; value?: string; isLink?: boolean }) => {
+const DetailRow = ({ label, value, isLink }: {label: string;value?: string;isLink?: boolean;}) => {
   return (
     <View className="flex-row items-start mb-1.5">
       <Text className="w-24 text-gray-500 font-medium text-[13px]">{label}:</Text>
-      {isLink && value && value !== "-" ? (
-        <TouchableOpacity
-          onPress={() => Linking.openURL(value.startsWith("http") ? value : `https://${value}`)}
-          className="flex-1"
-        >
+      {isLink && value && value !== "-" ?
+      <TouchableOpacity
+        onPress={() => Linking.openURL(value.startsWith("http") ? value : `https://${value}`)}
+        className="flex-1">
+        
           <Text className="text-[13px] font-medium text-blue-600 underline" numberOfLines={1}>
             {value}
           </Text>
-        </TouchableOpacity>
-      ) : (
-        <Text className="flex-1 text-[13px] font-semibold text-gray-800">
+        </TouchableOpacity> :
+
+      <Text className="flex-1 text-[13px] font-semibold text-gray-800">
           {value || "-"}
         </Text>
-      )}
-    </View>
-  );
+      }
+    </View>);
+
 };

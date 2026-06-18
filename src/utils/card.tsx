@@ -1,6 +1,7 @@
+import { Text } from '@/components/AppText';
 import { fonts } from "@/constants/fonts";
 import React, { ReactNode } from "react";
-import { View, Text, TouchableOpacity, ViewStyle, TextStyle, StyleSheet } from "react-native";
+import { View, TouchableOpacity, ViewStyle, TextStyle, StyleSheet } from 'react-native';
 
 type CardProps = {
     style?: string;

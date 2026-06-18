@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, useWindowDimensions } from "react-native";
+import { View, useWindowDimensions } from 'react-native';
 import { CalendarCheck } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
 
@@ -18,33 +19,32 @@ export default function SemesterAttendanceCard({
   presentPercent = 0,
   absentPercent = 0,
   leavePercent = 0,
-  overallPercent = 0,
-}: SemesterAttendanceCardProps) {
-  const t = useTranslations("Attendance.student");
+  overallPercent = 0
+}: SemesterAttendanceCardProps) {const { t } = useTranslation();
 
   const { width } = useWindowDimensions();
   const isTabletOrDesktop = width >= 768;
 
   const bars = [
-    {
-      label: t("Present"),
-      percent: presentPercent,
-      bg: "#BFF5D2",
-      fill: "#43C17A",
-    },
-    {
-      label: t("Absent"),
-      percent: absentPercent,
-      bg: "#FFD6D6",
-      fill: "#FF2020",
-    },
-    {
-      label: t("Leave"),
-      percent: leavePercent,
-      bg: "#FFE7C2",
-      fill: "#FFBB70",
-    },
-  ];
+  {
+    label: t("Present"),
+    percent: presentPercent,
+    bg: "#BFF5D2",
+    fill: "#43C17A"
+  },
+  {
+    label: t("Absent"),
+    percent: absentPercent,
+    bg: "#FFD6D6",
+    fill: "#FF2020"
+  },
+  {
+    label: t("Leave"),
+    percent: leavePercent,
+    bg: "#FFE7C2",
+    fill: "#FFBB70"
+  }];
+
 
   if (isTabletOrDesktop) {
     return (
@@ -62,37 +62,37 @@ export default function SemesterAttendanceCard({
         </View>
 
         <View className="flex-row items-end justify-between gap-2">
-          {bars.map((bar, index) => (
-            <View key={index} className="flex-1">
+          {bars.map((bar, index) =>
+          <View key={index} className="flex-1">
               <View
-                style={{ backgroundColor: bar.bg }}
-                className="h-2 w-full rounded-full overflow-hidden"
-              >
+              style={{ backgroundColor: bar.bg }}
+              className="h-2 w-full rounded-full overflow-hidden">
+              
                 <View
-                  style={{
-                    width: `${bar.percent}%`,
-                    backgroundColor: bar.fill,
-                  }}
-                  className="h-full rounded-full"
-                />
+                style={{
+                  width: `${bar.percent}%`,
+                  backgroundColor: bar.fill
+                }}
+                className="h-full rounded-full" />
+              
               </View>
               <Text style={{ color: bar.fill, fontFamily: fonts.medium }} className="text-xs mt-1">
                 {bar.percent}%
               </Text>
             </View>
-          ))}
+          )}
         </View>
 
         <View className="w-full flex-row justify-between items-center mt-1">
-          {bars.map((bar, index) => (
-            <View key={index} className="flex-row justify-start items-center gap-1">
+          {bars.map((bar, index) =>
+          <View key={index} className="flex-row justify-start items-center gap-1">
               <View style={{ backgroundColor: bar.fill }} className="h-3 w-3 rounded-sm" />
               <Text className="text-xs text-black" style={{ fontFamily: fonts.regular }}>{bar.label}</Text>
             </View>
-          ))}
+          )}
         </View>
-      </View>
-    );
+      </View>);
+
   }
 
   return (
@@ -103,8 +103,8 @@ export default function SemesterAttendanceCard({
           <View className="bg-[#43C17A] w-10 h-10 rounded-full items-center justify-center">
             <CalendarCheck size={20} color="#FFFFFF" weight="fill" />
           </View>
-          <Text className="text-[#282828] text-[15px]" style={{ fontFamily: fonts.bold }}>
-            Semester Attendance
+          <Text className="text-[#282828] text-[15px]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SemesterAttenda", "Semester Attendance")}
+
           </Text>
         </View>
         <Text className="text-[#43C17A] text-[20px]" style={{ fontFamily: fonts.bold }}>
@@ -127,8 +127,8 @@ export default function SemesterAttendanceCard({
           <View className="h-2 w-full rounded-full overflow-hidden bg-[#BFF5D2]">
             <View
               style={{ width: `${presentPercent}%` }}
-              className="h-full rounded-full bg-[#43C17A]"
-            />
+              className="h-full rounded-full bg-[#43C17A]" />
+            
           </View>
         </View>
 
@@ -145,8 +145,8 @@ export default function SemesterAttendanceCard({
           <View className="h-2 w-full rounded-full overflow-hidden bg-[#FFD6D6]">
             <View
               style={{ width: `${absentPercent}%` }}
-              className="h-full rounded-full bg-[#FF2020]"
-            />
+              className="h-full rounded-full bg-[#FF2020]" />
+            
           </View>
         </View>
 
@@ -163,11 +163,11 @@ export default function SemesterAttendanceCard({
           <View className="h-2 w-full rounded-full overflow-hidden bg-[#FFE7C2]">
             <View
               style={{ width: `${leavePercent}%` }}
-              className="h-full rounded-full bg-[#FFBB70]"
-            />
+              className="h-full rounded-full bg-[#FFBB70]" />
+            
           </View>
         </View>
       </View>
-    </View>
-  );
+    </View>);
+
 }

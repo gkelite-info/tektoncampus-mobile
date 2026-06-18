@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { supabase } from '@/lib/supabaseServer';
 import { fetchFacultyAssignments } from '@/lib/helpers/faculty/assignment/fetchFacultyAssignments';

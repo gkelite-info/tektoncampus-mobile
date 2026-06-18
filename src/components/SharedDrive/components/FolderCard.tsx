@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { View, TouchableOpacity, Modal } from 'react-native';
 import { Folder, DotsThreeOutlineVertical, PencilSimple, Trash } from "phosphor-react-native";
 
 export type FolderItemProps = {
@@ -20,8 +21,8 @@ export function FolderCard({
   color,
   onRename,
   onDelete,
-  onClick,
-}: FolderItemProps) {
+  onClick
+}: FolderItemProps) {const { t } = useTranslation();
   const [showMenu, setShowMenu] = React.useState(false);
 
   const handleMenuPress = () => {
@@ -34,8 +35,8 @@ export function FolderCard({
         activeOpacity={0.8}
         onPress={onClick}
         style={{ backgroundColor: `${color}26` }}
-        className="rounded-xl p-3 mr-4 w-36 h-[120px] relative justify-between"
-      >
+        className="rounded-xl p-3 mr-4 w-36 h-[120px] relative justify-between">
+        
         <View className="flex-row justify-between items-start">
           <View className="flex items-center justify-center">
             <Folder size={48} weight="fill" color={color} />
@@ -59,24 +60,24 @@ export function FolderCard({
         visible={showMenu}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => setShowMenu(false)}
-      >
-        <TouchableOpacity 
-          className="flex-1 bg-black/20 justify-center items-center px-4" 
+        onRequestClose={() => setShowMenu(false)}>
+        
+        <TouchableOpacity
+          className="flex-1 bg-black/20 justify-center items-center px-4"
           onPress={() => setShowMenu(false)}
-          activeOpacity={1}
-        >
+          activeOpacity={1}>
+          
           <View className="bg-white rounded-xl shadow-lg border border-gray-100 py-2 w-full max-w-[200px]">
             <TouchableOpacity
               onPress={() => {
                 setShowMenu(false);
                 onRename?.();
               }}
-              className="flex-row items-center px-4 py-3 border-b border-gray-100"
-            >
+              className="flex-row items-center px-4 py-3 border-b border-gray-100">
+              
               <PencilSimple size={18} color="#4B5563" />
-              <Text className="ml-3 text-sm font-medium text-gray-700">
-                Rename
+              <Text className="ml-3 text-sm font-medium text-gray-700">{t("Auto.Common.Rename", "Rename")}
+
               </Text>
             </TouchableOpacity>
             
@@ -85,16 +86,16 @@ export function FolderCard({
                 setShowMenu(false);
                 onDelete?.();
               }}
-              className="flex-row items-center px-4 py-3"
-            >
+              className="flex-row items-center px-4 py-3">
+              
               <Trash size={18} color="#EF4444" />
-              <Text className="ml-3 text-sm font-medium text-red-500">
-                Delete
+              <Text className="ml-3 text-sm font-medium text-red-500">{t("Auto.Common.Delete", "Delete")}
+
               </Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </Modal>
-    </>
-  );
+    </>);
+
 }

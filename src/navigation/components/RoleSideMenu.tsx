@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View, StyleSheet, Platform, StatusBar } from "react-native";
+import { Modal, ScrollView, TouchableOpacity, View, StyleSheet, Platform, StatusBar } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MotiView, AnimatePresence } from 'moti';
 import {

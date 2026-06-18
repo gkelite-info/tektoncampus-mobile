@@ -1,6 +1,7 @@
 
+import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from 'react-native';
 
 type TableProps = {
     columns: string[];

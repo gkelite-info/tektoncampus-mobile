@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Platform } from 'react-native';
+import { Modal, View, TouchableOpacity, ScrollView, ActivityIndicator, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BellSimple, X } from 'phosphor-react-native';
 import { useUser } from '@/utils/context/UserContext';

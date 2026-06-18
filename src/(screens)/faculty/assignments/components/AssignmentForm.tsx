@@ -1,13 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { supabase } from '@/lib/supabaseServer';
@@ -55,7 +48,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
     subjectId: '',
     branchId: '',
     sectionIds: [] as string[],
-    yearId: '',
+    yearId: ''
   });
 
   const today = new Date().toISOString().split('T')[0];
@@ -66,11 +59,11 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
         const { data: auth } = await supabase.auth.getUser();
         if (!auth?.user) throw new Error('Not authenticated');
 
-        const { data: userRecord } = await supabase
-          .from('users')
-          .select('userId')
-          .eq('auth_id', auth.user.id)
-          .single();
+        const { data: userRecord } = await supabase.
+        from('users').
+        select('userId').
+        eq('auth_id', auth.user.id).
+        single();
 
         if (!userRecord) throw new Error('User record not found');
 
@@ -92,7 +85,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
               subjectId: String(matchedSection.collegeSubjectId),
               branchId: String(sectionObj.collegeBranchId),
               sectionIds: [String(matchedSection.collegeSectionsId)],
-              yearId: String(matchedSection.collegeAcademicYearId),
+              yearId: String(matchedSection.collegeAcademicYearId)
             }));
           }
         }
@@ -127,17 +120,17 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
   const availableBranches = useMemo(() => {
     if (!form.subjectId) return [];
     const map = new Map();
-    facultySections
-      .filter((s) => s.collegeSubjectId === Number(form.subjectId))
-      .forEach((s) => {
-        const sectionObj = getSafe(s.college_sections);
-        const branchObj = getSafe(sectionObj?.college_branch);
-        if (sectionObj && branchObj) {
-          const bId = sectionObj.collegeBranchId;
-          const bName = branchObj.collegeBranchCode;
-          if (!map.has(bId)) map.set(bId, bName);
-        }
-      });
+    facultySections.
+    filter((s) => s.collegeSubjectId === Number(form.subjectId)).
+    forEach((s) => {
+      const sectionObj = getSafe(s.college_sections);
+      const branchObj = getSafe(sectionObj?.college_branch);
+      if (sectionObj && branchObj) {
+        const bId = sectionObj.collegeBranchId;
+        const bName = branchObj.collegeBranchCode;
+        if (!map.has(bId)) map.set(bId, bName);
+      }
+    });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.subjectId]);
 
@@ -150,65 +143,65 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
   const availableSections = useMemo(() => {
     if (!form.subjectId || !form.branchId || !form.yearId) return [];
     const map = new Map();
-    facultySections
-      .filter((s) => {
-        const sectionObj = getSafe(s.college_sections);
-        return (
-          s.collegeSubjectId === Number(form.subjectId) &&
-          sectionObj?.collegeBranchId === Number(form.branchId) &&
-          s.collegeAcademicYearId === Number(form.yearId)
-        );
-      })
-      .forEach((s) => {
-        const sectionObj = getSafe(s.college_sections);
-        if (sectionObj) {
-          const secId = s.collegeSectionsId;
-          const secName = sectionObj.collegeSections;
-          if (!map.has(secId)) map.set(secId, secName);
-        }
-      });
+    facultySections.
+    filter((s) => {
+      const sectionObj = getSafe(s.college_sections);
+      return (
+        s.collegeSubjectId === Number(form.subjectId) &&
+        sectionObj?.collegeBranchId === Number(form.branchId) &&
+        s.collegeAcademicYearId === Number(form.yearId));
+
+    }).
+    forEach((s) => {
+      const sectionObj = getSafe(s.college_sections);
+      if (sectionObj) {
+        const secId = s.collegeSectionsId;
+        const secName = sectionObj.collegeSections;
+        if (!map.has(secId)) map.set(secId, secName);
+      }
+    });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.subjectId, form.branchId, form.yearId]);
 
   const availableYears = useMemo(() => {
     if (!form.subjectId || !form.branchId) return [];
     const map = new Map();
-    facultySections
-      .filter((s) => {
-        const sectionObj = getSafe(s.college_sections);
-        return (
-          s.collegeSubjectId === Number(form.subjectId) &&
-          sectionObj?.collegeBranchId === Number(form.branchId)
-        );
-      })
-      .forEach((s) => {
-        const yearObj = getSafe(s.college_academic_year);
-        if (yearObj) {
-          const yId = s.collegeAcademicYearId;
-          const yName = yearObj.collegeAcademicYear;
-          if (!map.has(yId)) map.set(yId, yName);
-        }
-      });
+    facultySections.
+    filter((s) => {
+      const sectionObj = getSafe(s.college_sections);
+      return (
+        s.collegeSubjectId === Number(form.subjectId) &&
+        sectionObj?.collegeBranchId === Number(form.branchId));
+
+    }).
+    forEach((s) => {
+      const yearObj = getSafe(s.college_academic_year);
+      if (yearObj) {
+        const yId = s.collegeAcademicYearId;
+        const yName = yearObj.collegeAcademicYear;
+        if (!map.has(yId)) map.set(yId, yName);
+      }
+    });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.subjectId, form.branchId]);
 
   const validateForm = () => {
     if (!facultyId) return false;
-    if (!form.subjectId) { Toast.show({ type: 'error', text1: 'Please select a Subject.' }); return false; }
-    if (!form.topicName.trim()) { Toast.show({ type: 'error', text1: 'Topic Name is required.' }); return false; }
-    if (!form.totalMarks) { Toast.show({ type: 'error', text1: 'Total Marks are required.' }); return false; }
-    if (!form.branchId) { Toast.show({ type: 'error', text1: 'Please select a Branch.' }); return false; }
-    if (form.sectionIds.length === 0) { Toast.show({ type: 'error', text1: 'Please select at least one Section.' }); return false; }
-    if (!form.yearId) { Toast.show({ type: 'error', text1: 'Please select an Academic Year.' }); return false; }
-    if (!form.fromDate || !form.toDate) { Toast.show({ type: 'error', text1: 'Both start and end dates are required.' }); return false; }
+    if (!form.subjectId) {Toast.show({ type: 'error', text1: 'Please select a Subject.' });return false;}
+    if (!form.topicName.trim()) {Toast.show({ type: 'error', text1: 'Topic Name is required.' });return false;}
+    if (!form.totalMarks) {Toast.show({ type: 'error', text1: 'Total Marks are required.' });return false;}
+    if (!form.branchId) {Toast.show({ type: 'error', text1: 'Please select a Branch.' });return false;}
+    if (form.sectionIds.length === 0) {Toast.show({ type: 'error', text1: 'Please select at least one Section.' });return false;}
+    if (!form.yearId) {Toast.show({ type: 'error', text1: 'Please select an Academic Year.' });return false;}
+    if (!form.fromDate || !form.toDate) {Toast.show({ type: 'error', text1: 'Both start and end dates are required.' });return false;}
 
     const fromDateObj = new Date(form.fromDate);
     const toDateObj = new Date(form.toDate);
     const todayObj = new Date(today);
 
-    if (!initialData && fromDateObj < todayObj) { Toast.show({ type: 'error', text1: 'Assigned date cannot be in the past.' }); return false; }
-    if (!initialData && toDateObj < todayObj) { Toast.show({ type: 'error', text1: 'Submission deadline cannot be in the past.' }); return false; }
-    if (fromDateObj > toDateObj) { Toast.show({ type: 'error', text1: 'Assigned date must be before the submission deadline.' }); return false; }
+    if (!initialData && fromDateObj < todayObj) {Toast.show({ type: 'error', text1: 'Assigned date cannot be in the past.' });return false;}
+    if (!initialData && toDateObj < todayObj) {Toast.show({ type: 'error', text1: 'Submission deadline cannot be in the past.' });return false;}
+    if (fromDateObj > toDateObj) {Toast.show({ type: 'error', text1: 'Assigned date must be before the submission deadline.' });return false;}
 
     return true;
   };
@@ -229,7 +222,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
           collegeBranchId: form.branchId,
           collegeSectionsId: sectionId,
           collegeAcademicYearId: form.yearId,
-          marks: form.totalMarks,
+          marks: form.totalMarks
         };
 
         const res = await upsertFacultyAssignment(payload);
@@ -243,7 +236,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
         title: form.topicName.trim(),
         fromDate: form.fromDate,
         toDate: form.toDate,
-        marks: form.totalMarks,
+        marks: form.totalMarks
       });
     } catch (error) {
       console.error(error);
@@ -268,14 +261,14 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
       <View className="bg-white p-4 rounded-xl">
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">Subject <Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.subjectId}
               onValueChange={(val) => setForm({ ...form, subjectId: val, branchId: '', sectionIds: [], yearId: '' })}
-              enabled={uniqueSubjects.length > 1}
-            >
-              <Picker.Item label="Select Subject" value="" color="#9CA3AF" />
+              enabled={uniqueSubjects.length > 1}>
+              
+              <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" />
               {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
             </Picker>
           </View>
@@ -283,18 +276,18 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Topic Name */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">Topic Name <Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.TopicName", "Topic Name")}<Text className="text-red-500">*</Text></Text>
           <TextInput
             value={form.topicName}
             onChangeText={(val) => setForm({ ...form, topicName: val })}
-            placeholder="e.g., Implementation of Stack and Queue"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-black"
-          />
+            placeholder={t("Auto.Attr.egImplementatio", "e.g., Implementation of Stack and Queue")}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-black" />
+          
         </View>
 
         {/* Total Marks */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">Total Marks <Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.TotalMarks", "Total Marks")}<Text className="text-red-500">*</Text></Text>
           <TextInput
             value={form.totalMarks}
             onChangeText={(val) => {
@@ -302,21 +295,21 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
               setForm({ ...form, totalMarks: cleaned });
             }}
             keyboardType="number-pad"
-            placeholder="e.g., 100"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-black"
-          />
+            placeholder={t("Auto.Attr.eg100", "e.g., 100")}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-black" />
+          
         </View>
 
         {/* Branch */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">Branch <Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Branch", "Branch")}<Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.branchId}
               onValueChange={(val) => setForm({ ...form, branchId: val, sectionIds: [], yearId: '' })}
-              enabled={!!form.subjectId && availableBranches.length > 1}
-            >
-              <Picker.Item label="Select Branch" value="" color="#9CA3AF" />
+              enabled={!!form.subjectId && availableBranches.length > 1}>
+              
+              <Picker.Item label={t("Auto.Attr.SelectBranch", "Select Branch")} value="" color="#9CA3AF" />
               {availableBranches.map((b) => <Picker.Item key={b.id} label={b.name} value={b.id} />)}
             </Picker>
           </View>
@@ -324,14 +317,14 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Year */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">Year <Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Year", "Year")}<Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.yearId}
               onValueChange={(val) => setForm({ ...form, yearId: val, sectionIds: [] })}
-              enabled={!!form.branchId}
-            >
-              <Picker.Item label="Select Year" value="" color="#9CA3AF" />
+              enabled={!!form.branchId}>
+              
+              <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" />
               {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} />)}
             </Picker>
           </View>
@@ -339,34 +332,34 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Section Multiple Select */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">Section <Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Section", "Section")}<Text className="text-red-500">*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-white p-2 min-h-[40px] flex-row flex-wrap gap-2">
             {form.sectionIds.map((id) => {
               const section = availableSections.find((s) => String(s.id) === id);
               return (
                 <View key={id} className="flex-row items-center gap-1 bg-[#ECFDF5] px-3 py-1 rounded-full">
                   <Text className="text-[#065F46] text-xs">{section?.name}</Text>
-                  <TouchableOpacity onPress={() => setForm(prev => ({ ...prev, sectionIds: prev.sectionIds.filter(sid => sid !== id) }))}>
+                  <TouchableOpacity onPress={() => setForm((prev) => ({ ...prev, sectionIds: prev.sectionIds.filter((sid) => sid !== id) }))}>
                     <Text className="text-red-500 font-bold ml-1">×</Text>
                   </TouchableOpacity>
-                </View>
-              );
+                </View>);
+
             })}
             <View className="flex-1 min-w-[120px] bg-gray-50 rounded-md overflow-hidden">
               <Picker
                 selectedValue={sectionSelect}
                 onValueChange={(val) => {
                   if (val && !form.sectionIds.includes(val)) {
-                    setForm(prev => ({ ...prev, sectionIds: [...prev.sectionIds, val] }));
+                    setForm((prev) => ({ ...prev, sectionIds: [...prev.sectionIds, val] }));
                   }
                   setSectionSelect('');
                 }}
-                enabled={!!form.yearId}
-              >
+                enabled={!!form.yearId}>
+                
                 <Picker.Item label={form.yearId ? "Select section" : "Select year first"} value="" color="#9CA3AF" />
-                {availableSections.filter(s => !form.sectionIds.includes(String(s.id))).map((s) => (
-                  <Picker.Item key={s.id} label={s.name} value={s.id} />
-                ))}
+                {availableSections.filter((s) => !form.sectionIds.includes(String(s.id))).map((s) =>
+                <Picker.Item key={s.id} label={s.name} value={s.id} />
+                )}
               </Picker>
             </View>
           </View>
@@ -375,7 +368,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
         {/* Dates */}
         <View className="flex-row gap-4 mb-6">
           <View className="flex-1">
-            <Text className="mb-1 text-xs text-gray-500">Date Assigned <Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-xs text-gray-500">{t("Auto.Common.DateAssigned", "Date Assigned")}<Text className="text-red-500">*</Text></Text>
             <TouchableOpacity onPress={() => setFromDatePickerVisible(true)} className="border border-gray-300 rounded-md px-3 py-2">
               <Text className="text-sm text-black">{form.fromDate || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
@@ -383,14 +376,14 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
               isVisible={isFromDatePickerVisible}
               mode="date"
               onConfirm={(date) => {
-                setForm(prev => ({ ...prev, fromDate: date.toISOString().split('T')[0] }));
+                setForm((prev) => ({ ...prev, fromDate: date.toISOString().split('T')[0] }));
                 setFromDatePickerVisible(false);
               }}
-              onCancel={() => setFromDatePickerVisible(false)}
-            />
+              onCancel={() => setFromDatePickerVisible(false)} />
+            
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-xs text-gray-500">Submission Deadline <Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-xs text-gray-500">{t("Auto.Common.SubmissionDeadl", "Submission Deadline")}<Text className="text-red-500">*</Text></Text>
             <TouchableOpacity onPress={() => setToDatePickerVisible(true)} className="border border-gray-300 rounded-md px-3 py-2">
               <Text className="text-sm text-black">{form.toDate || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
@@ -398,11 +391,11 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
               isVisible={isToDatePickerVisible}
               mode="date"
               onConfirm={(date) => {
-                setForm(prev => ({ ...prev, toDate: date.toISOString().split('T')[0] }));
+                setForm((prev) => ({ ...prev, toDate: date.toISOString().split('T')[0] }));
                 setToDatePickerVisible(false);
               }}
-              onCancel={() => setToDatePickerVisible(false)}
-            />
+              onCancel={() => setToDatePickerVisible(false)} />
+            
           </View>
         </View>
 
@@ -411,20 +404,20 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
           <TouchableOpacity
             disabled={isSaving}
             onPress={handleSubmit}
-            className={`flex-1 items-center justify-center py-3 rounded-md ${isSaving ? 'bg-[#43C17A]/70' : 'bg-[#43C17A]'}`}
-          >
+            className={`flex-1 items-center justify-center py-3 rounded-md ${isSaving ? 'bg-[#43C17A]/70' : 'bg-[#43C17A]'}`}>
+            
             {isSaving ? <ActivityIndicator color="white" /> : <Text className="text-white font-bold">{t('Save')}</Text>}
           </TouchableOpacity>
           <TouchableOpacity
             disabled={isSaving}
             onPress={onCancel}
-            className="flex-1 items-center justify-center py-3 rounded-md border border-gray-300"
-          >
+            className="flex-1 items-center justify-center py-3 rounded-md border border-gray-300">
+            
             <Text className="text-gray-700 font-bold">{t('Cancel')}</Text>
           </TouchableOpacity>
         </View>
       </View>
       <View className="h-10" />
-    </ScrollView>
-  );
+    </ScrollView>);
+
 }

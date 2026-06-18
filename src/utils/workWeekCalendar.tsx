@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback } from "react-native";
+import { View, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
 import { CaretLeft, CaretRight } from "phosphor-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 

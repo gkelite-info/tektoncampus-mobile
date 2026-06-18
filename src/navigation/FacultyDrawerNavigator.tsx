@@ -11,11 +11,11 @@ import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
 import {
-    PlacementsScreen,
-    MyAttendanceScreen,
     WellbeingScreen,
-    SettingsScreen,
 } from "@/(screens)/student/mockScreens";
+import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
+import MyAttendanceScreen from "@/(screens)/faculty/myAttendance/index";
+import FacultyPlacementsScreen from "@/(screens)/faculty/placements/index";
 import FacultyMeetingsPage from "@/(screens)/faculty/meetings/meetings";
 
 import StudentProgressScreen from "@/(screens)/faculty/student-progress/index";
@@ -115,14 +115,14 @@ export default function FacultyDrawerNavigator() {
                 <Tab.Screen name="Calendar" component={CalendarScreen} />
                 <Tab.Screen name="StudentProgress" component={StudentProgressScreen} />
                 <Tab.Screen name="Projects" component={ProjectsScreen} />
-                <Tab.Screen name="Placements" component={PlacementsScreen} />
+                <Tab.Screen name="Placements" component={FacultyPlacementsScreen} />
                 <Tab.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
                 <Tab.Screen name="Club" component={FacultyClubScreen} />
                 <Tab.Screen name="Drive" component={DriveScreen} />
                 <Tab.Screen name="Meetings" component={FacultyMeetingsPage} />
                 <Tab.Screen name="MyAttendance" component={MyAttendanceScreen} />
                 <Tab.Screen name="Wellbeing" component={WellbeingScreen} />
-                <Tab.Screen name="Settings" component={SettingsScreen} />
+                <Tab.Screen name="Settings" component={SettingsStackNavigator} />
                 <Tab.Screen name="AssignmentSubmissions" component={AssignmentSubmissions} options={{ headerShown: false }} />
                 <Tab.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />
                 <Tab.Screen name="DiscussionSubmissions" component={DiscussionSubmissions} options={{ headerShown: false }} />

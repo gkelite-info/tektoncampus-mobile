@@ -1,38 +1,39 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from 'react-native';
 import tw from "twrnc";
 import { Avatar } from "@/components/Avatar";
 
 interface ClubInfoProps {
-    info?: {
-        name: string;
-        logo: string;
-        president: { name: string; role: string; avatar: string | null };
-        vicePresident: { name: string; role: string; avatar: string | null };
-        responsibleFaculty: { name: string; role: string; avatar: string | null };
-        mentors: { name: string; id: string; avatar: string | null }[];
-    } | null;
-    isLoading?: boolean;
+  info?: {
+    name: string;
+    logo: string;
+    president: {name: string;role: string;avatar: string | null;};
+    vicePresident: {name: string;role: string;avatar: string | null;};
+    responsibleFaculty: {name: string;role: string;avatar: string | null;};
+    mentors: {name: string;id: string;avatar: string | null;}[];
+  } | null;
+  isLoading?: boolean;
 }
 
-export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {
-    if (isLoading || !info) {
-        return (
-            <View style={tw`py-10 items-center justify-center`}>
-                <ActivityIndicator size="large" color="#43C17A" />
-            </View>
-        );
-    }
-
-    const ROLE_DISPLAY_NAMES: Record<string, string> = {
-        responsiblefaculty: "Responsible Faculty",
-        president: "President",
-        vicepresident: "Vice President",
-        mentor: "Mentor"
-    };
-
+export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {const { t } = useTranslation();
+  if (isLoading || !info) {
     return (
-        <View style={tw`mb-8 items-center px-4`}>
+      <View style={tw`py-10 items-center justify-center`}>
+                <ActivityIndicator size="large" color="#43C17A" />
+            </View>);
+
+  }
+
+  const ROLE_DISPLAY_NAMES: Record<string, string> = {
+    responsiblefaculty: "Responsible Faculty",
+    president: "President",
+    vicepresident: "Vice President",
+    mentor: "Mentor"
+  };
+
+  return (
+    <View style={tw`mb-8 items-center px-4`}>
             <View style={tw`mb-4 h-30 w-30 items-center justify-center overflow-hidden rounded-full border border-gray-100 bg-white shadow-sm`}>
                 <Avatar src={info.logo} size={120} />
             </View>
@@ -69,20 +70,20 @@ export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {
                     </View>
                 </View>
 
-                {info.mentors && info.mentors.length > 0 && (
-                    <View style={tw`flex-col items-start mt-4`}>
-                        <Text style={tw`mb-3 text-sm font-semibold text-[#484848]`}>Mentors :</Text>
+                {info.mentors && info.mentors.length > 0 &&
+        <View style={tw`flex-col items-start mt-4`}>
+                        <Text style={tw`mb-3 text-sm font-semibold text-[#484848]`}>{t("Auto.Common.Mentors", "Mentors :")}</Text>
                         <View style={tw`flex-row flex-wrap gap-4`}>
-                            {info.mentors.map((mentor) => (
-                                <View key={mentor.id} style={tw`flex-col items-center gap-1.5`}>
+                            {info.mentors.map((mentor) =>
+            <View key={mentor.id} style={tw`flex-col items-center gap-1.5`}>
                                     <Avatar src={mentor.avatar} size={40} />
                                     <Text style={tw`text-[11px] font-semibold text-[#16284F]`}>{mentor.name}</Text>
                                 </View>
-                            ))}
+            )}
                         </View>
                     </View>
-                )}
+        }
             </View>
-        </View>
-    );
+        </View>);
+
 }

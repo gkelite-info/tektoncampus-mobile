@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
+import { View, TouchableOpacity, TextInput, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Newspaper, EnvelopeSimple, BellSimple, Megaphone, MagnifyingGlass } from 'phosphor-react-native';
@@ -17,112 +18,112 @@ import { saveFacultyTask } from '@/lib/helpers/faculty/facultyTasks';
 import { saveStudentTask } from '@/lib/helpers/student/studentTaskAPI';
 import { fonts } from '@/constants/fonts';
 
-export default function CustomHeader({ navigation }: { navigation?: any } = {}) {
-    const { role, identifierId, userId, facultyId, studentId, subjectIds } = useUser();
-    const displayRole = role || 'Guest';
+export default function CustomHeader({ navigation }: {navigation?: any;} = {}) {const { t } = useTranslation();
+  const { role, identifierId, userId, facultyId, studentId, subjectIds } = useUser();
+  const displayRole = role || 'Guest';
 
-    const [unreadCount, setUnreadCount] = useState(0);
-    const [unreadEmailCount, setUnreadEmailCount] = useState(0);
-    const [searchFocused, setSearchFocused] = useState(false);
-    const [searchValue, setSearchValue] = useState("");
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadEmailCount, setUnreadEmailCount] = useState(0);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
-    const [isNewsOpen, setIsNewsOpen] = useState(false);
-    const [isEmailOpen, setIsEmailOpen] = useState(false);
-    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-    const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
-    const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
-    const [isTaskPanelOpen, setIsTaskPanelOpen] = useState(false);
-    const [emailInitialView, setEmailInitialView] = useState<{
-        tab?: "all" | "inbox" | "sent";
-        compose?: boolean;
-    }>({});
+  const [isNewsOpen, setIsNewsOpen] = useState(false);
+  const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
+  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
+  const [isTaskPanelOpen, setIsTaskPanelOpen] = useState(false);
+  const [emailInitialView, setEmailInitialView] = useState<{
+    tab?: "all" | "inbox" | "sent";
+    compose?: boolean;
+  }>({});
 
-    useEffect(() => {
-        if (!userId) return;
+  useEffect(() => {
+    if (!userId) return;
 
-        async function fetchNotificationCount() {
-            const count = await getUnreadNotificationCount(userId!);
-            setUnreadCount(count);
+    async function fetchNotificationCount() {
+      const count = await getUnreadNotificationCount(userId!);
+      setUnreadCount(count);
+    }
+
+    fetchNotificationCount();
+
+    const channelName = `custom-notification-channel-${userId}-${Math.random().toString(36).substring(2, 9)}`;
+    const notificationChannel = supabase.
+    channel(channelName).
+    on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "notifications" },
+      (payload) => {
+        const record = payload.new as any || payload.old as any;
+
+        if (record && Number(record.userId) === Number(userId)) {
+          setTimeout(() => fetchNotificationCount(), 100);
         }
+      }
+    ).
+    subscribe();
 
-        fetchNotificationCount();
-
-        const channelName = `custom-notification-channel-${userId}-${Math.random().toString(36).substring(2, 9)}`;
-        const notificationChannel = supabase
-            .channel(channelName)
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "notifications" },
-                (payload) => {
-                    const record = (payload.new as any) || (payload.old as any);
-
-                    if (record && Number(record.userId) === Number(userId)) {
-                        setTimeout(() => fetchNotificationCount(), 100);
-                    }
-                },
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(notificationChannel);
-        };
-    }, [userId]);
-
-    const handleSaveTask = async (
-        payload: { title: string; description: string; dueDate: string; dueTime: string },
-        taskId?: number,
-    ) => {
-        if (!facultyId) throw new Error("Faculty context not loaded");
-        const result = await saveFacultyTask(
-            {
-                facultyTaskId: taskId,
-                collegeSubjectId: subjectIds?.[0] ?? 0,
-                taskTitle: payload.title,
-                description: payload.description,
-                date: payload.dueDate,
-                time: payload.dueTime,
-            },
-            facultyId,
-        );
-        if (!result.success) throw new Error("Failed to save task");
+    return () => {
+      supabase.removeChannel(notificationChannel);
     };
+  }, [userId]);
 
-    const handleSaveStudentTask = async (
-        payload: { title: string; description: string; dueDate: string; dueTime: string },
-        taskId?: number,
-    ) => {
-        if (!studentId) throw new Error("Student context not loaded");
-        const result = await saveStudentTask(
-            {
-                studentTaskId: taskId,
-                taskTitle: payload.title,
-                description: payload.description,
-                date: payload.dueDate,
-                time: payload.dueTime,
-            },
-            studentId,
-        );
-        if (!result.success) throw new Error("Failed to save student task");
-    };
+  const handleSaveTask = async (
+  payload: {title: string;description: string;dueDate: string;dueTime: string;},
+  taskId?: number) =>
+  {
+    if (!facultyId) throw new Error("Faculty context not loaded");
+    const result = await saveFacultyTask(
+      {
+        facultyTaskId: taskId,
+        collegeSubjectId: subjectIds?.[0] ?? 0,
+        taskTitle: payload.title,
+        description: payload.description,
+        date: payload.dueDate,
+        time: payload.dueTime
+      },
+      facultyId
+    );
+    if (!result.success) throw new Error("Failed to save task");
+  };
 
-    const handleAddTaskClick = () => {
-        if (displayRole === "Student") {
-            setIsTaskPanelOpen(true);
-        } else {
-            setIsAddTaskOpen(true);
-        }
-    };
+  const handleSaveStudentTask = async (
+  payload: {title: string;description: string;dueDate: string;dueTime: string;},
+  taskId?: number) =>
+  {
+    if (!studentId) throw new Error("Student context not loaded");
+    const result = await saveStudentTask(
+      {
+        studentTaskId: taskId,
+        taskTitle: payload.title,
+        description: payload.description,
+        date: payload.dueDate,
+        time: payload.dueTime
+      },
+      studentId
+    );
+    if (!result.success) throw new Error("Failed to save student task");
+  };
 
-    const insets = useSafeAreaInsets();
+  const handleAddTaskClick = () => {
+    if (displayRole === "Student") {
+      setIsTaskPanelOpen(true);
+    } else {
+      setIsAddTaskOpen(true);
+    }
+  };
 
-    return (
-        <>
+  const insets = useSafeAreaInsets();
+
+  return (
+    <>
             <BlurView
-                intensity={Platform.OS === 'ios' ? 80 : 0}
-                tint="light"
-                style={{ paddingTop: insets.top, backgroundColor: Platform.OS === 'ios' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.96)' }}
-                className="border-b-0 border-transparent"
-            >
+        intensity={Platform.OS === 'ios' ? 80 : 0}
+        tint="light"
+        style={{ paddingTop: insets.top, backgroundColor: Platform.OS === 'ios' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.96)' }}
+        className="border-b-0 border-transparent">
+        
                 <View className={`px-4 pt-2 pb-3 ${Platform.OS === 'android' ? 'mt-2' : ''}`}>
                     <View className="flex-row items-center justify-between mb-3 z-10">
                         <View className="-ml-3">
@@ -135,28 +136,28 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
                             </TouchableOpacity>
 
                             <TouchableOpacity className="relative" onPress={() => {
-                                setEmailInitialView({ compose: false, tab: "all" });
-                                setIsEmailOpen(true);
-                            }}>
+                setEmailInitialView({ compose: false, tab: "all" });
+                setIsEmailOpen(true);
+              }}>
                                 <EnvelopeSimple size={21} color="#282828" />
-                                {unreadEmailCount > 0 && (
-                                    <View className="absolute -top-1.5 -right-1.5 bg-red-500 w-[14px] h-[14px] rounded-full items-center justify-center border border-white">
+                                {unreadEmailCount > 0 &&
+                <View className="absolute -top-1.5 -right-1.5 bg-red-500 w-[14px] h-[14px] rounded-full items-center justify-center border border-white">
                                         <Text className="text-white text-[8px] font-bold">
                                             {unreadEmailCount > 99 ? '99+' : unreadEmailCount}
                                         </Text>
                                     </View>
-                                )}
+                }
                             </TouchableOpacity>
 
                             <TouchableOpacity className="relative" onPress={() => setIsNotificationsOpen(true)}>
                                 <BellSimple size={21} color="#282828" />
-                                {unreadCount > 0 && (
-                                    <View className="absolute -top-1.5 -right-1.5 bg-red-500 w-[14px] h-[14px] rounded-full items-center justify-center border border-white">
+                                {unreadCount > 0 &&
+                <View className="absolute -top-1.5 -right-1.5 bg-red-500 w-[14px] h-[14px] rounded-full items-center justify-center border border-white">
                                         <Text className="text-white text-[8px] font-bold">
                                             {unreadCount > 99 ? '99+' : unreadCount}
                                         </Text>
                                     </View>
-                                )}
+                }
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => setIsAnnouncementOpen(true)}>
@@ -170,23 +171,23 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
                     <View className="flex-row items-center justify-between">
                         <View className="flex-1 flex-row items-center bg-[#EAEAEA] rounded-full h-[38px] px-4 mr-2 border border-transparent">
                             <TextInput
-                                className="flex-1 text-[#282828] text-sm py-0"
-                                style={{ fontFamily: fonts.regular }}
-                                placeholder="What do you want to find?"
-                                placeholderTextColor="#9CA3AF"
-                                value={searchValue}
-                                onChangeText={setSearchValue}
-                                onFocus={() => setSearchFocused(true)}
-                                onBlur={() => setSearchFocused(false)}
-                            />
+                className="flex-1 text-[#282828] text-sm py-0"
+                style={{ fontFamily: fonts.regular }}
+                placeholder={t("Auto.Attr.Whatdoyouwantto", "What do you want to find?")}
+                placeholderTextColor="#9CA3AF"
+                value={searchValue}
+                onChangeText={setSearchValue}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)} />
+              
                             <MagnifyingGlass size={18} color="#43C17A" weight="bold" />
                         </View>
 
-                        {(displayRole.includes('Faculty') || displayRole.includes('Student')) && (
-                            <TouchableOpacity onPress={handleAddTaskClick} className="bg-[#43C17A] h-[38px] px-3 md:px-4 rounded-md items-center justify-center">
-                                <Text className="text-white text-xs md:text-sm" style={{ fontFamily: fonts.medium }}>Add task +</Text>
+                        {(displayRole.includes('Faculty') || displayRole.includes('Student')) &&
+            <TouchableOpacity onPress={handleAddTaskClick} className="bg-[#43C17A] h-[38px] px-3 md:px-4 rounded-md items-center justify-center">
+                                <Text className="text-white text-xs md:text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Addtask", "Add task +")}</Text>
                             </TouchableOpacity>
-                        )}
+            }
                     </View>
                 </View>
             </BlurView>
@@ -196,25 +197,25 @@ export default function CustomHeader({ navigation }: { navigation?: any } = {}) 
             <NotificationsModal visible={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
             <AnnouncementModal visible={isAnnouncementOpen} onClose={() => setIsAnnouncementOpen(false)} />
 
-            {isAddTaskOpen && (
-                <TaskModal
-                    open={isAddTaskOpen}
-                    onClose={() => setIsAddTaskOpen(false)}
-                    onSave={displayRole === 'Student' ? handleSaveStudentTask : handleSaveTask}
-                    role={displayRole === 'Student' ? 'student' : 'faculty'}
-                    facultyId={displayRole === 'Faculty' ? facultyId! : undefined}
-                    studentId={displayRole === 'Student' ? studentId! : undefined}
-                />
-            )}
+            {isAddTaskOpen &&
+      <TaskModal
+        open={isAddTaskOpen}
+        onClose={() => setIsAddTaskOpen(false)}
+        onSave={displayRole === 'Student' ? handleSaveStudentTask : handleSaveTask}
+        role={displayRole === 'Student' ? 'student' : 'faculty'}
+        facultyId={displayRole === 'Faculty' ? facultyId! : undefined}
+        studentId={displayRole === 'Student' ? studentId! : undefined} />
+
+      }
 
             <TaskPanelModal
-                open={isTaskPanelOpen}
-                onClose={() => setIsTaskPanelOpen(false)}
-                role={displayRole === 'Faculty' ? 'faculty' : 'student'}
-                studentId={studentId ?? undefined}
-                facultyId={facultyId ?? undefined}
-                onSaveTask={displayRole === 'Faculty' ? handleSaveTask : handleSaveStudentTask}
-            />
-        </>
-    );
+        open={isTaskPanelOpen}
+        onClose={() => setIsTaskPanelOpen(false)}
+        role={displayRole === 'Faculty' ? 'faculty' : 'student'}
+        studentId={studentId ?? undefined}
+        facultyId={facultyId ?? undefined}
+        onSaveTask={displayRole === 'Faculty' ? handleSaveTask : handleSaveStudentTask} />
+      
+        </>);
+
 }

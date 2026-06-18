@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from "react-native";
+import { View, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import CalendarHeader from "./components/CalendarHeader";
 import CalendarGrid from "./components/CalendarGrid";
@@ -14,13 +15,13 @@ import {
   deleteCalendarEvent,
   fetchCalendarEvents,
   notifyStudentsOfEvent,
-  saveCalendarEvent,
-} from "@/lib/helpers/calendar/calendarEventAPI";
+  saveCalendarEvent } from
+"@/lib/helpers/calendar/calendarEventAPI";
 import {
   fetchCalendarEventSections,
   saveCalendarEventSections,
-  softDeleteCalendarEventSection,
-} from "@/lib/helpers/calendar/calendarEventSectionsAPI";
+  softDeleteCalendarEventSection } from
+"@/lib/helpers/calendar/calendarEventSectionsAPI";
 import { fetchAcademicDropdowns } from "@/lib/helpers/faculty/academicDropdown.helper";
 import { getFacultyIdByUserId } from "@/lib/helpers/faculty/facultyAPI";
 import { fetchHrCalendarEvents } from "@/lib/helpers/Hr/calendar/hrCalendarEventsAPI";
@@ -34,7 +35,7 @@ const convertTo24Hour = (time12h: string) => {
   return `${hours.padStart(2, "0")}:${minutes}:00`;
 };
 
-export default function CalendarScreen() {
+export default function CalendarScreen() {const { t } = useTranslation();
   const [mainTab, setMainTab] = useState<"Faculty" | "HR">("Faculty");
   const [hrEvents, setHrEvents] = useState<CalendarEvent[]>([]);
 
@@ -92,8 +93,8 @@ export default function CalendarScreen() {
         day: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][new Date(e.eventDate).getDay()],
         rawFormData: {
           roomNo: e.roomNo,
-          topicId: null,
-        },
+          topicId: null
+        }
       }));
       setHrEvents(mappedEvents);
     } catch (err) {
@@ -142,7 +143,7 @@ export default function CalendarScreen() {
         sectionIds.forEach((sectionId) => {
           expandedEvents.push({
             id: `${row.calendarEventId}-${sectionId}`,
-            title: row.type === "meeting" ? row.meetingTitle || "Meeting" : (safelyExtractedTopic ?? ""),
+            title: row.type === "meeting" ? row.meetingTitle || "Meeting" : safelyExtractedTopic ?? "",
             type: row.type,
             subjectName: row.college_subjects?.subjectName ?? "-",
             subjectKey: row.college_subjects?.subjectKey ?? "",
@@ -161,8 +162,8 @@ export default function CalendarScreen() {
               collegeRoomId: row.collegeRoomId,
               meetingLink: row.meetingLink,
               meetingId: row.meetingId,
-              meetingPassword: row.meetingPassword,
-            },
+              meetingPassword: row.meetingPassword
+            }
           });
         });
       });
@@ -193,7 +194,7 @@ export default function CalendarScreen() {
       collegeAcademicYearId: payload.collegeAcademicYearId,
       collegeSemesterId: payload.collegeSemesterId,
       sectionIds: payload.sectionIds,
-      ignoreEventId,
+      ignoreEventId
     });
     return conflicts.length > 0;
   };
@@ -214,7 +215,7 @@ export default function CalendarScreen() {
         toTime: payload.toTime,
         meetingLink: payload.meetingLink ?? null,
         meetingId: payload.meetingId ?? null,
-        meetingPassword: payload.meetingPassword ?? null,
+        meetingPassword: payload.meetingPassword ?? null
       });
       if (!eventRes.success) {
         Alert.alert("Error", "Failed to save event");
@@ -230,7 +231,7 @@ export default function CalendarScreen() {
         collegeBranchId: payload.collegeBranchId,
         collegeAcademicYearId: payload.collegeAcademicYearId,
         collegeSemesterId: payload.collegeSemesterId,
-        sectionIds: payload.sectionIds,
+        sectionIds: payload.sectionIds
       });
       if (!editingEventId) {
         await notifyStudentsOfEvent(calendarEventId, payload);
@@ -258,9 +259,9 @@ export default function CalendarScreen() {
         "Time Conflict",
         "There is a time conflict for the selected sections. Do you want to save anyway?",
         [
-          { text: "Cancel", style: "cancel" },
-          { text: "Save Anyway", onPress: () => executeSave(payload) },
-        ]
+        { text: "Cancel", style: "cancel" },
+        { text: "Save Anyway", onPress: () => executeSave(payload) }]
+
       );
       return { success: false };
     }
@@ -272,27 +273,27 @@ export default function CalendarScreen() {
       "Confirm Delete",
       "Are you sure you want to delete this event?",
       [
-        { text: "Cancel", style: "cancel" },
-        { 
-          text: "Delete", 
-          style: "destructive",
-          onPress: async () => {
-            try {
-              const calendarEventId = event.calendarEventId;
-              const sectionId = event.sectionId;
-              await softDeleteCalendarEventSection(calendarEventId, sectionId);
-              const remaining = await fetchCalendarEventSections(calendarEventId);
-              if (!remaining || remaining.length === 0) {
-                await deleteCalendarEvent(calendarEventId);
-              }
-              await loadCalendarEvents(currentMonth, currentYear);
-              setShowDetails(false);
-            } catch (err) {
-              Alert.alert("Error", "Failed to delete section");
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            const calendarEventId = event.calendarEventId;
+            const sectionId = event.sectionId;
+            await softDeleteCalendarEventSection(calendarEventId, sectionId);
+            const remaining = await fetchCalendarEventSections(calendarEventId);
+            if (!remaining || remaining.length === 0) {
+              await deleteCalendarEvent(calendarEventId);
             }
+            await loadCalendarEvents(currentMonth, currentYear);
+            setShowDetails(false);
+          } catch (err) {
+            Alert.alert("Error", "Failed to delete section");
           }
-        },
-      ]
+        }
+      }]
+
     );
   };
 
@@ -302,7 +303,7 @@ export default function CalendarScreen() {
     const startDate = event.startTime.split("T")[0];
     const start24 = event.startTime.split("T")[1].slice(0, 5);
     const end24 = event.endTime.split("T")[1].slice(0, 5);
-    
+
     const parse24To12 = (time24: string) => {
       const [hStr, mStr] = time24.split(":");
       let h = Number(hStr);
@@ -339,7 +340,7 @@ export default function CalendarScreen() {
       endPeriod: end.period,
       sectionIds: dbSectionIds,
       semesterId,
-      type: event.type,
+      type: event.type
     });
     setIsModalOpen(true);
   };
@@ -348,8 +349,8 @@ export default function CalendarScreen() {
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-4 py-2 border-b border-gray-100 flex-row justify-between items-center mb-2">
         <View>
-          <Text className="text-xl font-bold text-gray-900">Calendar & Events</Text>
-          <Text className="text-xs text-gray-500">Stay organized with your schedule</Text>
+          <Text className="text-xl font-bold text-gray-900">{t("Auto.Common.CalendarEvents", "Calendar & Events")}</Text>
+          <Text className="text-xs text-gray-500">{t("Auto.Common.Stayorganizedwi", "Stay organized with your schedule")}</Text>
         </View>
       </View>
 
@@ -357,75 +358,75 @@ export default function CalendarScreen() {
         <View className="flex-row gap-3 mb-4">
           <TouchableOpacity
             onPress={() => setMainTab("Faculty")}
-            className={`px-4 py-2 rounded-lg shadow-sm border border-gray-200 ${mainTab === "Faculty" ? "bg-emerald-500 border-emerald-500" : "bg-white"}`}
-          >
-            <Text className={`font-semibold text-sm ${mainTab === "Faculty" ? "text-white" : "text-gray-600"}`}>Academics</Text>
+            className={`px-4 py-2 rounded-lg shadow-sm border border-gray-200 ${mainTab === "Faculty" ? "bg-emerald-500 border-emerald-500" : "bg-white"}`}>
+            
+            <Text className={`font-semibold text-sm ${mainTab === "Faculty" ? "text-white" : "text-gray-600"}`}>{t("Auto.Common.Academics", "Academics")}</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
             onPress={() => setMainTab("HR")}
-            className={`px-4 py-2 rounded-lg shadow-sm border border-gray-200 ${mainTab === "HR" ? "bg-emerald-500 border-emerald-500" : "bg-white"}`}
-          >
-            <Text className={`font-semibold text-sm ${mainTab === "HR" ? "text-white" : "text-gray-600"}`}>HR Schedule</Text>
+            className={`px-4 py-2 rounded-lg shadow-sm border border-gray-200 ${mainTab === "HR" ? "bg-emerald-500 border-emerald-500" : "bg-white"}`}>
+            
+            <Text className={`font-semibold text-sm ${mainTab === "HR" ? "text-white" : "text-gray-600"}`}>{t("Auto.Common.HRSchedule", "HR Schedule")}</Text>
           </TouchableOpacity>
         </View>
 
-        {mainTab === "Faculty" ? (
-          <CalendarToolbar activeTab={activeTab} setActiveTab={setActiveTab} />
-        ) : (
-          <View className="bg-gray-50 rounded-xl border border-gray-200 px-4 py-3 mb-4">
-            <Text className="text-sm font-semibold text-gray-600">HR College Schedule</Text>
-          </View>
-        )}
+        {mainTab === "Faculty" ?
+        <CalendarToolbar activeTab={activeTab} setActiveTab={setActiveTab} /> :
 
-        {mainTab === "Faculty" && (
-          <CalendarHeader
-            currentDate={currentDate}
-            onMonthYearChange={(month, year) => setCurrentDate(new Date(year, month, 1))}
-            onAddClick={() => {
-              setEditingEventId(null);
-              setFormMode("create");
-              setEventForm(null);
-              setIsModalOpen(true);
-            }}
-          />
-        )}
+        <View className="bg-gray-50 rounded-xl border border-gray-200 px-4 py-3 mb-4">
+            <Text className="text-sm font-semibold text-gray-600">{t("Auto.Common.HRCollegeSchedu", "HR College Schedule")}</Text>
+          </View>
+        }
+
+        {mainTab === "Faculty" &&
+        <CalendarHeader
+          currentDate={currentDate}
+          onMonthYearChange={(month, year) => setCurrentDate(new Date(year, month, 1))}
+          onAddClick={() => {
+            setEditingEventId(null);
+            setFormMode("create");
+            setEventForm(null);
+            setIsModalOpen(true);
+          }} />
+
+        }
       </View>
 
       <View className="flex-1 bg-gray-50 px-2 pb-2">
-        {loading ? (
-          <View className="flex-1 items-center justify-center">
+        {loading ?
+        <View className="flex-1 items-center justify-center">
             <ActivityIndicator size="large" color="#10B981" />
-          </View>
-        ) : (
-          <CalendarGrid
-            events={mainTab === "Faculty" ? events : hrEvents}
-            weekDays={weekDays}
-            activeTab={mainTab === "Faculty" ? activeTab : "All"}
-            onPrevWeek={() => {
-              const prev = new Date(currentDate);
-              prev.setDate(prev.getDate() - 7);
-              setCurrentDate(prev);
-            }}
-            onNextWeek={() => {
-              const next = new Date(currentDate);
-              next.setDate(next.getDate() + 7);
-              setCurrentDate(next);
-            }}
-            onDeleteRequest={(event) => {
-              if (mainTab === "HR") return Alert.alert("Error", "Cannot delete HR events");
-              handleDeleteEvent(event);
-            }}
-            onEditRequest={(event) => {
-              if (mainTab === "HR") return Alert.alert("Error", "Cannot edit HR events");
-              handleEditEvent(event);
-            }}
-            onEventClick={(event) => {
-              setSelectedEvent(event);
-              setShowDetails(true);
-            }}
-          />
-        )}
+          </View> :
+
+        <CalendarGrid
+          events={mainTab === "Faculty" ? events : hrEvents}
+          weekDays={weekDays}
+          activeTab={mainTab === "Faculty" ? activeTab : "All"}
+          onPrevWeek={() => {
+            const prev = new Date(currentDate);
+            prev.setDate(prev.getDate() - 7);
+            setCurrentDate(prev);
+          }}
+          onNextWeek={() => {
+            const next = new Date(currentDate);
+            next.setDate(next.getDate() + 7);
+            setCurrentDate(next);
+          }}
+          onDeleteRequest={(event) => {
+            if (mainTab === "HR") return Alert.alert("Error", "Cannot delete HR events");
+            handleDeleteEvent(event);
+          }}
+          onEditRequest={(event) => {
+            if (mainTab === "HR") return Alert.alert("Error", "Cannot edit HR events");
+            handleEditEvent(event);
+          }}
+          onEventClick={(event) => {
+            setSelectedEvent(event);
+            setShowDetails(true);
+          }} />
+
+        }
       </View>
 
       <EventDetailsModal
@@ -434,8 +435,8 @@ export default function CalendarScreen() {
         onClose={() => {
           setShowDetails(false);
           setSelectedEvent(null);
-        }}
-      />
+        }} />
+      
 
       <AddEventModal
         isOpen={isModalOpen}
@@ -446,8 +447,8 @@ export default function CalendarScreen() {
           setEventForm(null);
           setEditingEventId(null);
         }}
-        onSave={handleSaveEvent}
-      />
-    </SafeAreaView>
-  );
+        onSave={handleSaveEvent} />
+      
+    </SafeAreaView>);
+
 }

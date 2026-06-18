@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View } from 'react-native';
 import { useUser } from "./context/UserContext";
 import { useFaculty } from "./context/faculty/useFaculty";
 import { extractAcademicYearNumber } from "./academicYear";

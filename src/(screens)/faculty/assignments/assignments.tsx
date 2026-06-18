@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 import AssignmentTab from './components/AssignmentTab';

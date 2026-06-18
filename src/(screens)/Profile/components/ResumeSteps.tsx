@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React, { useRef, useEffect, useState, useMemo } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { CheckCircle, CaretLeft, CaretRight } from "phosphor-react-native";
 import { useUser } from "@/utils/context/UserContext";
 

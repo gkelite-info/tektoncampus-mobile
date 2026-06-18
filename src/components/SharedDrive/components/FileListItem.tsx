@@ -1,5 +1,6 @@
+import { Text } from '@/components/AppText';
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from 'react-native';
 import { FilePdf, FileXls, FileDoc, FileText, DownloadSimple, Trash } from "phosphor-react-native";
 import { DriveFileRow } from "@/lib/helpers/drive/driveFilesAPI";
 import { useTranslation } from "react-i18next";

@@ -16,8 +16,8 @@ import {
     MeetingsScreen,
     MyAttendanceScreen,
     WellbeingScreen,
-    SettingsScreen,
 } from "@/(screens)/student/mockScreens";
+import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 
 const ParentCalendar = () => <AcademicsScreen />;
 const ParentAssignments = () => <AcademicsScreen />;
@@ -124,7 +124,7 @@ export default function ParentDrawerNavigator() {
                 <Stack.Screen name="MyAttendance" component={MyAttendanceScreen} />
                 <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
                 <Stack.Screen name="Payments" component={AcademicsScreen} />
-                <Stack.Screen name="Settings" component={SettingsScreen} />
+                <Stack.Screen name="Settings" component={SettingsStackNavigator} />
             </Stack.Navigator>
 
             <RoleSideMenu

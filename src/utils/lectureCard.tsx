@@ -1,6 +1,7 @@
+import { Text } from '@/components/AppText';
 import { fonts } from "@/constants/fonts";
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from 'react-native';
 
 type LectureCardProps = {
     time: string;

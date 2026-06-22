@@ -56,6 +56,7 @@ export default function AssignmentCard({
   onEdit,
   onDelete
 }: AssignmentCardProps) {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);

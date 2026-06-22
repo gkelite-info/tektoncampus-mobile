@@ -77,6 +77,7 @@ export default function AssignmentCardMobile({
   cardProp,
   activeView
 }: AssignmentCardProps) {
+  const { t } = useTranslation();
   const { studentId } = useStudent();
   const [uploadedFiles, setUploadedFiles] = useState<{[key: number]: string;}>({});
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);

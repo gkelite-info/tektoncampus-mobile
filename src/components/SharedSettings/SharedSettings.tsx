@@ -67,12 +67,12 @@ const SectionHeader = ({
   title
 
 
-}: {title: string;}) => <Text className="mb-2 ml-4 text-xs tracking-wider text-gray-500" style={{
-  fontFamily: fonts.bold,
-  textTransform: 'uppercase'
-}}>
+}: {title: string;}) => {const { t } = useTranslation();return <Text className="mb-2 ml-4 text-xs tracking-wider text-gray-500" style={{
+    fontFamily: fonts.bold,
+    textTransform: t("uppercase")
+  }}>
     {title}
-  </Text>;
+  </Text>;};
 type SettingsRowProps = {
   title: string;
   description: string;
@@ -92,8 +92,8 @@ const SettingsRow = React.memo(({
   disabled,
   showWip,
   children
-}: SettingsRowProps) => {const { t } = useTranslation();
-  const content = <View className={`min-h-[72px] justify-center bg-white px-4 py-3.5 ${disabled ? 'opacity-60' : ''}`}>
+}: SettingsRowProps) => {
+  const content = <View className={`min-h-[72px] justify-center bg-white px-4 py-3.5 ${disabled ? "opacity-60" : ''}`}>
         <View className="flex-row items-center gap-3.5">
           <IconBubble>
             <Icon size={22} weight="fill" color={COLORS.green} />
@@ -122,7 +122,7 @@ const SettingsRow = React.memo(({
         {showWip && <View pointerEvents="none" className="absolute inset-0 items-center justify-center bg-white/60">
             <Text className="rounded-full bg-[#16284F] px-3 py-1 text-[11px] font-bold tracking-wide text-white overflow-hidden" style={{
         fontFamily: fonts.bold
-      }}>{t("WIP", "WIP")}</Text>
+      }}>{"WIP"}</Text>
           </View>}
       </View>;
   if (!onPress || disabled) return content;
@@ -140,7 +140,7 @@ const FontScaleSlider = React.memo(({
 
 
 
-}: {value: number;onChange: (value: number) => void;onChangeEnd?: (value: number) => void;}) => {const { t } = useTranslation();
+}: {value: number;onChange: (value: number) => void;onChangeEnd?: (value: number) => void;}) => {
   const [trackWidth, setTrackWidth] = useState(1);
   const [dragX, setDragX] = useState<number | null>(null);
   const SECTIONS = (MAX_FONT_SCALE - MIN_FONT_SCALE) / FONT_STEP;
@@ -194,7 +194,7 @@ const FontScaleSlider = React.memo(({
   return <View className="flex-row items-center gap-3 py-2 pr-2">
         <Text className="text-[16px] text-gray-400" style={{
       fontFamily: fonts.medium
-    }}>{t("A", "A")}</Text>
+    }}>{"A"}</Text>
 
         <View accessibilityRole="adjustable" className="h-8 flex-1 justify-center relative" onLayout={(e) => setTrackWidth(e.nativeEvent.layout.width)} {...panResponder.panHandlers}>
           
@@ -216,7 +216,7 @@ const FontScaleSlider = React.memo(({
 
         <Text className="text-[22px] text-gray-700" style={{
       fontFamily: fonts.medium
-    }}>{t("A", "A")}</Text>
+    }}>{"A"}</Text>
       </View>;
 });
 export default function SettingsScreen() {
@@ -240,7 +240,7 @@ export default function SettingsScreen() {
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [reminders, setReminders] = useState(true);
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language === 'hi' ? 'Hindi' : i18n.language === 'te' ? 'Telugu' : i18n.language === 'ur' ? 'Urdu' : 'English');
+  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language === "hi" ? t("Hindi") : i18n.language === "te" ? t("Telugu") : i18n.language === "ur" ? t("Urdu") : t("English"));
   useEffect(() => {
     if (!userId) return;
     const loadPrefs = async () => {
@@ -251,7 +251,7 @@ export default function SettingsScreen() {
           setReminders((prefs.assignment_reminders || prefs.event_reminders || prefs.class_reminders) ?? true);
         }
       } catch (e) {
-        console.error('Failed to load preferences:', e);
+        console.error(t("Failed to load preferences:"), e);
       } finally {
         setIsLoading(false);
       }
@@ -264,7 +264,7 @@ export default function SettingsScreen() {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       await updateUserPreferences(userId, updates);
     } catch (e) {
-      console.error('Failed to update preference:', e);
+      console.error(t("Failed to update preference:"), e);
     }
   };
   const handleEmailAlertsChange = (val: boolean) => {
@@ -294,7 +294,7 @@ export default function SettingsScreen() {
   };
   const changeLanguage = (lang: string) => {
     setSelectedLanguage(lang);
-    if (lang === 'English') i18n.changeLanguage('en');else if (lang === 'Hindi') i18n.changeLanguage('hi');else if (lang === 'Telugu') i18n.changeLanguage('te');else if (lang === 'Urdu') i18n.changeLanguage('ur');
+    if (lang === "English") i18n.changeLanguage(t("en"));else if (lang === "Hindi") i18n.changeLanguage(t("hi"));else if (lang === "Telugu") i18n.changeLanguage(t("te"));else if (lang === "Urdu") i18n.changeLanguage(t("ur"));
     setLanguageModalVisible(false);
   };
   const closeLanguageModal = useCallback(() => setLanguageModalVisible(false), []);
@@ -373,7 +373,7 @@ export default function SettingsScreen() {
             </Text>
 
             <View className="gap-2.5">
-              {['English', 'Hindi', 'Telugu', 'Urdu'].map((language) => {
+              {[t("English"), t("Hindi"), t("Telugu"), t("Urdu")].map((language) => {
               const isSelected = selectedLanguage === language;
               return <Pressable key={language} className={`flex-row items-center justify-between rounded-xl border-2 px-4 py-3.5 ${isSelected ? 'border-[#43C17A] bg-[#43C17A15]' : 'border-transparent bg-gray-50'}`} onPress={() => changeLanguage(language)}>
                     <Text className={`text-[16px] ${isSelected ? 'text-[#1E7B4D]' : 'text-[#282828]'}`} style={{

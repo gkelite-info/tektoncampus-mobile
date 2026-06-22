@@ -2,9 +2,10 @@ import i18n, { LanguageDetectorAsyncModule } from "i18next";
 import { initReactI18next } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import en from "./src/locales/en.json";
-import hi from "./src/locales/hi.json";
-import te from "./src/locales/te.json";
+const en = require("./src/locales/en.json");
+const hi = require("./src/locales/hi.json");
+const te = require("./src/locales/te.json");
+const ur = require("./src/locales/ur.json");
 
 const languageDetector: LanguageDetectorAsyncModule = {
     type: "languageDetector",
@@ -40,10 +41,13 @@ i18n.use(languageDetector)
             en: { translation: en },
             hi: { translation: hi },
             te: { translation: te },
+            ur: { translation: ur },
         },
 
         interpolation: {
             escapeValue: false,
+            prefix: "{",
+            suffix: "}",
         },
     });
 

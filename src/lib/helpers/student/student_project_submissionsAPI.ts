@@ -143,14 +143,25 @@ export async function fetchProjectSubmissionsWithStudents(projectId: number) {
     return data ?? [];
 }
 
-export async function uploadFileToStorage(file: File, projectId: number, studentId: number) {
+export async function uploadFileToStorage(file: any, projectId: number, studentId: number) {
     const fileExt = file.name.split('.').pop();
     const fileName = `${studentId}_${Date.now()}.${fileExt}`;
     const filePath = `project_${projectId}/${fileName}`;
 
+    let uploadData;
+    if (file.uri) {
+        // Fetch the local file and convert it to ArrayBuffer for Supabase Storage in React Native
+        const response = await fetch(file.uri);
+        const blob = await response.blob();
+        uploadData = await new Response(blob).arrayBuffer();
+    } else {
+        uploadData = file;
+    }
+
     const { data, error } = await supabase.storage
         .from('project_submissions')
-        .upload(filePath, file, {
+        .upload(filePath, uploadData, {
+            contentType: file.mimeType || 'application/octet-stream',
             cacheControl: '3600',
             upsert: true
         });

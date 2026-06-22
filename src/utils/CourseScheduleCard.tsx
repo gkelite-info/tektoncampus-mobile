@@ -1,8 +1,8 @@
 import { Text } from '@/components/AppText';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View } from 'react-native';
 import { useUser } from "./context/UserContext";
-import { useFaculty } from "./context/faculty/useFaculty";
+import { FacultyContext } from "./context/faculty/useFaculty";
 import { extractAcademicYearNumber } from "./academicYear";
 
 type Props = {
@@ -31,7 +31,8 @@ export default function CourseScheduleCard({
         loading,
     } = useUser();
     const academicYearNumber = extractAcademicYearNumber(collegeAcademicYear);
-    const { college_branch } = useFaculty();
+    const facultyContext = useContext(FacultyContext);
+    const college_branch = facultyContext?.college_branch;
 
     useEffect(() => {
         const updateTime = () => {

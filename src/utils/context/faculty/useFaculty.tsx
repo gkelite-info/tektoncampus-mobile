@@ -48,7 +48,7 @@ export type FacultyContextType = {
     collegeAcademicYear: string | null;
 };
 
-const FacultyContext = createContext<FacultyContextType | null>(null);
+export const FacultyContext = createContext<FacultyContextType | null>(null);
 
 export const FacultyProvider = ({ children }: { children: React.ReactNode }) => {
     const { userId, role, loading: userLoading } = useUser();

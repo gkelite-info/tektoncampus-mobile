@@ -133,6 +133,7 @@ export default function StudentCalendar() {
         t,
         i18n
     } = useTranslation("Calendar.student");
+    const { t: generalT } = useTranslation();
     const locale = i18n.language;
     const headerHeight = useHeaderHeight();
     const week = useMemo(() => getWeekDays(locale), [locale]);
@@ -173,9 +174,6 @@ export default function StudentCalendar() {
                 console.error("Assignments query error:", assignmentRes.error);
             }
             const promises = week.map(async day => {
-                const {
-                    t
-                } = useTranslation();
                 const [classes, quizRes, discRes, facultyTasks] = await Promise.all([fetchStudentTimetableByDate({
                     date: day.fullDate,
                     collegeEducationId: studentContext.collegeEducationId,
@@ -194,23 +192,23 @@ export default function StudentCalendar() {
                 const qCount = quizRes.data?.length ?? 0;
                 const aCount = assignmentRes.data?.length ?? 0;
                 const dCount = discRes.data?.length ?? 0;
-                let focus = t("General Revision");
+                let focus = generalT("General Revision");
                 if (aCount > 0 && assignmentRes.data?.[0]) {
                     focus = assignmentRes.data[0].topicName;
                 } else if (qCount > 0 && quizRes.data?.[0]) focus = quizRes.data[0].quizTitle;
-                let tip = t("Organize your study desk");
+                let tip = generalT("Organize your study desk");
                 const deadlines: string[] = [];
-                if (qCount > 0) deadlines.push(t("Quizzes", {
+                if (qCount > 0) deadlines.push(generalT("Quizzes", {
                     count: qCount
                 }));
-                if (aCount > 0) deadlines.push(t("Assignments", {
+                if (aCount > 0) deadlines.push(generalT("Assignments", {
                     count: aCount
                 }));
-                if (dCount > 0) deadlines.push(t("Discussions", {
+                if (dCount > 0) deadlines.push(generalT("Discussions", {
                     count: dCount
                 }));
                 if (deadlines.length > 0) {
-                    tip = `${t("Check the deadlines for")}: ${deadlines.join(", ")}`;
+                    tip = `${generalT("Check the deadlines for")}: ${deadlines.join(", ")}`;
                 }
                 resultsMap[day.fullDate] = {
                     classCount: classes?.length ?? 0,
@@ -232,7 +230,7 @@ export default function StudentCalendar() {
         } finally {
             setLoading(false);
         }
-    }, [collegeEducationType, week, t]);
+    }, [collegeEducationType, week, generalT]);
     useEffect(() => {
         loadAllData(true);
     }, [loadAllData]);

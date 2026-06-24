@@ -1,9 +1,39 @@
-import type {
-  PlacementCompany,
-  PlacementDrive,
-  PlacementStudentRow,
-} from "@/app/(screens)/placement/placements/components/mockData";
+import type { PlacementCompany } from "./getPlacementCompanies";
 import { supabase } from "@/lib/supabaseClient";
+
+export type PlacementStudentRow = {
+  id: number;
+  studentName: string;
+  studentId: string;
+  branch: string;
+  year: string;
+  role: string;
+  company: string;
+  package: string;
+  joiningDate: string;
+  status: string;
+};
+
+export type PlacementDrive = {
+  id: number;
+  driveName: string;
+  companyName: string;
+  date: string;
+  branch: string;
+  eligibleStudents: number;
+  applied: number;
+  placed: number;
+  students: PlacementStudentRow[];
+  collegeId: number;
+  collegeEducationId?: number;
+  educationTypeName?: string;
+  collegeBranchId: number;
+  collegeAcademicYearId: number;
+  placementCompanyIds: number[];
+  role: string;
+  packageDetails: string;
+  isCompleted: boolean;
+};
 
 type StudentApplicationRow = {
   studentPlacementApplicationId: number;
@@ -578,7 +608,7 @@ export async function mapCompaniesToPlacementDrives(
   return companies.map((company) => {
     const companyPlacementIds = company.placementCompanyIds ?? [company.id];
     const companyApplications = companyPlacementIds.flatMap(
-      (placementId) => applicationsByPlacementId.get(placementId) ?? [],
+      (placementId: number) => applicationsByPlacementId.get(placementId) ?? [],
     );
     const eligibleStudentCount =
       eligibleStudentCountMap.get(
@@ -589,7 +619,7 @@ export async function mapCompaniesToPlacementDrives(
         }),
       ) ?? 0;
 
-    const students: PlacementStudentRow[] = companyApplications.map((application) => {
+    const students: PlacementStudentRow[] = companyApplications.map((application: StudentApplicationRow) => {
       const student = Array.isArray(application.students)
         ? application.students[0]
         : application.students;

@@ -1,8 +1,10 @@
-import type {
-  ChartBarItem,
-  PlacementStudentRow,
-} from "@/app/(screens)/placement/placements/components/mockData";
+import type { PlacementStudentRow } from "./getPlacementDrives";
 import { supabase } from "@/lib/supabaseClient";
+
+export type ChartBarItem = {
+  label: string;
+  value: number;
+};
 
 type PlacementApplicationRow = {
   studentPlacementApplicationId: number;

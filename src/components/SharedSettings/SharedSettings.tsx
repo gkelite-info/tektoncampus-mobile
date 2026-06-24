@@ -69,7 +69,7 @@ const SectionHeader = ({
 
 }: {title: string;}) => {const { t } = useTranslation();return <Text className="mb-2 ml-4 text-xs tracking-wider text-gray-500" style={{
     fontFamily: fonts.bold,
-    textTransform: t("uppercase")
+    textTransform: "uppercase"
   }}>
     {title}
   </Text>;};

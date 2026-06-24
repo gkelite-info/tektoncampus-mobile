@@ -23,6 +23,9 @@ interface SharedFilterBarProps {
 export default function SharedFilterBar({
   filters
 }: SharedFilterBarProps) {
+  const {
+    t
+  } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<FilterConfig | null>(null);
   const renderPickerModal = () => {
     
@@ -54,35 +57,32 @@ export default function SharedFilterBar({
               setActiveFilter(null);
             }} className={`flex-row items-center justify-between p-4 rounded-xl mb-1 ${isSelected ? 'bg-emerald-50' : 'bg-transparent'}`}>
                                         <Text className={`${isSelected ? 'text-[#43C17A]' : 'text-[#334155]'} text-base`} style={{
-                fontFamily: isSelected ? fonts.semiBold : fonts.medium
-              }}>
-                                            {item.label}
-                                        </Text>
-                                        {isSelected && <Check size={20} color="#43C17A" weight="bold" />}
-                                    </TouchableOpacity>;
-          }} />
-                    </View>
-                </TouchableOpacity>
-            </Modal>;
-  };
-  return <View className="mb-4">
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{
-      paddingRight: 20
-    }}>
-                {filters.map(filter => {
-        const {
-          t
-        } = useTranslation();
-        const selectedLabel = filter.options.find(o => o.value === filter.selectedValue)?.label || filter.label;
-        return <TouchableOpacity key={filter.id} onPress={() => setActiveFilter(filter)} disabled={filter.isLoading} className={`flex-row items-center bg-white border ${filter.selectedValue && filter.selectedValue !== "All" ? 'border-[#43C17A] bg-emerald-50' : 'border-slate-200'} rounded-full px-4 py-2 mr-3`}>
-                            <Text className={`text-sm mr-2 ${filter.selectedValue && filter.selectedValue !== "All" ? 'text-[#43C17A]' : 'text-slate-600'}`} style={{
-            fontFamily: fonts.medium
-          }}>
-                                {filter.isLoading ? t("Loading...") : selectedLabel}
-                            </Text>
-                            <CaretDown size={14} color={filter.selectedValue && filter.selectedValue !== "All" ? '#43C17A' : '#64748B'} />
-                        </TouchableOpacity>;
-      })}
+                 fontFamily: isSelected ? fonts.semiBold : fonts.medium
+               }}>
+                                             {item.label}
+                                         </Text>
+                                         {isSelected && <Check size={20} color="#43C17A" weight="bold" />}
+                                     </TouchableOpacity>;
+           }} />
+                     </View>
+                 </TouchableOpacity>
+             </Modal>;
+   };
+   return <View className="mb-4">
+             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{
+       paddingRight: 20
+     }}>
+                 {filters.map(filter => {
+         const selectedLabel = filter.options.find(o => o.value === filter.selectedValue)?.label || filter.label;
+         return <TouchableOpacity key={filter.id} onPress={() => setActiveFilter(filter)} disabled={filter.isLoading} className={`flex-row items-center bg-white border ${filter.selectedValue && filter.selectedValue !== "All" ? 'border-[#43C17A] bg-emerald-50' : 'border-slate-200'} rounded-full px-4 py-2 mr-3`}>
+                             <Text className={`text-sm mr-2 ${filter.selectedValue && filter.selectedValue !== "All" ? 'text-[#43C17A]' : 'text-slate-600'}`} style={{
+             fontFamily: fonts.medium
+           }}>
+                                 {filter.isLoading ? t("Loading...") : selectedLabel}
+                             </Text>
+                             <CaretDown size={14} color={filter.selectedValue && filter.selectedValue !== "All" ? '#43C17A' : '#64748B'} />
+                         </TouchableOpacity>;
+       })}
             </ScrollView>
             
             {renderPickerModal()}

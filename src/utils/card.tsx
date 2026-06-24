@@ -73,7 +73,7 @@ export default function CardComponent({
         }
     }
 
-    let detectedWidth: number | string | undefined;
+    let detectedWidth: any;
     const wBracketsMatch = styleStr.match(/w-\[(\d+(?:\.\d+)?)(px|%)?\]/);
     if (wBracketsMatch) {
         const val = wBracketsMatch[1];

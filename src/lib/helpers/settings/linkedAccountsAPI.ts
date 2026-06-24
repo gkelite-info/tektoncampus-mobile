@@ -82,7 +82,7 @@ export async function unlinkUserIdentity(providerId: string, userId: number) {
 }
 
 export async function linkUserIdentity(providerId: string, redirectTo: string) {
-  const { error } = await supabase.auth.linkIdentity({
+  const { data, error } = await supabase.auth.linkIdentity({
     provider: providerId as any,
     options: {
       redirectTo: redirectTo,
@@ -90,5 +90,5 @@ export async function linkUserIdentity(providerId: string, redirectTo: string) {
   });
 
   if (error) throw error;
-  return true;
+  return data;
 }

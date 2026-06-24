@@ -1,9 +1,16 @@
 import { ResumeData } from "./Resumedatafetcher";
 
 export function generateStandardTemplate(data: ResumeData): string {
-    const { name, city, email, mobile, linkedInId, profileSummary, education, employment, projects, internships, skills } = data;
+    const name = data.personal?.fullName;
+    const city = data.personal?.currentCity;
+    const email = data.personal?.email;
+    const mobile = data.personal?.mobile;
+    const linkedInId = data.personal?.linkedInId;
+    const profileSummary = data.summary;
+    const skills = data.skillGroups;
+    const { education, employment, projects, internships } = data;
 
-    const allSkills = skills.flatMap(group => group.skills).join(", ");
+    const allSkills = skills.flatMap((group) => group.skills).join(", ");
 
     return `
     <html>
@@ -91,9 +98,15 @@ export function generateStandardTemplate(data: ResumeData): string {
 }
 
 export function generateModernTemplate(data: ResumeData): string {
-    const { name, city, email, mobile, profileSummary, education, employment, projects, skills } = data;
+    const name = data.personal?.fullName;
+    const city = data.personal?.currentCity;
+    const email = data.personal?.email;
+    const mobile = data.personal?.mobile;
+    const profileSummary = data.summary;
+    const skills = data.skillGroups;
+    const { education, employment, projects } = data;
 
-    const allSkills = skills.flatMap(group => group.skills).join(" • ");
+    const allSkills = skills.flatMap((group) => group.skills).join(" • ");
 
     return `
     <html>

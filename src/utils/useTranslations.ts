@@ -5,9 +5,6 @@ export function useTranslations(namespace: string) {
     t
   } = useTranslation();
   return useCallback((key: string, options?: Record<string, string>) => {
-    const {
-      t
-    } = useTranslation();
     const fullKey = `${namespace}.${key}`;
     let result: string = t(fullKey, {
       defaultValue: key

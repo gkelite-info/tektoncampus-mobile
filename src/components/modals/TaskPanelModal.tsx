@@ -124,9 +124,6 @@ export default function TaskPanelModal({
   }, [role, open, collegeId, collegeBranchId, collegeAcademicYearId, collegeSemesterId]);
   if (!open) return null;
   const confirmDelete = (taskId: number) => {
-    const {
-      t
-    } = useTranslation();
     Alert.alert(t("Delete Task"), t("Are you sure you want to delete this task?"), [{
       text: t("Cancel"),
       style: "cancel"
@@ -137,9 +134,6 @@ export default function TaskPanelModal({
     }]);
   };
   const handleDelete = async (taskId: number) => {
-    const {
-      t
-    } = useTranslation();
     setIsDeleting(true);
     try {
       const res = role === "student" ? await deactivateStudentTask(taskId) : await deactivateFacultyTask(taskId);

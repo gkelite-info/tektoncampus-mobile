@@ -10,6 +10,10 @@ import StudentDrawerNavigator from "./StudentDrawerNavigator";
 import FacultyDrawerNavigator from "./FacultyDrawerNavigator";
 import ParentDrawerNavigator from "./ParentDrawerNavigator";
 import { FacultyProvider } from "@/utils/context/faculty/useFaculty";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { View, ActivityIndicator } from "react-native";
+
+const AuthStack = createNativeStackNavigator();
 
 type AppUser = {
     userId: number;
@@ -149,14 +153,10 @@ export default function RootNavigator() {
         };
     }, [authReady, navigationStateKey]);
 
-    if (!authReady || !navigationReady) {
-        return null;
-    }
-
     return (
         <NavigationContainer
             key={navigationStateKey ?? "guest"}
-            initialState={initialState}
+            initialState={undefined}
             onStateChange={(state) => {
                 if (!navigationStateKey) return;
 
@@ -166,8 +166,18 @@ export default function RootNavigator() {
                 );
             }}
         >
-           {!user ? (
-                <LoginScreen />
+            {!authReady || !navigationReady ? (
+                <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+                    <AuthStack.Screen name="Loading" component={() => (
+                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
+                            <ActivityIndicator size="large" color="#43C17A" />
+                        </View>
+                    )} />
+                </AuthStack.Navigator>
+            ) : !user ? (
+                <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+                    <AuthStack.Screen name="Login" component={LoginScreen} />
+                </AuthStack.Navigator>
             ) : roleNormalized.includes("faculty") ? (
                 <FacultyProvider>
                     <FacultyDrawerNavigator />
@@ -179,7 +189,9 @@ export default function RootNavigator() {
             ) : roleNormalized.includes("parent") ? (
                 <ParentDrawerNavigator />
             ) : (
-                <LoginScreen />
+                <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+                    <AuthStack.Screen name="Login" component={LoginScreen} />
+                </AuthStack.Navigator>
             )}
         </NavigationContainer>
     );

@@ -91,6 +91,9 @@ function UnitCard({
   unit,
   onOpenTopicPdf
 }: UnitCardProps) {
+  const {
+    t
+  } = useTranslation();
   const colors = colorMap[unit.color] || colorMap.purple;
   const percentage = unit.percentage ?? 0;
   const [isExpanded, setIsExpanded] = useState(false);

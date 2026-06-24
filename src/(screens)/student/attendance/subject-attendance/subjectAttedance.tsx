@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, ScrollView, ActivityIndicator, useWindowDimensions } from 'react-native';
 import { CaretLeft, Chalkboard, CaretDown } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
+import { useTranslations } from "@/utils/useTranslations";
 const useNavigate = () => {
   return {
     navigate: (screen: string, params?: any) => console.log(`Navigating to ${screen}`, params),
@@ -14,7 +15,6 @@ const useUser = () => ({
   userId: "student_123",
   loading: false
 });
-const useTranslations = (namespace: string) => (key: string) => key;
 const getStudentDashboardData = async (...args: any[]): Promise<any> => ({
   cards: {
     attended: 12,
@@ -121,9 +121,7 @@ export default function SubjectAttendance({
   onBack?: () => void;
   onNavigate?: (screen: string, params?: any) => void;
 }) {
-  const {
-    t
-  } = useTranslation();
+  const t = useTranslations("Attendance_module.student");
   const router = useNavigate();
   const {
     width
@@ -239,7 +237,7 @@ export default function SubjectAttendance({
 
                                             <View className="flex-row items-center gap-2">
                                                 <View className="w-7 h-7 rounded-full bg-blue-50 items-center justify-center">
-                                                    <Text className="text-blue-500 text-sm font-black">{t("Auto.Common.PDF", "PDF")}</Text>
+                                                    <Text className="text-blue-500 text-sm font-black">{t("PDF")}</Text>
                                                 </View>
                                                 <View className="w-7 h-7 rounded-full bg-[#43C17A] items-center justify-center">
                                                     <CaretDown size={14} color="#FFFFFF" style={{

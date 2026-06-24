@@ -46,7 +46,7 @@ export default function ResetPasswordScreen() {const { t } = useTranslation();
       await updateUserPassword(newPwd);
       Toast.hide();
       Toast.show({ type: "success", text1: t("Password updated successfully!") });
-      navigation.replace(t("PasswordDone"));
+      navigation.replace("PasswordDone");
     } catch (error: any) {
       Toast.hide();
       Toast.show({ type: "error", text1: error.message || t("Failed to update password.") });
@@ -59,7 +59,7 @@ export default function ResetPasswordScreen() {const { t } = useTranslation();
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? t("padding") : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
       className="flex-1 bg-[#F4F5F6]">
       
       <ScrollView className="flex-1 px-4" style={{ paddingTop: Math.max(insets.top, 12) + 120 }} showsVerticalScrollIndicator={false}>

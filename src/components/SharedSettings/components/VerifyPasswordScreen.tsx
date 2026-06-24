@@ -34,7 +34,7 @@ export default function VerifyPasswordScreen() {const { t } = useTranslation();
       await verifyCurrentPassword(email, password);
       Toast.hide();
       Toast.show({ type: "success", text1: t("Password verified!") });
-      navigation.replace(t("ResetPassword"));
+      navigation.replace("ResetPassword");
     } catch (error: any) {
       Toast.hide();
       Toast.show({ type: "error", text1: t("Incorrect password. Please try again.") });
@@ -62,7 +62,7 @@ export default function VerifyPasswordScreen() {const { t } = useTranslation();
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? t("padding") : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
       className="flex-1 bg-[#F4F5F6]">
       
       <View className="flex-1 px-4" style={{ paddingTop: Math.max(insets.top, 12) + 120 }}>

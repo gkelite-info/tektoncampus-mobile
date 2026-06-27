@@ -89,7 +89,7 @@ export default function SubjectProgressCards({
                     </TouchableOpacity>}
             </View>
 
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+            <ScrollView className="flex-1" showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
                 {isLoading ? [1, 2, 3].map((_, i) => <View key={i} className="h-20 flex-row items-center rounded-lg p-2 gap-1 bg-gray-100 opacity-60 mb-2">
                             <View className="h-12 w-[20%] rounded-md bg-gray-300" />
                             <View className="h-full w-[80%] p-2 flex-row justify-between items-center">

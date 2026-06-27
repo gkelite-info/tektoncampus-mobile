@@ -3,26 +3,37 @@ import { Text } from '@/components/AppText';
 import React from "react";
 import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { CaretRight, Plus, User } from "phosphor-react-native";
+import Shimmer from '@/components/ui/Shimmer';
 export const UserInfoCard = ({
-  cardProps
+  cardProps,
+  loading
 }: any) => {
   const {
     t
   } = useTranslation();
   const item = cardProps?.[0] || {};
+  
+  if (loading) {
+      return (
+          <View className="w-full bg-[#e3f4ea] rounded-2xl h-40 shadow-sm flex-row overflow-hidden relative mb-4">
+              <Shimmer width="100%" height="100%" borderRadius={16} />
+          </View>
+      );
+  }
+
   return <View className="w-full bg-[#e3f4ea] rounded-2xl h-40 shadow-sm flex-row overflow-hidden relative mb-4">
             <View className="flex-1 p-4 justify-center z-10">
                 <Text className="text-gray-700 text-sm mb-1 font-medium">{t("Auto.Common.WelcomeBack", "Welcome Back,")}</Text>
                 <View className="flex-row items-center flex-wrap mb-1">
                     <Text className="text-[#089144] font-bold text-lg mr-1">{t("Auto.Common.Prof", "Prof.")}
-            {item.user || "Sai Saraswathi"}
+            {item.user || "..."}
                     </Text>
                 </View>
                 <Text className="text-gray-600 text-xs mb-3 font-medium">
-                    {item.facultySubject || "(Engineering Chemistry)"}
+                    {item.facultySubject || "..."}
                 </Text>
                 <Text className="text-gray-600 text-xs font-medium">{t("Auto.Common.YourStudentsCom", "Your Students Completed")}
-          <Text className="text-[#089144] font-bold">{item.studentsTaskPercentage || 0}%</Text>{t("Auto.Common.ofthetasks", "of the tasks.")}
+          <Text className="text-[#089144] font-bold">{item.studentsTaskPercentage || 0}% </Text>{t("Auto.Common.ofthetasks", " of the tasks.")}
         </Text>
             </View>
             
@@ -46,8 +57,17 @@ export const CardComponent = ({
   style,
   icon,
   value,
-  label
-}: any) => <View className={`rounded-xl p-3 h-24 ${style} flex-row items-center shadow-sm w-full border border-gray-100/50`}>
+  label,
+  loading
+}: any) => {
+    if (loading) {
+        return (
+            <View className={`rounded-xl p-3 h-24 bg-white flex-row items-center shadow-sm w-full border border-gray-100/50`}>
+                <Shimmer width="100%" height="100%" borderRadius={12} />
+            </View>
+        );
+    }
+    return <View className={`rounded-xl p-3 h-24 ${style} flex-row items-center shadow-sm w-full border border-gray-100/50`}>
         <View className="w-12 h-12 bg-white rounded-lg items-center justify-center shadow-sm mr-3">
             {icon}
         </View>
@@ -56,12 +76,32 @@ export const CardComponent = ({
             <Text className="text-[11px] text-gray-500 font-medium leading-tight">{label}</Text>
         </View>
     </View>;
+};
 export const StudentPerformanceCard = ({
-  students
+  students,
+  loading
 }: any) => {
   const {
     t
   } = useTranslation();
+
+  if (loading) {
+      return (
+          <View className="bg-white rounded-2xl p-4 shadow-sm w-full mb-4">
+              <View className="flex-row items-center justify-between mb-4">
+                  <Shimmer width={150} height={20} />
+              </View>
+              {[1, 2, 3].map(i => (
+                  <View key={i} className="flex-row items-center py-2.5 border-b border-gray-50">
+                      <Shimmer width={32} height={32} borderRadius={16} className="mr-3" />
+                      <Shimmer width={80} height={15} className="mr-2" />
+                      <Shimmer width={100} height={10} className="ml-auto" />
+                  </View>
+              ))}
+          </View>
+      );
+  }
+
   return <View className="bg-white rounded-2xl p-4 shadow-sm w-full mb-4">
         <View className="flex-row items-center justify-between mb-4">
             <Text className="text-[15px] font-bold text-gray-900">{t("Auto.Common.MyStudentsPerfo", "My Students Performance")}
@@ -170,9 +210,13 @@ export const UpcomingClasses = ({
                 </TouchableOpacity>
             </View>
             
-            {loading ? <View className="py-6 items-center justify-center">
-                    <ActivityIndicator size="small" color="#089144" />
-                </View> : <View className="flex-col">
+            {loading ? <View className="flex-col">
+                {[1, 2].map(i => (
+                    <View key={i} className="mb-3 border border-gray-100/50 rounded-xl overflow-hidden h-[100px]">
+                       <Shimmer width="100%" height="100%" borderRadius={0} />
+                    </View>
+                ))}
+            </View> : <View className="flex-col">
                     {displayLessons.map((lesson: any, index: number) => <LessonCard key={lesson.id || index} lesson={lesson} onPress={() => onLessonPress && onLessonPress(lesson)} />)}
                     {displayLessons.length === 0 && <View className="py-6 items-center justify-center">
                             <Text className="text-gray-400 text-sm italic">{t("Auto.Common.Noupcomingclass", "No upcoming classes scheduled.")}</Text>

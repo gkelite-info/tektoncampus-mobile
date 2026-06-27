@@ -11,19 +11,19 @@ interface Props {
 }
 
 const DefaultAvatar = () =>
-<View className="w-[72px] h-[72px] rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center">
-    <User size={32} color="#9CA3AF" weight="fill" />
+<View className="rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden" style={{ width: 56, height: 56 }}>
+    <User size={26} color="#9CA3AF" weight="fill" />
   </View>;
 
 
-const InfoRow = ({ icon: Icon, label, value }: {icon: any;label: string;value: string | null | undefined;}) =>
-<View className="w-full md:w-1/2 flex-row items-center mb-4 md:mb-5">
-    <View className="w-[36px] h-[36px] rounded-full bg-[#43C17A]/10 items-center justify-center mr-3">
-      <Icon size={18} color="#43C17A" weight="duotone" />
+const InfoRow = ({ icon: Icon, label, value, fullWidth = false }: {icon: any;label: string;value: string | null | undefined; fullWidth?: boolean}) =>
+<View className="flex-row items-center mb-3" style={{ width: fullWidth ? '100%' : '48%' }}>
+    <View className="rounded-full bg-[#43C17A]/10 items-center justify-center mr-2" style={{ width: 30, height: 30 }}>
+      <Icon size={16} color="#43C17A" weight="duotone" />
     </View>
-    <View className="flex-1 pr-2">
-      <Text className="text-gray-400 text-[11px] mb-0.5 uppercase tracking-wider" style={{ fontFamily: fonts.semiBold }}>{label}</Text>
-      <Text className="text-[#333333] text-[13.5px]" style={{ fontFamily: fonts.semiBold }} numberOfLines={1} adjustsFontSizeToFit>
+    <View className="flex-1">
+      <Text className="text-gray-400 text-[10px] mb-0.5 uppercase tracking-wider" style={{ fontFamily: fonts.semiBold }}>{label}</Text>
+      <Text className="text-[#333333] text-[12.5px]" style={{ fontFamily: fonts.semiBold }} numberOfLines={1} adjustsFontSizeToFit>
         {value || "—"}
       </Text>
     </View>
@@ -37,38 +37,36 @@ const FacultyInfoCard: FC<Props> = ({ profile, loading }) => {const { t } = useT
     <View className="w-full md:flex-1 md:w-auto bg-white rounded-2xl mb-4 shadow-sm border border-gray-100 overflow-hidden">
       <View className="h-[6px] w-full bg-[#43C17A]" />
       
-      <View className="p-5 md:p-6 flex-col md:flex-row items-start md:items-center">
-        <View className="flex-row md:flex-col items-center w-full md:w-auto md:mr-8 md:border-r border-gray-100 md:pr-8 mb-6 md:mb-0">
-          <View className="mr-4 md:mr-0 md:mb-4 rounded-full bg-white p-[2px] border border-gray-100 shadow-sm">
-            {profile.image ?
+      <View className="p-4 flex-col">
+        <View className="flex-row items-center w-full mb-4 pb-4 border-b border-gray-100">
+          <View className="mr-3 rounded-full bg-white p-[2px] border border-gray-100 shadow-sm">
+            {profile.image && profile.image.trim() !== "" ?
             <Image
               source={{ uri: profile.image }}
-              className="w-[72px] h-[72px] rounded-full"
+              className="rounded-full"
+              style={{ width: 56, height: 56 }}
               resizeMode="cover" /> :
-
-
             <DefaultAvatar />
             }
           </View>
-          <View className="flex-1 md:items-center">
-             <Text className="text-[#1F2937] text-[18px] md:text-center" style={{ fontFamily: fonts.bold }}>
+          <View className="flex-1">
+             <Text className="text-[#1F2937] text-[17px]" style={{ fontFamily: fonts.bold }}>
                {profile.name}
              </Text>
-             <View className="bg-[#43C17A]/10 px-2.5 py-1 rounded-md mt-1.5 self-start md:self-center">
-               <Text className="text-[#43C17A] text-[10px] uppercase tracking-widest" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Faculty", "Faculty")}
-
+             <View className="bg-[#43C17A]/10 px-2 py-0.5 rounded-md mt-1 self-start">
+               <Text className="text-[#43C17A] text-[10px] uppercase tracking-widest" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Faculty", "Faculty").replace(":", "")}
               </Text>
              </View>
           </View>
         </View>
 
-        <View className="flex-1 flex-row flex-wrap w-full md:pl-2">
+        <View className="flex-row flex-wrap w-full justify-between">
           <InfoRow icon={IdentificationCard} label={t("Auto.Attr.FacultyID", "Faculty ID")} value={!loading ? profile.facultyId : "..."} />
           <InfoRow icon={Buildings} label={isInter ? "Group" : "Branch"} value={profile.branch} />
           <InfoRow icon={Phone} label={t("Auto.Attr.Mobile", "Mobile")} value={profile.mobile} />
-          <InfoRow icon={Envelope} label={t("Auto.Common.Email", "Email")} value={profile.email} />
-          <InfoRow icon={CalendarBlank} label={t("Auto.Attr.DateofJoining", "Date of Joining")} value={profile.joiningDate} />
           <InfoRow icon={Briefcase} label={t("Auto.Attr.Experience", "Experience")} value={profile.experience} />
+          <InfoRow icon={CalendarBlank} label={t("Auto.Attr.DateofJoining", "Date of Joining")} value={profile.joiningDate} />
+          <InfoRow icon={Envelope} label={t("Auto.Common.Email", "Email")} value={profile.email} />
         </View>
       </View>
     </View>);

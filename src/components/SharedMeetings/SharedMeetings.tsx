@@ -2,8 +2,7 @@ import { useTranslation } from 'react-i18next';import { Text } from '@/component
 import React, { useEffect, useState, useCallback } from "react";
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { fetchFacultyFinanceMeetings } from "@/lib/helpers/finance/meetings/meetingsAPI";
-import { fetchStudentFinanceMeetings } from "@/lib/helpers/finance/meetings/meetingsAPI";
+import { fetchFacultyFinanceMeetings, fetchStudentFinanceMeetings, fetchParentFinanceMeetings } from "@/lib/helpers/finance/meetings/meetingsAPI";
 import MeetingCard from "./components/MeetingCard";
 import MeetingCardShimmer from "@/utils/shimmers/MeetingCardShimmer";
 import { CaretLeft, CaretRight } from "phosphor-react-native";
@@ -12,7 +11,7 @@ import Toast from "react-native-toast-message";
 type MeetingType = "upcoming" | "previous";
 
 interface SharedMeetingsProps {
-  mode: "Faculty" | "Student";
+  mode: "Faculty" | "Student" | "Parent";
   fetchParams: any;
 }
 
@@ -60,6 +59,13 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
       let res;
       if (mode === "Faculty") {
         res = await fetchFacultyFinanceMeetings({
+          ...fetchParams,
+          type: currentType,
+          page,
+          limit: 10
+        });
+      } else if (mode === "Parent") {
+        res = await fetchParentFinanceMeetings({
           ...fetchParams,
           type: currentType,
           page,

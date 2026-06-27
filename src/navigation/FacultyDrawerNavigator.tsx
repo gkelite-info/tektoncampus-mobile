@@ -10,9 +10,7 @@ import FacultyAttendance from "@/(screens)/faculty/attendance/attendance";
 import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import FacultyAcademics from "@/(screens)/faculty/academics/academics";
 
-import {
-    WellbeingScreen,
-} from "@/(screens)/student/mockScreens";
+import WellbeingScreen from "@/(screens)/faculty/wellbeing/wellbeing";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import MyAttendanceScreen from "@/(screens)/faculty/myAttendance/index";
 import FacultyPlacementsScreen from "@/(screens)/faculty/placements/index";

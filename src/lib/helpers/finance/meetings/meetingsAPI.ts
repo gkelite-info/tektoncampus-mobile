@@ -198,3 +198,113 @@ export async function fetchStudentFinanceMeetings(params: {
 
   return { data: formattedData, totalPages: Math.ceil((count ?? 0) / limit) };
 }
+
+export async function fetchParentFinanceMeetings(params: {
+  roles?: string[];
+  type?: "upcoming" | "previous";
+  page?: number;
+  limit?: number;
+  collegeBranchId?: number;
+  collegeSectionsId?: number;
+  collegeAcademicYearId?: number;
+}) {
+  const {
+    roles = ["Parent"],
+    type = "upcoming",
+    page = 1,
+    limit = 10,
+    collegeBranchId,
+    collegeSectionsId,
+    collegeAcademicYearId,
+  } = params;
+
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const now = new Date();
+  const today = now.toISOString().split("T")[0];
+  const currentTime = now.toTimeString().split(" ")[0];
+
+  let query = supabase
+    .from("finance_meetings")
+    .select(
+      `
+            financeMeetingId, title, role, date, fromTime, description, toTime, meetingLink, isActive, deletedAt,
+            finance_meetings_sections!inner (
+                financeMeetingSectionsId,
+                college_education ( collegeEducationType ),
+                college_branch ( collegeBranchCode ),
+                college_sections ( collegeSectionsId, collegeSections ),
+                college_academic_year ( collegeAcademicYear )
+            )
+        `,
+      { count: "exact" },
+    )
+    .eq("isActive", true)
+    .is("deletedAt", null)
+    .in("role", roles);
+
+  if (collegeBranchId) {
+    query = query.eq(
+      "finance_meetings_sections.collegeBranchId",
+      collegeBranchId,
+    );
+  }
+  if (collegeSectionsId) {
+    query = query.eq(
+      "finance_meetings_sections.collegeSectionsId",
+      collegeSectionsId,
+    );
+  }
+  if (collegeAcademicYearId) {
+    query = query.eq(
+      "finance_meetings_sections.collegeAcademicYearId",
+      collegeAcademicYearId,
+    );
+  }
+
+  if (type === "upcoming") {
+    query = query.or(
+      `date.gt.${today},and(date.eq.${today},toTime.gte.${currentTime})`,
+    );
+  } else {
+    query = query.or(
+      `date.lt.${today},and(date.eq.${today},toTime.lt.${currentTime})`,
+    );
+  }
+
+  const isAscending = type === "upcoming";
+  const { data, error, count } = await query
+    .order("date", { ascending: isAscending })
+    .order("fromTime", { ascending: isAscending })
+    .range(from, to);
+
+  if (error) throw error;
+
+  const formattedData = (data as any[]).map((row) => ({
+    id: `${row.financeMeetingId}-${row.finance_meetings_sections[0]?.financeMeetingSectionsId}`,
+    financeMeetingId: row.financeMeetingId,
+    title: row.title,
+    timeRange: `${row.fromTime.slice(0, 5)} - ${row.toTime.slice(0, 5)}`,
+    description: row.description,
+    educationType:
+      row.finance_meetings_sections[0]?.college_education
+        ?.collegeEducationType ?? "N/A",
+    branch:
+      row.finance_meetings_sections[0]?.college_branch?.collegeBranchCode ??
+      "N/A",
+    year:
+      row.finance_meetings_sections[0]?.college_academic_year
+        ?.collegeAcademicYear ?? "N/A",
+    date: row.date,
+    participants: 0,
+    section:
+      row.finance_meetings_sections[0]?.college_sections?.collegeSections ??
+      "N/A",
+    category: row.role,
+    type: type,
+    meetingLink: row.meetingLink ?? "",
+  }));
+
+  return { data: formattedData, totalPages: Math.ceil((count ?? 0) / limit) };
+}

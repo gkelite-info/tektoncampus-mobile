@@ -8,6 +8,7 @@ import Toast from "react-native-toast-message";
 
 import RootNavigator from '@/navigation/RootNavigator';
 import { UserProvider } from '@/utils/context/UserContext';
+import { ParentProvider } from '@/providers/ParentProvider';
 import QueryProvider from '@/providers/QueryProvider';
 
 import './i18n';
@@ -49,7 +50,9 @@ export default function App() {
     <QueryProvider>
       <SafeAreaProvider className="bg-white">
         <UserProvider>
-          <RootNavigator />
+          <ParentProvider>
+            <RootNavigator />
+          </ParentProvider>
         </UserProvider>
         <Toast position='top' swipeable />
         <StatusBar style="dark" translucent={true} backgroundColor="transparent" />

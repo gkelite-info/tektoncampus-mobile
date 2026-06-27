@@ -161,7 +161,7 @@ export default function AssignmentSubmissions() {const { t } = useTranslation();
         </View>
 
         <View className="flex-row items-center justify-between mt-1 mb-3">
-          <Text className="text-xs text-gray-500">{t("Auto.Common.Submitted", "Submitted:")}{item.date}</Text>
+          <Text className="text-xs text-gray-500">{t("Auto.Common.Submitted", "Submitted:")} {item.date}</Text>
           {item.filePath &&
           <TouchableOpacity onPress={() => handleViewFile(item.filePath!)} className="flex-row items-center gap-1 bg-red-50 px-2 py-1 rounded-md">
               <FilePdf size={16} color="#ef4444" weight="fill" />
@@ -219,8 +219,8 @@ export default function AssignmentSubmissions() {const { t } = useTranslation();
 
         <View className="flex-row items-center justify-between border-t border-gray-100 pt-3">
             <View className="flex-1">
-              <Text className="text-xs font-bold text-gray-800">{t("Auto.Common.Marks", "Marks:")}<Text className="font-medium text-gray-600">{item.marks || '-'}</Text></Text>
-              <Text className="text-xs font-bold text-gray-800 mt-1" numberOfLines={1}>{t("Auto.Common.Notes", "Notes:")}<Text className="font-medium text-gray-600 italic">{item.feedback || '-'}</Text></Text>
+              <Text className="text-xs font-bold text-gray-800">{t("Auto.Common.Marks", "Marks:")} <Text className="font-medium text-gray-600">{item.marks || '-'}</Text></Text>
+              <Text className="text-xs font-bold text-gray-800 mt-1" numberOfLines={1}>{t("Auto.Common.Notes", "Notes:")} <Text className="font-medium text-gray-600 italic">{item.feedback || '-'}</Text></Text>
             </View>
             {item.status !== "Not Submitted" &&
           <TouchableOpacity onPress={() => startEditing(item)} className="p-2 rounded-full bg-gray-100">

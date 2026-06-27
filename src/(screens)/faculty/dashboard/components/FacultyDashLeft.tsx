@@ -51,7 +51,6 @@ export default function FacultyDashLeft() {
         try {
             setIsLoadingClasses(true);
 
-            // 1. Fetch user & faculty details dynamically
             const [userRes, facultyRes] = await Promise.all([
                 supabase.from("users").select("gender").eq("userId", userId).single(),
                 supabase.from("faculty").select("facultyId").eq("userId", userId).single()
@@ -71,10 +70,11 @@ export default function FacultyDashLeft() {
                     .is("deletedAt", null);
                 
                 if (subjectData && subjectData.length > 0) {
-                    const subjects = subjectData
+                    const subjectsArray = subjectData
                         .map((s: any) => s.college_subjects?.subjectName)
-                        .filter(Boolean)
-                        .join(", ");
+                        .filter(Boolean);
+                    const uniqueSubjects = [...new Set(subjectsArray)];
+                    const subjects = uniqueSubjects.join(", ");
                     setFacultySubject(`(${subjects})`);
                 }
 
@@ -174,44 +174,38 @@ export default function FacultyDashLeft() {
             className="w-full flex-1"
             contentContainerStyle={{ paddingTop: headerHeight + 16, paddingHorizontal: 16, paddingBottom: 160 }}
         >
-            <UserInfoCard cardProps={card} />
+            <UserInfoCard cardProps={card} loading={isLoadingClasses} />
             
-            {isLoadingClasses ? (
-                <View className="py-10 items-center justify-center">
-                    <ActivityIndicator size="large" color="#089144" />
-                </View>
-            ) : (
-                <>
-                    <View className="mt-4 flex-row flex-wrap justify-between">
-                        {cardData.map((item, index) => (
-                            <View key={index} className="w-[48%] mb-4">
-                                <CardComponent
-                                    style={item.style}
-                                    icon={item.icon}
-                                    value={item.value}
-                                    label={item.label}
-                                />
-                            </View>
-                        ))}
-                    </View>
-
-                    <View className="mt-4">
-                        <StudentPerformanceCard students={STUDENT_DATA} />
-                    </View>
-
-                    <View className="mt-4">
-                        <UpcomingClasses
-                            lessons={upcomingClasses}
-                            onAddLesson={() => navigation.navigate("Calendar")}
-                            onLessonPress={handleLessonPress}
-                            facultyId={Number(facultyId)}
+            <View className="mt-4 flex-row flex-wrap justify-between">
+                {cardData.map((item, index) => (
+                    <View key={index} className="w-[48%] mb-4">
+                        <CardComponent
+                            style={item.style}
+                            icon={item.icon}
+                            value={item.value}
+                            label={item.label}
                             loading={isLoadingClasses}
                         />
                     </View>
-                </>
-            )}
+                ))}
+            </View>
+
+            <View className="mt-4">
+                <StudentPerformanceCard students={STUDENT_DATA} loading={isLoadingClasses} />
+            </View>
+
+            <View className="mt-4">
+                <UpcomingClasses
+                    lessons={upcomingClasses}
+                    onAddLesson={() => navigation.navigate("Calendar")}
+                    onLessonPress={handleLessonPress}
+                    facultyId={Number(facultyId)}
+                    loading={isLoadingClasses}
+                />
+            </View>
 
             <ClassActionModal 
+
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 lesson={selectedLesson} 

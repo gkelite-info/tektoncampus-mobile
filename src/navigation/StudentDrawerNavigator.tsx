@@ -12,6 +12,7 @@ import ClubScreen from "@/(screens)/student/club/club";
 import DriveScreen from "@/(screens)/student/drive/drive";
 import MeetingsScreen from "@/(screens)/student/meetings/meetings";
 import WellbeingScreen from "@/(screens)/student/wellbeing/wellbeing";
+import StudentPayments from "@/(screens)/student/payments/payments";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 
 export type StudentDrawerParamList = {
@@ -27,8 +28,8 @@ export type StudentDrawerParamList = {
     Club: undefined;
     Drive: undefined;
     Meetings: undefined;
-    MyAttendance: undefined;
     Wellbeing: undefined;
+    Payments: undefined;
     Settings: undefined;
 };
 
@@ -48,6 +49,7 @@ const menuItems: RoleSideMenuItem[] = [
     { name: "Drive", label: "Drive" },
     { name: "Meetings", label: "Meetings" },
     { name: "Wellbeing", label: "Wellbeing" },
+    { name: "Payments", label: "Payments" },
     { name: "Settings", label: "Settings" },
 ];
 
@@ -106,6 +108,7 @@ export default function StudentDrawerNavigator() {
                 <Stack.Screen name="Drive" component={DriveScreen} />
                 <Stack.Screen name="Meetings" component={MeetingsScreen} />
                 <Stack.Screen name="Wellbeing" component={WellbeingScreen} />
+                <Stack.Screen name="Payments" component={StudentPayments} />
                 <Stack.Screen name="Settings" component={SettingsStackNavigator} />
             </Stack.Navigator>
 

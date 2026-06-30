@@ -5,10 +5,6 @@ import { User } from "phosphor-react-native";
 import { Avatar } from "@/utils/Avatar";
 import { fonts } from "@/constants/fonts";
 
-const useTranslations = (namespace: string) => {
-  return (key: string) => key;
-};
-
 export type ProfileCardProps = {
   name: string;
   department: string;
@@ -68,7 +64,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     <View className="flex-1 justify-center">
                         <View className="flex-row items-center flex-wrap gap-1">
                             <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                                {attendanceCount}{t("Auto.Common.Pres", "Pres")}
+                            {attendanceCount} {t("Auto.Common.Present", "Present")}
               </Text>
                             <Text className="text-[10px] text-[#43C17A] leading-tight" style={{ fontFamily: fonts.semiBold }}>
                                 {attendancePercentage}%
@@ -86,7 +82,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </View>
                     <View className="flex-1 justify-center">
                         <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                            {absentCount}{t("Auto.Common.Abs", "Abs")}
+                            {absentCount} {t("Auto.Common.Absent", "Absent")}
             </Text>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
                             {t("Total Absent")}
@@ -100,7 +96,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </View>
                     <View className="flex-1 justify-center">
                         <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                            {leaveCount}{t("Auto.Common.Leave", "Leave")}
+                            {leaveCount} {t("Auto.Common.Leave", "Leave")}
             </Text>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
                             {t("Total Leave")}

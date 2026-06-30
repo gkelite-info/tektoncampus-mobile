@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomHeader from "./components/CustomHeader";
 import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
 
-import ParentTabs from "@/tabs/ParentTabs";
+import { ParentCustomTabBar } from "@/tabs/ParentTabs";
+import ParentHomeScreen from "@/(screens)/parent/parent";
+import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 
 import ParentMeetings from "@/(screens)/parent/Meetings/meetings";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
@@ -14,7 +16,10 @@ import ParentPayment from "@/(screens)/parent/Payment/payment";
 
 
 export type ParentDrawerParamList = {
-    ParentTabs: undefined;
+    Home: undefined;
+    Profile: undefined;
+    Progress: undefined;
+    Payment: undefined;
     Attendance: undefined;
     StudentProgress: undefined;
     Meetings: undefined;
@@ -22,10 +27,10 @@ export type ParentDrawerParamList = {
     Settings: undefined;
 };
 
-const Stack = createNativeStackNavigator<ParentDrawerParamList>();
+const Tab = createBottomTabNavigator<ParentDrawerParamList>();
 
 const menuItems: RoleSideMenuItem[] = [
-    { name: "ParentTabs", label: "Home" },
+    { name: "Home", label: "Home" },
     { name: "Attendance", label: "Attendance" },
     { name: "StudentProgress", label: "Student Progress" },
     { name: "Meetings", label: "Meetings" },
@@ -49,13 +54,13 @@ export default function ParentDrawerNavigator() {
     const navigationRef = useRef<any>(null);
 
     // Dynamically evaluate active route name from the stack navigator state when the drawer is open
-    let activeRouteName: keyof ParentDrawerParamList = "ParentTabs";
+    let activeRouteName: keyof ParentDrawerParamList = "Home";
     if (isMenuOpen && navigationRef.current) {
         const navState = navigationRef.current.getState();
         const activeLeafName = getActiveRouteName(navState);
         if (activeLeafName) {
             if (activeLeafName === "Home" || activeLeafName === "Dashboard") {
-                activeRouteName = "ParentTabs";
+                activeRouteName = "Home";
             } else {
                 activeRouteName = activeLeafName as keyof ParentDrawerParamList;
             }
@@ -64,8 +69,9 @@ export default function ParentDrawerNavigator() {
 
     return (
         <>
-            <Stack.Navigator
-                initialRouteName="ParentTabs"
+            <Tab.Navigator
+                initialRouteName="Home"
+                tabBar={(props) => <ParentCustomTabBar {...props} />}
                 screenOptions={({ navigation }) => {
                     navigationRef.current = navigation;
 
@@ -75,29 +81,39 @@ export default function ParentDrawerNavigator() {
                         header: () => (
                             <CustomHeader navigation={{ toggleDrawer: () => setIsMenuOpen(true) }} />
                         ),
-                        freezeOnBlur: false,
                     };
                 }}
+                screenListeners={{
+                    state: (event) => {
+                        const route = event.data.state.routes[event.data.state.index];
+                        // Optionally update some state if needed
+                    },
+                }}
             >
-                <Stack.Screen name="ParentTabs" component={ParentTabs} />
-                <Stack.Screen name="Attendance" component={ParentAttendance} />
-                <Stack.Screen name="StudentProgress" component={ParentProgress} />
-                <Stack.Screen name="Meetings" component={ParentMeetings} />
-                <Stack.Screen name="Payments" component={ParentPayment} />
-                <Stack.Screen name="Settings" component={SettingsStackNavigator} />
-            </Stack.Navigator>
+                <Tab.Screen name="StudentProgress" component={ParentProgress} />
+                <Tab.Screen name="Payments" component={ParentPayment} />
+                <Tab.Screen name="Home" component={ParentHomeScreen} />
+                <Tab.Screen name="Attendance" component={ParentAttendance} />
+                <Tab.Screen name="Profile" component={ProfileContainer} />
+                <Tab.Screen name="Meetings" component={ParentMeetings} />
+                <Tab.Screen name="Settings" component={SettingsStackNavigator} />
+            </Tab.Navigator>
 
             <RoleSideMenu
                 visible={isMenuOpen}
                 activeRouteName={activeRouteName}
-                homeRouteName="ParentTabs"
+                homeRouteName="Home"
                 items={menuItems}
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);
                     
                     setTimeout(() => {
-                        navigationRef.current?.navigate(routeName);
+                        if (routeName === "ParentTabs" || routeName === "Home") {
+                            navigationRef.current?.navigate("Home");
+                        } else {
+                            navigationRef.current?.navigate(routeName);
+                        }
                     }, 100);
                 }}
             />

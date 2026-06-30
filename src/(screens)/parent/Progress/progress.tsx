@@ -1,14 +1,31 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
-import { View } from 'react-native';
+import React from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { useParent } from '@/providers/ParentProvider';
+import SharedStudentProgress from '../../student/studentProgress/SharedStudentProgress';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useTranslation } from 'react-i18next';
+import { Text } from '@/components/AppText';
 
-export default function ParentProgress() {const { t } = useTranslation();
-  return (
-    <>
-            <View className="flex-1 justify-center items-center bg-indigo-300">
-                <Text className="font-medium">{t("Auto.Common.ParentProgress", "Parent Progress")}
+export default function ParentProgress() {
+  const { t } = useTranslation();
+  const { childUserId, loading } = useParent();
+  const headerHeight = useHeaderHeight();
 
-        </Text>
-            </View>
-        </>);
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: headerHeight + 16 }}>
+        <ActivityIndicator size="large" color="#604DDC" />
+      </View>
+    );
+  }
 
+  if (!childUserId) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: headerHeight + 16, backgroundColor: '#f4f5f6' }}>
+        <Text className="text-gray-500 font-medium">{t("Dashboard.parent.Student Not Found", "Student Not Found")}</Text>
+      </View>
+    );
+  }
+
+  return <SharedStudentProgress targetUserId={childUserId} />;
 }

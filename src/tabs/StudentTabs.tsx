@@ -21,7 +21,7 @@ export type StudentTabParamList = {
 const Tab = createBottomTabNavigator<StudentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function StudentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const insets = useSafeAreaInsets();
     const bottomInset = insets.bottom || 10; 
 
@@ -40,6 +40,9 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             >
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;
+                    
+                    const coreRoutes = ["Calendar", "Academics", "Home", "Attendance", "Profile"];
+                    if (!coreRoutes.includes(route.name)) return null;
 
                     const onPress = () => {
                         const event = navigation.emit({
@@ -118,10 +121,12 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     );
 }
 
+// The default export is no longer needed since we use StudentDrawerNavigator as the root tab navigator.
+// We keep it around temporarily to avoid import errors before the navigator is updated.
 export default function StudentTabs() {
     return (
         <Tab.Navigator
-            tabBar={(props) => <CustomTabBar {...props} />}
+            tabBar={(props) => <StudentCustomTabBar {...props} />}
             screenOptions={{ headerShown: false }}
             initialRouteName="Home"
         >

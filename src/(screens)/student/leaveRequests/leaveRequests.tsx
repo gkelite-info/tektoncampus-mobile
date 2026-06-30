@@ -230,7 +230,7 @@ export default function LeaveRequestsScreen() {
             <Text className="text-slate-400 text-[9px] uppercase" style={{ fontFamily: fonts.bold }}>
               {t("Faculty", "Faculty")}
             </Text>
-            <Text className="text-slate-700 text-xs" style={{ fontFamily: fonts.semibold }} numberOfLines={1}>
+            <Text className="text-slate-700 text-xs" style={{ fontFamily: fonts.semiBold }} numberOfLines={1}>
               {item.facultyName}
             </Text>
           </View>

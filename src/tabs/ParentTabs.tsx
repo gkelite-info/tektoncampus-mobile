@@ -10,50 +10,40 @@ import ParentPayment from "@/(screens)/parent/Payment/payment";
 import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
 import ParentAttendance from "@/(screens)/parent/Attendance/attendance";
 
-
 export type ParentTabParamList = {
-    Progress: undefined;
-    Payment: undefined;
+    StudentProgress: undefined;
+    Payments: undefined;
     Home: undefined;
     Attendance: undefined;
     Profile: undefined;
 };
 
-
-function MockParentScreen({ title }: { title: string }) {
-    return (
-        <View className="flex-1 justify-center items-center bg-[#0F172A]">
-            <Text className="text-white text-lg font-semibold">{title}</Text>
-        </View>
-    );
-}
-
 const Tab = createBottomTabNavigator<ParentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const insets = useSafeAreaInsets();
     const bottomInset = insets.bottom || 10; 
 
     return (
-        
         <View
             className="absolute bottom-0 bg-transparent"
             style={{ width: SCREEN_WIDTH, height: 120 + bottomInset }}
         >
-            {}
             <View 
                 className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[15px] shadow-lg shadow-black/10" 
                 style={{ height: 85 + bottomInset }}
             />
 
-            {}
             <View 
                 className="flex-row absolute left-0 right-0"
                 style={{ height: 85, bottom: bottomInset }}
             >
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;
+
+                    const coreRoutes = ["StudentProgress", "Payments", "Home", "Attendance", "Profile"];
+                    if (!coreRoutes.includes(route.name)) return null;
 
                     const onPress = () => {
                         const event = navigation.emit({
@@ -67,10 +57,9 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                         }
                     };
 
-                    
                     const labels: Record<keyof ParentTabParamList, string> = {
-                        Progress: "Progress",
-                        Payment: "Payment",
+                        StudentProgress: "Progress",
+                        Payments: "Payment",
                         Home: "Home",
                         Attendance: "Attendance",
                         Profile: "Profile",
@@ -79,19 +68,17 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                     const label = labels[route.name as keyof ParentTabParamList];
                     const iconSize = 24;
                     const iconColor = isFocused ? "#6AE18B" : "#94A3B8";
-
                     
                     const renderIcon = () => {
                         switch (route.name) {
-                            case "Progress": return <ChartLineUp size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
-                            case "Payment": return <CreditCard size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
+                            case "StudentProgress": return <ChartLineUp size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
+                            case "Payments": return <CreditCard size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             case "Attendance": return <ClipboardText size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             case "Profile": return <User size={iconSize} color={iconColor} weight={isFocused ? "fill" : "regular"} />;
                             default: return null;
                         }
                     };
 
-                    
                     if (route.name === "Home") {
                         return (
                             <View key={route.key} className="flex-1 items-center justify-center">
@@ -113,7 +100,6 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
                         );
                     }
 
-                    
                     return (
                         <TouchableOpacity
                             key={route.key}
@@ -136,6 +122,8 @@ function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProp
     );
 }
 
+// The default export is no longer needed since we use ParentDrawerNavigator as the root tab navigator.
+// We keep it around temporarily to avoid import errors before the navigator is updated.
 export default function ParentTabs() {
     return (
         <Tab.Navigator
@@ -143,11 +131,11 @@ export default function ParentTabs() {
             screenOptions={{ headerShown: false }}
             initialRouteName="Home"
         >
-            <Tab.Screen name="Progress" component={ParentProgress} />
-            <Tab.Screen name="Payment" component={ParentPayment} />
+            <Tab.Screen name="StudentProgress" component={ParentProgress} />
+            <Tab.Screen name="Payments" component={ParentPayment} />
             <Tab.Screen name="Home" component={ParentHomeScreen} />
             <Tab.Screen name="Attendance" component={ParentAttendance} />
             <Tab.Screen name="Profile" component={ProfileContainer} />
         </Tab.Navigator>
     );
-}
+}

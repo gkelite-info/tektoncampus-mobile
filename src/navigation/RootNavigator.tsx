@@ -9,6 +9,7 @@ import { StudentProvider } from "@/utils/context/student/useStudent";
 import StudentDrawerNavigator from "./StudentDrawerNavigator";
 import FacultyDrawerNavigator from "./FacultyDrawerNavigator";
 import ParentDrawerNavigator from "./ParentDrawerNavigator";
+import CollegeAdminDrawerNavigator from "./CollegeAdminDrawerNavigator";
 import { FacultyProvider } from "@/utils/context/faculty/useFaculty";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, ActivityIndicator } from "react-native";
@@ -35,6 +36,7 @@ function isNavigationStateValidForRole(
     if (role.includes("faculty")) return routeNames.includes("Dashboard");
     if (role.includes("student")) return routeNames.includes("StudentTabs");
     if (role.includes("parent")) return routeNames.includes("ParentTabs");
+    if (role.includes("college") && role.includes("admin")) return routeNames.includes("Dashboard");
 
     return false;
 }
@@ -188,6 +190,8 @@ export default function RootNavigator() {
                 </StudentProvider>
             ) : roleNormalized.includes("parent") ? (
                 <ParentDrawerNavigator />
+            ) : (roleNormalized.includes("college") && roleNormalized.includes("admin")) ? (
+                <CollegeAdminDrawerNavigator />
             ) : (
                 <AuthStack.Navigator screenOptions={{ headerShown: false }}>
                     <AuthStack.Screen name="Login" component={LoginScreen} />

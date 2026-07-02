@@ -77,9 +77,6 @@ export default function ResumeAccomplishments() {
                 <View className="mb-8">
                     <Text className="text-md font-semibold text-[#43C17A] mb-3">{t("Auto.Common.Awards", "Awards")}</Text>
                     {awards.map(aw => {
-          const {
-            t
-          } = useTranslation();
           return <View key={aw.awardId} className="border border-gray-200 rounded-lg p-3 mb-2 bg-gray-50 flex-row justify-between items-start">
                             <View className="flex-1">
                                 <Text className="font-medium text-gray-800">{aw.awardName}</Text>
@@ -99,15 +96,12 @@ export default function ResumeAccomplishments() {
                 <View className="mb-8">
                     <Text className="text-md font-semibold text-[#43C17A] mb-3">{t("Auto.Common.Certifications", "Certifications")}</Text>
                     {certs.map(cert => {
-          const {
-            t
-          } = useTranslation();
-          return <View key={cert.certificationId} className="border border-gray-200 rounded-lg p-3 mb-2 bg-gray-50 flex-row justify-between items-start">
+          return <View key={cert.resumeCertificateId} className="border border-gray-200 rounded-lg p-3 mb-2 bg-gray-50 flex-row justify-between items-start">
                             <View className="flex-1">
                                 <Text className="font-medium text-gray-800">{cert.certificationName}</Text>
                                 <Text className="text-sm text-gray-500">{t("Auto.Common.ID", "ID:")}{cert.certificationCompletionId}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => handleDelete("Certification", cert.certificationId, deleteCertification)}>
+                            <TouchableOpacity onPress={() => handleDelete("Certification", cert.resumeCertificateId, deleteCertification)}>
                                 <Text className="text-red-500">{t("Auto.Common.Delete", "Delete")}</Text>
                             </TouchableOpacity>
                         </View>;
@@ -121,9 +115,6 @@ export default function ResumeAccomplishments() {
                 <View className="mb-4">
                     <Text className="text-md font-semibold text-[#43C17A] mb-3">{t("Auto.Common.ClubsCommittees", "Clubs & Committees")}</Text>
                     {clubs.map(club => {
-          const {
-            t
-          } = useTranslation();
           return <View key={club.resumeClubCommitteeId} className="border border-gray-200 rounded-lg p-3 mb-2 bg-gray-50 flex-row justify-between items-start">
                             <View className="flex-1">
                                 <Text className="font-medium text-gray-800">{club.clubName}</Text>

@@ -251,9 +251,6 @@ export default function SubjectCard({
           <FlatList data={uniqueSubjects} keyExtractor={item => item} renderItem={({
             item
           }) => {
-            const {
-              t
-            } = useTranslation();
             return <TouchableOpacity className="py-3 border-b border-gray-100" onPress={() => {
               setSelectedSubject(item);
               setDropdownVisible(false);

@@ -20,7 +20,7 @@ export default function SupportModal({ visible, onClose }: Props) {const { t } =
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
-            <SafeAreaView className="flex-1 bg-[#F3F4F6]">
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#F3F4F6' }}>
                 <View className="flex-row items-center border-b border-gray-200 bg-white p-4">
                     <TouchableOpacity onPress={onClose} className="mr-3 p-1">
                         <ArrowLeft size={24} color="#282828" />
@@ -28,7 +28,7 @@ export default function SupportModal({ visible, onClose }: Props) {const { t } =
                     <Text className="text-lg font-bold text-[#282828]">{t("Auto.Common.TektonCampusSup", "Tekton Campus Support")}</Text>
                 </View>
 
-                <ScrollView className="flex-1 p-4" contentContainerStyle={{ paddingBottom: 40 }}>
+                <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingBottom: 40, flexGrow: 1 }} showsVerticalScrollIndicator={false}>
                     <Text className="text-[#525252] text-sm mb-6">{t("Auto.Common.Fillinthedetail", "Fill in the details below. Every submission is tracked and resolved transparently.")}
 
           </Text>

@@ -74,9 +74,6 @@ export default function TaskModal({
     onClose();
   };
   const handleSave = async () => {
-    const {
-      t
-    } = useTranslation();
     if (!title.trim()) {
       Toast.show({
         type: "error",
@@ -138,9 +135,6 @@ export default function TaskModal({
     setTimePickerVisibility(false);
   };
   const formatDisplayTime = (time24: string) => {
-    const {
-      t
-    } = useTranslation();
     if (!time24) return t("Select Time");
     const [h, m] = time24.split(":");
     let hours = parseInt(h, 10);

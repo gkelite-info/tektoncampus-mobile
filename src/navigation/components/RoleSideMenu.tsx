@@ -21,6 +21,7 @@ import {
     Smiley,
     UsersThree,
     X,
+    PlusCircle,
 } from "phosphor-react-native";
 
 export type RoleSideMenuItem = {
@@ -45,6 +46,7 @@ function renderIcon(routeName: string, isActive: boolean) {
         case "StudentTabs":
         case "FacultyTabs":
         case "ParentTabs":
+        case "Dashboard":
             return <House size={24} color={color} weight={weight as any} />;
         case "Calendar":
             return <Calendar size={24} color={color} weight={weight as any} />;
@@ -75,6 +77,10 @@ function renderIcon(routeName: string, isActive: boolean) {
             return <CurrencyDollar size={24} color={color} weight={weight as any} />;
         case "Settings":
             return <Gear size={24} color={color} weight={weight as any} />;
+        case "InstitutionManagement":
+            return <Buildings size={24} color={color} weight={weight as any} />;
+        case "AddAdmin":
+            return <PlusCircle size={24} color={color} weight={weight as any} />;
         default:
             return <FileText size={24} color={color} weight={weight as any} />;
     }

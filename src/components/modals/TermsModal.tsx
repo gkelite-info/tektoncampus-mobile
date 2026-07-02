@@ -13,7 +13,7 @@ export default function TermsModal({ visible, onClose }: Props) {
     const { t } = useTranslation();
     return (
         <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
-            <SafeAreaView className="flex-1 bg-white">
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
                 <View className="flex-row items-center border-b border-gray-100 p-4">
                     <TouchableOpacity onPress={onClose} className="mr-3 p-1">
                         <ArrowLeft size={24} color="#282828" />
@@ -21,7 +21,7 @@ export default function TermsModal({ visible, onClose }: Props) {
                     <Text className="text-lg text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TermsAndConditi", "Terms And Conditions")}</Text>
                 </View>
 
-                <ScrollView className="flex-1 p-5">
+                <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20, flexGrow: 1, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
                     <View className="mb-8">
                         <Text className="text-base text-[#525252] leading-6 mb-4" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.1Youshallabideb", "1. You shall abide by all terms and conditions of service as shall be applicable from time to time.")}
 

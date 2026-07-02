@@ -27,7 +27,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gkelite.tektoncampus",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Tekton Campus needs access to your camera to capture photos for profile pictures and assignments.",
+        "NSPhotoLibraryUsageDescription": "Tekton Campus needs access to your photo library to upload assignments and profile pictures.",
+        "NSMicrophoneUsageDescription": "Tekton Campus needs access to your microphone for video recording."
+      }
     },
     "android": {
       "adaptiveIcon": {

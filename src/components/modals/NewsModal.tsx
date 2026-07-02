@@ -62,9 +62,6 @@ export default function NewsModal({
     }
   };
   const handleDeleteEpaper = (ePaperId: number) => {
-    const {
-      t
-    } = useTranslation();
     Alert.alert(t("Delete EPaper", "Delete EPaper"), t("Are you sure you want to delete this e-paper?", "Are you sure you want to delete this e-paper?"), [{
       text: t("Cancel", "Cancel"),
       style: "cancel"
@@ -179,9 +176,6 @@ export default function NewsModal({
                                                 </View>
                                                 <View className="space-y-3">
                                                     {papers.map(paper => {
-                    const {
-                      t
-                    } = useTranslation();
                     return <View key={paper.ePaperId} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm flex-row items-center justify-between mb-3">
                                                             <Text className="text-[15px] font-medium text-gray-800 flex-1" numberOfLines={1}>
                                                                 {paper.name}

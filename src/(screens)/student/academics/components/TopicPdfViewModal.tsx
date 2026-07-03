@@ -162,7 +162,7 @@ export function TopicPdfViewModal({
                                     <Text className="text-xs text-gray-700 uppercase tracking-wider mb-1" style={{
                 fontFamily: fonts.semiBold
               }}>
-                                        {t("Uploaded PDFs")}
+                                        {t("Academics.student.Uploaded PDFs", "Uploaded PDFs")}
                                     </Text>
 
                                     {resources.length > 0 ? resources.map(resource => {
@@ -196,7 +196,7 @@ export function TopicPdfViewModal({
                                             <Text className="text-sm text-gray-400 text-center" style={{
                   fontFamily: fonts.medium
                 }}>
-                                                {t("No PDFs uploaded for this topic yet")}
+                                                {t("Academics.student.No PDFs uploaded for this topic yet", "No PDFs uploaded for this topic yet")}
                                             </Text>
                                         </View>}
                                 </View>
@@ -206,7 +206,7 @@ export function TopicPdfViewModal({
                                 <TouchableOpacity onPress={onClose} className="flex-1 py-2.5 rounded-xl border border-gray-200 items-center justify-center">
                                     <Text className="text-sm text-gray-600" style={{
                 fontFamily: fonts.bold
-              }}>{t("Close")}</Text>
+              }}>{t("Academics.student.Close", "Close")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress={async () => {
@@ -218,13 +218,13 @@ export function TopicPdfViewModal({
                                             <ActivityIndicator size="small" color="white" />
                                             <Text className="text-sm text-white" style={{
                   fontFamily: fonts.bold
-                }}>{t("Downloading")}...</Text>
+                }}>{t("Academics.student.Downloading", "Downloading")}...</Text>
                                         </> : <>
                                             <ArrowSquareDown size={14} color="white" />
                                             <Text className="text-sm text-white" style={{
                   fontFamily: fonts.bold
                 }}>
-                                                {selectedResources.length > 0 ? `${t("Download File")}${selectedResources.length > 1 ? "s" : ""}` : t("Select File(s)")}
+                                                {selectedResources.length > 0 ? `${t("Academics.student.Download File", "Download File")}${selectedResources.length > 1 ? "s" : ""}` : t("Academics.student.Select File(s)", "Select File(s)")}
                                             </Text>
                                         </>}
                                 </TouchableOpacity>

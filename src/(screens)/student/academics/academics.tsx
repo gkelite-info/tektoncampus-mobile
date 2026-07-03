@@ -52,24 +52,24 @@ function AcademicsContent() {
         <Text className="text-[#282828] text-[28px] mb-1" style={{
           fontFamily: fonts.bold
         }}>
-          {t("Academicss")}
+          {t("Academics.student.Academics", "Academics")}
         </Text>
 
         {isLargeScreen ? <Text className="text-[#282828] text-sm" style={{
           fontFamily: fonts.regular
         }}>
-          {t("Track syllabus progress and manage notes by semester")}
+          {t("Academics.student.Track syllabus progress and manage notes by semester", "Track syllabus progress and manage notes by semester")}
         </Text> : <Text className="text-[#282828] text-sm" style={{
           fontFamily: fonts.regular
         }}>
-          {t("Track syllabus progress and manage notes")}
+          {t("Academics.student.Track syllabus progress and manage notes", "Track syllabus progress and manage notes")}
         </Text>}
       </View>
 
       {isLargeScreen && <View style={{
         width: "32%"
       }} className="justify-end flex-row">
-        <CourseScheduleCard department={loading ? "..." : studentProfile?.department || "N/A"} degree={loading ? "..." : studentProfile?.degree || "N/A"} year={loading ? "..." : studentProfile?.year || "N/A"} style="w-[320px]" />
+        <CourseScheduleCard department={loading ? "..." : studentProfile?.department || t("Academics.student.N/A", "N/A")} degree={loading ? "..." : studentProfile?.degree || t("Academics.student.N/A", "N/A")} year={loading ? "..." : studentProfile?.year || t("Academics.student.N/A", "N/A")} style="w-[320px]" />
 
       </View>}
     </View>
@@ -87,7 +87,7 @@ export default function StudentAcademics() {
     <SafeAreaView edges={["left", "right", "bottom"]} className="flex-1">
       <React.Suspense fallback={<View className="flex-1 items-center justify-center py-10">
         {Loader ? <Loader /> : <ActivityIndicator size="small" color="#6b7280" />}
-        <Text className="text-sm text-gray-500 mt-2">{t("Auto.Common.LoadingAcademic", "Loading Academics...")}</Text>
+        <Text className="text-sm text-gray-500 mt-2">{t("Academics.student.Loading Academics...", "Loading Academics...")}</Text>
       </View>}>
 
         <AcademicsContent />

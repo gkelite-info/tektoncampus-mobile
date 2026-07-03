@@ -50,7 +50,7 @@ function FilterBanner({
                     <Text className="text-[#525252] text-base" style={{
           fontFamily: fonts.regular
         }}>
-                        {t("Subject :")}
+                        {t("Academics.student.Subject", "Subject :")}
                     </Text>
                     <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
                         <Text className="text-[#43C17A] text-base" style={{
@@ -65,13 +65,13 @@ function FilterBanner({
                     <Text className="text-[#525252] text-base" style={{
           fontFamily: fonts.regular
         }}>
-                        {t("Semester :")}
+                        {t("Academics.student.Semester", "Semester :")}
                     </Text>
                     <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
                         <Text className="text-[#43C17A] text-base" style={{
             fontFamily: fonts.medium
           }}>
-                            {filterBannerDetails.semester ? `${t("Sem")} ${filterBannerDetails.semester}` : "N/A"}
+                            {filterBannerDetails.semester ? `${t("Academics.student.Sem", "Sem")} ${filterBannerDetails.semester}` : "N/A"}
                         </Text>
                     </View>
                 </View>
@@ -102,7 +102,7 @@ function UnitCard({
     if (topics.length === 0) {
       return <Text className="text-gray-400 text-xs" style={{
         fontFamily: fonts.italic
-      }}>{t("No topics found")}</Text>;
+      }}>{t("Academics.student.No topics found", "No topics found")}</Text>;
     }
     return topics.map((topic: UnitTopic) => <View key={topic.topicId} className="flex-row items-start justify-between gap-2 py-1">
                 <View className="flex-row items-start gap-2 flex-1">
@@ -201,7 +201,7 @@ export function SubjectDetailsCard({
                 <Text className="text-[#7153E1] text-sm" style={{
         fontFamily: fonts.bold
       }}>
-                    {t("Go Back")}
+                    {t("Academics.student.Go Back", "Go Back")}
                 </Text>
             </TouchableOpacity>
 
@@ -213,7 +213,7 @@ export function SubjectDetailsCard({
                     <Text className="text-[#4C4C4C] text-base" style={{
           fontFamily: fonts.medium
         }}>
-                        {t("Faculty :")}{" "}
+                        {t("Academics.student.Faculty", "Faculty :")}{" "}
                     </Text>
                     <Text className="text-[#122A5E] text-base" style={{
           fontFamily: fonts.bold
@@ -230,12 +230,12 @@ export function SubjectDetailsCard({
                 <View className="flex-1">
                     <Text className="text-base text-[#14532D]" style={{
           fontFamily: fonts.bold
-        }}>{t("Auto.Common.AIGeneratedNote", "AI Generated Notes")}
+        }}>{t("Academics.student.AI Generated Notes", "AI Generated Notes")}
 
           </Text>
                     <Text className="text-sm text-[#4B5563] mt-0.5" style={{
           fontFamily: fonts.medium
-        }}>{t("Auto.Common.TopicwisePDFsar", "Topic-wise PDFs are generated along with the notes for quick study.")}
+        }}>{t("Academics.student.Topic-wise PDFs are generated along with the notes for quick study.", "Topic-wise PDFs are generated along with the notes for quick study.")}
 
           </Text>
                 </View>
@@ -246,7 +246,7 @@ export function SubjectDetailsCard({
                 {dynamicUnits.length === 0 && <Text className="text-gray-500 p-4 text-center text-base" style={{
         fontFamily: fonts.italic
       }}>
-                        {t("No units found")}
+                        {t("Academics.student.No units found", "No units found")}
                     </Text>}
             </View>
 

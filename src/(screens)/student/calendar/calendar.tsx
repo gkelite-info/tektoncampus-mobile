@@ -22,7 +22,7 @@ function getWeekDays(locale: string) {
         const date = new Date(monday);
         date.setDate(monday.getDate() + i);
         days.push({
-            dayName: date.toLocaleDateString(locale === "te" ? "te-IN" : locale === "hi" ? "hi-IN" : "en-US", {
+            dayName: date.toLocaleDateString(locale === "te" ? "te-IN" : locale === "hi" ? "hi-IN" : locale === "ur" ? "ur-PK" : "en-US", {
                 weekday: "short"
             }),
             dateNum: date.getDate(),
@@ -58,7 +58,8 @@ function TimetableRow({
 }: {
     entry: TimetableEntry;
 }) {
-    const subject = entry.subjectName ?? entry.subject ?? "Class";
+    const { t } = useTranslation();
+    const subject = entry.subjectName ?? entry.subject ?? t("Calendar.student.Class", "Class");
     const time = entry.startTime && entry.endTime ? `${entry.startTime} – ${entry.endTime}` : entry.startTime ?? "";
     const faculty = entry.facultyName ?? "";
     const room = entry.roomNo ?? "";
@@ -130,10 +131,10 @@ function StatCard({
 }
 export default function StudentCalendar() {
     const {
-        t,
+        t: originalT,
         i18n
-    } = useTranslation("Calendar.student");
-    const { t: generalT } = useTranslation();
+    } = useTranslation();
+    const t = useCallback((key: string) => originalT(`Calendar.student.${key}`, key), [originalT]);
     const locale = i18n.language;
     const headerHeight = useHeaderHeight();
     const week = useMemo(() => getWeekDays(locale), [locale]);
@@ -192,23 +193,17 @@ export default function StudentCalendar() {
                 const qCount = quizRes.data?.length ?? 0;
                 const aCount = assignmentRes.data?.length ?? 0;
                 const dCount = discRes.data?.length ?? 0;
-                let focus = generalT("General Revision");
+                let focus = t("General Revision");
                 if (aCount > 0 && assignmentRes.data?.[0]) {
                     focus = assignmentRes.data[0].topicName;
                 } else if (qCount > 0 && quizRes.data?.[0]) focus = quizRes.data[0].quizTitle;
-                let tip = generalT("Organize your study desk");
+                let tip = t("Organize your study desk");
                 const deadlines: string[] = [];
-                if (qCount > 0) deadlines.push(generalT("Quizzes", {
-                    count: qCount
-                }));
-                if (aCount > 0) deadlines.push(generalT("Assignments", {
-                    count: aCount
-                }));
-                if (dCount > 0) deadlines.push(generalT("Discussions", {
-                    count: dCount
-                }));
+                if (qCount > 0) deadlines.push(`${qCount} ${t("Quizzes")}`);
+                if (aCount > 0) deadlines.push(`${aCount} ${t("Assignments")}`);
+                if (dCount > 0) deadlines.push(`${dCount} ${t("Discussions")}`);
                 if (deadlines.length > 0) {
-                    tip = `${generalT("Check the deadlines for")}: ${deadlines.join(", ")}`;
+                    tip = `${t("Check the deadlines for")}: ${deadlines.join(", ")}`;
                 }
                 resultsMap[day.fullDate] = {
                     classCount: classes?.length ?? 0,
@@ -230,7 +225,7 @@ export default function StudentCalendar() {
         } finally {
             setLoading(false);
         }
-    }, [collegeEducationType, week, generalT]);
+    }, [collegeEducationType, week, t]);
     useEffect(() => {
         loadAllData(true);
     }, [loadAllData]);
@@ -251,8 +246,8 @@ export default function StudentCalendar() {
 
             <Text className="text-[#282828] text-2xl mb-1" style={{
                 fontFamily: fonts.bold
-            }}>{t("Auto.Common.Calendar", "Calendar")}</Text>
-            <Text className="text-[#282828] font-semibold text-[15px] mb-3">{t("Auto.Common.WeeklyCalendarO", "Weekly Calendar Overview")}
+            }}>{t("Calendar")}</Text>
+            <Text className="text-[#282828] font-semibold text-[15px] mb-3">{t("Weekly Calendar Overview")}
 
             </Text>
 
@@ -313,24 +308,24 @@ export default function StudentCalendar() {
                     {loading ? <ActivityIndicator color="#ffffff" size="small" /> : <>
                         <Text numberOfLines={1} className="text-white text-[11px] font-medium leading-4">
                             {"📘 "}
-                            {!activeDayInfo ? "No Classes" : `${activeDayInfo.classCount} Classes`}
+                            {!activeDayInfo?.classCount ? t("No Classes") : `${activeDayInfo.classCount} ${t("Classes")}`}
                             {" · 📝 "}
-                            {!activeDayInfo ? "No Quizzes" : `${activeDayInfo.quizCount} Quizzes`}
+                            {!activeDayInfo?.quizCount ? t("No Quizzes") : `${activeDayInfo.quizCount} ${t("Quizzes")}`}
                         </Text>
                         <Text numberOfLines={1} className="text-white text-[11px] font-medium leading-4">
                             {"🧾 "}
-                            {!activeDayInfo ? "No Assignments" : `${activeDayInfo.assignmentCount} Assignments`}
+                            {!activeDayInfo?.assignmentCount ? t("No Assignments") : `${activeDayInfo.assignmentCount} ${t("Assignments")}`}
                             {" · 💬 "}
-                            {!activeDayInfo ? "No Discussions" : `${activeDayInfo.discussionCount} Discussions`}
+                            {!activeDayInfo?.discussionCount ? t("No Discussions") : `${activeDayInfo.discussionCount} ${t("Discussions")}`}
                         </Text>
                         <Text numberOfLines={1} className="text-white text-[11px] font-semibold mt-0.5 leading-4">
-                            {"🎯 Focus Area: "}
+                            {`🎯 ${t("Focus Area")}: `}
                             <Text className="font-normal">
                                 {!activeDayInfo ? "..." : activeDayInfo.focus}
                             </Text>
                         </Text>
                         <Text numberOfLines={1} className="text-white/90 text-[10px] italic leading-[14px]">
-                            {"🪄 Tip: "}
+                            {`🪄 ${t("Tip")}: `}
                             {!activeDayInfo ? "..." : activeDayInfo.tip}
                         </Text>
                     </>}
@@ -350,14 +345,14 @@ export default function StudentCalendar() {
                             {activeDayItem?.dayName ?? ""}
                         </Text>
                     </View>
-                    <Text className="text-[#282828] font-semibold text-[17px]">{t("Auto.Common.Timetable", "Timetable")}
+                    <Text className="text-[#282828] font-semibold text-[17px]">{t("Timetable")}
 
                     </Text>
                 </View>
 
                 {loading ? <ActivityIndicator color="#43C17A" size="small" /> : !activeDayInfo || activeDayInfo.timetable.length === 0 ? <Text className="text-gray-400 text-[13px] text-center py-6" style={{
                     fontFamily: fonts.regular
-                }}>{t("Auto.Common.Noclassesschedu", "No classes scheduled")}
+                }}>{t("No classes scheduled")}
 
                 </Text> : activeDayInfo.timetable.map((entry, i) => <TimetableRow key={i} entry={entry} />)}
             </View>
@@ -365,11 +360,11 @@ export default function StudentCalendar() {
             <View className="flex-row bg-white p-2 rounded-xl mt-5 mb-2" style={{
                 gap: 8
             }}>
-                <StatCard count={activeDayInfo?.quizCount ?? 0} label={"Active\nQuizzes"} color="#E75480" bg="#FDE8F0" />
+                <StatCard count={activeDayInfo?.quizCount ?? 0} label={t("Active") + "\n" + t("Quiz")} color="#E75480" bg="#FDE8F0" />
 
-                <StatCard count={activeDayInfo?.assignmentCount ?? 0} label={"Active\nAssignments"} color="#5B9BD5" bg="#E8F1FB" />
+                <StatCard count={activeDayInfo?.assignmentCount ?? 0} label={t("Active") + "\n" + t("Assignment")} color="#5B9BD5" bg="#E8F1FB" />
 
-                <StatCard count={activeDayInfo?.discussionCount ?? 0} label={"Active\nDiscussions"} color="#9B6EC8" bg="#F0E8FB" />
+                <StatCard count={activeDayInfo?.discussionCount ?? 0} label={t("Active") + "\n" + t("Discussion")} color="#9B6EC8" bg="#F0E8FB" />
 
             </View>
         </ScrollView>

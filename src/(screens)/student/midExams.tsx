@@ -22,10 +22,10 @@ export default function MidExams({
   } = useTranslation();
   const headerHeight = useHeaderHeight();
   const examMetaData = [{
-    title: t("examStartDate", "Exam start date"),
+    title: t("Dashboard.student.Exam start date", "Exam start date"),
     subTitle: "11 March 2025"
   }, {
-    title: t("examType", "Exam type"),
+    title: t("Dashboard.student.Exam type", "Exam type"),
     subTitle: "Mid Term Exams (CSE Year 2)"
   }];
   const subjects: Subject[] = [{
@@ -50,14 +50,14 @@ export default function MidExams({
                 <Text className="text-2xl text-[#282828]" style={{
         fontFamily: fonts.semiBold
       }}>
-                    {t("midTermTitle", "Mid Term Exam Enrollment")}
+                    {t("Dashboard.student.Mid Term Exam Enrollment", "Mid Term Exam Enrollment")}
                 </Text>
             </View>
 
             <Text className="text-sm text-[#515151] mb-4 pl-0.5 mt-1" style={{
       fontFamily: fonts.regular
     }}>
-                {t("description", "Enroll for your upcoming exams starting March 11, 2025")}
+                {t("Dashboard.student.Enroll for your upcoming exams starting March 11, 2025", "Enroll for your upcoming exams starting March 11, 2025")}
             </Text>
 
             <View className="bg-white rounded-lg p-3.5 mb-3.5 shadow-sm border border-gray-100">
@@ -76,12 +76,12 @@ export default function MidExams({
 
                 <View className="flex-row items-center my-1.5">
                     <View className="w-[18%]">
-                        <Text className="text-base text-[#282828] font-medium text-lg">{t("note", "Note:")}</Text>
+                        <Text className="text-base text-[#282828] font-medium text-lg">{t("Dashboard.student.Note", "Note:")}</Text>
                     </View>
                     <Text className="text-base text-[#282828] flex-1" style={{
           fontFamily: fonts.regular
         }}>
-                        {t("noteDesc", "You’re eligible to enroll if your attendance ≥ 75%")}
+                        {t("Dashboard.student.You’re eligible to enroll if your attendance ≥ 75%", "You’re eligible to enroll if your attendance ≥ 75%")}
                     </Text>
                 </View>
             </View>
@@ -91,25 +91,25 @@ export default function MidExams({
                     <Text className="text-base text-[#282828]" style={{
           fontFamily: fonts.medium
         }}>
-                        {t("selectSubjects", "Select Subjects to Enroll")}
+                        {t("Dashboard.student.Select Subjects to Enroll", "Select Subjects to Enroll")}
                     </Text>
                     <View className="bg-[#E5F6EC] rounded-full px-3 py-1">
                         <Text className="text-[#43C17A] text-sm" style={{
             fontFamily: fonts.medium
-          }}>{t("hallTicket", "Hall Ticket")}</Text>
+          }}>{t("Dashboard.student.Hall Ticket", "Hall Ticket")}</Text>
                     </View>
                 </View>
 
                 <View className="flex-row border-b border-gray-200 pb-2 mb-2.5">
                     <Text className="flex-[2.2] text-sm text-gray-400" style={{
           fontFamily: fonts.bold
-        }}>{t("subjectHeader", "Subject")}</Text>
+        }}>{t("Dashboard.student.Subject", "Subject")}</Text>
                     <Text className="flex-[1.8] text-sm text-gray-400 text-center" style={{
           fontFamily: fonts.bold
-        }}>{t("attendanceHeader", "Attendance")}</Text>
+        }}>{t("Dashboard.student.Attendance", "Attendance")}</Text>
                     <Text className="flex-[2] text-sm text-gray-400 text-center" style={{
           fontFamily: fonts.bold
-        }}>{t("actionsHeader", "Actions")}</Text>
+        }}>{t("Dashboard.student.Actions", "Actions")}</Text>
                 </View>
 
                 {subjects.map((item, index) => {
@@ -138,7 +138,7 @@ export default function MidExams({
                                     <Text className="text-white text-base text-center" style={{
                 fontFamily: fonts.bold
               }}>
-                                        {isEligible ? t("enroll", "ENROLL") : t("notEligible", "NOT ELIGIBLE")}
+                                        {isEligible ? t("Dashboard.student.ENROLL", "ENROLL") : t("Dashboard.student.NOT ELIGIBLE", "NOT ELIGIBLE")}
                                     </Text>
                                 </TouchableOpacity>
                             </View>

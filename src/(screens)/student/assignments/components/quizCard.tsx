@@ -59,7 +59,7 @@ export default function QuizCard({ data, onStartQuiz }: QuizCardProps) {const { 
               className="bg-[#43C17A] px-3 py-1.5 rounded-md shadow-xs">
               
                             <Text className="text-white text-base shrink-0" style={{ fontFamily: fonts.bold }}>
-                                {t("Start Quiz")}
+                                {t("Assignment.student.Start Quiz")}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -67,25 +67,25 @@ export default function QuizCard({ data, onStartQuiz }: QuizCardProps) {const { 
                     <View className="flex-row flex-wrap gap-y-1.5 gap-2 mt-4 w-full">
                         <View className="flex-row items-center gap-1.5 w-fit pr-1">
                             <UserCircle size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Faculty", "Faculty:")}
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Faculty", "Faculty:")}
                 {data.facultyName}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
                             <ArrowsClockwise size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Left", "Left:")}
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Left", "Left:")}
                 {data.attemptsLeft}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-fit pr-1 mt-0.5">
                             <CalendarDots size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Duration", "Duration:")}
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Duration", "Duration:")}
                 {data.quizDuration}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
                             <ClockCountdown size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Time", "Time:")}
+                            <Text className="text-gray-600 text-sm" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Time", "Time:")}
                 {data.timeLimit || "30 mins"}
                             </Text>
                         </View>
@@ -145,25 +145,25 @@ export function AttemptedQuizCard({ data, onOpenPerformanceModal }: AttemptedQui
                     <View className="flex-row flex-wrap gap-y-1.5 mt-4 w-full">
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
                             <UserCircle size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Faculty", "Faculty:")}
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Faculty", "Faculty:")}
                 {data.facultyName}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1">
                             <CalendarDots size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Att", "Att:")}
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Att", "Att:")}
                 {data.attemptedOn}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
                             <Question size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Qs", "Qs:")}
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Qs", "Qs:")}
                 {data.questionsAttempted}
                             </Text>
                         </View>
                         <View className="flex-row items-center gap-1.5 w-[50%] pr-1 mt-0.5">
                             <ArrowsClockwise size={14} color="#43C17A" />
-                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Used", "Used:")}
+                            <Text className="text-gray-600 text-[10px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Used", "Used:")}
                 {data.attemptsUsed}
                             </Text>
                         </View>
@@ -228,10 +228,10 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
                         <ArrowLeft size={24} color="#282828" weight="bold" />
                     </TouchableOpacity>
                     <Text className="text-xl text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
-                        {quiz?.courseName || "N/A"}
+                        {quiz?.courseName || t("Assignment.student.N/A", "N/A")}
                     </Text>
                     <Text className="text-sm text-gray-500 mt-0.5" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
-                        {quiz?.topic || "N/A"}
+                        {quiz?.topic || t("Assignment.student.N/A", "N/A")}
                     </Text>
                 </View>
 
@@ -244,7 +244,7 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
             <View className="mb-5">
                 <View className="flex-row justify-end mb-1.5">
                     <Text className="text-[#43C17A] text-sm" style={{ fontFamily: fonts.bold }}>
-                        {progressCount.toString().padStart(2, "0")}{t("Auto.Common.of", "of")}{MOCK_QUESTIONS.length}
+                        {progressCount.toString().padStart(2, "0")}{t("Assignment.student.of", "of")}{MOCK_QUESTIONS.length}
                     </Text>
                 </View>
                 <View className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
@@ -296,7 +296,7 @@ export function QuizAttemptScreenOld({ quiz, onGoBack, onSubmitQuiz }: QuizAttem
           activeOpacity={0.8}
           className="bg-[#43C17A] py-3.5 rounded-xl items-center justify-center shadow-xs">
           
-                    <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SubmitQuiz", "Submit Quiz")}</Text>
+                    <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Submit Quiz", "Submit Quiz")}</Text>
                 </TouchableOpacity>
             </View>
         </View>);

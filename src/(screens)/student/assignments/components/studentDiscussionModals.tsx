@@ -43,7 +43,7 @@ export function AttachmentViewerModal({
                 <View className="h-[56px] flex-row items-center justify-between px-4 border-b border-gray-200">
                     <Text className="text-base text-gray-800" style={{
           fontFamily: fonts.bold
-        }}>{t("Auto.Common.AttachmentViewe", "Attachment Viewer")}
+        }}>{t("Assignment.student.Attachment Viewer", "Attachment Viewer")}
 
           </Text>
                     <TouchableOpacity onPress={onClose} className="p-1 bg-gray-100 rounded-full">
@@ -57,7 +57,7 @@ export function AttachmentViewerModal({
       }} startInLoadingState /> : <View className="flex-1 items-center justify-center">
                         <Text className="text-gray-500 text-sm" style={{
           fontFamily: fonts.regular
-        }}>{t("Auto.Common.NoURLprovided", "No URL provided")}
+        }}>{t("Assignment.student.No URL provided", "No URL provided")}
 
           </Text>
                     </View>}
@@ -108,7 +108,7 @@ export function StudentDiscussionUploadModal({
     } catch (err) {
       Toast.show({
         type: "error",
-        text1: "Failed to pick document"
+        text1: t("Assignment.student.Failed to pick document", "Failed to pick document")
       });
     }
   };
@@ -116,14 +116,14 @@ export function StudentDiscussionUploadModal({
     if (files.length === 0) {
       Toast.show({
         type: "error",
-        text1: "Please select at least one file"
+        text1: t("Assignment.student.Please select at least one file", "Please select at least one file")
       });
       return;
     }
     if (!studentId) {
       Toast.show({
         type: "error",
-        text1: "Student not found"
+        text1: t("Assignment.student.Student not found", "Student not found")
       });
       return;
     }
@@ -140,7 +140,7 @@ export function StudentDiscussionUploadModal({
         if (!result.success) {
           Toast.show({
             type: "error",
-            text1: "Failed to save file record."
+            text1: t("Assignment.student.Failed to save file record.", "Failed to save file record.")
           });
           return;
         }
@@ -151,14 +151,14 @@ export function StudentDiscussionUploadModal({
       })));
       Toast.show({
         type: "success",
-        text1: "Files uploaded successfully!"
+        text1: t("Assignment.student.Files uploaded successfully!", "Files uploaded successfully!")
       });
       onSuccess?.();
       handleClose();
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Upload failed. Please try again."
+        text1: t("Assignment.student.Upload failed. Please try again.", "Upload failed. Please try again.")
       });
     } finally {
       setLoading(false);
@@ -176,7 +176,7 @@ export function StudentDiscussionUploadModal({
             }}>{discussion.title}</Text>
                             <Text className="text-base text-[#282828] mt-1" style={{
               fontFamily: fonts.bold
-            }}>{t("Upload")}</Text>
+            }}>{t("Assignment.student.Upload")}</Text>
                         </View>
                         <TouchableOpacity onPress={handleClose} className="p-1">
                             <X size={22} color="#000000" />
@@ -189,7 +189,7 @@ export function StudentDiscussionUploadModal({
                             <CloudUpload size={40} color="#9CA3AF" />
                             <Text className="text-sm text-gray-600 text-center" style={{
               fontFamily: fonts.regular
-            }}>{t("Auto.Common.Tapheretochoose", "Tap here to choose documents")}
+            }}>{t("Assignment.student.Tap here to choose documents", "Tap here to choose documents")}
 
               </Text>
                         </TouchableOpacity>
@@ -207,7 +207,7 @@ export function StudentDiscussionUploadModal({
                       }}>{file.name}</Text>
                                                     <Text className="text-[10px] text-gray-400" style={{
                         fontFamily: fonts.regular
-                      }}>{(file.size / 1024).toFixed(2)}{t("Auto.Common.KB", "KB")}</Text>
+                      }}>{(file.size / 1024).toFixed(2)}{t("Assignment.student.KB", "KB")}</Text>
                                                 </View>
                                             </View>
                                             <TouchableOpacity onPress={() => setFiles(prev => prev.filter((_, i) => i !== idx))} className="p-1.5 bg-red-100 rounded">
@@ -224,13 +224,13 @@ export function StudentDiscussionUploadModal({
                         <TouchableOpacity onPress={handleClose} className="flex-1 py-3 border border-gray-200 bg-white rounded-xl">
                             <Text className="text-center text-sm text-gray-600" style={{
               fontFamily: fonts.bold
-            }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
+            }}>{t("Assignment.student.Cancel", "Cancel")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleUploadSubmit} disabled={loading} className="flex-1 py-3 bg-[#43C17A] rounded-xl flex-row items-center justify-center shadow-sm">
               
                             {loading ? <ActivityIndicator size="small" color="#FFFFFF" /> : <Text className="text-center text-sm text-white" style={{
               fontFamily: fonts.bold
-            }}>{t("Auto.Common.UploadFile", "Upload File")}</Text>}
+            }}>{t("Assignment.student.Upload File", "Upload File")}</Text>}
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -244,11 +244,11 @@ async function requestStoragePermission() {
       return true;
     }
     const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-      title: "Storage Permission Required",
-      message: "This app needs access to your storage to download discussion files.",
-      buttonNeutral: "Ask Me Later",
-      buttonNegative: "Cancel",
-      buttonPositive: "OK"
+      title: t("Assignment.student.Storage Permission Required", "Storage Permission Required"),
+      message: t("Assignment.student.This app needs access to your storage to download discussion files.", "This app needs access to your storage to download discussion files."),
+      buttonNeutral: t("Assignment.student.Ask Me Later", "Ask Me Later"),
+      buttonNegative: t("Assignment.student.Cancel", "Cancel"),
+      buttonPositive: t("Assignment.student.OK", "OK")
     });
     return granted === PermissionsAndroid.RESULTS.GRANTED;
   } catch (err) {
@@ -294,7 +294,7 @@ export function StudentDiscussionDetailsModal({
     try {
       Toast.show({
         type: "info",
-        text1: "Downloading file..."
+        text1: t("Assignment.student.Downloading file...", "Downloading file...")
       });
       const fileName = url.split("/").pop()?.split("?")[0] || "attachment";
       const decodedFileName = decodeURIComponent(fileName).split("_").slice(1).join("_") || decodeURIComponent(fileName);
@@ -303,7 +303,7 @@ export function StudentDiscussionDetailsModal({
         if (!hasPermission) {
           Toast.show({
             type: "error",
-            text1: "Storage permission denied"
+            text1: t("Assignment.student.Storage permission denied", "Storage permission denied")
           });
           return;
         }
@@ -312,7 +312,7 @@ export function StudentDiscussionDetailsModal({
           await FileSystem.downloadAsync(url, publicDownloadUri);
           Toast.show({
             type: "success",
-            text1: "File downloaded to Downloads folder!"
+            text1: t("Assignment.student.File downloaded to Downloads folder!", "File downloaded to Downloads folder!")
           });
           return;
         } catch (androidError) {
@@ -326,19 +326,19 @@ export function StudentDiscussionDetailsModal({
         await Sharing.shareAsync(localUri);
         Toast.show({
           type: "success",
-          text1: "File downloaded successfully!"
+          text1: t("Assignment.student.File downloaded successfully!", "File downloaded successfully!")
         });
       } else {
         Toast.show({
           type: "error",
-          text1: "Sharing not available on this device"
+          text1: t("Assignment.student.Sharing not available on this device", "Sharing not available on this device")
         });
       }
     } catch (error) {
       console.error("Download failed:", error);
       Toast.show({
         type: "error",
-        text1: "Failed to download file"
+        text1: t("Assignment.student.Failed to download file", "Failed to download file")
       });
     }
   };
@@ -351,7 +351,7 @@ export function StudentDiscussionDetailsModal({
     } else {
       Toast.show({
         type: "error",
-        text1: "No attachments available to download"
+        text1: t("Assignment.student.No attachments available to download", "No attachments available to download")
       });
     }
   };
@@ -366,7 +366,7 @@ export function StudentDiscussionDetailsModal({
                         <Text className="text-xl text-[#43C17A]" style={{
             fontFamily: fonts.bold
           }}>
-                            {t("Discussion forum")}
+                            {t("Assignment.student.Discussion forum")}
                         </Text>
                         <TouchableOpacity onPress={handleClose} className="p-1">
                             <X size={22} color="#9CA3AF" />
@@ -385,7 +385,7 @@ export function StudentDiscussionDetailsModal({
                                 <Text className="text-sm text-[#282828]" style={{
                 fontFamily: fonts.bold
               }}>
-                                    {t("Faculty Name :")}{" "}
+                                    {t("Assignment.student.Faculty Name :")}{" "}
                                     <Text className="text-gray-500" style={{
                   fontFamily: fonts.regular
                 }}>
@@ -401,7 +401,7 @@ export function StudentDiscussionDetailsModal({
                                 <Text className="text-sm text-[#282828]" style={{
                 fontFamily: fonts.bold
               }}>
-                                    {t("Uploaded On :")}{" "}
+                                    {t("Assignment.student.Uploaded On :")}{" "}
                                     <Text className="text-gray-500" style={{
                   fontFamily: fonts.regular
                 }}>
@@ -415,7 +415,7 @@ export function StudentDiscussionDetailsModal({
                                 <Text className="text-white text-sm" style={{
                 fontFamily: fonts.bold
               }}>
-                                    {t("Download")}
+                                    {t("Assignment.student.Download")}
                                 </Text>
                                 <View className="bg-white rounded-full p-0.5 items-center justify-center">
                                     <Download size={12} color="#43C17A" />
@@ -426,7 +426,7 @@ export function StudentDiscussionDetailsModal({
                                 <Text className="text-sm text-[#282828]" style={{
                 fontFamily: fonts.bold
               }}>
-                                    {t("Marks Scored :")}{" "}
+                                    {t("Assignment.student.Marks Scored :")}{" "}
                                     <Text className="text-[#FF5A1F]" style={{
                   fontFamily: fonts.bold
                 }}>
@@ -440,12 +440,12 @@ export function StudentDiscussionDetailsModal({
                                     <Text className="text-xs text-[#282828]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Description")}
+                                        {t("Assignment.student.Description")}
                                     </Text>
                                     <Text className="text-xs text-gray-500 mt-1 leading-5" style={{
                   fontFamily: fonts.regular
                 }}>
-                                        {discussion.description ?? t("No description provided.")}
+                                        {discussion.description ?? t("Assignment.student.No description provided.")}
                                     </Text>
                                 </View>
 
@@ -453,7 +453,7 @@ export function StudentDiscussionDetailsModal({
                                     <Text className="text-xs text-[#282828]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Deadline")}
+                                        {t("Assignment.student.Deadline")}
                                     </Text>
                                     <Text className="text-xs text-gray-500 mt-0.5" style={{
                   fontFamily: fonts.regular
@@ -466,7 +466,7 @@ export function StudentDiscussionDetailsModal({
                                     <Text className="text-xs text-[#282828]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Total Marks")}
+                                        {t("Assignment.student.Total Marks")}
                                     </Text>
                                     <Text className="text-xs text-gray-500 mt-0.5" style={{
                   fontFamily: fonts.regular
@@ -479,7 +479,7 @@ export function StudentDiscussionDetailsModal({
                                         <Text className="text-xs text-[#282828] mb-1.5" style={{
                   fontFamily: fonts.bold
                 }}>
-                                            {t("Attachments")}
+                                            {t("Assignment.student.Attachments")}
                                         </Text>
                                         <View className="flex-row flex-wrap gap-2">
                                             {discussion.attachments.map((file: {
@@ -490,7 +490,7 @@ export function StudentDiscussionDetailsModal({
                                                     <Text numberOfLines={1} className="text-[10px] text-[#334155] max-w-[120px]" style={{
                       fontFamily: fonts.semiBold
                     }}>
-                                                        {file.fileUrl?.split("/").pop()?.split("_").slice(1).join("_") || "File"}
+                                                        {file.fileUrl?.split("/").pop()?.split("_").slice(1).join("_") || t("Assignment.student.File", "File")}
                                                     </Text>
                                                 </TouchableOpacity>)}
                                         </View>
@@ -505,7 +505,7 @@ export function StudentDiscussionDetailsModal({
                             <Text className="text-gray-700 text-sm" style={{
               fontFamily: fonts.bold
             }}>
-                                {t("Close")}
+                                {t("Assignment.student.Close")}
                             </Text>
                         </TouchableOpacity>
                     </View>

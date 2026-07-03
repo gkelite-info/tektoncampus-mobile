@@ -1,13 +1,13 @@
 import Skeleton from "@/utils/skeleton";
 import React from "react";
-import { View, ScrollView, SafeAreaView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 
 export function StudentProgressSkeleton() {
     const headerHeight = useHeaderHeight();
 
     return (
-        <SafeAreaView className="flex-1 bg-[#f4f5f6]" style={{ paddingTop: headerHeight + 16 }}>
+        <View className="flex-1 bg-[#f4f5f6]" style={{ paddingTop: headerHeight }}>
             <ScrollView
                 className="flex-1 p-2"
                 contentContainerStyle={{ paddingBottom: 60 }}
@@ -138,6 +138,6 @@ export function StudentProgressSkeleton() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }

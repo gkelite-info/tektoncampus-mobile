@@ -49,16 +49,16 @@ export function AttendanceSummaryCard({ percentage, attendedCount, conductedCoun
   return (
     <View className="w-full bg-white rounded-2xl p-3">
             <Text className="text-[17px] text-[#333] mb-4 tracking-tight" style={{ fontFamily: fonts.semiBold }}>
-                {t("Attendance Summary")}
+                {t("Dashboard.student.Attendance Summary", "Attendance Summary")}
             </Text>
 
-            <View className="flex-col items-center justify-center ">
-                <View className="w-full max-w-[240px] aspect-[2/1] relative items-center justify-end ">
+            <View className="flex-col items-center justify-center">
+                <View className="w-full max-w-[240px] aspect-[2.5/1] relative items-center justify-end">
                     <Svg
-            viewBox="0 0 200 100"
+            viewBox="0 20 200 80"
             width="100%"
             height="100%"
-            style={{ position: "absolute", top: -12, left: 0, overflow: "visible" }}>
+            style={{ position: "absolute", top: 0, left: 0, overflow: "visible" }}>
             
                         <Defs>
                             <LinearGradient id="gaugeGradient" x1="0" y1="0" x2="1" y2="0">
@@ -88,17 +88,17 @@ export function AttendanceSummaryCard({ percentage, attendedCount, conductedCoun
 
                     <View className="items-center justify-end pb-1 ">
                         <View className="flex-row items-baseline leading-none ">
-                            <Text className="text-3xl text-[#2D3139] " style={{ fontFamily: fonts.bold }}>
+                            <Text className="text-4xl text-[#2D3139] " style={{ fontFamily: fonts.bold }}>
                                 {displayedTextPercent}
                             </Text>
-                            <Text className="text-xl text-[#2D3139] ml-0.5" style={{ fontFamily: fonts.bold }}>%</Text>
+                            <Text className="text-2xl text-[#2D3139] ml-0.5" style={{ fontFamily: fonts.bold }}>%</Text>
                         </View>
-                        <Text className="text-sm text-gray-500 mt-1" style={{ fontFamily: fonts.semiBold }}>
-                            {t("Attendance")}
+                        <Text className="text-md text-gray-500 mt-1 mb-5" style={{ fontFamily: fonts.semiBold }}>
+                            {t("Dashboard.student.Attendance", "Attendance")}
                         </Text>
                         {conductedCount !== undefined && conductedCount > 0 &&
             <Text className="text-xs text-green-600 mt-1" style={{ fontFamily: fonts.medium }}>
-                                {attendedCount}{t("Auto.Common.of", "of")}{conductedCount}{t("Auto.Common.classes", "classes")}
+                                {attendedCount} {t("Dashboard.student.of", "of")} {conductedCount} {t("Dashboard.student.classes", "classes")}
             </Text>
             }
                     </View>
@@ -108,13 +108,13 @@ export function AttendanceSummaryCard({ percentage, attendedCount, conductedCoun
                     <View className="flex-row items-center gap-2">
                         <View className="w-3 h-3 rounded-full bg-[#D9F9C3]" />
                         <Text className="text-xs text-gray-600" style={{ fontFamily: fonts.medium }}>
-                            {t("Absent")}
+                            {t("Dashboard.student.Absent", "Absent")}
                         </Text>
                     </View>
                     <View className="flex-row items-center gap-2">
                         <View className="w-3 h-3 rounded-full bg-[#4ABF08]" />
                         <Text className="text-xs text-gray-600" style={{ fontFamily: fonts.medium }}>
-                            {t("Present")}
+                            {t("Dashboard.student.Present", "Present")}
                         </Text>
                     </View>
                 </View>

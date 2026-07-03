@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, TouchableOpacity, Modal, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Modal, StatusBar, Platform } from 'react-native';
 import { List, X } from "phosphor-react-native";
 import { ProfileCard } from "./profileCard";
 import AcademicPerformance from "@/utils/AcademicPerformance";
@@ -84,7 +84,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f4f5f6] pb-10" style={{ paddingTop: headerHeight + 16 }}>
+    <View className="flex-1 bg-[#f4f5f6] pb-10" style={{ paddingTop: headerHeight }}>
             <StatusBar barStyle="dark-content" />
             <ScrollView
         className="flex-1 p-2"
@@ -228,6 +228,6 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                     </View>
                 </TouchableOpacity>
             </Modal>
-        </SafeAreaView>);
+        </View>);
 
 };

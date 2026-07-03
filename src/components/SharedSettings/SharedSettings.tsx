@@ -305,7 +305,7 @@ export default function SettingsScreen() {
       <ScrollView bounces showsVerticalScrollIndicator={false} className="flex-1" contentContainerStyle={{
       paddingHorizontal: 16,
       paddingTop: Math.max(insets.top, 12) + 120,
-      paddingBottom: Math.max(insets.bottom, 16) + 40
+      paddingBottom: Math.max(insets.bottom, 16) + 160
     }}>
         
         <View className="flex-row items-center gap-4 mb-8 pl-2">

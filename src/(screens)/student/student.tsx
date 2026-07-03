@@ -124,10 +124,10 @@ export default function StudentHome() {
         const totalUnits = units.length;
         const avgPercentage = totalUnits > 0 ? Math.round(units.reduce((acc: number, curr: any) => acc + (curr.completionPercentage || 0), 0) / totalUnits) : 0;
         const firstUnit = units[0];
-        const professor = firstUnit && facultyMap[firstUnit.createdBy] ? t('Dashboard_module.student.Prof {name}', {
+        const professor = firstUnit && facultyMap[firstUnit.createdBy] ? t('Dashboard.student.Prof {name}', {
           name: facultyMap[firstUnit.createdBy],
           defaultValue: 'Prof {name}'
-        }) : t('Dashboard_module.student.Faculty not assigned', 'Faculty not assigned');
+        }) : t('Dashboard.student.Faculty not assigned', 'Faculty not assigned');
         const colors = colorPalettes[index % colorPalettes.length];
         return {
           title: sub.subjectName,
@@ -211,28 +211,28 @@ export default function StudentHome() {
     style: 'bg-[#E2DAFF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
     icon: <Chalkboard size={32} color="#714EF2" weight="fill" />,
     value: attendancePercent === null ? <ValueShimmer /> : `${attendancePercent}%`,
-    label: t('Dashboard_module.student.Attendance', 'Attendance'),
+    label: t('Dashboard.student.Attendance', 'Attendance'),
     to: 'Attendance'
   }, {
     style: 'bg-[#FFEDDA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
     icon: <UsersIcon size={32} color="#FFBB70" weight="fill" />,
-    value: assignmentsLoading ? <ValueShimmer /> : t('Dashboard_module.student.{count} Due', {
+    value: assignmentsLoading ? <ValueShimmer /> : t('Dashboard.student.{count} Due', {
       count: String(dueAssignmentsCount),
       defaultValue: '{count} Due'
     }),
-    label: t('Dashboard_module.student.Assignments', 'Assignments'),
+    label: t('Dashboard.student.Assignments', 'Assignments'),
     to: 'Assignments'
   }, {
     style: 'bg-[#E6FBEA] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
     icon: <BookOpenIcon size={32} color="#74FF8F" weight="fill" />,
-    value: t('Dashboard_module.student.Mid Exams', 'Mid Exams'),
-    label: t('Dashboard_module.student.N/A', 'N/A'),
+    value: t('Dashboard.student.Mid Exams', 'Mid Exams'),
+    label: t('Dashboard.student.N/A', 'N/A'),
     onClick: () => setView('exams')
   }, {
     style: 'bg-[#CEE6FF] h-[90px] w-[48%] rounded-2xl p-4 justify-between',
     icon: <ClockIcon size={32} color="#60AEFF" weight="fill" />,
     value: feeLoading ? <ValueShimmer /> : `₹${pendingFeeAmount?.toLocaleString('en-IN')}`,
-    label: t('Dashboard_module.student.Fee Due', 'Fee Due'),
+    label: t('Dashboard.student.Fee Due', 'Fee Due'),
     to: 'Payments'
   }];
   const formatDate = (dateStr: string) => {
@@ -273,7 +273,7 @@ export default function StudentHome() {
                     <Text style={[tw`text-[#282828] text-[17px]`, {
           fontFamily: fonts.bold
         }]}>
-                        {t('Dashboard_module.student.Upcoming Events', 'Upcoming Events')}
+                        {t('Dashboard.student.Upcoming Events', 'Upcoming Events')}
                     </Text>
                     <TouchableOpacity onPress={handleUpcomingClasses}>
                         <CaretRightIcon size={20} color="#000000" weight="bold" />
@@ -287,21 +287,21 @@ export default function StudentHome() {
                             <Text style={[tw`text-[#282828] text-sm`, {
             fontFamily: fonts.regular
           }]}>
-                                {t('Dashboard_module.student.No events scheduled', 'No events scheduled')}
+                                {t('Dashboard.student.No events scheduled', 'No events scheduled')}
                             </Text>
                         </View> : lectures.map((lec: any) => {
           
           return <View key={lec.calendarEventId} style={tw`relative mb-1`}>
-                                <LectureCard time={`${formatTimeToAMPM(lec.fromTime)}\n-\n${formatTimeToAMPM(lec.toTime)}`} title={lec.eventTitle} professor={t('Dashboard_module.student.Prof {name}', {
+                                <LectureCard time={`${formatTimeToAMPM(lec.fromTime)}\n-\n${formatTimeToAMPM(lec.toTime)}`} title={lec.eventTitle} professor={t('Dashboard.student.Prof {name}', {
               name: lec.facultyName,
               defaultValue: 'Prof {name}'
-            })} description={`${lec.eventTopic} • ${formatDate(lec.date)}`} status={lec.isCancelled ? t('Dashboard_module.student.Cancelled', 'Cancelled') : ''} />
+            })} description={`${lec.eventTopic} • ${formatDate(lec.date)}`} status={lec.isCancelled ? t('Dashboard.student.Cancelled', 'Cancelled') : ''} />
 
                                 {lec.meetingLink && !lec.isCancelled && <TouchableOpacity activeOpacity={0.8} onPress={() => handleLinkPress(lec.meetingLink)} style={tw`absolute right-3 top-1/2 -translate-y-4 bg-[#43C17A] px-3 py-1.5 rounded-md shadow-sm`}>
                                         <Text style={[tw`text-white text-xs`, {
                 fontFamily: fonts.medium
               }]}>
-                                            {t('Dashboard_module.student.Join', 'Join')}
+                                            {t('Dashboard.student.Join', 'Join')}
                                         </Text>
                                     </TouchableOpacity>}
                             </View>;
@@ -310,7 +310,14 @@ export default function StudentHome() {
             </View>
 
             <View style={tw`w-full`}>
-                <AcademicPerformance studentId={studentId} />
+                <AcademicPerformance 
+                    studentId={studentId} 
+                    translations={{
+                        title: t('Dashboard.student.Academic Performance', 'Academic Performance'),
+                        calculating: t('Dashboard.student.Calculating performance', 'Calculating performance...'),
+                        failed: t('Dashboard.student.Failed to load performance', 'Failed to load performance')
+                    }} 
+                />
             </View>
 
             <View style={tw`w-full`}>

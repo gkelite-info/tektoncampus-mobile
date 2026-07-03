@@ -16,9 +16,7 @@ export default function NewsModal({
   visible,
   onClose
 }: Props) {
-  const {
-    t
-  } = useTranslation("News");
+  const { t } = useTranslation();
   const {
     role,
     collegeId
@@ -62,11 +60,11 @@ export default function NewsModal({
     }
   };
   const handleDeleteEpaper = (ePaperId: number) => {
-    Alert.alert(t("Delete EPaper", "Delete EPaper"), t("Are you sure you want to delete this e-paper?", "Are you sure you want to delete this e-paper?"), [{
-      text: t("Cancel", "Cancel"),
+    Alert.alert(t("News.Delete", "Delete"), t("News.Are you sure you want to delete this e-paper?", "Are you sure you want to delete this e-paper?"), [{
+      text: t("Auto.Common.Cancel", "Cancel"),
       style: "cancel"
     }, {
-      text: t("Delete", "Delete"),
+      text: t("News.Delete", "Delete"),
       style: "destructive",
       onPress: async () => {
         try {
@@ -124,7 +122,7 @@ export default function NewsModal({
                             <TouchableOpacity onPress={() => setSelectedArticleUrl(null)} className="mr-3 p-1 rounded-full bg-gray-50">
                                 <X size={20} color="#111827" />
                             </TouchableOpacity>
-                            <Text className="font-medium text-lg text-[#111827]">{t("Article", "Article")}</Text>
+                            <Text className="font-medium text-lg text-[#111827]">{t("News.Article", "Article")}</Text>
                         </View>
                         <WebView source={{
             uri: selectedArticleUrl
@@ -133,7 +131,7 @@ export default function NewsModal({
                         <View className="flex-row items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
                             <View className="flex-row items-center gap-2">
                                 <Newspaper size={24} weight="fill" color="#43C17A" />
-                                <Text className="font-medium text-xl text-[#111827]">{t("News", "News")}</Text>
+                                <Text className="font-medium text-xl text-[#111827]">{t("News.News", "News")}</Text>
                             </View>
                             <TouchableOpacity onPress={onClose} className="p-1 rounded-full bg-gray-50">
                                 <X size={20} color="#6B7280" />
@@ -143,12 +141,12 @@ export default function NewsModal({
                         <View className="flex-row border-b border-gray-100 bg-white">
                             <TouchableOpacity onPress={() => setActiveTab("epaper")} className={`flex-1 py-3 border-b-2 ${activeTab === 'epaper' ? 'border-[#43C17A]' : 'border-transparent'}`}>
                                 <Text className={`text-center text-sm font-medium ${activeTab === 'epaper' ? 'text-[#43C17A]' : 'text-gray-500'}`}>
-                                    {t("EPapers", "EPapers")}
+                                    {t("News.EPapers", "EPapers")}
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => setActiveTab("news")} className={`flex-1 py-3 border-b-2 ${activeTab === 'news' ? 'border-[#43C17A]' : 'border-transparent'}`}>
                                 <Text className={`text-center text-sm font-medium ${activeTab === 'news' ? 'text-[#43C17A]' : 'text-gray-500'}`}>
-                                    {t("Current News", "Current News")}
+                                    {t("News.Current News", "Current News")}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -159,7 +157,7 @@ export default function NewsModal({
             }}>
                                     {isAdmin && <TouchableOpacity className="w-full flex-row items-center justify-center gap-2 py-3 bg-white border border-[#43C17A] rounded-lg mb-4">
                                             <Plus size={18} color="#43C17A" />
-                                            <Text className="text-[#43C17A] font-medium">{t("Add EPaper", "Add EPaper")}</Text>
+                                            <Text className="text-[#43C17A] font-medium">{t("News.Add EPaper", "Add EPaper")}</Text>
                                         </TouchableOpacity>}
 
                                     {loadingEpapers ? <View>
@@ -170,7 +168,7 @@ export default function NewsModal({
                                                             <Shimmer width={60} height={28} borderRadius={6} />
                                                         </View>)}
                                                 </View>)}
-                                        </View> : Object.keys(groupedEpapers).length === 0 ? <Text className="text-center text-gray-500 text-sm mt-8">{t("No EPapers available", "No EPapers available")}</Text> : Object.entries(groupedEpapers).map(([date, papers]) => <View key={date} className="mb-4">
+                                        </View> : Object.keys(groupedEpapers).length === 0 ? <Text className="text-center text-gray-500 text-sm mt-8">{t("News.No EPapers available", "No EPapers available")}</Text> : Object.entries(groupedEpapers).map(([date, papers]) => <View key={date} className="mb-4">
                                                 <View className="bg-gray-200 px-3 py-1.5 rounded-md self-start mb-3">
                                                     <Text className="text-xs font-semibold text-gray-900">{date}</Text>
                                                 </View>
@@ -187,7 +185,7 @@ export default function NewsModal({
                           }
                         }} className="flex-row items-center gap-1.5 px-3 py-1.5 bg-[#43C17A]/10 rounded-md">
                                                                     <FilePdf size={14} color="#43C17A" weight="fill" />
-                                                                    <Text className="text-[#43C17A] text-xs font-medium">{t("View", "View")}</Text>
+                                                                    <Text className="text-[#43C17A] text-xs font-medium">{t("News.View", "View")}</Text>
                                                                 </TouchableOpacity>
                                                                 {isAdmin && <TouchableOpacity onPress={() => handleDeleteEpaper(paper.ePaperId)} className="p-1.5 bg-red-50 rounded-md">
                                                                         <Trash size={16} color="#EF4444" />
@@ -230,7 +228,7 @@ export default function NewsModal({
                   return <View key={index} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mb-4">
                                                     <View className="flex-row items-center gap-2 mb-2">
                                                         <Text className="text-sm font-medium text-[#111827]">
-                                                            🗞️ {item.source?.name || t("News Source", "News Source")}
+                                                            🗞️ {item.source?.name || t("News.News Source", "News Source")}
                                                         </Text>
                                                     </View>
                                                     
@@ -243,11 +241,11 @@ export default function NewsModal({
                                                             {item.publishedAt ? new Date(item.publishedAt).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit'
-                        }) : t("Updated", "Updated")}
+                        }) : t("News.Updated", "Updated")}
                                                         </Text>
                                                         
                                                         <TouchableOpacity onPress={() => handleReadMore(item.url)}>
-                                                            <Text className="text-[#43C17A] text-xs font-medium">{t("Read More", "Read More")}</Text>
+                                                            <Text className="text-[#43C17A] text-xs font-medium">{t("News.Read More", "Read More")}</Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>;

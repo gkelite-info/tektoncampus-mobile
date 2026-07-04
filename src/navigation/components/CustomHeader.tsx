@@ -119,10 +119,10 @@ export default function CustomHeader({ navigation }: {navigation?: any;} = {}) {
   return (
     <>
         <BlurView
-        intensity={80}
-        tint="light"
+        intensity={Platform.OS === 'ios' ? 75 : 75}
+        tint={Platform.OS === 'ios' ? "default" : "light"}
         experimentalBlurMethod="dimezisBlurView"
-        style={{ paddingTop: insets.top, backgroundColor: 'rgba(255, 255, 255, 0.45)' }}
+        style={{ paddingTop: insets.top, backgroundColor: Platform.OS === 'ios' ? 'transparent' : 'rgba(255, 255, 255, 0.45)' }}
         className="border-b-[0.5px] border-white/60 shadow-sm">
         
                 <View className={`px-4 pt-2 pb-3 ${Platform.OS === 'android' ? 'mt-2' : ''}`}>

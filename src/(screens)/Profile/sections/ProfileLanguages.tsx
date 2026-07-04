@@ -101,7 +101,7 @@ export default function ProfileLanguages() {const { t } = useTranslation();
 
                 <View className="flex-row justify-end mt-6">
                     <TouchableOpacity onPress={handleSave} disabled={isSaving} className={`bg-[#43C17A] px-6 py-2.5 rounded-lg ${isSaving ? 'opacity-50' : ''}`}>
-                        <Text className="text-white font-bold">{isSaving ? "Saving..." : "Save"}</Text>
+                        <Text className="text-white font-bold">{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

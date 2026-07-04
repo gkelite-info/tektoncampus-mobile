@@ -52,7 +52,7 @@ export default function UserInfoCard() {
                                 { fontFamily: fonts.italic }
                             ]}
                         >
-                            {t("Student Id - ")}{" "}
+                            {t("Dashboard.student.Student Id - ", "Student Id - ")}{" "}
                             <Text
                                 style={[
                                     tw`text-[#282828] text-[12px]`,
@@ -66,7 +66,7 @@ export default function UserInfoCard() {
 
                     <View style={tw`flex-row items-center`}>
                         <Text style={tw`text-[#282828] text-base font-normal`}>
-                            {t("Welcome Back, ")}{" "}
+                            {t("Dashboard.student.Welcome Back, ", "Welcome Back, ")}{" "}
                             <Text style={[tw`text-[#089144] text-base`, { fontFamily: fonts.bold }]}>
                                 {fullName}
                             </Text>
@@ -75,12 +75,12 @@ export default function UserInfoCard() {
 
                     <View style={tw`mt-1`}>
                         <Text style={tw`text-sm text-[#454545]`}>
-                            {t("You’ve completed ")}
+                            {t("Dashboard.student.You’ve completed ", "You’ve completed ")}
                             <Text style={tw`text-[#089144] font-semibold`}>0</Text>
-                            {t(" of your tasks")}
+                            {t("Dashboard.student. of your tasks", " of your tasks")}
                         </Text>
                         <Text style={tw`text-sm text-[#454545] -mt-0.5`}>
-                            {t("Keep up the great progress!")}
+                            {t("Dashboard.student.Keep up the great progress!", "Keep up the great progress!")}
                         </Text>
                     </View>
 

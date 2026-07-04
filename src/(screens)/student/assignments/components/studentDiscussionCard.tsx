@@ -77,13 +77,13 @@ export default function StudentDiscussionCard({
         if (onRemoveFile) onRemoveFile(deleteUploadId);
         Toast.show({
           type: "success",
-          text1: t("File removed successfully")
+          text1: t("Assignment.student.File removed successfully")
         });
       }
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: t("An error occurred")
+        text1: t("Assignment.student.An error occurred")
       });
     } finally {
       setIsDeleting(false);
@@ -91,7 +91,7 @@ export default function StudentDiscussionCard({
     }
   };
   const getFileName = (url: string) => {
-    return url?.split("/").pop()?.split("_").slice(1).join("_") || "File";
+    return url?.split("/").pop()?.split("_").slice(1).join("_") || t("Assignment.student.File", "File");
   };
   return <View className="w-full px-4 mb-4">
             <TouchableOpacity onPress={handleCardClick} activeOpacity={0.7} className="bg-[#F4F5F6] rounded-xl p-4 flex flex-col shadow-sm border border-gray-100">
@@ -106,14 +106,14 @@ export default function StudentDiscussionCard({
                             <Text className="text-white text-sm" style={{
             fontFamily: fonts.bold
           }}>
-                                {t("Upload")}
+                                {t("Assignment.student.Upload")}
                             </Text>
                         </TouchableOpacity> : <View className="bg-[#16284F] px-3 py-1 rounded-md shadow-sm gap-2 flex-row items-center">
                             <FileCheck size={13} color="#FFFFFF" />
                             <Text className="text-white text-sm" style={{
             fontFamily: fonts.bold
           }}>
-                                {t("Uploaded")}
+                                {t("Assignment.student.Uploaded")}
                             </Text>
                         </View>}
                 </View>
@@ -130,7 +130,7 @@ export default function StudentDiscussionCard({
                         <Text className="text-[11px] text-gray-600" style={{
             fontFamily: fonts.regular
           }}>
-                            {t("Faculty Name :")} {data.facultyName}
+                            {t("Assignment.student.Faculty Name :")} {data.facultyName}
                         </Text>
                     </View>
                     <View className="flex-row items-center gap-x-1.5">
@@ -138,7 +138,7 @@ export default function StudentDiscussionCard({
                         <Text className="text-[11px] text-gray-600" style={{
             fontFamily: fonts.regular
           }}>
-                            {t("Uploaded On :")}{" "}
+                            {t("Assignment.student.Uploaded On :")}{" "}
                             {data.createdAt ? new Date(data.createdAt).toLocaleDateString() : "—"}
                         </Text>
                     </View>
@@ -147,7 +147,7 @@ export default function StudentDiscussionCard({
                         <Text className="text-[11px] text-gray-600" style={{
             fontFamily: fonts.regular
           }}>
-                            {t("Deadline :")}{" "}
+                            {t("Assignment.student.Deadline :")}{" "}
                             {data.deadline ? new Date(data.deadline).toLocaleDateString() : "—"}
                         </Text>
                     </View>
@@ -157,7 +157,7 @@ export default function StudentDiscussionCard({
                     <Text className="text-[11px] text-[#282828] mb-1.5" style={{
           fontFamily: fonts.bold
         }}>
-                        {t("Attachments")}
+                        {t("Assignment.student.Attachments")}
                     </Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
                         {(data.attachments ?? []).map((file, idx) => <TouchableOpacity key={`fac-m-${idx}`} onPress={() => handleOpenFile(file.fileUrl)} className="flex-row items-center bg-[#e2e8f0] text-[#334155] px-2.5 py-1 rounded border border-slate-300 mr-2">
@@ -186,13 +186,13 @@ export default function StudentDiscussionCard({
                         {(!data.attachments || data.attachments.length === 0) && (!uploadedFiles || uploadedFiles.length === 0) && <Text className="text-[10px] text-gray-400 italic py-1" style={{
             fontFamily: fonts.regular
           }}>
-                                    {t("No attachments")}
+                                    {t("Assignment.student.No attachments")}
                                 </Text>}
                     </ScrollView>
                 </View>
             </TouchableOpacity>
 
-            <ConfirmDeleteModal open={!!deleteUploadId} onConfirm={handleRemoveUpload} onCancel={() => setDeleteUploadId(null)} isDeleting={isDeleting} name="uploaded file" />
+            <ConfirmDeleteModal open={!!deleteUploadId} onConfirm={handleRemoveUpload} onCancel={() => setDeleteUploadId(null)} isDeleting={isDeleting} name={t("Assignment.student.uploaded file", "uploaded file")} />
 
             <AttachmentViewerModal visible={!!viewerUrl} url={viewerUrl || ""} onClose={() => setViewerUrl(null)} />
         </View>;

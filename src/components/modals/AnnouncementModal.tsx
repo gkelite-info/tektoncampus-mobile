@@ -21,9 +21,7 @@ export default function AnnouncementModal({
   onClose,
   highlightedPostId
 }: Props) {
-  const {
-    t
-  } = useTranslation("CampusBuzz");
+  const { t } = useTranslation();
   const {
     collegeId,
     userId,
@@ -80,14 +78,12 @@ export default function AnnouncementModal({
     loadPosts(nextPage, false);
   };
   const confirmDeletePost = (postId: number) => {
-    const {
-      t
-    } = useTranslation();
-    Alert.alert(t("Delete Post", "Delete Post"), t("Are you sure you want to delete this post?", "Are you sure you want to delete this post? This action cannot be undone."), [{
-      text: t("Cancel", "Cancel"),
+    const { t } = useTranslation();
+    Alert.alert(t("CampusBuzz.Delete Post", "Delete Post"), t("CampusBuzz.Are you sure you want to delete this post?", "Are you sure you want to delete this post? This action cannot be undone."), [{
+      text: t("CampusBuzz.Cancel", "Cancel"),
       style: "cancel"
     }, {
-      text: t("Delete", "Delete"),
+      text: t("CampusBuzz.Delete", "Delete"),
       style: "destructive",
       onPress: async () => {
         setIsDeletingPost(true);
@@ -116,7 +112,7 @@ export default function AnnouncementModal({
     return <View className="bg-white">
             <View className="px-4 mt-4">
                 <View className="flex-row items-center bg-[#ECECEC] h-[45px] rounded-full px-4">
-                    <TextInput placeholder={t("Search posts or announcements", "Search posts or announcements")} placeholderTextColor="#6B7280" value={searchInput} onChangeText={setSearchInput} className="flex-1 text-[#282828] text-base" />
+                    <TextInput placeholder={t("CampusBuzz.Search posts or announcements", "Search posts or announcements")} placeholderTextColor="#6B7280" value={searchInput} onChangeText={setSearchInput} className="flex-1 text-[#282828] text-base" />
                     <MagnifyingGlass size={20} color="#43C17A" />
                 </View>
             </View>
@@ -126,11 +122,9 @@ export default function AnnouncementModal({
           gap: 8
         }}>
                     {TABS.map(tab => {
-            const {
-              t
-            } = useTranslation();
+            const { t } = useTranslation();
             return <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)} className={`px-5 h-[32px] rounded-full items-center justify-center transition-colors border ${activeTab === tab ? "bg-[#43C17A] border-[#43C17A]" : "bg-[#EAF7F1] border-[#EAF7F1]"}`}>
-                            <Text className={`text-sm font-medium ${activeTab === tab ? "text-white" : "text-[#43C17A]"}`}>{t(tab, tab)}</Text>
+                            <Text className={`text-sm font-medium ${activeTab === tab ? "text-white" : "text-[#43C17A]"}`}>{t(`CampusBuzz.${tab}`, tab)}</Text>
                         </TouchableOpacity>;
           })}
                 </ScrollView>
@@ -161,7 +155,7 @@ export default function AnnouncementModal({
                 <View className="flex-row items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
                     <View className="flex-row items-center gap-2">
                         <Megaphone size={24} weight="fill" color="#43C17A" />
-                        <Text className="font-semibold text-xl text-[#282828]">{t("Campus Buzz", "Campus Buzz")}</Text>
+                        <Text className="font-semibold text-xl text-[#282828]">{t("CampusBuzz.Campus Buzz", "Campus Buzz")}</Text>
                     </View>
                     <View className="flex-row items-center gap-3">
                         <TouchableOpacity onPress={() => {
@@ -169,7 +163,7 @@ export default function AnnouncementModal({
               setIsAddPostOpen(true);
             }} className="flex-row items-center gap-1 bg-[#EAF7F1] px-3 py-1.5 rounded-full">
                             <Plus size={14} color="#43C17A" weight="bold" />
-                            <Text className="text-[#43C17A] font-medium text-sm">{t("Post", "Post")}</Text>
+                            <Text className="text-[#43C17A] font-medium text-sm">{t("CampusBuzz.Add Post", "Post")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onClose} className="p-1.5 rounded-full bg-gray-50">
                             <X size={20} color="#6B7280" />
@@ -197,13 +191,11 @@ export default function AnnouncementModal({
                                 </View>
                             </View>)}
                     </View> : <FlatList data={filteredPosts} keyExtractor={item => item.campusBuzzPostId.toString()} ListFooterComponent={renderFooter} ListEmptyComponent={() => {
-          const {
-            t
-          } = useTranslation();
+          const { t } = useTranslation();
           return <View className="flex-1 items-center justify-center pt-20">
                                 <Megaphone size={48} color="#D1D5DB" weight="fill" />
                                 <Text className="text-gray-500 mt-4 text-center px-8">
-                                    {debouncedSearch ? t("No matching posts found.", "No matching posts found.") : t("No posts found. Be the first to share!", "No posts found. Be the first to share!")}
+                                    {debouncedSearch ? t("CampusBuzz.No matching posts found", "No matching posts found.") : t("CampusBuzz.No posts found Be the first to share!", "No posts found. Be the first to share!")}
                                 </Text>
                             </View>;
         }} renderItem={({

@@ -49,7 +49,7 @@ export default function QuizPerformanceModal({
                         <Text className="text-xl text-[#182142]" style={{
             fontFamily: fonts.bold
           }}>
-                            {t("Performance Summary")}
+                            {t("Assignment.student.Performance Summary")}
                         </Text>
                         <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="p-2 bg-gray-100 rounded-full items-center justify-center">
                             <X size={20} color="#4b5563" weight="bold" />
@@ -81,7 +81,7 @@ export default function QuizPerformanceModal({
                                     <Text className="text-xs text-gray-500 mt-0.5" style={{
                   fontFamily: fonts.semiBold
                 }}>
-                                        {t("Quiz Score")}
+                                        {t("Assignment.student.Quiz Score")}
                                     </Text>
                                 </View>
                             </View>
@@ -91,12 +91,12 @@ export default function QuizPerformanceModal({
                             <Text className="text-lg text-[#1A1A1A] text-center leading-6" style={{
               fontFamily: fonts.bold
             }}>
-                                {t("Good job! you performed well in this quiz")}
+                                {t("Assignment.student.Good job! you performed well in this quiz")}
                             </Text>
                             <Text className="text-[13px] text-gray-500 mt-2 text-center" style={{
               fontFamily: fonts.regular
             }}>
-                                {t("you answered {percent}% of question correctly", {
+                                {t("Assignment.student.you answered {percent}% of question correctly", {
                 percent: quiz.percentage.toString()
               })}
                             </Text>
@@ -109,7 +109,7 @@ export default function QuizPerformanceModal({
                                     <Text className="text-[#43C17A] text-[11px]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Correct Answers")}
+                                        {t("Assignment.student.Correct Answers")}
                                     </Text>
                                 </View>
                                 <Text className="text-3xl text-gray-800" style={{
@@ -125,7 +125,7 @@ export default function QuizPerformanceModal({
                                     <Text className="text-[#FF3B30] text-[11px]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Wrong Answers")}
+                                        {t("Assignment.student.Wrong Answers")}
                                     </Text>
                                 </View>
                                 <Text className="text-3xl text-gray-800" style={{
@@ -141,7 +141,7 @@ export default function QuizPerformanceModal({
                                     <Text className="text-[#6b7280] text-[11px]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Unanswered")}
+                                        {t("Assignment.student.Unanswered")}
                                     </Text>
                                 </View>
                                 <Text className="text-3xl text-gray-800" style={{
@@ -157,7 +157,7 @@ export default function QuizPerformanceModal({
                                     <Text className="text-[#43C17A] text-[11px]" style={{
                   fontFamily: fonts.bold
                 }}>
-                                        {t("Total Questions")}
+                                        {t("Assignment.student.Total Questions")}
                                     </Text>
                                 </View>
                                 <Text className="text-3xl text-gray-800" style={{
@@ -174,7 +174,7 @@ export default function QuizPerformanceModal({
                                 <Text className="text-white text-base" style={{
               fontFamily: fonts.bold
             }}>
-                                    {t("View Answers")}
+                                    {t("Assignment.student.View Answers")}
                                 </Text>
                             </TouchableOpacity> : null}
 
@@ -182,7 +182,7 @@ export default function QuizPerformanceModal({
                             <Text className="text-gray-700 text-base" style={{
               fontFamily: fonts.bold
             }}>
-                                {t("Close")}
+                                {t("Assignment.student.Close")}
                             </Text>
                         </TouchableOpacity>
                     </View>

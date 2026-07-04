@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, TouchableOpacity, Modal, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Modal, StatusBar, Platform } from 'react-native';
 import { List, X } from "phosphor-react-native";
 import { ProfileCard } from "./profileCard";
 import AcademicPerformance from "@/utils/AcademicPerformance";
@@ -39,8 +39,8 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
   } = useTargetStudentDetails(targetUserId);
 
   const semesterLabel = collegeSemester ?
-  `Semester ${collegeSemester}` :
-  "Semester N/A";
+  `${t("Dashboard.student.Semester", "Semester")} ${collegeSemester}` :
+  `${t("Dashboard.student.Semester", "Semester")} ${t("Dashboard.student.N/A", "N/A")}`;
 
   const isLoading = userLoading || studentLoading || progressLoading;
 
@@ -84,7 +84,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f4f5f6] pb-10" style={{ paddingTop: headerHeight + 16 }}>
+    <View className="flex-1 bg-[#f4f5f6] pb-10" style={{ paddingTop: headerHeight }}>
             <StatusBar barStyle="dark-content" />
             <ScrollView
         className="flex-1 p-2"
@@ -100,44 +100,41 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
               
                             <View className="flex-row items-center">
                                 <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.medium }}>
-                                    {collegeEducationType === "Inter" ? "Group" : "Branch"} :
+                                    {collegeEducationType === "Inter" ? t("Dashboard.student.GroupLabel", "Group:") : t("Dashboard.student.BranchLabel", "Branch:")}
                                 </Text>
                                 <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
                                     <Text className="text-[#43C17A] text-[11px] tracking-wide" style={{ fontFamily: fonts.semiBold }}>
-                                        {collegeBranchCode ?? "N/A"}
+                                        {collegeBranchCode ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
                             </View>
 
                             <View className="flex-row items-center">
-                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Year", "Year :")}
-
+                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.YearLabel", "Year:")}
                 </Text>
                                 <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
                                     <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.semiBold }}>
-                                        {collegeAcademicYear ?? "N/A"}
+                                        {collegeAcademicYear ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
                             </View>
 
                             <View className="flex-row items-center">
-                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Section", "Section:")}
-
+                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.SectionLabel", "Section:")}
                 </Text>
                                 <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
                                     <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.semiBold }}>
-                                        {college_sections ?? "N/A"}
+                                        {college_sections ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
                             </View>
 
                             <View className="flex-row items-center">
-                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Semester", "Semester:")}
-
+                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.SemesterLabel", "Semester:")}
                 </Text>
                                 <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
                                     <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.semiBold }}>
-                                        {collegeSemester ?? "N/A"}
+                                        {collegeSemester ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
                             </View>
@@ -162,9 +159,9 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                 <View className="flex-col gap-4">
                     <View className="bg-white rounded-2xl shadow-sm">
                         <ProfileCard
-              name={fullName ?? "Student"}
-              department={collegeBranchCode ?? "N/A"}
-              studentId={identifierId ?? "N/A"}
+              name={fullName ?? t("Dashboard.student.Student", "Student")}
+              department={collegeBranchCode ?? t("Dashboard.student.N/A", "N/A")}
+              studentId={identifierId ?? t("Dashboard.student.N/A", "N/A")}
               avatarUrl={profilePhoto}
               attendancePercentage={progressData?.overallAttendancePercentage ?? 0}
               attendanceCount={progressData?.attendedCount ?? 0}
@@ -181,7 +178,14 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
             
                     </View>
 
-                    <AcademicPerformance studentId={studentId} />
+                    <AcademicPerformance 
+                        studentId={studentId} 
+                        translations={{
+                            title: t('Dashboard.student.Academic Performance', 'Academic Performance'),
+                            calculating: t('Dashboard.student.Calculating performance', 'Calculating performance...'),
+                            failed: t('Dashboard.student.Failed to load performance', 'Failed to load performance')
+                        }} 
+                    />
 
                     <View className="bg-white rounded-2xl">
                         <AttendanceList data={progressData?.subjectAttendance || []} />
@@ -228,6 +232,6 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                     </View>
                 </TouchableOpacity>
             </Modal>
-        </SafeAreaView>);
+        </View>);
 
 };

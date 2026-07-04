@@ -140,7 +140,7 @@ function AssignmentsLeftContent() {
         facultyName: quiz?.faculty?.fullName || "-",
         attemptedOn: formatDate(submission?.submittedAt),
         questionsAttempted: `${submission?.answersCount ?? 0} / ${submission?.totalQuestionsCount ?? 0}`,
-        attemptsUsed: `${submission?.attemptNumber} ${t("of")} ${quizMaxAttempts}`,
+        attemptsUsed: `${submission?.attemptNumber} ${t("Assignment.student.of")} ${quizMaxAttempts}`,
         score: `${marksObtained} / ${totalMarks}`,
         bgColor: "bg-[#481451]",
         percentage,
@@ -480,12 +480,12 @@ function AssignmentsLeftContent() {
                     <Text className="text-2xl mb-1 text-[#282828]" style={{
           fontFamily: fonts.bold
         }}>
-                        {t("Assignments")}
+                        {t("Assignment.student.Assignments")}
                     </Text>
                     <Text className="text-[#282828] text-base" style={{
           fontFamily: fonts.regular
         }}>
-                        {t("View, track, and submit your work with ease")}
+                        {t("Assignment.student.View, track, and submit your work with ease")}
                     </Text>
                 </View>
 
@@ -499,7 +499,7 @@ function AssignmentsLeftContent() {
             fontFamily: fonts.bold
           }}>
               
-                            {t("Assignments")}
+                            {t("Assignment.student.Assignments")}
                         </Text>
                     </TouchableOpacity>
 
@@ -509,7 +509,7 @@ function AssignmentsLeftContent() {
             fontFamily: fonts.bold
           }}>
               
-                            {t("Quiz")}
+                            {t("Assignment.student.Quiz")}
                         </Text>
                     </TouchableOpacity>
 
@@ -519,7 +519,7 @@ function AssignmentsLeftContent() {
             fontFamily: fonts.bold
           }}>
               
-                            {t("Discussion forum")}
+                            {t("Assignment.student.Discussion forum")}
                         </Text>
                     </TouchableOpacity>
 
@@ -527,7 +527,7 @@ function AssignmentsLeftContent() {
             
                         <Text className={`text-lg ${activeTab === "lab" ? "text-[#43C17A]" : "text-gray-500"}`} style={{
             fontFamily: fonts.bold
-          }}>{t("Lab", "Lab")}
+          }}>{t("Assignment.student.Lab", "Lab")}
 
 
             </Text>
@@ -544,7 +544,7 @@ function AssignmentsLeftContent() {
               fontFamily: fonts.semiBold
             }} numberOfLines={1} adjustsFontSizeToFit>
                 
-                                        {t("Active")}
+                                        {t("Assignment.student.Active")}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity className={`flex-1 pb-2 items-center border-b-2 ${activeView === "previous" ? "border-gray-800" : "border-transparent"}`} onPress={() => handleViewChange("previous")}>
@@ -553,7 +553,7 @@ function AssignmentsLeftContent() {
               fontFamily: fonts.semiBold
             }} numberOfLines={1} adjustsFontSizeToFit>
                 
-                                        {t("Previous")}
+                                        {t("Assignment.student.Previous")}
                                     </Text>
                                 </TouchableOpacity>
                             </>}
@@ -564,7 +564,7 @@ function AssignmentsLeftContent() {
               fontFamily: fonts.bold
             }} numberOfLines={1} adjustsFontSizeToFit>
                 
-                                        {t("Ongoing Quizzes")}
+                                        {t("Assignment.student.Ongoing Quizzes")}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity className={`flex-1 pb-2 items-center border-b-2 ${quizView === "attempted" ? "border-[#43C17A]" : "border-transparent"}`} onPress={() => handleQuizViewChange("attempted")}>
@@ -573,7 +573,7 @@ function AssignmentsLeftContent() {
               fontFamily: fonts.bold
             }} numberOfLines={1} adjustsFontSizeToFit>
                 
-                                        {t("Questions Attempted")}
+                                        {t("Assignment.student.Questions Attempted")}
                                     </Text>
                                 </TouchableOpacity>
                             </>}
@@ -584,7 +584,7 @@ function AssignmentsLeftContent() {
               fontFamily: fonts.bold
             }} numberOfLines={1} adjustsFontSizeToFit>
                 
-                                        {t("Active Discussions")}
+                                        {t("Assignment.student.Active Discussions")}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity className={`flex-1 pb-2 items-center border-b-2 ${discussionView === "completed" ? "border-gray-800" : "border-transparent"}`} onPress={() => handleDiscussionViewChange("completed")}>
@@ -593,7 +593,7 @@ function AssignmentsLeftContent() {
               fontFamily: fonts.bold
             }} numberOfLines={1} adjustsFontSizeToFit>
                 
-                                        {t("Completed Discussions")}
+                                        {t("Assignment.student.Completed Discussions")}
                                     </Text>
                                 </TouchableOpacity>
                             </>}
@@ -606,7 +606,7 @@ function AssignmentsLeftContent() {
                                 {activeView === "active" && (activeAssignments.length > 0 ? <AssignmentCardMobile cardProp={activeAssignments} activeView={activeView} /> : <Text className="text-sm text-gray-500 mt-4 text-center" style={{
             fontFamily: fonts.regular
           }}>
-                                            {t("No active assignments available")}
+                                            {t("Assignment.student.No active assignments available")}
                                         </Text>)}
 
                                 {activeView === "previous" && (previousAssignments.length > 0 ? <View className="text-sm text-[#282828]">
@@ -615,7 +615,7 @@ function AssignmentsLeftContent() {
                                         </View> : <Text className="text-sm text-gray-500 mt-4 text-center" style={{
             fontFamily: fonts.regular
           }}>
-                                            {t("No assignments available")}
+                                            {t("Assignment.student.No assignments available")}
                                         </Text>)}
                             </>)}
 
@@ -625,7 +625,7 @@ function AssignmentsLeftContent() {
                                             <Text className="text-sm text-gray-500" style={{
                 fontFamily: fonts.regular
               }}>
-                                                {t("No ongoing quizzes available")}
+                                                {t("Assignment.student.No ongoing quizzes available")}
                                             </Text>
                                         </View> : ongoingQuizzes.map((quiz, index) => {
               const bgColors = ["bg-[#481451]", "bg-[#182142]", "bg-[#1B1A40]", "bg-[#2E1851]", "bg-[#0A2647]"];
@@ -652,7 +652,7 @@ function AssignmentsLeftContent() {
                                             <Text className="text-sm text-gray-500" style={{
                 fontFamily: fonts.regular
               }}>
-                                                {t("No attempted quizzes yet")}
+                                                {t("Assignment.student.No attempted quizzes yet")}
                                             </Text>
                                         </View> : attemptedQuizzes.map((submission, index) => {
               
@@ -666,7 +666,7 @@ function AssignmentsLeftContent() {
                 facultyName: quiz?.faculty?.fullName || "-",
                 attemptedOn: formatDate(submission.submittedAt),
                 questionsAttempted: `${submission.answersCount ?? 0} / ${submission.totalQuestionsCount ?? 0}`,
-                attemptsUsed: `${submission.attemptNumber} ${t("of")} ${quiz?.maxAttempts ?? 3}`,
+                attemptsUsed: `${submission.attemptNumber} ${t("Assignment.student.of")} ${quiz?.maxAttempts ?? 3}`,
                 score: `${submission.totalMarksObtained} / ${quiz?.totalMarks ?? "-"}`,
                 bgColor: bgColors[index % bgColors.length]
               }} onOpenPerformanceModal={(quizId, submissionId) => {
@@ -686,7 +686,7 @@ function AssignmentsLeftContent() {
                                                 <Text className="text-sm text-gray-500" style={{
                 fontFamily: fonts.regular
               }}>
-                                                    {t("No active discussions found")}
+                                                    {t("Assignment.student.No active discussions found")}
                                                 </Text>
                                             </View> : activeDiscussions.slice((discussionCurrentPage - 1) * DISCUSSION_PER_PAGE, discussionCurrentPage * DISCUSSION_PER_PAGE).map(discussion => <StudentDiscussionCard key={discussion.discussionId} data={discussion} uploadedFiles={discussion.studentUploads || []} onRemoveFile={(studentDiscussionUploadId: any) => {
               setActiveDiscussions(prev => prev.map(d => d.discussionId === discussion.discussionId ? {
@@ -698,7 +698,7 @@ function AssignmentsLeftContent() {
                                                 <Text className="text-sm text-gray-500" style={{
                 fontFamily: fonts.regular
               }}>
-                                                    {t("No completed discussions found")}
+                                                    {t("Assignment.student.No completed discussions found")}
                                                 </Text>
                                             </View> : completedDiscussions.slice((discussionCurrentPage - 1) * DISCUSSION_PER_PAGE, discussionCurrentPage * DISCUSSION_PER_PAGE).map(discussion => <StudentDiscussionCard key={discussion.discussionId} data={discussion} isCompleted={true} uploadedFiles={discussionUploads[discussion.discussionId] || []} />))}
                                 </>}
@@ -708,7 +708,7 @@ function AssignmentsLeftContent() {
                             {labsLoading || tabSwitchLoading ? <StudentDiscussionCardSkeletonGroup count={3} /> : labs.length === 0 ? <View className="items-center justify-center h-1/3 mt-10">
                                     <Text className="text-sm text-gray-500" style={{
               fontFamily: fonts.regular
-            }}>{t("Auto.Common.Nolabmanualsava", "No lab manuals available")}
+            }}>{t("Assignment.student.No lab manuals available", "No lab manuals available")}
 
               </Text>
                                 </View> : labs.map(lab => <FacultyLabCard key={lab.labId} data={lab} />)}

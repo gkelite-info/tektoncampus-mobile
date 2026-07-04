@@ -59,11 +59,11 @@ async function requestStoragePermission() {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       {
-        title: "Storage Permission Required",
-        message: "This app needs access to your storage to download assignment files.",
-        buttonNeutral: "Ask Me Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK"
+        title: t("Assignment.student.Storage Permission Required", "Storage Permission Required"),
+        message: t("Assignment.student.This app needs access to your storage to download assignment files.", "This app needs access to your storage to download assignment files."),
+        buttonNeutral: t("Assignment.student.Ask Me Later", "Ask Me Later"),
+        buttonNegative: t("Assignment.student.Cancel", "Cancel"),
+        buttonPositive: t("Assignment.student.OK", "OK")
       }
     );
     return granted === PermissionsAndroid.RESULTS.GRANTED;
@@ -118,12 +118,12 @@ export default function AssignmentCardMobile({
   const handleDownload = async (index: number, item: CardProp) => {
     const storedPath = item.existingFilePath ?? uploadedFiles[index];
     if (!storedPath) {
-      Toast.show({ type: "error", text1: "No uploaded file found" });
+      Toast.show({ type: "error", text1: t("Assignment.student.No uploaded file found", "No uploaded file found") });
       return;
     }
 
     try {
-      Toast.show({ type: "info", text1: "Downloading file..." });
+      Toast.show({ type: "info", text1: t("Assignment.student.Downloading file...", "Downloading file...") });
 
       const { data, error: signedUrlError } = await supabase.storage.
       from("student_submissions").
@@ -131,7 +131,7 @@ export default function AssignmentCardMobile({
 
       if (signedUrlError || !data?.signedUrl) {
         console.error("Signed URL error:", signedUrlError);
-        Toast.show({ type: "error", text1: "Failed to generate download URL" });
+        Toast.show({ type: "error", text1: t("Assignment.student.Failed to generate download URL", "Failed to generate download URL") });
         return;
       }
 
@@ -141,14 +141,14 @@ export default function AssignmentCardMobile({
       if (Platform.OS === "android") {
         const hasPermission = await requestStoragePermission();
         if (!hasPermission) {
-          Toast.show({ type: "error", text1: "Storage permission denied" });
+          Toast.show({ type: "error", text1: t("Assignment.student.Storage permission denied", "Storage permission denied") });
           return;
         }
 
         const publicDownloadUri = `file:///storage/emulated/0/Download/${fileName}`;
         try {
           await FileSystem.downloadAsync(downloadUrl, publicDownloadUri);
-          Toast.show({ type: "success", text1: "File downloaded to Downloads folder!" });
+          Toast.show({ type: "success", text1: t("Assignment.student.File downloaded to Downloads folder!", "File downloaded to Downloads folder!") });
           return;
         } catch (androidError) {
           console.log("Direct download to Downloads failed, falling back:", androidError);
@@ -161,13 +161,13 @@ export default function AssignmentCardMobile({
       const isSharingAvailable = await Sharing.isAvailableAsync();
       if (isSharingAvailable) {
         await Sharing.shareAsync(localUri);
-        Toast.show({ type: "success", text1: "File downloaded successfully!" });
+        Toast.show({ type: "success", text1: t("Assignment.student.File downloaded successfully!", "File downloaded successfully!") });
       } else {
-        Toast.show({ type: "error", text1: "Sharing not available on this device" });
+        Toast.show({ type: "error", text1: t("Assignment.student.Sharing not available on this device", "Sharing not available on this device") });
       }
     } catch (error) {
       console.error("Download failed:", error);
-      Toast.show({ type: "error", text1: "Failed to download file" });
+      Toast.show({ type: "error", text1: t("Assignment.student.Failed to download file", "Failed to download file") });
     }
   };
 
@@ -202,7 +202,7 @@ export default function AssignmentCardMobile({
                       numberOfLines={1}
                       style={{ fontFamily: fonts.bold }}>
                       
-                                            {item.subjectName || "Subject"}
+                                            {item.subjectName || t("Assignment.student.Subject", "Subject")}
                                         </Text>
                                         <Text
                       className="text-gray-800 text-sm mt-0.5 leading-snug"
@@ -263,7 +263,7 @@ export default function AssignmentCardMobile({
                                     {uploadedFiles[index] ?
                 <View className="bg-[#E2F3E9] px-3 py-1 rounded-full border border-[#43C17A]/20">
                                             <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.bold }}>
-                                                {t("Uploaded")}
+                                                {t("Assignment.student.Uploaded")}
                                             </Text>
                                         </View> :
 
@@ -273,14 +273,14 @@ export default function AssignmentCardMobile({
                   className="bg-[#E2F3E9] px-3 py-1 rounded-full border border-[#43C17A]/20">
                   
                                             <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.bold }}>
-                                                {t("Upload")} +
+                                                {t("Assignment.student.Upload")} +
                                             </Text>
                                         </TouchableOpacity>
                 }
                                 </View> :
 
               <View className="flex-row items-center gap-1.5">
-                                    <Text className="text-[11px] text-gray-500 font-medium">{t("Auto.Common.Marks", "Marks :")}
+                                    <Text className="text-[11px] text-gray-500 font-medium">{t("Assignment.student.Marks", "Marks :")}
 
                 </Text>
                                     <View className="bg-[#16284F] px-2.5 py-0.5 rounded-full">
@@ -293,7 +293,7 @@ export default function AssignmentCardMobile({
 
                             <TouchableOpacity onPress={() => openModal(item)} activeOpacity={0.6}>
                                 <Text className="text-[#43C17A] text-base" style={{ fontFamily: fonts.semiBold }}>
-                                    {t("View Details")}
+                                    {t("Assignment.student.View Details")}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -335,7 +335,7 @@ export default function AssignmentCardMobile({
                   className="text-gray-600 text-xs flex-1"
                   numberOfLines={1}>
                   
-                                                {item.videoLink || "Resource Link"}
+                                                {item.videoLink || t("Assignment.student.Resource Link", "Resource Link")}
                                             </Text>
                 }
                                     </View>

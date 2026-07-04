@@ -89,7 +89,7 @@ export default function SubjectCard({
       <ScrollView horizontal showsHorizontalScrollIndicator={false} className="w-full flex-row py-2">
         <View className="flex-row items-center gap-2 mr-4">
           <Text className="text-[#525252] text-base font-medium">
-            {t("Subject :")}
+            {t("Academics.student.Subject", "Subject :")}
           </Text>
           <TouchableOpacity onPress={() => setDropdownVisible(true)} className="px-3 py-1 bg-[#DCEAE2] rounded-full flex-row items-center justify-between" style={{
             maxWidth: 150
@@ -98,7 +98,7 @@ export default function SubjectCard({
             <Text className="text-[#43C17A] text-base truncate" numberOfLines={1} style={{
               fontFamily: fonts.medium
             }}>
-              {selectedSubject === "All" ? t("All") : selectedSubject}
+              {selectedSubject === "All" ? t("Academics.student.All", "All") : selectedSubject}
             </Text>
             <CaretDown size={12} color="#43C17A" weight="bold" />
           </TouchableOpacity>
@@ -106,22 +106,22 @@ export default function SubjectCard({
 
         {!(collegeEducationType === "Inter") && <View className="flex-row items-center gap-2 mr-4">
           <Text className="text-[#525252] text-base font-medium">
-            {t("Semester :")}
+            {t("Academics.student.Semester", "Semester :")}
           </Text>
           <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
-            <Text className="text-[#43C17A] text-base font-medium">{t("Auto.Common.Sem", "Sem")}
-              {subjectProps[0]?.semester || "N/A"}
+            <Text className="text-[#43C17A] text-base font-medium">{t("Academics.student.Sem", "Sem")}
+              {subjectProps[0]?.semester || t("Academics.student.N/A", "N/A")}
             </Text>
           </View>
         </View>}
 
         <View className="flex-row items-center gap-2 mr-4">
           <Text className="text-[#525252] text-base font-medium">
-            {t("Year :")}
+            {t("Academics.student.Year", "Year :")}
           </Text>
           <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
             <Text className="text-[#43C17A] text-base font-medium">
-              {subjectProps[0]?.academicYear || "N/A"}
+              {subjectProps[0]?.academicYear || t("Academics.student.N/A", "N/A")}
             </Text>
           </View>
         </View>
@@ -144,7 +144,7 @@ export default function SubjectCard({
                 </Text>
                 <View className="px-2 py-0.5 bg-[#DCEAE2] rounded-full">
                   <Text className="text-[#43C17A] text-base font-semibold">
-                    {t("Credits")}: {item.subjectCredits}
+                    {t("Academics.student.Credits", "Credits")}: {item.subjectCredits}
                   </Text>
                 </View>
               </View>
@@ -152,7 +152,7 @@ export default function SubjectCard({
               <TouchableOpacity className="bg-[#7051E1] px-2.5 py-1.5 rounded-md" onPress={() => handleViewDetails(item.subjectTitle)}>
 
                 <Text className="text-white font-medium text-[11px]">
-                  {t("View Details")}
+                  {t("Academics.student.View Details", "View Details")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -160,7 +160,7 @@ export default function SubjectCard({
             <View className="flex-col gap-2 mt-1">
               <View className="flex-row items-center gap-2">
                 <Text className="text-[#282828] font-semibold text-base">
-                  {t("Faculty -")}
+                  {t("Academics.student.Faculty -", "Faculty -")}
                 </Text>
                 <Avatar src={item.profileIcon} size={30} alt="faculty" />
 
@@ -175,13 +175,13 @@ export default function SubjectCard({
                 <Text className="text-[#525252] text-base" style={{
                   fontFamily: fonts.regular
                 }}>
-                  <Text className="text-[#282828] font-medium">{t("Units:")} </Text>
+                  <Text className="text-[#282828] font-medium">{t("Academics.student.Units", "Units:")} </Text>
                   {item.units}
                 </Text>
                 <Text className="text-[#525252] text-base" style={{
                   fontFamily: fonts.regular
                 }}>
-                  <Text className="text-[#282828] font-medium">{t("Topics Covered :")} </Text>
+                  <Text className="text-[#282828] font-medium">{t("Academics.student.Topics Covered", "Topics Covered :")} </Text>
                   {item.topicsCovered}/{item.topicsTotal}
                 </Text>
               </View>
@@ -191,7 +191,7 @@ export default function SubjectCard({
               }}>
                 <Text className="text-[#282828]" style={{
                   fontFamily: fonts.medium
-                }}>{t("Next lesson :")} </Text>
+                }}>{t("Academics.student.Next lesson", "Next lesson :")} </Text>
                 {item.nextLesson}
               </Text>
             </View>
@@ -226,7 +226,7 @@ export default function SubjectCard({
                 <Text className="text-[#6D4EE0] text-base" style={{
                   fontFamily: fonts.bold
                 }}>
-                  {item.percentage === null ? t("No data") : `${percentage}%`}
+                  {item.percentage === null ? t("Academics.student.No data", "No data") : `${percentage}%`}
                 </Text>
               </View>
             </View>
@@ -259,7 +259,7 @@ export default function SubjectCard({
               <Text className={`text-sm ${selectedSubject === item ? "text-[#43C17A]" : "text-gray-700"}`} style={{
                 fontFamily: fonts.bold
               }}>
-                {item === "All" ? t("All") : item}
+                {item === "All" ? t("Academics.student.All", "All") : item}
               </Text>
             </TouchableOpacity>;
           }} />

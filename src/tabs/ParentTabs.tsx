@@ -21,7 +21,10 @@ export type ParentTabParamList = {
 const Tab = createBottomTabNavigator<ParentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
+import { useTranslation } from 'react-i18next';
+
 export function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+    const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const bottomInset = insets.bottom || 10; 
 
@@ -58,11 +61,11 @@ export function ParentCustomTabBar({ state, descriptors, navigation }: BottomTab
                     };
 
                     const labels: Record<keyof ParentTabParamList, string> = {
-                        StudentProgress: "Progress",
-                        Payments: "Payment",
-                        Home: "Home",
-                        Attendance: "Attendance",
-                        Profile: "Profile",
+                        StudentProgress: t("Navbars.Progress", "Progress"),
+                        Payments: t("Navbars.Payment", "Payment"),
+                        Home: t("Navbars.Home", "Home"),
+                        Attendance: t("Navbars.Attendance", "Attendance"),
+                        Profile: t("Navbars.Profile", "Profile"),
                     };
 
                     const label = labels[route.name as keyof ParentTabParamList];

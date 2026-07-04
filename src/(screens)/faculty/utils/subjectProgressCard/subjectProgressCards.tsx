@@ -82,7 +82,7 @@ export default function SubjectProgressCards({
                 <Text className="text-[#282828] text-base" style={{
         fontFamily: fonts.semiBold
       }}>
-                    {t("Subjects Progress", "Subjects Progress")}
+                    {t("Dashboard.student.Subjects Progress", "Subjects Progress")}
                 </Text>
                 {onViewMore && <TouchableOpacity onPress={onViewMore} activeOpacity={0.6} className="p-1">
                         <Text className="text-black font-bold text-base"><CaretRightIcon size={22} weight="bold" /></Text>
@@ -103,7 +103,7 @@ export default function SubjectProgressCards({
                         <Text className="text-[#282828] text-sm" style={{
           fontFamily: fonts.medium
         }}>
-                            {t("No subjects yet !", "No subjects yet !")}
+                            {t("Dashboard.student.No subjects yet !", "No subjects yet !")}
                         </Text>
                     </View> : props.map((subject, index) => <SubjectCardRow key={index} subject={subject} />)}
             </ScrollView>

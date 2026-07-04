@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function NotificationsModal({ visible, onClose }: Props) {
-    const { t } = useTranslation("Notifications");
+    const { t } = useTranslation();
     const { userId } = useUser();
     const [notifications, setNotifications] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +61,7 @@ export default function NotificationsModal({ visible, onClose }: Props) {
                 <View className="flex-row items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
                     <View className="flex-row items-center gap-2">
                         <BellSimple size={24} weight="fill" color="#43C17A" />
-                        <Text className="font-semibold text-lg text-[#282828]">{t("Notifications", "Notifications")}</Text>
+                        <Text className="font-semibold text-lg text-[#282828]">{t("Notifications.Notifications", "Notifications")}</Text>
                     </View>
                     <TouchableOpacity 
                         onPress={onClose}
@@ -87,7 +87,7 @@ export default function NotificationsModal({ visible, onClose }: Props) {
                         </View>
                     ) : notifications.length === 0 ? (
                         <View className="p-8 items-center justify-center">
-                            <Text className="text-sm text-gray-500">{t("No notifications", "No notifications")}</Text>
+                            <Text className="text-sm text-gray-500">{t("Notifications.No notifications", "No notifications")}</Text>
                         </View>
                     ) : (
                         notifications.map((notif) => (
@@ -107,7 +107,7 @@ export default function NotificationsModal({ visible, onClose }: Props) {
                                             notif.isRead ? "text-gray-800 font-medium" : "text-[#1F5E3B] font-semibold"
                                         }`}
                                     >
-                                        {notif.title}
+                                        {t(notif.title, notif.title)}
                                     </Text>
                                     <Text className="text-[10px] text-gray-500 mt-0.5">
                                         {new Date(notif.createdAt).toLocaleTimeString([], {
@@ -121,7 +121,7 @@ export default function NotificationsModal({ visible, onClose }: Props) {
                                         notif.isRead ? "text-gray-500" : "text-gray-700"
                                     }`}
                                 >
-                                    {notif.message}
+                                    {t(notif.message, notif.message)}
                                 </Text>
                             </TouchableOpacity>
                         ))

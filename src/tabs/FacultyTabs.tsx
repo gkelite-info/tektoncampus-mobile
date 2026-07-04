@@ -31,7 +31,10 @@ function MockFacultyScreen({ title }: { title: string }) {
 const Tab = createBottomTabNavigator<FacultyTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
+import { useTranslation } from 'react-i18next';
+
 export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+    const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const bottomInset = insets.bottom || 10; 
 
@@ -69,11 +72,11 @@ export function FacultyCustomTabBar({ state, descriptors, navigation }: BottomTa
 
                     
                     const labels: Record<keyof FacultyTabParamList, string> = {
-                        Assignments: "Assignments",
-                        Academics: "Academics",
-                        Dashboard: "Home", 
-                        Attendance: "Attendance",
-                        Profile: "Profile",
+                        Assignments: t("Navbars.Assignments", "Assignments"),
+                        Academics: t("Navbars.Academics", "Academics"),
+                        Dashboard: t("Navbars.Home", "Home"), 
+                        Attendance: t("Navbars.Attendance", "Attendance"),
+                        Profile: t("Navbars.Profile", "Profile"),
                     };
 
                     const label = labels[route.name as keyof FacultyTabParamList];

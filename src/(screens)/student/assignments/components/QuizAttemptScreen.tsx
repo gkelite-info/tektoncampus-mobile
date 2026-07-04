@@ -62,17 +62,17 @@ function QuizExitWarningModal({
 
                     <Text className="text-xl text-[#182142] mb-3 text-center" style={{
           fontFamily: fonts.bold
-        }}>{t("Auto.Common.DontSwitchTabs", "\u26A0\uFE0F Don't Switch Tabs!")}
+        }}>{t("Assignment.student.\u26A0\uFE0F Don't Switch Tabs!", "\u26A0\uFE0F Don't Switch Tabs!")}
 
           </Text>
                     <Text className="text-[#5C6B82] text-sm text-center mb-1 leading-relaxed" style={{
           fontFamily: fonts.regular
-        }}>{t("Auto.Common.Youswitchedaway", "You switched away from the quiz window. Your quiz will be automatically submitted in")}
-            {countdown}{t("Auto.Common.secondsifyoudon", "seconds if you don't return.")}
+        }}>{t("Assignment.student.You switched away from the quiz window. Your quiz will be automatically submitted in", "You switched away from the quiz window. Your quiz will be automatically submitted in")}
+            {countdown}{t("Assignment.student.seconds if you don't return.", "seconds if you don't return.")}
           </Text>
                     <Text className="text-[#8E9CAE] text-[11px] text-center mb-6" style={{
           fontFamily: fonts.regular
-        }}>{t("Auto.Common.Switchingtabsor", "Switching tabs or windows during a quiz is not allowed.")}
+        }}>{t("Assignment.student.Switching tabs or windows during a quiz is not allowed.", "Switching tabs or windows during a quiz is not allowed.")}
 
           </Text>
 
@@ -80,12 +80,12 @@ function QuizExitWarningModal({
                         <TouchableOpacity onPress={onSubmit} activeOpacity={0.8} className="flex-1 py-3 bg-[#FF3B30] rounded-2xl items-center justify-center">
                             <Text className="text-white text-sm" style={{
               fontFamily: fonts.bold
-            }}>{t("Auto.Common.SubmitNow", "Submit Now")}</Text>
+            }}>{t("Assignment.student.Submit Now", "Submit Now")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onStay} activeOpacity={0.8} className="flex-1 py-3 bg-[#43C17A] rounded-2xl items-center justify-center">
                             <Text className="text-white text-sm" style={{
               fontFamily: fonts.bold
-            }}>{t("Auto.Common.ReturntoQuiz", "Return to Quiz")}</Text>
+            }}>{t("Assignment.student.Return to Quiz", "Return to Quiz")}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -110,16 +110,16 @@ function QuizRefreshModal({
                     <View className="w-16 h-16 bg-red-50 rounded-full items-center justify-center mb-5">
                         <XCircle size={32} color="#FF2A2A" weight="duotone" />
                     </View>
-                    <Text className="text-lg font-bold text-gray-900 mb-2 text-center">{t("Quiz Interrupted")}</Text>
+                    <Text className="text-lg font-bold text-gray-900 mb-2 text-center">{t("Assignment.student.Quiz Interrupted")}</Text>
                     <Text className="text-sm text-gray-500 mb-6 text-center leading-relaxed">
-                        {t("Your quiz session was interrupted due to a page refresh Your progress has been auto-submitted Please check your attempted quizzes or retry from ongoing quizzes")}
+                        {t("Assignment.student.Your quiz session was interrupted due to a page refresh Your progress has been auto-submitted Please check your attempted quizzes or retry from ongoing quizzes")}
                     </Text>
                     <View className="flex-col gap-2 w-full">
                         <TouchableOpacity onPress={onConfirm} className="w-full p-3 rounded-xl bg-[#16284F] items-center">
-                            <Text className="text-white font-semibold text-sm">{t("Go to Ongoing Quizzes")}</Text>
+                            <Text className="text-white font-semibold text-sm">{t("Assignment.student.Go to Ongoing Quizzes")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onCancel} className="w-full p-3 rounded-xl border border-gray-300 items-center bg-white">
-                            <Text className="text-gray-700 font-semibold text-sm">{t("Stay Here")}</Text>
+                            <Text className="text-gray-700 font-semibold text-sm">{t("Assignment.student.Stay Here")}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -204,7 +204,7 @@ function QuizAttemptScreenContent({
     if (!currentStudentId || !currentQuizId) {
       Toast.show({
         type: "error",
-        text1: t("Missing student or quiz info")
+        text1: t("Assignment.student.Missing student or quiz info")
       });
       return;
     }
@@ -252,7 +252,7 @@ function QuizAttemptScreenContent({
       if (!submissionResult.success || !submissionResult.submissionId) {
         Toast.show({
           type: "error",
-          text1: t("Failed to submit quiz")
+          text1: t("Assignment.student.Failed to submit quiz")
         });
         isSubmitCalledRef.current = false;
         return;
@@ -261,13 +261,13 @@ function QuizAttemptScreenContent({
       await endQuizSession(currentQuizId, currentStudentId, currentAttemptCount + 1);
       Toast.show({
         type: "success",
-        text1: t("Quiz submitted successfully!")
+        text1: t("Assignment.student.Quiz submitted successfully!")
       });
       onSubmitSuccess?.();
     } catch (err) {
       Toast.show({
         type: "error",
-        text1: t("Something went wrong")
+        text1: t("Assignment.student.Something went wrong")
       });
       isSubmitCalledRef.current = false;
     } finally {
@@ -319,7 +319,7 @@ function QuizAttemptScreenContent({
       } catch (err) {
         Toast.show({
           type: "error",
-          text1: t("Failed to load quiz")
+          text1: t("Assignment.student.Failed to load quiz")
         });
       } finally {
         setIsLoading(false);
@@ -438,15 +438,15 @@ function QuizAttemptScreenContent({
     return <View className="flex-1 items-center justify-center bg-gray-50 p-6">
                 <View className="bg-white rounded-xl p-8 items-center shadow-sm w-full max-w-sm">
                     <Text className="text-4xl mb-3">✅</Text>
-                    <Text className="text-lg font-bold text-[#282828] mb-2">{t("All Attempts Used!")}</Text>
+                    <Text className="text-lg font-bold text-[#282828] mb-2">{t("Assignment.student.All Attempts Used!")}</Text>
                     <Text className="text-sm text-gray-500 text-center mb-6">
-                        {t("You have used all {count} attempts for this quiz Check your score in Attempted Quizzes", {
+                        {t("Assignment.student.You have used all {count} attempts for this quiz Check your score in Attempted Quizzes", {
             count: maxAttempts
           })}
                     </Text>
                     <TouchableOpacity onPress={() => navigation.navigate("AttemptedQuizzes")} className="bg-[#43C17A] px-6 py-3 rounded-xl w-full items-center">
             
-                        <Text className="text-white font-bold text-sm">{t("View Attempted Quizzes")}</Text>
+                        <Text className="text-white font-bold text-sm">{t("Assignment.student.View Attempted Quizzes")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>;
@@ -461,7 +461,7 @@ function QuizAttemptScreenContent({
                         <Text className="text-2xl text-[#1A1A1A]" style={{
             fontFamily: fonts.bold
           }}>
-                            {quiz?.courseName ?? "Quiz"}
+                            {quiz?.courseName ?? t("Assignment.student.Quiz", "Quiz")}
                         </Text>
                         <Text className="text-base text-gray-500 mt-1" style={{
             fontFamily: fonts.medium
@@ -474,7 +474,7 @@ function QuizAttemptScreenContent({
                         <Text className="text-[10px] text-white tracking-widest opacity-90" style={{
             fontFamily: fonts.bold
           }}>
-                            {t("TIME LEFT")}
+                            {t("Assignment.student.TIME LEFT")}
                         </Text>
                         <Text className="text-3xl text-[#79C1FC] mt-1" style={{
             fontFamily: fonts.bold
@@ -490,7 +490,7 @@ function QuizAttemptScreenContent({
                         <Text className="text-[#43C17A] text-base" style={{
             fontFamily: fonts.bold
           }}>
-                            {progressCount}{t("Auto.Common.of", "of")}{questions.length}
+                            {progressCount}{t("Assignment.student.of", "of")}{questions.length}
                         </Text>
                     </View>
                     <View className="h-[8px] w-full bg-[#E5F7ED] rounded-full overflow-hidden">
@@ -525,7 +525,7 @@ function QuizAttemptScreenContent({
                                                     </Text>
                                                 </TouchableOpacity>;
               })}
-                                </View> : <TextInput value={answers[q.questionId]?.writtenAnswer ?? ""} onChangeText={text => handleWrittenAnswerChange(q.questionId, text)} placeholder={t("Type your answer here")} placeholderTextColor="#9ca3af" className="w-full border-b border-gray-200 pb-2 text-base text-[#1A1A1A]" style={{
+                                </View> : <TextInput value={answers[q.questionId]?.writtenAnswer ?? ""} onChangeText={text => handleWrittenAnswerChange(q.questionId, text)} placeholder={t("Assignment.student.Type your answer here")} placeholderTextColor="#9ca3af" className="w-full border-b border-gray-200 pb-2 text-base text-[#1A1A1A]" style={{
               fontFamily: fonts.regular
             }} />}
                         </View>;
@@ -538,7 +538,7 @@ function QuizAttemptScreenContent({
                         {isSubmitting ? <ActivityIndicator size="small" color="#ffffff" /> : <Text className="text-white text-base" style={{
             fontFamily: fonts.bold
           }}>
-                                {t("Submit Quiz")}
+                                {t("Assignment.student.Submit Quiz")}
                             </Text>}
                     </TouchableOpacity>
                 </View>

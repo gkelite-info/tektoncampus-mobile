@@ -23,13 +23,17 @@ export default function ConfirmDeleteModal({
   onConfirm,
   onCancel,
   isDeleting = false,
-  title = "Delete",
-  confirmText = "Yes, Delete",
-  loadingText = "Deleting...",
-  name = "event",
+  title,
+  confirmText,
+  loadingText,
+  name,
   customDescription,
   actionType = "remove"
 }: Props) {const { t } = useTranslation();
+  title = title || t("Assignment.student.Delete", "Delete");
+  confirmText = confirmText || t("Assignment.student.Yes, Delete", "Yes, Delete");
+  loadingText = loadingText || t("Assignment.student.Deleting...", "Deleting...");
+  name = name || t("Assignment.student.event", "event");
   const isAccept = actionType === "accept";
   const isRemove = actionType === "remove";
 
@@ -80,20 +84,20 @@ export default function ConfirmDeleteModal({
             customDescription :
 
             actionType === "accept" ?
-            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Pleaseconfirmif", "Please confirm if you would like to approve the request for")}
+            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{t("Assignment.student.Please confirm if you would like to approve the request for", "Please confirm if you would like to approve the request for")}
               {" "}
-                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>{t("Auto.Common.Theywillbeoffic", ". They will be officially added to your club members list.")}
+                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>{t("Assignment.student.. They will be officially added to your club members list.", ". They will be officially added to your club members list.")}
             </Text> :
             actionType === "reject" ?
-            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Pleaseconfirmif", "Please confirm if you would like to decline the request for")}
+            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{t("Assignment.student.Please confirm if you would like to decline the request for", "Please confirm if you would like to decline the request for")}
               {" "}
-                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>{t("Auto.Common.Thiswillclearth", ". This will clear them from your pending approvals.")}
+                                <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>{t("Assignment.student.. This will clear them from your pending approvals.", ". This will clear them from your pending approvals.")}
             </Text> :
 
-            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Areyousureyouwa", "Are you sure you want to")}
+            <Text className="text-[14px] text-gray-500 text-center leading-5" style={{ fontFamily: fonts.regular }}>{t("Assignment.student.Are you sure you want to", "Are you sure you want to")}
               {title.toLowerCase()}{" "}
                                 <Text className="text-gray-700" style={{ fontFamily: fonts.semiBold }}>{name}</Text>?
-                                {actionType === "remove" && " This action cannot be undone and will permanently remove the data."}
+                                {actionType === "remove" && t("Assignment.student. This action cannot be undone and will permanently remove the data.", " This action cannot be undone and will permanently remove the data.")}
                             </Text>
             }
                     </View>
@@ -104,7 +108,7 @@ export default function ConfirmDeleteModal({
               disabled={isDeleting}
               className="flex-1 border border-gray-300 bg-white py-3 rounded-xl active:bg-gray-50 disabled:opacity-50">
               
-                            <Text className="text-gray-700 text-center" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}
+                            <Text className="text-gray-700 text-center" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Cancel", "Cancel")}
 
               </Text>
                         </TouchableOpacity>

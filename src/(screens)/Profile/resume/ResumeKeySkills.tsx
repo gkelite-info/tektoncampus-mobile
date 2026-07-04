@@ -83,7 +83,7 @@ export default function ResumeKeySkills() {const { t } = useTranslation();
             disabled={isSaving}
             className={`bg-[#43C17A] px-6 py-2 rounded-lg ${isSaving ? 'opacity-50' : ''}`}>
             
-                        <Text className="text-white font-bold">{isSaving ? "Saving..." : "Save"}</Text>
+                        <Text className="text-white font-bold">{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                     </TouchableOpacity>
                 </View>
 

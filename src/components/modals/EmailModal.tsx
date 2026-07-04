@@ -219,7 +219,7 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {co
                 <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
                     <View className="flex-row items-center gap-2">
                         <EnvelopeSimple size={24} weight="fill" color="#43C17A" />
-                        <Text className="text-[17px] font-bold text-[#282828]">{t("Auto.Common.Email", "Email")}</Text>
+                        <Text className="text-[17px] font-bold text-[#282828]">{t("Email.Email", "Email")}</Text>
                     </View>
                     <View className="flex-row items-center gap-3">
                         <TouchableOpacity
@@ -230,7 +230,7 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {co
                 className="flex-row items-center gap-1 bg-gray-100 px-3 py-1.5 rounded-full">
                 
                             <Plus size={16} color="#43C17A" />
-                            <Text className="text-[13px] font-medium text-[#282828]">{t("Auto.Common.Compose", "Compose")}</Text>
+                            <Text className="text-[13px] font-medium text-[#282828]">{t("Email.Compose", "Compose")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onClose} className="p-1 rounded-full bg-transparent">
                             <X size={22} color="#6B7280" />
@@ -265,8 +265,7 @@ export default function EmailModal({ visible, onClose, initialView }: Props) {co
                         </View> :
             displayedEmails.length === 0 ?
             <View className="flex-1 justify-center items-center">
-                            <Text className="text-[14px] text-gray-500">{t("Auto.Common.No", "No")}
-                {activeTab}{t("Auto.Common.emailsfound", "emails found.")}
+                            <Text className="text-[14px] text-gray-500">{t("Auto.Common.No", "No")} {activeTab} {t("Auto.Common.emailsfound", "emails found.")}
               </Text>
                         </View> :
 

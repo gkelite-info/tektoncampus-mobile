@@ -84,13 +84,15 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
   };
 
   const displayRoleMap: Record<string, string> = {
-    FinanceManager: "Finance Manager",
-    CollegeAdmin: "College Admin",
-    CollegeHr: "College HR",
-    PlacementOfficer: "Placement Officer",
-    WellbeingExecutive: "Wellbeing Executive",
-    WellbeingManager: "Wellbeing Manager",
-    SuperAdmin: "Super Admin"
+    FinanceManager: t("Dashboard.profile.FinanceManager", "Finance Manager"),
+    CollegeAdmin: t("Dashboard.profile.CollegeAdmin", "College Admin"),
+    CollegeHr: t("Dashboard.profile.CollegeHR", "College HR"),
+    Student: t("Dashboard.profile.Student", "Student"),
+    Faculty: t("Dashboard.profile.Faculty", "Faculty"),
+    PlacementOfficer: t("Dashboard.profile.PlacementOfficer", "Placement Officer"),
+    WellbeingExecutive: t("Dashboard.profile.WellbeingExecutive", "Wellbeing Executive"),
+    WellbeingManager: t("Dashboard.profile.WellbeingManager", "Wellbeing Manager"),
+    SuperAdmin: t("Dashboard.profile.SuperAdmin", "Super Admin")
   };
 
   const displayRole = role ? displayRoleMap[role] ?? role : "";
@@ -99,19 +101,19 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
   const profileOptions = [
   {
     id: "terms",
-    name: "Terms And Conditions",
+    name: t("Dashboard.profile.TermsAndConditions", "Terms And Conditions"),
     icon: <ClipboardText size={24} color="#43C17A" weight="fill" />,
     onClick: () => setShowTermsModal(true)
   },
   {
     id: "support",
-    name: "Tekton Campus Support",
+    name: t("Dashboard.profile.TektonCampusSupport", "Tekton Campus Support"),
     icon: <Headset size={24} color="#43C17A" weight="fill" />,
     onClick: () => setShowSupportModal(true)
   },
   {
     id: "change-password",
-    name: "Change Password",
+    name: t("Dashboard.profile.ChangePassword", "Change Password"),
     icon: <Key size={24} color="#43C17A" weight="fill" />,
     onClick: () => setShowPasswordModal(true)
   }];

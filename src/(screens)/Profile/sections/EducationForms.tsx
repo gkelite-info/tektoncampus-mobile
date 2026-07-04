@@ -62,7 +62,7 @@ export function PrimaryEducationForm({ data, onSave, userId }: SharedProps) {con
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-4" value={location} onChangeText={setLocation} placeholder={t("Auto.Attr.CityState", "City, State")} />
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? "Saving..." : "Save Primary Education"}</Text>
+                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SavePrimaryEducation", "Save Primary Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -124,7 +124,7 @@ export function SecondaryEducationForm({ data, onSave, onDelete, userId }: Share
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-4" value={percentage} onChangeText={setPercentage} placeholder={t("Auto.Attr.eg855", "e.g. 85.5")} keyboardType="numeric" />
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? "Saving..." : "Save Secondary Education"}</Text>
+                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveSecondaryEducation", "Save Secondary Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -197,7 +197,7 @@ export function UndergraduateEducationForm({ data, onSave, onDelete, userId }: S
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-4" value={cgpa} onChangeText={setCgpa} placeholder={t("Auto.Attr.eg85", "e.g. 8.5")} keyboardType="numeric" />
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? "Saving..." : "Save Undergraduate Education"}</Text>
+                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveUndergraduateEducation", "Save Undergraduate Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -265,7 +265,7 @@ export function PhdEducationForm({ data, onSave, onDelete, userId }: SharedProps
             </View>
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? "Saving..." : "Save PhD Education"}</Text>
+                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SavePhDEducation", "Save PhD Education")}</Text>
             </TouchableOpacity>
         </View>);
 

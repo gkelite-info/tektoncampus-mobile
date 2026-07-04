@@ -21,7 +21,10 @@ export type StudentTabParamList = {
 const Tab = createBottomTabNavigator<StudentTabParamList>();
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
+import { useTranslation } from 'react-i18next';
+
 export function StudentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+    const { t } = useTranslation();
     const insets = useSafeAreaInsets();
     const bottomInset = insets.bottom || 10; 
 
@@ -57,11 +60,11 @@ export function StudentCustomTabBar({ state, descriptors, navigation }: BottomTa
                     };
 
                     const labels: Record<keyof StudentTabParamList, string> = {
-                        Calendar: "Calendar",
-                        Academics: "Academics",
-                        Home: "Home",
-                        Attendance: "Attendance",
-                        Profile: "Profile",
+                        Calendar: t("Navbars.Calendar", "Calendar"),
+                        Academics: t("Navbars.Academics", "Academics"),
+                        Home: t("Navbars.Home", "Home"),
+                        Attendance: t("Navbars.Attendance", "Attendance"),
+                        Profile: t("Navbars.Profile", "Profile"),
                     };
 
                     const label = labels[route.name as keyof StudentTabParamList];

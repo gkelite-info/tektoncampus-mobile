@@ -95,7 +95,7 @@ export default function IssueCard({
         </View>
       </View>
 
-      <Text className="text-lg font-bold text-gray-800 mb-3">{issue.title}</Text>
+      <Text className="text-lg font-bold text-gray-800 mb-3">{t(issue.title, issue.title)}</Text>
 
       <View className="flex-row flex-wrap mb-3">
         <View className="flex-row items-center mr-4 mb-2">
@@ -103,7 +103,7 @@ export default function IssueCard({
             {t('Wellbeing_module.common.SubCategory', 'Sub Category')} :
           </Text>
           <View className="px-3 py-1 border border-[#D7D7D7] rounded-sm">
-            <Text className="text-gray-700 font-medium text-xs">{issue.subCategory || issue.category || t('Wellbeing_module.common.NA', 'N/A')}</Text>
+            <Text className="text-gray-700 font-medium text-xs">{issue.subCategory ? t(issue.subCategory, issue.subCategory) : issue.category ? t(issue.category, issue.category) : t('Wellbeing_module.common.NA', 'N/A')}</Text>
           </View>
         </View>
         <View className="flex-row items-center mb-2">
@@ -111,7 +111,7 @@ export default function IssueCard({
             {t('Wellbeing_module.common.Branch', 'Branch')} :
           </Text>
           <View className="px-3 py-1 border border-[#D7D7D7] rounded-sm">
-            <Text className="text-gray-700 font-medium text-xs">{issue.branch || issue.appliesTo || t('Wellbeing_module.common.NA', 'N/A')}</Text>
+            <Text className="text-gray-700 font-medium text-xs">{issue.branch ? t(issue.branch, issue.branch) : issue.appliesTo ? t(issue.appliesTo, issue.appliesTo) : t('Wellbeing_module.common.NA', 'N/A')}</Text>
           </View>
         </View>
       </View>
@@ -121,7 +121,7 @@ export default function IssueCard({
           {t('Wellbeing_module.common.Description', 'Description')} :
         </Text>
         <Text className="text-gray-500 leading-5 text-sm">
-          {issue.description}
+          {t(issue.description, issue.description)}
         </Text>
       </View>
 

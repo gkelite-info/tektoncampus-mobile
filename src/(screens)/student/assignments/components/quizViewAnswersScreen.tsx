@@ -69,7 +69,7 @@ function QuizViewAnswersScreenContent({
                         </TouchableOpacity>
                         <View className="flex-1">
                             <Text numberOfLines={1} className="text-lg font-bold text-[#282828]">
-                                {quiz?.courseName || "Quiz"}
+                                {quiz?.courseName || t("Assignment.student.Quiz", "Quiz")}
                             </Text>
                             {quiz?.topic ? <Text numberOfLines={1} className="text-xs font-medium text-[#282828]">
                                     {quiz.topic}
@@ -78,7 +78,7 @@ function QuizViewAnswersScreenContent({
                     </View>
 
                     <Text className="text-base font-bold text-[#282828] shrink-0">
-                        {t("Score :")}{" "}
+                        {t("Assignment.student.Score :")}{" "}
                         <Text className="text-[#43C17A]">{quiz?.score || "-"}</Text>
                     </Text>
                 </View>
@@ -105,13 +105,13 @@ function QuizViewAnswersScreenContent({
             return <View key={q.questionId} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                   
                                     <View className="flex-row justify-between items-start mb-4 gap-2">
-                                        <Text className="text-base font-bold text-[#282828] flex-1">{t("Auto.Common.Q", "Q")}
+                                        <Text className="text-base font-bold text-[#282828] flex-1">{t("Assignment.student.Q", "Q")}
                       {index + 1}. {q.questionText}
                                         </Text>
                                         <View className={`px-3 py-1 rounded-md ${isCorrect ? "bg-[#43C17A]" : "bg-[#FF3B30]"}`}>
                       
                                             <Text className="text-sm font-bold text-white">
-                                                {isCorrect ? t("Correct") : t("Wrong")}
+                                                {isCorrect ? t("Assignment.student.Correct") : t("Assignment.student.Wrong")}
                                             </Text>
                                         </View>
                                     </View>
@@ -150,8 +150,8 @@ function QuizViewAnswersScreenContent({
                                                 </View>
                                                 <Text className={`text-sm flex-1 ${isCorrect ? "text-[#43C17A]" : "text-[#FF3B30]"}`}>
                         
-                                                    {t("Your answer:")}{" "}
-                                                    {studentAnswer?.writtenAnswer || t("Not answered")}
+                                                    {t("Assignment.student.Your answer:")}{" "}
+                                                    {studentAnswer?.writtenAnswer || t("Assignment.student.Not answered")}
                                                 </Text>
                                             </View>
                                         </View>}
@@ -159,7 +159,7 @@ function QuizViewAnswersScreenContent({
                                     <View className="flex-row items-center gap-2 mt-4">
                                         <CheckCircle size={20} weight="fill" color="#9be4bc" />
                                         <Text className="text-sm font-semibold text-[#282828] flex-1">
-                                            {t("Correct Answer :")}{" "}
+                                            {t("Assignment.student.Correct Answer :")}{" "}
                                             <Text className="text-[#43C17A]">
                                                 {correctOption?.optionText || "-"}
                                             </Text>

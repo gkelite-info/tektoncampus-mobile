@@ -134,7 +134,7 @@ export function StudentAssignmentUploadModal({
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const asset = result.assets[0];
         if (asset.mimeType !== "application/pdf" && !asset.name.toLowerCase().endsWith(".pdf")) {
-          Toast.show({ type: "error", text1: "Only PDF files are allowed" });
+          Toast.show({ type: "error", text1: t("Assignment.student.Only PDF files are allowed", "Only PDF files are allowed") });
           return;
         }
         setFile({
@@ -145,7 +145,7 @@ export function StudentAssignmentUploadModal({
         });
       }
     } catch (err) {
-      Toast.show({ type: "error", text1: "Failed to pick document" });
+      Toast.show({ type: "error", text1: t("Assignment.student.Failed to pick document", "Failed to pick document") });
     }
   };
 
@@ -162,12 +162,12 @@ export function StudentAssignmentUploadModal({
         if (res.success) {
           setFile(null);
           onUploadSuccess(null);
-          Toast.show({ type: "success", text1: "File deleted successfully" });
+          Toast.show({ type: "success", text1: t("Assignment.student.File deleted successfully", "File deleted successfully") });
         } else {
-          Toast.show({ type: "error", text1: res.error || "Failed to delete file" });
+          Toast.show({ type: "error", text1: res.error || t("Assignment.student.Failed to delete file", "Failed to delete file") });
         }
       } catch (err) {
-        Toast.show({ type: "error", text1: "Failed to delete file" });
+        Toast.show({ type: "error", text1: t("Assignment.student.Failed to delete file", "Failed to delete file") });
       } finally {
         setDeleting(false);
       }
@@ -178,7 +178,7 @@ export function StudentAssignmentUploadModal({
 
   const handleSubmit = async () => {
     if (!file) {
-      Toast.show({ type: "error", text1: "Please select a file first" });
+      Toast.show({ type: "error", text1: t("Assignment.student.Please select a file first", "Please select a file first") });
       return;
     }
 
@@ -201,14 +201,14 @@ export function StudentAssignmentUploadModal({
       });
 
       if (res.success) {
-        Toast.show({ type: "success", text1: "Assignment submitted successfully 🎉" });
+        Toast.show({ type: "success", text1: t("Assignment.student.Assignment submitted successfully 🎉", "Assignment submitted successfully 🎉") });
         onUploadSuccess(uploadedPath);
         onClose();
       } else {
-        Toast.show({ type: "error", text1: res.error || "Failed to save submission" });
+        Toast.show({ type: "error", text1: res.error || t("Assignment.student.Failed to save submission", "Failed to save submission") });
       }
     } catch (err) {
-      Toast.show({ type: "error", text1: "Failed to upload file" });
+      Toast.show({ type: "error", text1: t("Assignment.student.Failed to upload file", "Failed to upload file") });
     } finally {
       setUploading(false);
     }
@@ -222,10 +222,10 @@ export function StudentAssignmentUploadModal({
                 <View className="bg-white rounded-2xl w-full max-w-[340px] p-6 shadow-xl flex-col">
                     <View className="flex-row justify-between items-start mb-4">
                         <View className="flex-1 pr-2">
-                            <Text className="text-2xl text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.UploadAssignmen", "Upload Assignment")}
+                            <Text className="text-2xl text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Upload Assignment", "Upload Assignment")}
 
               </Text>
-                            <Text className="text-base text-gray-500 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Submityourassig", "Submit your assignment file in the required format.")}
+                            <Text className="text-base text-gray-500 mt-2" style={{ fontFamily: fonts.regular }}>{t("Assignment.student.Submit your assignment file in the required format.", "Submit your assignment file in the required format.")}
 
               </Text>
                         </View>
@@ -235,27 +235,27 @@ export function StudentAssignmentUploadModal({
                     </View>
 
                     <View className="mb-4">
-                        <Text className="text-base text-[#282828] mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AssignmentDetai", "Assignment Details")}
+                        <Text className="text-base text-[#282828] mb-2" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Assignment Details", "Assignment Details")}
 
             </Text>
                         <View className="flex-col gap-2">
                             <Text className="text-base text-gray-600" style={{ fontFamily: fonts.regular }}>
-                                <Text style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Subject", "Subject :")}</Text>
+                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Subject", "Subject :")}</Text>
                                 {assignment?.subjectName || "—"}
                             </Text>
                             <Text className="text-base text-gray-600" style={{ fontFamily: fonts.regular }}>
-                                <Text style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Topic", "Topic :")}</Text>
+                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Topic", "Topic :")}</Text>
                                 {assignment?.title || "—"}
                             </Text>
                             <Text className="text-base text-gray-600" style={{ fontFamily: fonts.regular }}>
-                                <Text style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Faculty", "Faculty :")}</Text>
+                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Faculty", "Faculty :")}</Text>
                                 {assignment?.professor || "—"}
                             </Text>
                         </View>
                     </View>
 
                     <View className="flex-col gap-2">
-                        <Text className="text-base text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Uploadyourfile", "Upload your file")}
+                        <Text className="text-base text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Upload your file", "Upload your file")}
 
             </Text>
 
@@ -266,11 +266,11 @@ export function StudentAssignmentUploadModal({
               className="border-2 border-dashed border-gray-300 bg-gray-50 rounded-2xl p-6 flex-col items-center justify-center gap-2">
               
                                 <CloudArrowUp size={40} color="#9CA3AF" />
-                                <Text className="text-sm text-gray-500 text-center" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.DragDropyourfil", "Drag & Drop your file here or")}
+                                <Text className="text-sm text-gray-500 text-center" style={{ fontFamily: fonts.regular }}>{t("Assignment.student.Drag & Drop your file here or", "Drag & Drop your file here or")}
 
               </Text>
                                 <View className="bg-white px-3 py-1 rounded-full border border-gray-300">
-                                    <Text className="text-xs text-gray-700" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.BrowseFiles", "Browse Files")}
+                                    <Text className="text-xs text-gray-700" style={{ fontFamily: fonts.semiBold }}>{t("Assignment.student.Browse Files", "Browse Files")}
 
                 </Text>
                                 </View>
@@ -294,7 +294,7 @@ export function StudentAssignmentUploadModal({
                                     {deleting ?
                 <ActivityIndicator size="small" color="#EF4444" /> :
 
-                <Text className="text-red-500 text-base underline" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Deleteuploadedf", "Delete uploaded file")}
+                <Text className="text-red-500 text-base underline" style={{ fontFamily: fonts.semiBold }}>{t("Assignment.student.Delete uploaded file", "Delete uploaded file")}
 
                 </Text>
                 }
@@ -305,7 +305,7 @@ export function StudentAssignmentUploadModal({
 
                     <View className="flex-row items-center mt-6 gap-3">
                         <TouchableOpacity onPress={onClose} className="flex-1 py-2.5 border border-gray-300 bg-white rounded-xl">
-                            <Text className="text-center text-base text-gray-600" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}
+                            <Text className="text-center text-base text-gray-600" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Cancel", "Cancel")}
 
               </Text>
                         </TouchableOpacity>
@@ -317,7 +317,7 @@ export function StudentAssignmentUploadModal({
                             {uploading ?
               <ActivityIndicator size="small" color="#FFFFFF" /> :
 
-              <Text className="text-center text-base text-white" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Upload", "Upload")}
+              <Text className="text-center text-base text-white" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Upload", "Upload")}
 
               </Text>
               }
@@ -354,7 +354,7 @@ export function StudentAssignmentDetailsModal({
 
                     <View className="flex-col gap-4 mt-2">
                         <View className="flex-row justify-between items-start">
-                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.AssignmentTitle", "Assignment Title:")}
+                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Assignment Title", "Assignment Title:")}
 
               </Text>
                             <Text className="text-base text-gray-800 flex-1 ml-2" style={{ fontFamily: fonts.regular }}>
@@ -363,7 +363,7 @@ export function StudentAssignmentDetailsModal({
                         </View>
 
                         <View className="flex-row justify-between items-start">
-                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Subject", "Subject:")}
+                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Subject", "Subject:")}
 
               </Text>
                             <Text className="text-base text-gray-800 flex-1 ml-2" style={{ fontFamily: fonts.regular }}>
@@ -372,7 +372,7 @@ export function StudentAssignmentDetailsModal({
                         </View>
 
                         <View className="flex-row justify-between items-start">
-                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Faculty", "Faculty:")}
+                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Faculty", "Faculty:")}
 
               </Text>
                             <Text className="text-base text-gray-800 flex-1 ml-2" style={{ fontFamily: fonts.regular }}>
@@ -381,7 +381,7 @@ export function StudentAssignmentDetailsModal({
                         </View>
 
                         <View className="flex-row justify-between items-start">
-                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Postedon", "Posted on:")}
+                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Posted on", "Posted on:")}
 
               </Text>
                             <Text className="text-base text-gray-800 flex-1 ml-2" style={{ fontFamily: fonts.regular }}>
@@ -390,7 +390,7 @@ export function StudentAssignmentDetailsModal({
                         </View>
 
                         <View className="flex-row justify-between items-start">
-                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Deadline", "Deadline:")}
+                            <Text className="text-base text-gray-500 w-1/3" style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Deadline", "Deadline:")}
 
               </Text>
                             <Text className="text-base text-gray-800 flex-1 ml-2" style={{ fontFamily: fonts.regular }}>
@@ -399,7 +399,7 @@ export function StudentAssignmentDetailsModal({
                         </View>
 
                         <View className="flex-col gap-1 border-t border-gray-100 pt-3">
-                            <Text className="text-lg text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Attachment", "Attachment:")}
+                            <Text className="text-lg text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Assignment.student.Attachment", "Attachment:")}
 
               </Text>
                             {assignment?.existingFilePath ?
@@ -409,7 +409,7 @@ export function StudentAssignmentDetailsModal({
                                     </Text>
                                 </TouchableOpacity> :
 
-              <Text className="text-base text-gray-500 italic mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Noattachmentupl", "No attachment uploaded")}
+              <Text className="text-base text-gray-500 italic mt-1" style={{ fontFamily: fonts.regular }}>{t("Assignment.student.No attachment uploaded", "No attachment uploaded")}
 
               </Text>
               }

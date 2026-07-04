@@ -159,7 +159,7 @@ export default function ResumeProfileSummary() {const { t } = useTranslation();
                 <View className="flex-row justify-between items-center mb-4">
                     <Text className="text-lg font-semibold text-[#000000]">{t("Auto.Common.ProfileSummary", "Profile Summary")}</Text>
                     <TouchableOpacity onPress={handleSave} disabled={isSaving} className={`bg-[#43C17A] px-6 py-2 rounded-lg ${isSaving ? 'opacity-50' : ''}`}>
-                        <Text className="text-white font-bold">{isSaving ? "Saving..." : "Save"}</Text>
+                        <Text className="text-white font-bold">{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                     </TouchableOpacity>
                 </View>
 

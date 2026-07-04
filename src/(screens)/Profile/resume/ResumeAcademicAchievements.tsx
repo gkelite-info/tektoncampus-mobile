@@ -99,7 +99,7 @@ export default function ResumeAcademicAchievements() {
                 </View>
 
                 {achievements.map((item, index) => {
-        
+
         return <View key={index} className="border border-gray-200 rounded-lg p-3 mb-2 bg-gray-50 flex-row justify-between items-center">
                         <Text className="font-medium text-gray-800 flex-1 mr-2">{item.achievementName}</Text>
                         <TouchableOpacity onPress={() => handleDelete(item.achievementName)}>
@@ -118,7 +118,7 @@ export default function ResumeAcademicAchievements() {
           
 
                     <TouchableOpacity onPress={handleAdd} disabled={isSaving} className="bg-[#43C17A] px-4 py-2.5 rounded-lg items-center">
-                        <Text className="text-white font-bold">{isSaving ? "Saving..." : "Add Achievement"}</Text>
+                        <Text className="text-white font-bold">{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.AddAchievement", "Add Achievement")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

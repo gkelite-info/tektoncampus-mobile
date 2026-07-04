@@ -176,7 +176,7 @@ function InternshipFormItem({ item, studentId, onSaved, onDelete }: any) {const 
                     <Text className="text-red-500 font-medium">{t("Auto.Common.Delete", "Delete")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSave} disabled={isLoading} className="px-4 py-2 bg-[#43C17A] rounded-lg">
-                    <Text className="text-white font-medium">{isLoading ? "Saving..." : "Save"}</Text>
+                    <Text className="text-white font-medium">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                 </TouchableOpacity>
             </View>
         </View>);

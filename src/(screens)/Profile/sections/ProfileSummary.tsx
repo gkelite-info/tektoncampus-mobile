@@ -105,7 +105,7 @@ export default function ProfileSummary() {const { t } = useTranslation();
             <ActivityIndicator size="small" color="#ffffff" className="mr-2" /> :
             null}
                         <Text className="text-white font-bold">
-                            {isSubmitting ? "Submitting..." : "Submit"}
+                            {isSubmitting ? t("Dashboard.profile.Submitting", "Submitting...") : t("Dashboard.profile.Submit", "Submit")}
                         </Text>
                     </TouchableOpacity>
                 </View>

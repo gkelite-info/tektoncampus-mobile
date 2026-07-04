@@ -263,7 +263,7 @@ export default function ResumePersonalDetails({ onNext }: {onNext?: () => void;}
             disabled={isLoading}
             className={`bg-[#43C17A] px-6 py-2.5 rounded-lg ${isLoading ? "opacity-50" : ""}`}>
             
-                        <Text className="text-white font-bold">{isLoading ? "Saving..." : "Save"}</Text>
+                        <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                     </TouchableOpacity>
                     
                     {onNext &&
@@ -272,7 +272,7 @@ export default function ResumePersonalDetails({ onNext }: {onNext?: () => void;}
             disabled={isLoading}
             className={`bg-[#43C17A] px-6 py-2.5 rounded-lg ${isLoading ? "opacity-50" : ""}`}>
             
-                            <Text className="text-white font-bold">{isLoading ? "Saving..." : "Next"}</Text>
+                            <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Next", "Next")}</Text>
                         </TouchableOpacity>
           }
                 </View>

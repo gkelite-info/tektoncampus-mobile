@@ -278,7 +278,7 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
             disabled={isLoading}
             className={`bg-[#43C17A] px-6 py-2.5 rounded-lg ${isLoading ? "opacity-50" : ""}`}>
             
-                        <Text className="text-white font-bold">{isLoading ? "Submitting..." : "Submit"}</Text>
+                        <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Submitting", "Submitting...") : t("Dashboard.profile.Submit", "Submit")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

@@ -102,7 +102,7 @@ export default function ResumeCompetitiveExams() {
                 </View>
 
                 {exams.map((item, index) => {
-        
+
         return <View key={index} className="border border-gray-200 rounded-lg p-3 mb-2 bg-gray-50 flex-row justify-between items-center">
                         <View>
                             <Text className="font-medium text-gray-800">{item.examName}</Text>
@@ -128,7 +128,7 @@ export default function ResumeCompetitiveExams() {
           
 
                     <TouchableOpacity onPress={handleAdd} disabled={isSaving} className="bg-[#43C17A] px-4 py-2.5 rounded-lg items-center">
-                        <Text className="text-white font-bold">{isSaving ? "Saving..." : "Add Exam"}</Text>
+                        <Text className="text-white font-bold">{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.AddExam", "Add Exam")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

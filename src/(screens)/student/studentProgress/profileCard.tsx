@@ -64,14 +64,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     <View className="flex-1 justify-center">
                         <View className="flex-row items-center flex-wrap gap-1">
                             <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                            {attendanceCount} {t("Auto.Common.Present", "Present")}
+                            {attendanceCount} {t("Dashboard.student.Present", "Present")}
               </Text>
                             <Text className="text-[10px] text-[#43C17A] leading-tight" style={{ fontFamily: fonts.semiBold }}>
                                 {attendancePercentage}%
                             </Text>
                         </View>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
-                            {t("Total Attendance")}
+                            {t("Dashboard.student.Total Attendance", "Total Attendance")}
                         </Text>
                     </View>
                 </View>
@@ -82,10 +82,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </View>
                     <View className="flex-1 justify-center">
                         <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                            {absentCount} {t("Auto.Common.Absent", "Absent")}
+                            {absentCount} {t("Dashboard.student.Absent", "Absent")}
             </Text>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
-                            {t("Total Absent")}
+                            {t("Dashboard.student.Total Absent", "Total Absent")}
                         </Text>
                     </View>
                 </View>
@@ -96,10 +96,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </View>
                     <View className="flex-1 justify-center">
                         <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                            {leaveCount} {t("Auto.Common.Leave", "Leave")}
+                            {leaveCount} {t("Dashboard.student.Leave", "Leave")}
             </Text>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
-                            {t("Total Leave")}
+                            {t("Dashboard.student.Total Leave", "Total Leave")}
                         </Text>
                     </View>
                 </View>

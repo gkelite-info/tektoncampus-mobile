@@ -25,7 +25,7 @@ export function AttendanceList({
             <Text className="p-5 pb-2 text-lg text-gray-800" style={{
       fontFamily: fonts.bold
     }}>
-                {t("Attendance by Subject")}
+                {t("Dashboard.student.Attendance by Subject", "Attendance by Subject")}
             </Text>
 
             <ScrollView className="flex-1 px-5 pb-5" showsVerticalScrollIndicator={false}>

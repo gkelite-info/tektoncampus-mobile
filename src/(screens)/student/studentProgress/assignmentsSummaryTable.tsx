@@ -80,7 +80,7 @@ export function AssignmentsSummaryTable({
                     <Text className="text-[14.5px] tracking-tight text-gray-800" style={{
           fontFamily: fonts.bold
         }}>
-                        {t("Class Progress Overview")}
+                        {t("Dashboard.student.Class Progress Overview", "Class Progress Overview")}
                     </Text>
                     <TouchableOpacity activeOpacity={0.7} className="flex-row items-center gap-1.5 rounded-md bg-[#43C17A] px-3 py-1.5 shadow-sm">
                         <Text className="text-xs text-white" style={{
@@ -98,7 +98,7 @@ export function AssignmentsSummaryTable({
                         <Text className="text-sm text-gray-500 text-center" style={{
           fontFamily: fonts.regular
         }}>
-                            {t("No subject progress data available for this semester")}
+                            {t("Dashboard.student.No subject progress data available for this semester", "No subject progress data available for this semester")}
                         </Text>
                     </View> : rows.map((row, index) => {
         
@@ -108,7 +108,7 @@ export function AssignmentsSummaryTable({
                                     <Text className="w-[125px] text-[#282828] text-[13px]" style={{
                 fontFamily: fonts.semiBold
               }}>
-                                        {t("Subject")} :
+                                        {t("Dashboard.student.Subject", "Subject")} :
                                     </Text>
                                     <Text className="flex-1 text-[#525252] text-[13px] pr-14" numberOfLines={1} style={{
                 fontFamily: fonts.regular
@@ -121,7 +121,7 @@ export function AssignmentsSummaryTable({
                                     <Text className="w-[125px] text-[#282828] text-[13px]" style={{
                 fontFamily: fonts.semiBold
               }}>
-                                        {t("Attendance")} :
+                                        {t("Dashboard.student.Attendance", "Attendance")} :
                                     </Text>
                                     <Text className="flex-1 text-[#525252] text-[13px]" style={{
                 fontFamily: fonts.regular
@@ -134,7 +134,7 @@ export function AssignmentsSummaryTable({
                                     <Text className="w-[125px] text-[#282828] text-[13px]" style={{
                 fontFamily: fonts.semiBold
               }}>
-                                        {t("Assignments Done")} :
+                                        {t("Dashboard.student.Assignments Done", "Assignments Done")} :
                                     </Text>
                                     <Text className="flex-1 text-[#525252] text-[13px]" style={{
                 fontFamily: fonts.regular
@@ -147,7 +147,7 @@ export function AssignmentsSummaryTable({
                                     <Text className="w-[125px] text-[#282828] text-[13px]" style={{
                 fontFamily: fonts.semiBold
               }}>
-                                        {t("Quiz")} :
+                                        {t("Dashboard.student.Quiz", "Quiz")} :
                                     </Text>
                                     <Text className="flex-1 text-[#525252] text-[13px]" style={{
                 fontFamily: fonts.regular
@@ -160,7 +160,7 @@ export function AssignmentsSummaryTable({
                                     <Text className="w-[125px] text-[#282828] text-[13px]" style={{
                 fontFamily: fonts.semiBold
               }}>
-                                        {t("Discussion Forum")} :
+                                        {t("Dashboard.student.Discussion Forum", "Discussion Forum")} :
                                     </Text>
                                     <Text className="flex-1 text-[#525252] text-[13px]" style={{
                 fontFamily: fonts.regular

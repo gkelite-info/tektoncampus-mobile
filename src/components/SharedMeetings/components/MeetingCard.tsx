@@ -121,7 +121,7 @@ export default function MeetingCard({
                 <Text className="text-[#303030] text-sm">{t("Auto.Common.Subject", "Subject :")}</Text>
                 <View className="bg-[#E2E6ED] px-2.5 py-1 rounded-full">
                   <Text className="text-[#16284F] text-[11px] font-medium">
-                    {(data as any).subject || "General"}
+                    {(data as any).subject || t("SharedMeetings.subject.general", "General")}
                   </Text>
                 </View>
               </View>
@@ -141,7 +141,7 @@ export default function MeetingCard({
                   data.type === "previous" ? "text-[#414141]" : "text-white"}`
                   }>
                   
-                    {data.type === "previous" ? t("Completed") : t("Join Meeting")}
+                    {data.type === "previous" ? t("SharedMeetings.status.completed", "Completed") : t("SharedMeetings.status.joinMeeting", "Join Meeting")}
                   </Text>
                 </TouchableOpacity>
               }
@@ -181,20 +181,20 @@ export default function MeetingCard({
             <View className="flex-col gap-y-3">
               <View className="flex-row items-center justify-between">
                 <Text className="text-[#303030] font-medium text-sm">
-                  {t("Role :")}
+                  {t("SharedMeetings.details.role", "Role :")}
                 </Text>
-                <PillTag label={t((data as any).category) || t("NA")} />
+                <PillTag label={t("SharedMeetings.category." + (data as any).category, (data as any).category) || t("SharedMeetings.details.na", "N/A")} />
               </View>
 
               <View className="flex-row items-center justify-between">
                 <Text className="text-[#303030] font-medium text-sm">
-                  {t("Date :")}
+                  {t("SharedMeetings.details.date", "Date :")}
                 </Text>
-                <PillTag label={data.date || t("NA")} />
+                <PillTag label={data.date || t("SharedMeetings.details.na", "N/A")} />
               </View>
               <View className="flex-row items-center justify-between">
                 <Text className="text-[#303030] font-medium text-sm">
-                  {t("Time :")}
+                  {t("SharedMeetings.details.time", "Time :")}
                 </Text>
                 <PillTag label={formattedTimeRange} />
               </View>
@@ -204,22 +204,22 @@ export default function MeetingCard({
               <>
                   <View className="flex-row items-center justify-between">
                     <Text className="text-[#303030] font-medium text-sm">
-                      {t("Branch :")}
+                      {t("SharedMeetings.details.branch", "Branch :")}
                     </Text>
-                    <PillTag label={data.branch || t("NA")} />
+                    <PillTag label={data.branch || t("SharedMeetings.details.na", "N/A")} />
                   </View>
                   <View className="flex-row items-center justify-between">
                     <Text className="text-[#303030] font-medium text-sm">
-                      {t("Year :")}
+                      {t("SharedMeetings.details.year", "Year :")}
                     </Text>
-                    <PillTag label={data.year || t("NA")} />
+                    <PillTag label={data.year || t("SharedMeetings.details.na", "N/A")} />
                   </View>
 
                   <View className="flex-row items-center justify-between">
                     <Text className="text-[#303030] font-medium text-sm">
-                      {t("Section :")}
+                      {t("SharedMeetings.details.section", "Section :")}
                     </Text>
-                    <PillTag label={data.section || t("NA")} />
+                    <PillTag label={data.section || t("SharedMeetings.details.na", "N/A")} />
                   </View>
                 </>
               }

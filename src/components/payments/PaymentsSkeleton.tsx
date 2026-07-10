@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { View, Animated, StyleSheet, ScrollView } from "react-native";
+import { View, Animated, StyleSheet, ScrollView, DimensionValue } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 
-function ShimmerBlock({ width, height, className }: { width?: string | number; height?: string | number; className?: string }) {
+function ShimmerBlock({ width, height, className }: { width?: DimensionValue; height?: DimensionValue; className?: string }) {
     const shimmerAnimatedValue = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -24,7 +24,7 @@ function ShimmerBlock({ width, height, className }: { width?: string | number; h
 
     const translateX = shimmerAnimatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: [-64, 300], // Increased range for larger blocks
+        outputRange: [-64, 300], 
     });
 
     return (

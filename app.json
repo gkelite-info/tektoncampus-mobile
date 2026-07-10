@@ -29,11 +29,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gkelite.tektoncampus",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1",
       "infoPlist": {
         "NSCameraUsageDescription": "Tekton Campus needs access to your camera to capture photos for profile pictures and assignments.",
         "NSPhotoLibraryUsageDescription": "Tekton Campus needs access to your photo library to upload assignments and profile pictures.",
-        "NSMicrophoneUsageDescription": "Tekton Campus needs access to your microphone for video recording."
+        "NSMicrophoneUsageDescription": "Tekton Campus needs access to your microphone for video recording.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -44,9 +45,11 @@
       "package": "com.gkelite.tektoncampus"
     },
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "642a3b40-0e9b-47da-8fc8-1a82459dc76b"
+        "projectId": "029c6ed1-b6cc-4aea-a963-2145d14c9818"
       }
-    }
+    },
+    "owner": "ashishgkelite"
   }
 }

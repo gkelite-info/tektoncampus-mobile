@@ -107,6 +107,16 @@ export default function LeaveRequestsScreen() {
     { type: "Rejected", count: counts.rejected, color: "#EF4444" }
   ];
 
+  const getStatsCardLabel = (type: string) => {
+    switch (type) {
+      case "Total": return t("LeaveRequests.student.Total", "Total");
+      case "Approved": return t("LeaveRequests.student.Approved", "Approved");
+      case "Pending": return t("LeaveRequests.student.Pending", "Pending");
+      case "Rejected": return t("LeaveRequests.student.Rejected", "Rejected");
+      default: return type;
+    }
+  };
+
   const renderStatsCard = () => (
     <View className="flex-row justify-between mb-5" style={{ gap: 8 }}>
       {statsCards.map((bal, idx) => (
@@ -115,13 +125,23 @@ export default function LeaveRequestsScreen() {
             {bal.count.toString().padStart(2, '0')}
           </Text>
           <Text className="text-slate-400 text-[9px] text-center mt-1 uppercase" style={{ fontFamily: fonts.bold }}>
-            {t(bal.type, bal.type)}
+            {getStatsCardLabel(bal.type)}
           </Text>
           <View className="w-1.5 h-1.5 rounded-full mt-1.5" style={{ backgroundColor: bal.color }} />
         </View>
       ))}
     </View>
   );
+
+  const getTabLabel = (tab: string) => {
+    switch (tab) {
+      case "all": return t("LeaveRequests.student.all", "All");
+      case "approved": return t("LeaveRequests.student.approved", "Approved");
+      case "pending": return t("LeaveRequests.student.pending", "Pending");
+      case "rejected": return t("LeaveRequests.student.rejected", "Rejected");
+      default: return tab;
+    }
+  };
 
   const renderFilters = () => (
     <View className="mb-4 space-y-3">
@@ -132,7 +152,7 @@ export default function LeaveRequestsScreen() {
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder={t("Search leaves...", "Search leaves...")}
+            placeholder={t("LeaveRequests.student.searchLeaves", "Search leaves...")}
             placeholderTextColor="#9CA3AF"
             className="flex-1 ml-2 text-xs text-slate-700 h-5 p-0"
             style={{ fontFamily: fonts.regular }}
@@ -166,7 +186,7 @@ export default function LeaveRequestsScreen() {
               className={`text-[10px] capitalize ${activeTab === tab ? 'text-emerald-700' : 'text-slate-500'}`} 
               style={{ fontFamily: activeTab === tab ? fonts.bold : fonts.medium }}
             >
-              {t(tab, tab)}
+              {getTabLabel(tab)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -181,17 +201,17 @@ export default function LeaveRequestsScreen() {
       case "approved":
         icon = <CheckCircle size={14} color="#10B981" weight="fill" />;
         statusStyle = "bg-emerald-50 border-emerald-100 text-emerald-700";
-        statusText = t("Approved", "Approved");
+        statusText = t("LeaveRequests.student.Approved", "Approved");
         break;
       case "rejected":
         icon = <XCircle size={14} color="#EF4444" weight="fill" />;
         statusStyle = "bg-red-50 border-red-100 text-red-700";
-        statusText = t("Rejected", "Rejected");
+        statusText = t("LeaveRequests.student.Rejected", "Rejected");
         break;
       default:
         icon = <Clock size={14} color="#F59E0B" weight="fill" />;
         statusStyle = "bg-amber-50 border-amber-100 text-amber-700";
-        statusText = t("Pending", "Pending");
+        statusText = t("LeaveRequests.student.Pending", "Pending");
         break;
     }
 
@@ -205,11 +225,11 @@ export default function LeaveRequestsScreen() {
               </Text>
               <View className="w-1 h-1 bg-slate-300 rounded-full" />
               <Text className="text-emerald-600 text-xs" style={{ fontFamily: fonts.bold }}>
-                {item.days} {t("Days", "Days")}
+                {item.days} {t("LeaveRequests.student.Days", "Days")}
               </Text>
             </View>
             <Text className="text-slate-500 text-[10px] uppercase" style={{ fontFamily: fonts.bold }}>
-              {item.leaveType}
+              {(item.leaveType || "").toLowerCase().replace(/[^a-z]/g, "") === 'leave' ? t("LeaveRequests.student.Leave", "Leave") : (item.leaveType || "").toLowerCase().replace(/[^a-z]/g, "") === 'attendanceregularization' ? t("LeaveRequests.student.attendanceRegularization", "Attendance Regularization") : item.leaveType}
             </Text>
           </View>
           
@@ -228,7 +248,7 @@ export default function LeaveRequestsScreen() {
         <View className="flex-row items-center justify-between pt-3 border-t border-slate-50">
           <View className="flex-1 pr-2">
             <Text className="text-slate-400 text-[9px] uppercase" style={{ fontFamily: fonts.bold }}>
-              {t("Faculty", "Faculty")}
+              {t("LeaveRequests.student.Faculty", "Faculty")}
             </Text>
             <Text className="text-slate-700 text-xs" style={{ fontFamily: fonts.semiBold }} numberOfLines={1}>
               {item.facultyName}
@@ -240,7 +260,7 @@ export default function LeaveRequestsScreen() {
             className="bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200"
           >
             <Text className="text-slate-600 text-[10px]" style={{ fontFamily: fonts.bold }}>
-              {t("View Details", "View Details")}
+              {t("LeaveRequests.student.viewDetails", "View Details")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -254,7 +274,7 @@ export default function LeaveRequestsScreen() {
                 className="bg-blue-50 px-2 py-1 rounded border border-blue-100"
               >
                 <Text className="text-blue-600 text-[9px]" style={{ fontFamily: fonts.bold }}>
-                  {t("Attachment", "Attachment")} {i + 1}
+                  {t("LeaveRequests.student.Attachment", "Attachment")} {i + 1}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -266,15 +286,15 @@ export default function LeaveRequestsScreen() {
 
   return (
     <SafeAreaView edges={["left", "right", "bottom"]} className="flex-1 bg-[#F8FAFC]">
-      <View className="px-4" style={{ paddingTop: headerHeight + 16 }}>
+      <View className="px-4 flex-1" style={{ paddingTop: headerHeight + 16 }}>
         {/* Header */}
         <View className="flex-row justify-between items-center mb-5">
           <View>
             <Text className="text-2xl text-[#1E293B]" style={{ fontFamily: fonts.bold }}>
-              {t("Leave Requests", "Leave Requests")}
+              {t("LeaveRequests.student.leaveRequests", "Leave Requests")}
             </Text>
             <Text className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: fonts.regular }}>
-              {t("Submit leave, track approvals", "Submit leave, track approvals")}
+              {t("LeaveRequests.student.submitLeaveDescription", "Submit leave, track approvals")}
             </Text>
           </View>
           
@@ -283,7 +303,7 @@ export default function LeaveRequestsScreen() {
             className="bg-[#43C17A] px-3 py-2 rounded-xl"
           >
             <Text className="text-white text-xs" style={{ fontFamily: fonts.bold }}>
-              {t("Request Leave", "Request Leave")}
+              {t("LeaveRequests.student.requestLeave", "Request Leave")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -299,7 +319,7 @@ export default function LeaveRequestsScreen() {
             </>
           }
           renderItem={renderLeaveCard}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 80 }}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} colors={["#43C17A"]} />
           }
@@ -313,7 +333,7 @@ export default function LeaveRequestsScreen() {
             ) : (
               <View className="py-10 items-center justify-center">
                 <Text className="text-slate-400 text-sm italic" style={{ fontFamily: fonts.medium }}>
-                  {t("No leave requests found.", "No leave requests found.")}
+                  {t("LeaveRequests.student.noLeaveRequestsFound", "No leave requests found.")}
                 </Text>
               </View>
             )

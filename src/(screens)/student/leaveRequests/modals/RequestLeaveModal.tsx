@@ -63,12 +63,12 @@ export default function RequestLeaveModal({
         );
   
         if (containsApk) {
-          Toast.show({ type: 'error', text1: 'APK files are not allowed.' });
+          Toast.show({ type: 'error', text1: t('LeaveRequests.student.APK files are not allowed.', 'APK files are not allowed.') });
           return;
         }
   
         if (files.length + newFiles.length > 5) {
-          Toast.show({ type: 'error', text1: 'You can only upload a maximum of 5 files.' });
+          Toast.show({ type: 'error', text1: t('LeaveRequests.student.You can only upload a maximum of 5 files.', 'You can only upload a maximum of 5 files.') });
           return;
         }
 
@@ -85,23 +85,23 @@ export default function RequestLeaveModal({
 
   const handleSubmit = async () => {
     if (!leaveType) {
-      Toast.show({ type: 'error', text1: t('Select Leave Type', 'Select Leave Type') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Select Leave Type', 'Select Leave Type') });
       return;
     }
     if (!startDate) {
-      Toast.show({ type: 'error', text1: t('Start Date', 'Start Date required') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Start Date required', 'Start Date required') });
       return;
     }
     if (!endDate) {
-      Toast.show({ type: 'error', text1: t('End Date', 'End Date required') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.End Date required', 'End Date required') });
       return;
     }
     if (!faculty) {
-      Toast.show({ type: 'error', text1: t('Please select a faculty', 'Please select a faculty') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Please select a faculty', 'Please select a faculty') });
       return;
     }
     if (!description.trim()) {
-      Toast.show({ type: 'error', text1: t('Description', 'Description required') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Description required', 'Description required') });
       return;
     }
 
@@ -115,7 +115,7 @@ export default function RequestLeaveModal({
         faculty,
         files
       });
-      Toast.show({ type: 'success', text1: t('Leave request submitted successfully!', 'Leave request submitted successfully!') });
+      Toast.show({ type: 'success', text1: t('LeaveRequests.student.Leave request submitted successfully!', 'Leave request submitted successfully!') });
       
       // Reset form
       setLeaveType('');
@@ -127,7 +127,7 @@ export default function RequestLeaveModal({
       
       onSuccess();
     } catch (error) {
-      Toast.show({ type: 'error', text1: t('Failed to submit request Please try again', 'Failed to submit request. Please try again.') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Failed to submit request Please try again', 'Failed to submit request. Please try again.') });
     } finally {
       setIsSubmitting(false);
     }
@@ -146,7 +146,7 @@ export default function RequestLeaveModal({
         
         <View className="bg-white w-full rounded-2xl shadow-xl overflow-hidden max-w-[500px] max-h-full">
           <View className="flex-row justify-between items-center p-5 border-b border-gray-100">
-            <Text className="text-lg font-bold text-[#282828]">{t("Request Leave", "Request Leave")}</Text>
+            <Text className="text-lg font-bold text-[#282828]">{t("LeaveRequests.student.requestLeave", "Request Leave")}</Text>
             <TouchableOpacity onPress={onClose} disabled={isSubmitting} className="p-1">
               <X size={20} color="#9CA3AF" weight="bold" />
             </TouchableOpacity>
@@ -155,10 +155,10 @@ export default function RequestLeaveModal({
           <ScrollView className="p-5" contentContainerStyle={{ gap: 16 }} showsVerticalScrollIndicator={false}>
             {/* Leave Type */}
             <View className="gap-1.5 z-50">
-              <Text className="text-sm font-semibold text-[#282828]">{t("Leave Type", "Leave Type")} <Text className="text-red-500">*</Text></Text>
+              <Text className="text-sm font-semibold text-[#282828]">{t("LeaveRequests.student.leaveType", "Leave Type")} <Text className="text-red-500">*</Text></Text>
               <TouchableOpacity onPress={() => setShowTypeDropdown(!showTypeDropdown)} className="w-full border border-gray-200 rounded-lg px-3 py-3 flex-row justify-between items-center bg-white">
                 <Text className={`text-sm ${leaveType ? 'text-[#282828]' : 'text-gray-400'}`}>
-                  {leaveType === 'leave' ? t("Leave", "Leave") : leaveType === 'attendanceregularization' ? t("Attendance Regularization", "Attendance Regularization") : t("Select Leave Type", "Select Leave Type")}
+                  {leaveType === 'leave' ? t("LeaveRequests.student.Leave", "Leave") : leaveType === 'attendanceregularization' ? t("LeaveRequests.student.attendanceRegularization", "Attendance Regularization") : t("LeaveRequests.student.selectLeaveType", "Select Leave Type")}
                 </Text>
                 <CaretDown size={16} color="#9CA3AF" />
               </TouchableOpacity>
@@ -166,10 +166,10 @@ export default function RequestLeaveModal({
               {showTypeDropdown && (
                 <View className="absolute top-[65px] left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-sm z-50 overflow-hidden">
                   <TouchableOpacity onPress={() => { setLeaveType('leave'); setShowTypeDropdown(false); }} className={`px-4 py-3 border-b border-gray-100 ${leaveType === 'leave' ? 'bg-[#E7F8EE]' : 'bg-white'}`}>
-                    <Text className={`text-sm ${leaveType === 'leave' ? 'text-[#43C17A] font-bold' : 'text-[#282828]'}`}>{t("Leave", "Leave")}</Text>
+                    <Text className={`text-sm ${leaveType === 'leave' ? 'text-[#43C17A] font-bold' : 'text-[#282828]'}`}>{t("LeaveRequests.student.Leave", "Leave")}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { setLeaveType('attendanceregularization'); setShowTypeDropdown(false); }} className={`px-4 py-3 bg-white ${leaveType === 'attendanceregularization' ? 'bg-[#E7F8EE]' : 'bg-white'}`}>
-                    <Text className={`text-sm ${leaveType === 'attendanceregularization' ? 'text-[#43C17A] font-bold' : 'text-[#282828]'}`}>{t("Attendance Regularization", "Attendance Regularization")}</Text>
+                    <Text className={`text-sm ${leaveType === 'attendanceregularization' ? 'text-[#43C17A] font-bold' : 'text-[#282828]'}`}>{t("LeaveRequests.student.attendanceRegularization", "Attendance Regularization")}</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -178,7 +178,7 @@ export default function RequestLeaveModal({
             {/* Dates */}
             <View className="flex-row gap-4 z-40">
               <View className="flex-1 gap-1.5">
-                <Text className="text-sm font-semibold text-[#282828]">{t("Start Date", "Start Date")} <Text className="text-red-500">*</Text></Text>
+                <Text className="text-sm font-semibold text-[#282828]">{t("LeaveRequests.student.startDate", "Start Date")} <Text className="text-red-500">*</Text></Text>
                 <TextInput 
                   value={startDate} 
                   onChangeText={handleStartDateChange} 
@@ -188,7 +188,7 @@ export default function RequestLeaveModal({
                 />
               </View>
               <View className="flex-1 gap-1.5">
-                <Text className="text-sm font-semibold text-[#282828]">{t("End Date", "End Date")} <Text className="text-red-500">*</Text></Text>
+                <Text className="text-sm font-semibold text-[#282828]">{t("LeaveRequests.student.endDate", "End Date")} <Text className="text-red-500">*</Text></Text>
                 <TextInput 
                   value={endDate} 
                   onChangeText={setEndDate} 
@@ -202,15 +202,15 @@ export default function RequestLeaveModal({
 
             {/* Faculties */}
             <View className="gap-1.5 z-30">
-              <Text className="text-sm font-semibold text-[#282828]">{t("Faculties", "Faculties")} <Text className="text-red-500">*</Text></Text>
+              <Text className="text-sm font-semibold text-[#282828]">{t("LeaveRequests.student.Faculties", "Faculties")} <Text className="text-red-500">*</Text></Text>
               <TouchableOpacity 
                 onPress={() => { if (!loadingFaculties && faculties.length > 0) setShowFacultyDropdown(!showFacultyDropdown); }} 
                 className={`w-full border border-gray-200 rounded-lg px-3 py-3 flex-row justify-between items-center ${loadingFaculties || faculties.length === 0 ? 'bg-gray-50' : 'bg-white'}`}
               >
                 {loadingFaculties ? (
-                  <Text className="text-sm text-gray-500">{t("Loading faculties", "Loading faculties...")}</Text>
+                  <Text className="text-sm text-gray-500">{t("LeaveRequests.student.loadingFaculties", "Loading faculties...")}</Text>
                 ) : faculties.length === 0 ? (
-                  <Text className="text-sm text-gray-500">{t("No faculties assigned", "No faculties assigned")}</Text>
+                  <Text className="text-sm text-gray-500">{t("LeaveRequests.student.noFacultiesAssigned", "No faculties assigned")}</Text>
                 ) : faculty ? (
                   <View className="flex-row items-center gap-2 flex-1 mr-2">
                     <Avatar src={faculty.avatar} size={24} />
@@ -219,7 +219,7 @@ export default function RequestLeaveModal({
                     </Text>
                   </View>
                 ) : (
-                  <Text className="text-sm text-gray-400">{t("Select Faculties", "Select Faculties")}</Text>
+                  <Text className="text-sm text-gray-400">{t("LeaveRequests.student.selectFaculties", "Select Faculties")}</Text>
                 )}
                 <CaretDown size={16} color="#9CA3AF" />
               </TouchableOpacity>
@@ -250,11 +250,11 @@ export default function RequestLeaveModal({
 
             {/* Description */}
             <View className="gap-1.5 z-10">
-              <Text className="text-sm font-semibold text-[#282828]">{t("Description", "Description")} <Text className="text-red-500">*</Text></Text>
+              <Text className="text-sm font-semibold text-[#282828]">{t("LeaveRequests.student.Description", "Description")} <Text className="text-red-500">*</Text></Text>
               <TextInput 
                 value={description} 
                 onChangeText={setDescription} 
-                placeholder={t("Provide a short explanation for your leave request", "Provide a short explanation for your leave request..........")} 
+                placeholder={t("LeaveRequests.student.provideExplanationPlaceholder", "Provide a short explanation for your leave request..........")} 
                 placeholderTextColor="#9CA3AF" 
                 multiline 
                 numberOfLines={4} 
@@ -266,12 +266,12 @@ export default function RequestLeaveModal({
             {/* Attachments */}
             <View className="gap-1.5">
               <View className="flex-row justify-between items-end">
-                <Text className="text-sm font-semibold text-[#282828]">{t("Attachments", "Attachments")}</Text>
-                <Text className="text-xs text-gray-400">{t("Optional (Max 5)", "Optional (Max 5)")}</Text>
+                <Text className="text-sm font-semibold text-[#282828]">{t("LeaveRequests.student.Attachments", "Attachments")}</Text>
+                <Text className="text-xs text-gray-400">{t("LeaveRequests.student.optionalMax5", "Optional (Max 5)")}</Text>
               </View>
               
               <TouchableOpacity onPress={handlePickFile} className="border-2 border-dashed border-gray-300 rounded-lg p-4 items-center justify-center bg-gray-50">
-                <Text className="text-sm font-medium text-gray-600">{t("Click to upload files", "Click to upload files")}</Text>
+                <Text className="text-sm font-medium text-gray-600">{t("LeaveRequests.student.clickToUpload", "Click to upload files")}</Text>
               </TouchableOpacity>
 
               {files.length > 0 && (
@@ -305,10 +305,10 @@ export default function RequestLeaveModal({
 
           <View className="p-4 border-t border-gray-100 flex-row gap-3 bg-white">
             <TouchableOpacity onPress={onClose} disabled={isSubmitting} className="flex-1 py-3 bg-gray-100 rounded-lg items-center justify-center">
-              <Text className="text-[#525252] font-bold text-sm">{t("Cancel", "Cancel")}</Text>
+              <Text className="text-[#525252] font-bold text-sm">{t("LeaveRequests.student.Cancel", "Cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSubmit} disabled={isSubmitting} className="flex-1 py-3 bg-[#43C17A] rounded-lg items-center justify-center">
-              <Text className="text-white font-bold text-sm">{isSubmitting ? t("Submitting", "Submitting...") : t("Submit Request", "Submit Request")}</Text>
+              <Text className="text-white font-bold text-sm">{isSubmitting ? t("LeaveRequests.student.Submitting", "Submitting...") : t("LeaveRequests.student.submitRequest", "Submit Request")}</Text>
             </TouchableOpacity>
           </View>
         </View>

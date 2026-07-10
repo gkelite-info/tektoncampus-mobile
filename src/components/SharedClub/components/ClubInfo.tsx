@@ -25,11 +25,21 @@ export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {co
 
   }
 
-  const ROLE_DISPLAY_NAMES: Record<string, string> = {
-    responsiblefaculty: "Responsible Faculty",
-    president: "President",
-    vicepresident: "Vice President",
-    mentor: "Mentor"
+  const getRoleDisplayName = (role: string | undefined, defaultName: string) => {
+    if (!role) return t(`SharedClub.roles.${defaultName.toLowerCase().replace(/\s+/g, "")}`, defaultName);
+    const cleanedRole = role.toLowerCase().replace(/[^a-z]/g, "");
+    switch (cleanedRole) {
+      case "responsiblefaculty":
+        return t("SharedClub.roles.responsibleFaculty", "Responsible Faculty");
+      case "president":
+        return t("SharedClub.roles.president", "President");
+      case "vicepresident":
+        return t("SharedClub.roles.vicePresident", "Vice President");
+      case "mentor":
+        return t("SharedClub.roles.mentor", "Mentor");
+      default:
+        return t(`SharedClub.roles.${cleanedRole}`, defaultName);
+    }
   };
 
   return (
@@ -46,7 +56,7 @@ export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {co
                         <Text style={tw`text-sm font-bold text-[#16284F]`}>{info.responsibleFaculty?.name}</Text>
                         <View style={tw`rounded bg-[#E0E5FA] px-2 py-1 border border-[#465FAC]`}>
                             <Text style={tw`text-xs font-semibold text-[#16284F]`}>
-                                {ROLE_DISPLAY_NAMES[info.responsibleFaculty?.role?.toLowerCase() || ""] || "Faculty"}
+                                {getRoleDisplayName(info.responsibleFaculty?.role, "Faculty")}
                             </Text>
                         </View>
                     </View>
@@ -55,7 +65,7 @@ export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {co
                         <Text style={tw`text-sm font-bold text-[#16284F]`}>{info.president?.name}</Text>
                         <View style={tw`rounded bg-[#E0E5FA] px-2 py-1 border border-[#465FAC]`}>
                             <Text style={tw`text-xs font-semibold text-[#16284F]`}>
-                                {ROLE_DISPLAY_NAMES[info.president?.role?.toLowerCase() || ""] || "President"} 👑
+                                {getRoleDisplayName(info.president?.role, "President")} 👑
                             </Text>
                         </View>
                     </View>
@@ -64,7 +74,7 @@ export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {co
                         <Text style={tw`text-sm font-bold text-[#16284F]`}>{info.vicePresident?.name}</Text>
                         <View style={tw`rounded bg-[#E0E5FA] px-2 py-1 border border-[#465FAC]`}>
                             <Text style={tw`text-xs font-semibold text-[#16284F]`}>
-                                {ROLE_DISPLAY_NAMES[info.vicePresident?.role?.toLowerCase() || ""] || "Vice President"}
+                                {getRoleDisplayName(info.vicePresident?.role, "Vice President")}
                             </Text>
                         </View>
                     </View>
@@ -72,7 +82,7 @@ export default function ClubInfo({ info, isLoading = false }: ClubInfoProps) {co
 
                 {info.mentors && info.mentors.length > 0 &&
         <View style={tw`flex-col items-start mt-4`}>
-                        <Text style={tw`mb-3 text-sm font-semibold text-[#484848]`}>{t("Auto.Common.Mentors", "Mentors :")}</Text>
+                        <Text style={tw`mb-3 text-sm font-semibold text-[#484848]`}>{t("SharedClub.info.mentors", "Mentors:")}</Text>
                         <View style={tw`flex-row flex-wrap gap-4`}>
                             {info.mentors.map((mentor) =>
             <View key={mentor.id} style={tw`flex-col items-center gap-1.5`}>

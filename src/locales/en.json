@@ -1101,7 +1101,72 @@
     "View Details": "View Details",
     "Leave Details": "Leave Details",
     "Communication History": "Communication History",
-    "Type your message": "Type your message..."
+    "Type your message": "Type your message...",
+    "student": {
+      "Approved": "Approved",
+      "Rejected": "Rejected",
+      "Pending": "Pending",
+      "Days": "Days",
+      "Leave": "Leave",
+      "Faculty": "Faculty",
+      "Attachment": "Attachment",
+      "Confirm": "Confirm",
+      "Areyousureyouwantto": "Are you sure you want to",
+      "delete": "delete",
+      "remove": "remove",
+      "Cancel": "Cancel",
+      "Wait": "Wait...",
+      "Faculties": "Faculties",
+      "Description": "Description",
+      "Attachments": "Attachments",
+      "Submitting": "Submitting...",
+      "Document": "Document",
+      "New": "New",
+      "Duration": "Duration",
+      "Status": "Status",
+      "Selected": "Selected",
+      "Delete": "Delete",
+      "Sending": "Sending...",
+      "message": "message",
+      "Total": "Total",
+      "all": "All",
+      "approved": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "searchLeaves": "Search leaves...",
+      "attendanceRegularization": "Attendance Regularization",
+      "viewDetails": "View Details",
+      "leaveRequests": "Leave Requests",
+      "submitLeaveDescription": "Submit leave, track approvals",
+      "requestLeave": "Request Leave",
+      "noLeaveRequestsFound": "No leave requests found.",
+      "leaveType": "Leave Type",
+      "selectLeaveType": "Select Leave Type",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "loadingFaculties": "Loading faculties...",
+      "noFacultiesAssigned": "No faculties assigned",
+      "selectFaculties": "Select Faculties",
+      "provideExplanationPlaceholder": "Provide a short explanation for your leave request..........",
+      "optionalMax5": "Optional (Max 5)",
+      "clickToUpload": "Click to upload files",
+      "submitRequest": "Submit Request",
+      "leaveDetails": "Leave Details",
+      "requestSent": "Request Sent",
+      "duration": "Duration",
+      "status": "Status",
+      "selected": "Selected",
+      "communicationHistory": "Communication History",
+      "deleteButton": "Delete",
+      "cancel": "Cancel",
+      "selectMessages": "Select Messages",
+      "noCommunicationYet": "No communication yet.",
+      "sending": "Sending...",
+      "typeYourMessage": "Type your message",
+      "messagesCount": "message(s)",
+      "singleMessage": "message",
+      "yesDelete": "Yes, Delete"
+    }
   },
   "Auto.Common.PoweredbyGKElit": "Powered by GK Elite-Info",
   "Auto.Common.ProceedtoLogin": "Proceed to Login",
@@ -3047,5 +3112,109 @@
   "iiprop": "url|mime|extmetadata",
   "iiurlwidth": "1100",
   "format": "json",
-  "origin": "*"
+  "origin": "*",
+  "SharedClub": {
+    "toast": {
+      "failedToLoadClubs": "Failed to load clubs or status",
+      "studentIdMissing": "Student ID is missing. Cannot send request.",
+      "joinRequestSent": "Join request sent successfully!",
+      "failedToSendRequest": "Failed to send request.",
+      "failedToFetchClubInfo": "Failed to fetch club information.",
+      "failedToLoadClubInfo": "Failed to load club information."
+    },
+    "explore": {
+      "noClubsFound": "No clubs found at the moment",
+      "joinClub": "Join Club",
+      "sendingRequest": "Sending Request",
+      "pendingStatus": "Pending",
+      "viewClub": "View Club",
+      "activeUsers": "Active Users:",
+      "inactiveUsers": "Inactive Users:"
+    },
+    "date": {
+      "today": "Today",
+      "yesterday": "Yesterday"
+    },
+    "announcements": {
+      "failedToLoad": "Failed to load announcements",
+      "failedToLoadOlder": "Failed to load older messages",
+      "updated": "Announcement updated",
+      "failedToSend": "Failed to send message",
+      "unknownError": "Unknown error occurred",
+      "deleted": "Announcement deleted",
+      "failedToDelete": "Failed to delete",
+      "options": "Options",
+      "whatToDo": "What would you like to do?",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "unknownAuthor": "Unknown",
+      "loading": "Loading...",
+      "loadOlder": "Load older messages",
+      "editPlaceholder": "Edit announcement...",
+      "typePlaceholder": "Type here........"
+    },
+    "roles": {
+      "responsibleFaculty": "Responsible Faculty",
+      "president": "President",
+      "vicePresident": "Vice President",
+      "mentor": "Mentor"
+    },
+    "info": {
+      "mentors": "Mentors:"
+    },
+    "requests": {
+      "failedToLoad": "Failed to load data.",
+      "successAccept": "Successfully accepted!",
+      "successReject": "Successfully rejected!",
+      "successRemove": "Successfully removed!",
+      "notAuthenticated": "User not authenticated",
+      "anErrorOccurred": "An error occurred",
+      "filterAll": "All",
+      "filterPending": "Pending",
+      "filterAccepted": "Accepted",
+      "total": "Total",
+      "acceptedCount": "Accepted",
+      "pendingCount": "Pending",
+      "requestsLabel": "Requests",
+      "noRequestsMatching": "No requests found matching your search.",
+      "noRequestsCategory": "No requests found in this category."
+    },
+    "tabs": {
+      "info": "Info",
+      "requests": "Requests",
+      "chat": "Chat",
+      "myClub": "My Club",
+      "explore": "Explore"
+    }
+  },
+  "SharedMeetings": {
+    "subject": {
+      "general": "General"
+    },
+    "status": {
+      "completed": "Completed",
+      "joinMeeting": "Join Meeting"
+    },
+    "details": {
+      "role": "Role :",
+      "na": "N/A",
+      "date": "Date :",
+      "time": "Time :",
+      "branch": "Branch :",
+      "year": "Year :",
+      "section": "Section :"
+    },
+    "toast": {
+      "error": "Error",
+      "failedToFetchUpcoming": "Failed to fetch upcoming meetings",
+      "failedToFetchPrevious": "Failed to fetch previous meetings"
+    },
+    "tabs": {
+      "upcoming": "Upcoming Meetings",
+      "previous": "Previous Meetings"
+    },
+    "noUpcomingMeetings": "No upcoming meetings found.",
+    "noPreviousMeetings": "No previous meetings found."
+  }
 }

@@ -31,10 +31,10 @@ export default function ConfirmDeleteModal({
       <View className="flex-1 justify-center items-center bg-black/40 px-4">
         <View className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl flex-col gap-3">
           <Text className="text-lg font-bold text-gray-800">
-            {t("Auto.Common.Confirm", "Confirm")} {title}
+            {t("LeaveRequests.student.Confirm", "Confirm")} {title}
           </Text>
           <Text className="text-sm text-gray-600 mt-1 leading-relaxed">
-            {t("Auto.Common.Areyousureyouwa", "Are you sure you want to")} {actionType} {name}?
+            {t("LeaveRequests.student.Areyousureyouwantto", "Are you sure you want to")} {actionType === "delete" ? t("LeaveRequests.student.delete", "delete") : t("LeaveRequests.student.remove", "remove")} {name}?
           </Text>
 
           <View className="flex-row gap-3 justify-end mt-4">
@@ -43,7 +43,7 @@ export default function ConfirmDeleteModal({
               disabled={isDeleting}
               className="px-5 py-2.5 rounded-lg border border-gray-200 justify-center">
               <Text className="text-sm font-medium text-gray-600">
-                {t("Auto.Common.Cancel", "Cancel")}
+                {t("LeaveRequests.student.Cancel", "Cancel")}
               </Text>
             </TouchableOpacity>
 
@@ -52,7 +52,7 @@ export default function ConfirmDeleteModal({
               disabled={isDeleting}
               className={`px-5 py-2.5 rounded-lg justify-center bg-[#FF4B4B]`}>
               <Text className="text-white text-sm font-medium">
-                {isDeleting ? 'Wait...' : confirmText}
+                {isDeleting ? t("LeaveRequests.student.Wait", "Wait...") : confirmText}
               </Text>
             </TouchableOpacity>
           </View>

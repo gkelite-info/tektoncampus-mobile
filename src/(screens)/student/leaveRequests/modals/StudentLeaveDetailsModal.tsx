@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/AppText';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TouchableOpacity, TextInput, Modal, KeyboardAvoidingView, Platform, FlatList, Image, Linking, ActivityIndicator, Keyboard } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { X, Paperclip, PaperPlaneRight, CalendarBlank, FilePdf, Checks, PencilSimple, Trash, Check } from 'phosphor-react-native';
 import Toast from 'react-native-toast-message';
 import * as DocumentPicker from 'expo-document-picker';
@@ -27,6 +28,7 @@ interface StudentLeaveDetailsModalProps {
 
 export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, currentStudentId }: StudentLeaveDetailsModalProps) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -72,11 +74,11 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
     setIsInitialLoading(true);
     try {
       const history = await fetchLeaveChatHistory(leaveData.id, 1, LIMIT);
-      setMessages(history);
+      setMessages([...history].reverse());
       setPage(1);
       setHasMore(history.length === LIMIT);
     } catch (err) {
-      Toast.show({ type: 'error', text1: t('Failed to load chat history', 'Failed to load chat history') });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Failed to load chat history', 'Failed to load chat history') });
     } finally {
       setIsInitialLoading(false);
     }
@@ -92,7 +94,8 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
       if (olderMessages.length > 0) {
         setMessages((prev) => {
           const newMsgs = olderMessages.filter((o: any) => !prev.some((p) => p.chatId === o.chatId));
-          return [...newMsgs, ...prev]; // Prepend older messages since list is inverted
+          const reversedNewMsgs = [...newMsgs].reverse();
+          return [...prev, ...reversedNewMsgs];
         });
         setPage(nextPage);
         setHasMore(olderMessages.length === LIMIT);
@@ -109,7 +112,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
   const reloadHistory = async () => {
     try {
       const history = await fetchLeaveChatHistory(leaveData.id, 1, page * LIMIT);
-      setMessages(history);
+      setMessages([...history].reverse());
     } catch (err) {
       console.log('Failed to reload history', err);
     }
@@ -232,7 +235,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
 
       reloadHistory();
     } catch (err: any) {
-      Toast.show({ type: 'error', text1: t('Failed to send message', 'Failed to send message'), text2: err.message });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Failed to send message', 'Failed to send message'), text2: err.message });
       setNewMessage(msgText);
       setSelectedFile(fileObj);
     } finally {
@@ -261,7 +264,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
       }
       cancelEditingMessage();
     } catch (err) {
-      Toast.show({ type: 'error', text1: 'Failed to update message.' });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Failed to update message.', 'Failed to update message.') });
     } finally {
       setIsUpdatingMessage(false);
     }
@@ -286,7 +289,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
         if (editingMessageId && selectedMessageIds.includes(editingMessageId)) {
           cancelEditingMessage();
         }
-        Toast.show({ type: 'success', text1: 'Messages deleted successfully.' });
+        Toast.show({ type: 'success', text1: t('LeaveRequests.student.Messages deleted successfully.', 'Messages deleted successfully.') });
         setIsSelectionMode(false);
         setSelectedMessageIds([]);
         setIsBulkDelete(false);
@@ -295,11 +298,11 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
         setMessages((prev) => prev.filter((m) => m.chatId !== messageIdToDelete));
         if (editingMessageId === messageIdToDelete) cancelEditingMessage();
         setMessageIdToDelete(null);
-        Toast.show({ type: 'success', text1: 'Message deleted successfully.' });
+        Toast.show({ type: 'success', text1: t('LeaveRequests.student.Message deleted successfully.', 'Message deleted successfully.') });
       }
       setIsDeleteModalOpen(false);
     } catch (err) {
-      Toast.show({ type: 'error', text1: 'Failed to delete message.' });
+      Toast.show({ type: 'error', text1: t('LeaveRequests.student.Failed to delete message.', 'Failed to delete message.') });
     } finally {
       setIsDeletingMessage(false);
     }
@@ -358,7 +361,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
                 ) : (
                   <TouchableOpacity onPress={() => Linking.openURL(item.mediaUrl)} className={`flex-row items-center gap-1.5 px-2 py-1.5 rounded-md ${isMe ? 'bg-black/10' : 'bg-gray-100'}`}>
                     <FilePdf size={16} color={isMe ? "#FFF" : "#282828"} weight="fill" />
-                    <Text className={`text-[11px] font-bold underline ${isMe ? 'text-white' : 'text-[#282828]'}`}>{t("Document", "Document")}</Text>
+                    <Text className={`text-[11px] font-bold underline ${isMe ? 'text-white' : 'text-[#282828]'}`}>{t("LeaveRequests.student.Document", "Document")}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -400,7 +403,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
               </View>
             )}
             <Text className="text-[9px] text-gray-400 font-medium">{formatChatTime(item.createdAt)}</Text>
-            {showNewBadge && <View className="bg-[#D32F2F] px-1 rounded"><Text className="text-white text-[8px] font-bold uppercase">{t("New", "New")}</Text></View>}
+            {showNewBadge && <View className="bg-[#D32F2F] px-1 rounded"><Text className="text-white text-[8px] font-bold uppercase">{t("LeaveRequests.student.New", "New")}</Text></View>}
             {isMe && <Checks size={12} color={item.isRead ? "#34B7F1" : "#D1D5DB"} weight="bold" />}
           </View>
         </View>
@@ -411,11 +414,14 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
   return (
     <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 bg-black/40">
-        <View className="bg-[#F5F7FA] mt-10 flex-1 rounded-t-3xl overflow-hidden shadow-2xl">
+        <View 
+          className="bg-[#F5F7FA] flex-1 rounded-t-3xl overflow-hidden shadow-2xl"
+          style={{ marginTop: Math.max(insets.top + 10, 45) }}
+        >
           
           {/* Header */}
           <View className="bg-white flex-row items-center justify-between p-4 border-b border-gray-100 shadow-sm z-10">
-            <Text className="text-lg font-bold text-[#282828]">{t("Leave Details", "Leave Details")}</Text>
+            <Text className="text-lg font-bold text-[#282828]">{t("LeaveRequests.student.leaveDetails", "Leave Details")}</Text>
             <TouchableOpacity onPress={onClose} className="p-1 bg-gray-100 rounded-full">
               <X size={20} color="#525252" weight="bold" />
             </TouchableOpacity>
@@ -424,41 +430,45 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
           {/* Leave Info */}
           <View className="bg-white border-b border-gray-200 p-4 flex-row flex-wrap justify-between">
              <View className="items-center w-1/4 mb-2">
-               <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("Request Sent", "Request Sent")}</Text>
-               <Text className="text-xs font-bold text-[#282828] text-center">{leaveData?.fromDate}</Text>
+                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("LeaveRequests.student.requestSent", "Request Sent")}</Text>
+                <Text className="text-xs font-bold text-[#282828] text-center">{leaveData?.fromDate}</Text>
              </View>
              <View className="items-center w-1/4 mb-2">
-               <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("Duration", "Duration")}</Text>
-               <Text className="text-xs font-bold text-[#282828] text-center" numberOfLines={2}>{leaveData?.fromDate} - {leaveData?.toDate}</Text>
+                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("LeaveRequests.student.duration", "Duration")}</Text>
+                <Text className="text-xs font-bold text-[#282828] text-center" numberOfLines={2}>{leaveData?.fromDate} - {leaveData?.toDate}</Text>
              </View>
              <View className="items-center w-1/4 mb-2">
-               <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("Status", "Status")}</Text>
-               <Text className={`text-xs font-bold capitalize ${leaveData?.status === "approved" ? "text-[#43C17A]" : leaveData?.status === "rejected" ? "text-red-500" : "text-orange-400"}`}>{leaveData?.status}</Text>
+                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("LeaveRequests.student.status", "Status")}</Text>
+                <Text className={`text-xs font-bold capitalize ${leaveData?.status === "approved" ? "text-[#43C17A]" : leaveData?.status === "rejected" ? "text-red-500" : "text-orange-400"}`}>
+                  {leaveData?.status === "approved" ? t("LeaveRequests.student.Approved", "Approved") : leaveData?.status === "rejected" ? t("LeaveRequests.student.Rejected", "Rejected") : t("LeaveRequests.student.Pending", "Pending")}
+                </Text>
              </View>
              <View className="items-center w-1/4 mb-2">
-               <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("Leave Type", "Leave Type")}</Text>
-               <View className="flex-row items-center gap-1">
-                 <View className="w-1.5 h-1.5 rounded-full bg-[#43C17A]" />
-                 <Text className="text-xs font-bold text-[#282828]">{leaveData?.leaveType}</Text>
-               </View>
+                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">{t("LeaveRequests.student.leaveType", "Leave Type")}</Text>
+                <View className="flex-row items-center gap-1">
+                  <View className="w-1.5 h-1.5 rounded-full bg-[#43C17A]" />
+                  <Text className="text-xs font-bold text-[#282828]">
+                    {(leaveData?.leaveType || "").toLowerCase().replace(/[^a-z]/g, "") === 'leave' ? t("LeaveRequests.student.Leave", "Leave") : (leaveData?.leaveType || "").toLowerCase().replace(/[^a-z]/g, "") === 'attendanceregularization' ? t("LeaveRequests.student.attendanceRegularization", "Attendance Regularization") : leaveData?.leaveType}
+                  </Text>
+                </View>
              </View>
           </View>
 
           {/* Communication Header */}
           <View className="px-5 py-3 flex-row items-center justify-between bg-gray-50 border-b border-gray-100 z-10">
             <Text className="text-[13px] font-bold text-[#282828]">
-              {isSelectionMode ? `${selectedMessageIds.length} Selected` : t("Communication History", "Communication History")}
+              {isSelectionMode ? `${selectedMessageIds.length} ${t("LeaveRequests.student.selected", "Selected")}` : t("LeaveRequests.student.communicationHistory", "Communication History")}
             </Text>
             <View className="flex-row items-center gap-4">
               {isSelectionMode && selectedMessageIds.length > 0 && (
                 <TouchableOpacity onPress={initiateBulkDelete} className="flex-row items-center gap-1">
                   <Trash size={14} color="#FF4B4B" weight="bold" />
-                  <Text className="text-[#FF4B4B] text-xs font-bold">Delete ({selectedMessageIds.length})</Text>
+                  <Text className="text-[#FF4B4B] text-xs font-bold">{t("LeaveRequests.student.deleteButton", "Delete")} ({selectedMessageIds.length})</Text>
                 </TouchableOpacity>
               )}
               {(isSelectionMode || messages.some((msg) => msg.senderRole === "STUDENT" && !msg.isRead)) && (
                 <TouchableOpacity onPress={() => { setIsSelectionMode(!isSelectionMode); setSelectedMessageIds([]); }}>
-                  <Text className="text-[#43C17A] text-xs font-bold">{isSelectionMode ? "Cancel" : "Select Messages"}</Text>
+                  <Text className="text-[#43C17A] text-xs font-bold">{isSelectionMode ? t("LeaveRequests.student.cancel", "Cancel") : t("LeaveRequests.student.selectMessages", "Select Messages")}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -483,7 +493,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
               ListFooterComponent={isLoadingMore ? <ActivityIndicator size="small" color="#9CA3AF" style={{ padding: 10 }} /> : null}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-10 scale-y-[-1]">
-                  <Text className="text-gray-400 italic text-sm">{t("No communication yet", "No communication yet.")}</Text>
+                  <Text className="text-gray-400 italic text-sm">{t("LeaveRequests.student.noCommunicationYet", "No communication yet.")}</Text>
                 </View>
               }
             />
@@ -495,7 +505,7 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
               {isSending && (
                 <View className="flex-row gap-2 self-end items-center opacity-70">
                   <View className="bg-[#43C17A] px-3 py-2 rounded-2xl rounded-tr-sm">
-                    <Text className="text-white text-xs italic">{t("Sending", "Sending...")}</Text>
+                    <Text className="text-white text-xs italic">{t("LeaveRequests.student.sending", "Sending...")}</Text>
                   </View>
                 </View>
               )}
@@ -529,12 +539,12 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
               <TextInput
                 value={newMessage}
                 onChangeText={handleTyping}
-                placeholder={t("Type your message", "Type your message")}
+                placeholder={t("LeaveRequests.student.typeYourMessage", "Type your message")}
                 placeholderTextColor="#9CA3AF"
                 className="flex-1 h-10 text-sm text-[#282828]"
                 multiline
                 maxLength={500}
-                disabled={isSending}
+                editable={!isSending}
               />
               <TouchableOpacity
                 onPress={handleSend}
@@ -557,9 +567,9 @@ export default function StudentLeaveDetailsModal({ isOpen, onClose, leaveData, c
         onConfirm={confirmDeleteMessage}
         onCancel={() => { setIsDeleteModalOpen(false); setMessageIdToDelete(null); setIsBulkDelete(false); }}
         isDeleting={isDeletingMessage}
-        title="Delete"
-        name={isBulkDelete ? `${selectedMessageIds.length} message(s)` : "message"}
-        confirmText="Yes, Delete"
+        title={t("LeaveRequests.student.Delete", "Delete")}
+        name={isBulkDelete ? `${selectedMessageIds.length} ${t("LeaveRequests.student.messagesCount", "message(s)")}` : t("LeaveRequests.student.singleMessage", "message")}
+        confirmText={t("LeaveRequests.student.yesDelete", "Yes, Delete")}
         actionType="delete"
       />
     </Modal>

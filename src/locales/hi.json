@@ -2387,7 +2387,72 @@
     "View Details": "विवरण देखें",
     "Leave Details": "विवरण छोड़ें",
     "Communication History": "संचार इतिहास",
-    "Type your message": "अपना संदेश टाइप करें..."
+    "Type your message": "अपना संदेश टाइप करें...",
+    "student": {
+      "Approved": "अनुमत",
+      "Rejected": "अस्वीकार कर दिया",
+      "Pending": "लंबित",
+      "Days": "दिन",
+      "Leave": "छुट्टी",
+      "Faculty": "संकाय",
+      "Attachment": "लगाव",
+      "Confirm": "पुष्टि करना",
+      "Areyousureyouwantto": "क्या आप सचमच करना चाहते हैं",
+      "delete": "मिटाना",
+      "remove": "निकालना",
+      "Cancel": "रद्द करना",
+      "Wait": "इंतज़ार...",
+      "Faculties": "संकाय",
+      "Description": "विवरण",
+      "Attachments": "संलग्नक",
+      "Submitting": "सबमिट किया जा रहा है...",
+      "Document": "दस्तावेज़",
+      "New": "नया",
+      "Duration": "अवधि",
+      "Status": "स्थिति",
+      "Selected": "चयनित",
+      "Delete": "मिटाना",
+      "Sending": "भेजा जा रहा है...",
+      "message": "संदेश",
+      "Total": "कुल",
+      "all": "सभी",
+      "approved": "अनुमत",
+      "pending": "लंबित",
+      "rejected": "अस्वीकार कर दिया",
+      "searchLeaves": "खोजें पत्ते...",
+      "attendanceRegularization": "उपस्थिति नियमितीकरण",
+      "viewDetails": "विवरण देखें",
+      "leaveRequests": "अनुरोध छोड़ें",
+      "submitLeaveDescription": "छुट्टी जमा करें, अनुमोदन ट्रैक करें",
+      "requestLeave": "छुट्टी का अनुरोध करें",
+      "noLeaveRequestsFound": "कोई छुट्टी अनुरोध नहीं मिला.",
+      "leaveType": "प्रकार छोड़ें",
+      "selectLeaveType": "छुट्टी का प्रकार चुनें",
+      "startDate": "आरंभ करने की तिथि",
+      "endDate": "अंतिम तिथि",
+      "loadingFaculties": "संकाय लोड हो रहे हैं...",
+      "noFacultiesAssigned": "कोई संकाय नियुक्त नहीं",
+      "selectFaculties": "संकायों का चयन करें",
+      "provideExplanationPlaceholder": "अपने अवकाश अनुरोध के लिए एक संक्षिप्त स्पष्टीकरण प्रदान करें...",
+      "optionalMax5": "वैकल्पिक (अधिकतम 5)",
+      "clickToUpload": "फ़ाइलें अपलोड करने के लिए क्लिक करें",
+      "submitRequest": "अनुरोध सबमिट करें",
+      "leaveDetails": "विवरण छोड़ें",
+      "requestSent": "निमंत्रण भेजा गया",
+      "duration": "अवधि",
+      "status": "स्थिति",
+      "selected": "चयनित",
+      "communicationHistory": "संचार इतिहास",
+      "deleteButton": "मिटाना",
+      "cancel": "रद्द करना",
+      "selectMessages": "संदेश चुनें",
+      "noCommunicationYet": "अभी तक कोई संचार नहीं.",
+      "sending": "भेजा जा रहा है...",
+      "typeYourMessage": "अपना संदेश टाइप करें",
+      "messagesCount": "संदेश",
+      "singleMessage": "संदेश",
+      "yesDelete": "हाँ, हटाएँ"
+    }
   },
   "No Classes": "कोई कक्षा नहीं",
   "No Quizzes": "कोई प्रश्नोत्तरी नहीं",
@@ -2487,7 +2552,7 @@
       "Add": "जोड़ना",
       "UnitNumber": "खड संख्या *",
       "SaveUnit": "यूनिट सहेजें",
-      "AddWeightage": "Add Weightage",
+      "AddWeightage": "वेटेज जोड़ें",
       "LoadingWeightag": "वेटेज लोड हो रहा है...",
       "Total": "कुल:",
       "WeightageDistri": "भार वितरण",
@@ -2942,7 +3007,7 @@
       "Forgotyourpassw": "अपना कूट शब्द भूल गए?",
       "Continue": "जारी रखना",
       "ScheduleCard": "शेड्यूल कार्ड",
-      "SemesterStats": "Semester Stats:",
+      "SemesterStats": "सेमेस्टर आँकड़े:",
       "CalendarSection": "कैलेंडर अनुभाग",
       "DesktopDataView": "डेस्कटॉप डेटा व्यू ग्रिड",
       "Timetable": "समय सारिणी",
@@ -3048,7 +3113,7 @@
       "Replacefolder": "फ़ोल्डर बदलें",
       "Afolderwiththen": "नाम वाला एक फ़ोल्डर",
       "alreadyexistsDo": "पहले से ही मौजूद है। क्या आप इसे रिप्लेस करना चाहते हैं?",
-      "Drive": "गाड़ी चलाना",
+      "Drive": "ड्राइव",
       "Manageorganizem": "फ़ाइलों को प्रबंधित, व्यवस्थित और मॉनिटर करें",
       "Folders": "फ़ोल्डर",
       "Nofoldersyet": "अभी तक कोई फ़ोल्डर नहीं",
@@ -3237,5 +3302,109 @@
   "iiprop": "यूआरएल|माइम|एक्स्टमेटाडेटा",
   "iiurlwidth": "1100",
   "format": "json",
-  "origin": "*"
+  "origin": "*",
+  "SharedClub": {
+    "toast": {
+      "failedToLoadClubs": "क्लब या स्थिति लोड करने में विफल",
+      "studentIdMissing": "छात्र आईडी गायब है. अनुरोध नहीं भेज सकते.",
+      "joinRequestSent": "शामिल होने का अनुरोध सफलतापूर्वक भेजा गया!",
+      "failedToSendRequest": "अनुरोध भेजने में विफल.",
+      "failedToFetchClubInfo": "क्लब की जानकारी प्राप्त करने में विफल.",
+      "failedToLoadClubInfo": "क्लब की जानकारी लोड करने में विफल."
+    },
+    "explore": {
+      "noClubsFound": "फिलहाल कोई क्लब नहीं मिला",
+      "joinClub": "क्लब में शामिल हों",
+      "sendingRequest": "भेजने का अनुरोध",
+      "pendingStatus": "लंबित",
+      "viewClub": "क्लब देखें",
+      "activeUsers": "सक्रिय उपयोगकर्ता:",
+      "inactiveUsers": "निष्क्रिय उपयोगकर्ता:"
+    },
+    "date": {
+      "today": "आज",
+      "yesterday": "कल"
+    },
+    "announcements": {
+      "failedToLoad": "घोषणाएँ लोड करने में विफल",
+      "failedToLoadOlder": "पुराने संदेश लोड करने में विफल",
+      "updated": "घोषणा अद्यतन की गई",
+      "failedToSend": "संदेश भेजने में विफल",
+      "unknownError": "अज्ञात त्रुटि उत्पन्न हुई",
+      "deleted": "घोषणा हटा दी गई",
+      "failedToDelete": "हटाने में विफल",
+      "options": "विकल्प",
+      "whatToDo": "आप क्या करना चाहेंगे?",
+      "edit": "संपादन करना",
+      "delete": "मिटाना",
+      "cancel": "रद्द करना",
+      "unknownAuthor": "अज्ञात",
+      "loading": "लोड हो रहा है...",
+      "loadOlder": "पुराने संदेश लोड करें",
+      "editPlaceholder": "घोषणा संपादित करें...",
+      "typePlaceholder": "यहाँ टाइप करें........"
+    },
+    "roles": {
+      "responsibleFaculty": "जिम्मेदार संकाय",
+      "president": "अध्यक्ष",
+      "vicePresident": "उपाध्यक्ष",
+      "mentor": "उपदेशक"
+    },
+    "info": {
+      "mentors": "गुरु:"
+    },
+    "requests": {
+      "failedToLoad": "डेटा लोड करने में विफल.",
+      "successAccept": "सफलतापूर्वक स्वीकार किया गया!",
+      "successReject": "सफलतापूर्वक अस्वीकृत!",
+      "successRemove": "सफलतापूर्वक हटा दिया गया!",
+      "notAuthenticated": "उपयोगकर्ता प्रमाणित नहीं है",
+      "anErrorOccurred": "एक त्रुटि पाई गई",
+      "filterAll": "सभी",
+      "filterPending": "लंबित",
+      "filterAccepted": "स्वीकृत",
+      "total": "कुल",
+      "acceptedCount": "स्वीकृत",
+      "pendingCount": "लंबित",
+      "requestsLabel": "अनुरोध",
+      "noRequestsMatching": "आपकी खोज से मेल खाता कोई अनुरोध नहीं मिला.",
+      "noRequestsCategory": "इस श्रेणी में कोई अनुरोध नहीं मिला."
+    },
+    "tabs": {
+      "info": "जानकारी",
+      "requests": "अनुरोध",
+      "chat": "बात करना",
+      "myClub": "मेरा क्लब",
+      "explore": "अन्वेषण करना"
+    }
+  },
+  "SharedMeetings": {
+    "subject": {
+      "general": "सामान्य"
+    },
+    "status": {
+      "completed": "पुरा होना।",
+      "joinMeeting": "बैठक में शामिल"
+    },
+    "details": {
+      "role": "भूमिका :",
+      "na": "एन/ए",
+      "date": "तारीख :",
+      "time": "समय :",
+      "branch": "शाखा :",
+      "year": "वर्ष :",
+      "section": "अनुभाग :"
+    },
+    "toast": {
+      "error": "गलती",
+      "failedToFetchUpcoming": "आगामी बैठकें लाने में विफल",
+      "failedToFetchPrevious": "पिछली बैठकें लाने में विफल"
+    },
+    "tabs": {
+      "upcoming": "आगामी बैठकें",
+      "previous": "पिछली बैठकें"
+    },
+    "noUpcomingMeetings": "कोई आगामी मीटिंग नहीं मिली.",
+    "noPreviousMeetings": "कोई पिछली मीटिंग नहीं मिली."
+  }
 }

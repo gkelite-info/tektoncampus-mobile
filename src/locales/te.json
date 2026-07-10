@@ -2386,7 +2386,72 @@
     "View Details": "వివరాలను వీక్షించండి",
     "Leave Details": "వివరాలను వదిలివేయండి",
     "Communication History": "కమ్యూనికేషన్ చరిత్ర",
-    "Type your message": "మీ సందేశాన్ని టైప్ చేయండి..."
+    "Type your message": "మీ సందేశాన్ని టైప్ చేయండి...",
+    "student": {
+      "Approved": "ఆమోదించబడింది",
+      "Rejected": "తిరస్కరించబడింది",
+      "Pending": "పెండింగ్‌లో ఉంది",
+      "Days": "రోజులు",
+      "Leave": "వదిలేయండి",
+      "Faculty": "ఫ్యాకల్టీ",
+      "Attachment": "అటాచ్మెంట్",
+      "Confirm": "నిర్ధారించండి",
+      "Areyousureyouwantto": "మీరు ఖచ్చితంగా అనుకుంటున్నారా",
+      "delete": "తొలగించు",
+      "remove": "తొలగించు",
+      "Cancel": "రద్దు చేయి",
+      "Wait": "వేచి ఉండండి...",
+      "Faculties": "ఫ్యాకల్టీలు",
+      "Description": "వివరణ",
+      "Attachments": "జోడింపులు",
+      "Submitting": "సమర్పిస్తోంది...",
+      "Document": "పత్రం",
+      "New": "కొత్తది",
+      "Duration": "వ్యవధి",
+      "Status": "స్థితి",
+      "Selected": "ఎంపిక చేయబడింది",
+      "Delete": "తొలగించు",
+      "Sending": "పంపుతోంది...",
+      "message": "సందేశం",
+      "Total": "మొత్తం",
+      "all": "అన్నీ",
+      "approved": "ఆమోదించబడింది",
+      "pending": "పెండింగ్‌లో ఉంది",
+      "rejected": "తిరస్కరించబడింది",
+      "searchLeaves": "సెర్చ్ లీవ్స్...",
+      "attendanceRegularization": "హాజరు క్రమబద్ధీకరణ",
+      "viewDetails": "వివరాలను వీక్షించండి",
+      "leaveRequests": "అభ్యర్థనలను వదిలివేయండి",
+      "submitLeaveDescription": "సెలవు, ట్రాక్ ఆమోదాలను సమర్పించండి",
+      "requestLeave": "సెలవును అభ్యర్థించండి",
+      "noLeaveRequestsFound": "సెలవు అభ్యర్థనలు ఏవీ కనుగొనబడలేదు.",
+      "leaveType": "రకాన్ని వదిలివేయండి",
+      "selectLeaveType": "వదిలి రకాన్ని ఎంచుకోండి",
+      "startDate": "ప్రారంభ తేదీ",
+      "endDate": "ముగింపు తేదీ",
+      "loadingFaculties": "ఫ్యాకల్టీలను లోడ్ చేస్తోంది...",
+      "noFacultiesAssigned": "ఫ్యాకల్టీలను కేటాయించలేదు",
+      "selectFaculties": "ఫ్యాకల్టీలను ఎంచుకోండి",
+      "provideExplanationPlaceholder": "మీ సెలవు అభ్యర్థనకు సంక్షిప్త వివరణ ఇవ్వండి..........",
+      "optionalMax5": "ఐచ్ఛికం (గరిష్టంగా 5)",
+      "clickToUpload": "ఫైల్‌లను అప్‌లోడ్ చేయడానికి క్లిక్ చేయండి",
+      "submitRequest": "అభ్యర్థనను సమర్పించండి",
+      "leaveDetails": "వివరాలను వదిలివేయండి",
+      "requestSent": "అభ్యర్థన పంపబడింది",
+      "duration": "వ్యవధి",
+      "status": "స్థితి",
+      "selected": "ఎంపిక చేయబడింది",
+      "communicationHistory": "కమ్యూనికేషన్ చరిత్ర",
+      "deleteButton": "తొలగించు",
+      "cancel": "రద్దు చేయి",
+      "selectMessages": "సందేశాలను ఎంచుకోండి",
+      "noCommunicationYet": "ఇంకా కమ్యూనికేషన్ లేదు.",
+      "sending": "పంపుతోంది...",
+      "typeYourMessage": "మీ సందేశాన్ని టైప్ చేయండి",
+      "messagesCount": "సందేశం(లు)",
+      "singleMessage": "సందేశం",
+      "yesDelete": "అవును, తొలగించు"
+    }
   },
   "No Classes": "తరగతులు లేవు",
   "No Quizzes": "క్విజ్‌లు లేవు",
@@ -3047,7 +3112,7 @@
       "Replacefolder": "ఫోల్డర్‌ని భర్తీ చేయండి",
       "Afolderwiththen": "పేరుతో ఫోల్డర్",
       "alreadyexistsDo": "ఇప్పటికే ఉంది. మీరు దానిని భర్తీ చేయాలనుకుంటున్నారా?",
-      "Drive": "డ్రైవ్ చేయండి",
+      "Drive": "డ్రైవ్",
       "Manageorganizem": "ఫైల్‌లను నిర్వహించండి, నిర్వహించండి & పర్యవేక్షించండి",
       "Folders": "ఫోల్డర్లు",
       "Nofoldersyet": "ఇంకా ఫోల్డర్‌లు లేవు",
@@ -3236,5 +3301,109 @@
   "iiprop": "url|mime|extmetadata",
   "iiurlwidth": "1100",
   "format": "json",
-  "origin": "*"
+  "origin": "*",
+  "SharedClub": {
+    "toast": {
+      "failedToLoadClubs": "క్లబ్‌లు లేదా స్థితిని లోడ్ చేయడంలో విఫలమైంది",
+      "studentIdMissing": "విద్యార్థి ID లేదు. అభ్యర్థనను పంపలేరు.",
+      "joinRequestSent": "చేరడానికి అభ్యర్థన విజయవంతంగా పంపబడింది!",
+      "failedToSendRequest": "అభ్యర్థనను పంపడంలో విఫలమైంది.",
+      "failedToFetchClubInfo": "క్లబ్ సమాచారాన్ని పొందడంలో విఫలమైంది.",
+      "failedToLoadClubInfo": "క్లబ్ సమాచారాన్ని లోడ్ చేయడంలో విఫలమైంది."
+    },
+    "explore": {
+      "noClubsFound": "ప్రస్తుతం క్లబ్‌లు ఏవీ కనుగొనబడలేదు",
+      "joinClub": "క్లబ్‌లో చేరండి",
+      "sendingRequest": "అభ్యర్థనను పంపుతోంది",
+      "pendingStatus": "పెండింగ్‌లో ఉంది",
+      "viewClub": "క్లబ్‌ని వీక్షించండి",
+      "activeUsers": "క్రియాశీల వినియోగదారులు:",
+      "inactiveUsers": "నిష్క్రియ వినియోగదారులు:"
+    },
+    "date": {
+      "today": "ఈరోజు",
+      "yesterday": "నిన్న"
+    },
+    "announcements": {
+      "failedToLoad": "ప్రకటనలను లోడ్ చేయడంలో విఫలమైంది",
+      "failedToLoadOlder": "పాత సందేశాలను లోడ్ చేయడంలో విఫలమైంది",
+      "updated": "ప్రకటన నవీకరించబడింది",
+      "failedToSend": "సందేశాన్ని పంపడంలో విఫలమైంది",
+      "unknownError": "తెలియని లోపం సంభవించింది",
+      "deleted": "ప్రకటన తొలగించబడింది",
+      "failedToDelete": "తొలగించడంలో విఫలమైంది",
+      "options": "ఎంపికలు",
+      "whatToDo": "మీరు ఏమి చేయాలనుకుంటున్నారు?",
+      "edit": "సవరించు",
+      "delete": "తొలగించు",
+      "cancel": "రద్దు చేయి",
+      "unknownAuthor": "తెలియదు",
+      "loading": "లోడ్ అవుతోంది...",
+      "loadOlder": "పాత సందేశాలను లోడ్ చేయండి",
+      "editPlaceholder": "ప్రకటనను సవరించండి...",
+      "typePlaceholder": "ఇక్కడ టైప్ చేయండి........"
+    },
+    "roles": {
+      "responsibleFaculty": "బాధ్యత గల ఫ్యాకల్టీ",
+      "president": "అధ్యక్షుడు",
+      "vicePresident": "ఉపాధ్యక్షుడు",
+      "mentor": "గురువు"
+    },
+    "info": {
+      "mentors": "మార్గదర్శకులు:"
+    },
+    "requests": {
+      "failedToLoad": "డేటాను లోడ్ చేయడంలో విఫలమైంది.",
+      "successAccept": "విజయవంతంగా ఆమోదించబడింది!",
+      "successReject": "విజయవంతంగా తిరస్కరించబడింది!",
+      "successRemove": "విజయవంతంగా తీసివేయబడింది!",
+      "notAuthenticated": "వినియోగదారు ప్రమాణీకరించబడలేదు",
+      "anErrorOccurred": "ఒక లోపం సంభవించింది",
+      "filterAll": "అన్నీ",
+      "filterPending": "పెండింగ్‌లో ఉంది",
+      "filterAccepted": "అంగీకరించబడింది",
+      "total": "మొత్తం",
+      "acceptedCount": "అంగీకరించబడింది",
+      "pendingCount": "పెండింగ్‌లో ఉంది",
+      "requestsLabel": "అభ్యర్థనలు",
+      "noRequestsMatching": "మీ శోధనకు సరిపోలే అభ్యర్థనలు ఏవీ కనుగొనబడలేదు.",
+      "noRequestsCategory": "ఈ వర్గంలో అభ్యర్థనలు ఏవీ కనుగొనబడలేదు."
+    },
+    "tabs": {
+      "info": "సమాచారం",
+      "requests": "అభ్యర్థనలు",
+      "chat": "చాట్ చేయండి",
+      "myClub": "నా క్లబ్",
+      "explore": "అన్వేషించండి"
+    }
+  },
+  "SharedMeetings": {
+    "subject": {
+      "general": "జనరల్"
+    },
+    "status": {
+      "completed": "పూర్తయింది",
+      "joinMeeting": "సమావేశంలో చేరండి"
+    },
+    "details": {
+      "role": "పాత్ర:",
+      "na": "N/A",
+      "date": "తేదీ:",
+      "time": "సమయం:",
+      "branch": "శాఖ:",
+      "year": "సంవత్సరం:",
+      "section": "విభాగం:"
+    },
+    "toast": {
+      "error": "లోపం",
+      "failedToFetchUpcoming": "రాబోయే సమావేశాలను పొందడంలో విఫలమైంది",
+      "failedToFetchPrevious": "మునుపటి సమావేశాలను పొందడంలో విఫలమైంది"
+    },
+    "tabs": {
+      "upcoming": "రాబోయే సమావేశాలు",
+      "previous": "మునుపటి సమావేశాలు"
+    },
+    "noUpcomingMeetings": "రాబోయే సమావేశాలు ఏవీ కనుగొనబడలేదు.",
+    "noPreviousMeetings": "మునుపటి సమావేశాలు ఏవీ కనుగొనబడలేదు."
+  }
 }

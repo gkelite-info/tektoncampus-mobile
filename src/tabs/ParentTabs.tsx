@@ -26,21 +26,21 @@ import { useTranslation } from 'react-i18next';
 export function ParentCustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
-    const bottomInset = insets.bottom || 10; 
+    const bottomInset = insets.bottom || 0; 
 
     return (
         <View
             className="absolute bottom-0 bg-transparent"
-            style={{ width: SCREEN_WIDTH, height: 120 + bottomInset }}
+            style={{ width: SCREEN_WIDTH, height: 100 + bottomInset }}
         >
             <View 
                 className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[15px] shadow-lg shadow-black/10" 
-                style={{ height: 85 + bottomInset }}
+                style={{ height: 65 + bottomInset }}
             />
 
             <View 
                 className="flex-row absolute left-0 right-0"
-                style={{ height: 85, bottom: bottomInset }}
+                style={{ height: 65, bottom: bottomInset }}
             >
                 {state.routes.map((route, index) => {
                     const isFocused = state.index === index;

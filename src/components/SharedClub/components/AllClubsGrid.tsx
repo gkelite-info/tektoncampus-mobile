@@ -32,9 +32,6 @@ export default function AllClubsGrid({
   useEffect(() => {
     if (!collegeId || !studentId) return;
     const fetchData = async () => {
-      const {
-        t
-      } = useTranslation();
       try {
         setIsLoading(true);
         const clubsPromise = getAllClubsAPI(parseInt(collegeId.toString(), 10), currentPage, ITEMS_PER_PAGE);
@@ -58,7 +55,7 @@ export default function AllClubsGrid({
       } catch (error) {
         Toast.show({
           type: "error",
-          text1: t("Failed to load clubs or status")
+          text1: t("SharedClub.toast.failedToLoadClubs", "Failed to load clubs or status")
         });
       } finally {
         setIsLoading(false);
@@ -67,13 +64,10 @@ export default function AllClubsGrid({
     fetchData();
   }, [collegeId, currentPage, studentId]);
   const handleJoinClick = async (clubId: string) => {
-    const {
-      t
-    } = useTranslation();
     if (!studentId) {
       Toast.show({
         type: "error",
-        text1: t("Student ID is missing. Cannot send request.")
+        text1: t("SharedClub.toast.studentIdMissing", "Student ID is missing. Cannot send request.")
       });
       return;
     }
@@ -82,14 +76,14 @@ export default function AllClubsGrid({
       await joinClubAPI(parseInt(clubId, 10), parseInt(studentId.toString(), 10));
       Toast.show({
         type: "success",
-        text1: t("Join request sent successfully!")
+        text1: t("SharedClub.toast.joinRequestSent", "Join request sent successfully!")
       });
       setActiveClubId(clubId);
       setActiveClubStatus("pending");
     } catch (error: any) {
       Toast.show({
         type: "error",
-        text1: error.message || t("Failed to send request.")
+        text1: error.message || t("SharedClub.toast.failedToSendRequest", "Failed to send request.")
       });
     } finally {
       setJoiningClubId(null);
@@ -102,24 +96,21 @@ export default function AllClubsGrid({
   }
   if (clubs.length === 0) {
     return <View style={tw`flex-1 items-center pt-20`}>
-                <Text style={tw`text-gray-500 font-medium text-lg`}>
-                    {t("No clubs found at the moment")}
-                </Text>
-            </View>;
+                 <Text style={tw`text-gray-500 font-medium text-lg`}>
+                     {t("SharedClub.explore.noClubsFound", "No clubs found at the moment")}
+                 </Text>
+             </View>;
   }
-  return <FlatList data={clubs} keyExtractor={item => item.id.toString()} numColumns={1} contentContainerStyle={tw`pb-20 px-4`} renderItem={({
+  return <FlatList data={clubs} keyExtractor={item => item.id.toString()} numColumns={1} contentContainerStyle={tw`pb-24 px-4`} renderItem={({
     item: club
   }) => {
-    const {
-      t
-    } = useTranslation();
     const isAlreadyInAClub = activeClubStatus === "accepted";
     const isPendingForAClub = activeClubStatus === "pending";
     const isThisClubTheActiveOne = activeClubId === club.id.toString();
     const isCurrentlyJoining = joiningClubId === club.id.toString();
     const isButtonDisabled = joiningClubId !== null || isPendingForAClub || isAlreadyInAClub && !isThisClubTheActiveOne;
-    let buttonText = t("Join Club");
-    if (isCurrentlyJoining) buttonText = t("Sending Request");else if (isThisClubTheActiveOne && isPendingForAClub) buttonText = t("Pending");else if (isThisClubTheActiveOne && isAlreadyInAClub) buttonText = t("View Club");
+    let buttonText = t("SharedClub.explore.joinClub", "Join Club");
+    if (isCurrentlyJoining) buttonText = t("SharedClub.explore.sendingRequest", "Sending Request");else if (isThisClubTheActiveOne && isPendingForAClub) buttonText = t("SharedClub.explore.pendingStatus", "Pending");else if (isThisClubTheActiveOne && isAlreadyInAClub) buttonText = t("SharedClub.explore.viewClub", "View Club");
     let buttonClass = "bg-[#16284F]";
     if (isThisClubTheActiveOne && isPendingForAClub) {
       buttonClass = "bg-[#FB8000]";
@@ -140,12 +131,12 @@ export default function AllClubsGrid({
                         <View style={tw`flex-row gap-3 w-full mb-6`}>
                             <View style={tw`flex-1 bg-[#43C17A]/20 py-2 rounded-md`}>
                                 <Text style={tw`text-[#43C17A] text-[12px] text-center font-bold`}>
-                                    {t("Active Users:")} {club.active || 0}
+                                    {t("SharedClub.explore.activeUsers", "Active Users:")} {club.active || 0}
                                 </Text>
                             </View>
                             <View style={tw`flex-1 bg-[#FF2A2A]/20 py-2 rounded-md`}>
                                 <Text style={tw`text-[#FF2A2A] text-[12px] text-center font-bold`}>
-                                    {t("Inactive Users:")} {club.inactive || 0}
+                                    {t("SharedClub.explore.inactiveUsers", "Inactive Users:")} {club.inactive || 0}
                                 </Text>
                             </View>
                         </View>

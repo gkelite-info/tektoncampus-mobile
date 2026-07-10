@@ -19,7 +19,7 @@ import { useUser } from "@/utils/context/UserContext";
 
 const FETCH_LIMIT = 20;
 
-export const formatChatDateTime = (dateString: string) => {
+export const formatChatDateTime = (dateString: string, t: any) => {
   const date = new Date(dateString);
   const timeString = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
 
@@ -27,8 +27,8 @@ export const formatChatDateTime = (dateString: string) => {
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  if (date.toDateString() === today.toDateString()) return `Today ${timeString}`;
-  if (date.toDateString() === yesterday.toDateString()) return `Yesterday ${timeString}`;
+  if (date.toDateString() === today.toDateString()) return `${t("SharedClub.date.today", "Today")} ${timeString}`;
+  if (date.toDateString() === yesterday.toDateString()) return `${t("SharedClub.date.yesterday", "Yesterday")} ${timeString}`;
   return `${date.toLocaleDateString("en-GB")} ${timeString}`;
 };
 
@@ -86,7 +86,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
         }
       } catch (err) {
         if (!abortController.signal.aborted) {
-          Toast.show({ type: "error", text1: "Failed to load announcements" });
+          Toast.show({ type: "error", text1: t("SharedClub.announcements.failedToLoad", "Failed to load announcements") });
         }
       } finally {
         if (!abortController.signal.aborted) setLoading(false);
@@ -161,7 +161,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
         return [...newUniqueMessages, ...prev];
       });
     } catch (err) {
-      Toast.show({ type: "error", text1: "Failed to load older messages" });
+      Toast.show({ type: "error", text1: t("SharedClub.announcements.failedToLoadOlder", "Failed to load older messages") });
     } finally {
       setFetchingMore(false);
     }
@@ -182,7 +182,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
         m
         ));
         setEditingId(null);
-        Toast.show({ type: "success", text1: "Announcement updated" });
+        Toast.show({ type: "success", text1: t("SharedClub.announcements.updated", "Announcement updated") });
         setInputValue("");
       } else {
         const newMessage = await postAnnouncement(
@@ -198,7 +198,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
       }
     } catch (err: any) {
       console.error("Failed to send message:", err);
-      Toast.show({ type: "error", text1: "Failed to send message", text2: err?.message || "Unknown error occurred" });
+      Toast.show({ type: "error", text1: t("SharedClub.announcements.failedToSend", "Failed to send message"), text2: err?.message || t("SharedClub.announcements.unknownError", "Unknown error occurred") });
     } finally {
       setIsPosting(false);
     }
@@ -208,20 +208,20 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
     try {
       await deleteAnnouncement(id);
       setMessages((prev) => prev.filter((m) => m.announcementId !== id));
-      Toast.show({ type: "success", text1: "Announcement deleted" });
+      Toast.show({ type: "success", text1: t("SharedClub.announcements.deleted", "Announcement deleted") });
     } catch (err) {
-      Toast.show({ type: "error", text1: "Failed to delete" });
+      Toast.show({ type: "error", text1: t("SharedClub.announcements.failedToDelete", "Failed to delete") });
     }
   };
 
   const showOptions = (announcement: any) => {
     Alert.alert(
-      "Options",
-      "What would you like to do?",
+      t("SharedClub.announcements.options", "Options"),
+      t("SharedClub.announcements.whatToDo", "What would you like to do?"),
       [
-      { text: "Edit", onPress: () => {setEditingId(announcement.announcementId);setInputValue(announcement.message);} },
-      { text: "Delete", onPress: () => confirmDelete(announcement.announcementId), style: "destructive" },
-      { text: "Cancel", style: "cancel" }]
+      { text: t("SharedClub.announcements.edit", "Edit"), onPress: () => {setEditingId(announcement.announcementId);setInputValue(announcement.message);} },
+      { text: t("SharedClub.announcements.delete", "Delete"), onPress: () => confirmDelete(announcement.announcementId), style: "destructive" },
+      { text: t("SharedClub.announcements.cancel", "Cancel"), style: "cancel" }]
 
     );
   };
@@ -239,7 +239,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
       announcement.authorFaculty.users?.user_profile;
       return { name: announcement.authorFaculty.users?.fullName, avatar: profile?.profileUrl };
     }
-    return { name: "Unknown", avatar: null };
+    return { name: t("SharedClub.announcements.unknownAuthor", "Unknown"), avatar: null };
   };
 
   if (loading) {
@@ -261,7 +261,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
       
             <ScrollView
         style={tw`flex-1 px-4`}
-        contentContainerStyle={tw`pb-4 pt-4`}
+        contentContainerStyle={tw`${canPost ? 'pb-4' : 'pb-24'} pt-4`}
         onScroll={({ nativeEvent }) => {
           if (nativeEvent.contentOffset.y <= 10) {
             fetchOlderMessages();
@@ -285,7 +285,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
           <View style={tw`items-center py-2`}>
                                 <TouchableOpacity onPress={fetchOlderMessages} disabled={fetchingMore}>
                                     <Text style={tw`text-xs font-bold text-gray-400 py-2 px-4 rounded-full bg-gray-50 border border-gray-200`}>
-                                        {fetchingMore ? "Loading..." : "Load older messages"}
+                                        {fetchingMore ? t("SharedClub.announcements.loading", "Loading...") : t("SharedClub.announcements.loadOlder", "Load older messages")}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -310,7 +310,7 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
 
                                         <View style={tw`mb-2 pr-8`}>
                                             <Text style={tw`text-[11px] font-medium text-gray-400 mb-1`}>
-                                                {formatChatDateTime(announcement.createdAt)}
+                                                {formatChatDateTime(announcement.createdAt, t)}
                                             </Text>
                                             <View style={tw`flex-row items-center flex-wrap`}>
                                                 <View style={tw`rounded bg-[#E0E5FA] px-1.5 py-0.5 border border-[#465FAC] mr-2`}>
@@ -341,12 +341,12 @@ export default function Announcements({ userRole, clubId, collegeId, roleType }:
             </ScrollView>
 
             {canPost &&
-      <View style={[tw`p-4 bg-[#F4F5F6]`, { paddingBottom: isKeyboardVisible ? Platform.OS === 'android' ? keyboardHeight : 16 : Math.max(insets.bottom, 16) }]}>
+      <View style={[tw`p-4 bg-[#F4F5F6]`, { paddingBottom: isKeyboardVisible ? (Platform.OS === 'android' ? keyboardHeight : 16) : (65 + Math.max(insets.bottom, 16)) }]}>
                     <View style={tw`flex-row items-center bg-[#E5E5E5] rounded-full px-4 py-2`}>
                         <TextInput
             value={inputValue}
             onChangeText={setInputValue}
-            placeholder={editingId ? "Edit announcement..." : "Type here........"}
+            placeholder={editingId ? t("SharedClub.announcements.editPlaceholder", "Edit announcement...") : t("SharedClub.announcements.typePlaceholder", "Type here........")}
             placeholderTextColor="#6F6F6F"
             maxLength={1000}
             style={tw`flex-1 text-sm font-medium text-[#282828] py-2`}

@@ -60,7 +60,7 @@ export default function RequestsList({
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Failed to load data."
+        text1: t("SharedClub.requests.failedToLoad", "Failed to load data.")
       });
     } finally {
       setIsLoading(false);
@@ -69,10 +69,17 @@ export default function RequestsList({
   useEffect(() => {
     fetchRequests();
   }, [clubId, currentFilter, currentPage, searchQuery]);
+  const getSuccessMessage = (actionType: "accept" | "reject" | "remove") => {
+    switch (actionType) {
+      case "accept": return t("SharedClub.requests.successAccept", "Successfully accepted!");
+      case "reject": return t("SharedClub.requests.successReject", "Successfully rejected!");
+      case "remove": return t("SharedClub.requests.successRemove", "Successfully removed!");
+    }
+  };
   const handleExecuteAction = async (type: "accept" | "reject" | "remove", reqItem: any) => {
     if (!facultyId) return Toast.show({
       type: "error",
-      text1: "User not authenticated"
+      text1: t("SharedClub.requests.notAuthenticated", "User not authenticated")
     });
     setIsActionLoading(true);
     try {
@@ -88,16 +95,24 @@ export default function RequestsList({
       }
       Toast.show({
         type: "success",
-        text1: `Successfully ${type}ed!`
+        text1: getSuccessMessage(type)
       });
       fetchRequests();
     } catch (error: any) {
       Toast.show({
         type: "error",
-        text1: error.message || "An error occurred"
+        text1: error.message || t("SharedClub.requests.anErrorOccurred", "An error occurred")
       });
     } finally {
       setIsActionLoading(false);
+    }
+  };
+  const getFilterLabel = (f: string) => {
+    switch (f) {
+      case "all": return t("SharedClub.requests.filterAll", "All");
+      case "pending": return t("SharedClub.requests.filterPending", "Pending");
+      case "accepted": return t("SharedClub.requests.filterAccepted", "Accepted");
+      default: return f;
     }
   };
   return <View style={tw`flex-1 px-4`}>
@@ -106,7 +121,7 @@ export default function RequestsList({
                 {["all", "pending", "accepted"].map(filter => <TouchableOpacity key={filter} onPress={() => onChangeFilter(filter)} style={tw`rounded-full px-5 py-2 ${currentFilter === filter ? "bg-[#16284F]" : "bg-[#E7E7E7]"}`}>
           
                         <Text style={tw`text-sm font-semibold capitalize ${currentFilter === filter ? "text-white" : "text-[#000000]"}`}>
-                            {filter}
+                            {getFilterLabel(filter)}
                         </Text>
                     </TouchableOpacity>)}
             </View>
@@ -119,15 +134,12 @@ export default function RequestsList({
             </View>
 
             <Text style={tw`text-sm font-semibold text-gray-500 mb-4`}>
-                {totalItems} {currentFilter === 'all' ? 'Total' : currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1)}{t("Auto.Common.Requests", "Requests")}
+                {totalItems} {currentFilter === 'all' ? t("SharedClub.requests.total", "Total") : currentFilter === 'accepted' ? t("SharedClub.requests.acceptedCount", "Accepted") : t("SharedClub.requests.pendingCount", "Pending")} {t("SharedClub.requests.requestsLabel", "Requests")}
       </Text>
 
-            {isLoading ? <ActivityIndicator size="large" color="#43C17A" style={tw`mt-10`} /> : requests.length > 0 ? <FlatList data={requests} keyExtractor={item => item.id} contentContainerStyle={tw`pb-10`} renderItem={({
+            {isLoading ? <ActivityIndicator size="large" color="#43C17A" style={tw`mt-10`} /> : requests.length > 0 ? <FlatList data={requests} keyExtractor={item => item.id} contentContainerStyle={tw`pb-24`} renderItem={({
       item: req
     }) => {
-      const {
-        t
-      } = useTranslation();
       return <View style={tw`flex-row items-center justify-between rounded-lg bg-white p-3 shadow-sm border border-gray-100 mb-3`}>
                             <View style={tw`flex-row items-center flex-1 pr-2`}>
                                 <Avatar src={req.avatar} size={40} />
@@ -154,8 +166,8 @@ export default function RequestsList({
                             </View>
                         </View>;
     }} /> : <View style={tw`items-center py-12`}>
-                    <Text style={tw`text-gray-500`}>{t("Auto.Common.Norequestsfound", "No requests found")}
-          {searchInput ? "matching your search" : "in this category"}.
+                    <Text style={tw`text-gray-500`}>
+                        {searchInput ? t("SharedClub.requests.noRequestsMatching", "No requests found matching your search.") : t("SharedClub.requests.noRequestsCategory", "No requests found in this category.")}
                     </Text>
                 </View>}
         </View>;

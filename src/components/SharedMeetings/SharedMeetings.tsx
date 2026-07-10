@@ -92,8 +92,10 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
     } catch (err) {
       Toast.show({
         type: "error",
-        text1: "Error",
-        text2: `Failed to fetch ${currentType} meetings`
+        text1: t("SharedMeetings.toast.error", "Error"),
+        text2: currentType === "upcoming" 
+          ? t("SharedMeetings.toast.failedToFetchUpcoming", "Failed to fetch upcoming meetings") 
+          : t("SharedMeetings.toast.failedToFetchPrevious", "Failed to fetch previous meetings")
       });
     } finally {
       setIsLoading(false);
@@ -133,7 +135,7 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
                     isActive ? "text-[#E9E9E9]" : "text-[#414141]"}`
                     }>
                     
-                    {tab.label}
+                    {tab.id === "upcoming" ? t("SharedMeetings.tabs.upcoming", "Upcoming Meetings") : t("SharedMeetings.tabs.previous", "Previous Meetings")}
                   </Text>
                 </TouchableOpacity>);
 
@@ -157,9 +159,11 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
             </View> :
 
           <View className="py-20 items-center justify-center bg-white rounded-xl border border-dashed border-gray-300">
-              <Text className="text-lg text-gray-500 text-center">{t("Auto.Common.No", "No")}
-              {currentType}{t("Auto.Common.meetingsfound", "meetings found.")}
-            </Text>
+              <Text className="text-lg text-gray-500 text-center">
+                {currentType === "upcoming" 
+                  ? t("SharedMeetings.noUpcomingMeetings", "No upcoming meetings found.") 
+                  : t("SharedMeetings.noPreviousMeetings", "No previous meetings found.")}
+              </Text>
             </View>
           }
 

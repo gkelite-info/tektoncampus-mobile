@@ -1018,7 +1018,72 @@
     "View Details": "تفصیلات دیکھیں",
     "Leave Details": "تفصیلات چھوڑیں۔",
     "Communication History": "مواصلات کی تاریخ",
-    "Type your message": "اپنا پیغام ٹائپ کریں..."
+    "Type your message": "اپنا پیغام ٹائپ کریں...",
+    "student": {
+      "Approved": "منظور شدہ",
+      "Rejected": "مسترد",
+      "Pending": "زیر التواء",
+      "Days": "دن",
+      "Leave": "چھوڑو",
+      "Faculty": "فیکلٹی",
+      "Attachment": "اٹیچمنٹ",
+      "Confirm": "تصدیق کریں۔",
+      "Areyousureyouwantto": "کیا آپ واقعی چاہتے ہیں؟",
+      "delete": "حذف کریں",
+      "remove": "ہٹا دیں",
+      "Cancel": "منسوخ کریں۔",
+      "Wait": "انتظار کرو...",
+      "Faculties": "فیکلٹیز",
+      "Description": "تفصیل",
+      "Attachments": "منسلکات",
+      "Submitting": "جمع کر رہا ہے...",
+      "Document": "دستاویز",
+      "New": "نیا",
+      "Duration": "دورانیہ",
+      "Status": "حیثیت",
+      "Selected": "منتخب",
+      "Delete": "حذف کریں۔",
+      "Sending": "بھیج رہا ہے...",
+      "message": "پیغام",
+      "Total": "کل",
+      "all": "تمام",
+      "approved": "منظور شدہ",
+      "pending": "زیر التواء",
+      "rejected": "مسترد",
+      "searchLeaves": "پتے تلاش کریں...",
+      "attendanceRegularization": "حاضری ریگولرائزیشن",
+      "viewDetails": "تفصیلات دیکھیں",
+      "leaveRequests": "درخواستیں چھوڑ دیں۔",
+      "submitLeaveDescription": "چھٹی جمع کروائیں، منظوریوں کو ٹریک کریں۔",
+      "requestLeave": "رخصت کی درخواست کریں۔",
+      "noLeaveRequestsFound": "چھٹی کی کوئی درخواست نہیں ملی۔",
+      "leaveType": "چھوڑنے کی قسم",
+      "selectLeaveType": "چھوڑنے کی قسم منتخب کریں۔",
+      "startDate": "آغاز کی تاریخ",
+      "endDate": "اختتامی تاریخ",
+      "loadingFaculties": "فیکلٹیز لوڈ ہو رہی ہیں...",
+      "noFacultiesAssigned": "کوئی فیکلٹی تفویض نہیں کی گئی۔",
+      "selectFaculties": "فیکلٹیز کو منتخب کریں۔",
+      "provideExplanationPlaceholder": "اپنی چھٹی کی درخواست کے لیے مختصر وضاحت فراہم کریں........",
+      "optionalMax5": "اختیاری (زیادہ سے زیادہ 5)",
+      "clickToUpload": "فائلیں اپ لوڈ کرنے کے لیے کلک کریں۔",
+      "submitRequest": "درخواست جمع کروائیں۔",
+      "leaveDetails": "تفصیلات چھوڑیں۔",
+      "requestSent": "درخواست بھیجی گئی۔",
+      "duration": "دورانیہ",
+      "status": "حیثیت",
+      "selected": "منتخب",
+      "communicationHistory": "مواصلات کی تاریخ",
+      "deleteButton": "حذف کریں۔",
+      "cancel": "منسوخ کریں۔",
+      "selectMessages": "پیغامات منتخب کریں۔",
+      "noCommunicationYet": "ابھی تک کوئی مواصلت نہیں۔",
+      "sending": "بھیج رہا ہے...",
+      "typeYourMessage": "اپنا پیغام ٹائپ کریں۔",
+      "messagesCount": "پیغام",
+      "singleMessage": "پیغام",
+      "yesDelete": "ہاں، حذف کریں۔"
+    }
   },
   "Auto.Common.PoweredbyGKElit": "جی کے ایلیٹ انفو کے ذریعہ تقویت یافتہ",
   "Auto.Common.ProceedtoLogin": "لاگ ان پر آگے بڑھیں۔",
@@ -2340,7 +2405,7 @@
       "CollegeHR": "کالج HR",
       "Student": "طالب علم",
       "Faculty": "فیکلٹی",
-      "PlacementOfficer": "Placement Officer",
+      "PlacementOfficer": "پلیسمنٹ آفیسر",
       "WellbeingExecutive": "ویلبیئنگ ایگزیکٹو",
       "WellbeingManager": "ویلبیئنگ مینیجر",
       "SuperAdmin": "سپر ایڈمن",
@@ -2724,7 +2789,7 @@
       "BrowseFiles": "فائلیں براؤز کریں۔",
       "Readytoupload": "اپ لوڈ کرنے کے لیے تیار (",
       "Uploaded": "اپ لوڈ کردہ (",
-      "PDF": "PDF",
+      "PDF": "پی ڈی ایف",
       "Notopicsfound": "کوئی عنوانات نہیں ملے",
       "Delete": "حذف کریں۔",
       "Nounitsfound": "کوئی یونٹ نہیں ملے",
@@ -3466,5 +3531,109 @@
   "iiprop": "url|mime|extmetadata",
   "iiurlwidth": "1100",
   "format": "json",
-  "origin": "*"
+  "origin": "*",
+  "SharedClub": {
+    "toast": {
+      "failedToLoadClubs": "کلب یا سٹیٹس لوڈ کرنے میں ناکام",
+      "studentIdMissing": "طالب علم کی شناخت غائب ہے۔ درخواست نہیں بھیج سکتے۔",
+      "joinRequestSent": "شمولیت کی درخواست کامیابی کے ساتھ بھیج دی گئی!",
+      "failedToSendRequest": "درخواست بھیجنے میں ناکام۔",
+      "failedToFetchClubInfo": "کلب کی معلومات حاصل کرنے میں ناکام۔",
+      "failedToLoadClubInfo": "کلب کی معلومات لوڈ کرنے میں ناکام۔"
+    },
+    "explore": {
+      "noClubsFound": "اس وقت کوئی کلب نہیں ملا",
+      "joinClub": "کلب میں شامل ہوں۔",
+      "sendingRequest": "درخواست بھیجنا",
+      "pendingStatus": "زیر التواء",
+      "viewClub": "کلب دیکھیں",
+      "activeUsers": "فعال صارفین:",
+      "inactiveUsers": "غیر فعال صارفین:"
+    },
+    "date": {
+      "today": "آج",
+      "yesterday": "کل"
+    },
+    "announcements": {
+      "failedToLoad": "اعلانات لوڈ کرنے میں ناکام",
+      "failedToLoadOlder": "پرانے پیغامات لوڈ کرنے میں ناکام",
+      "updated": "اعلان اپ ڈیٹ ہو گیا۔",
+      "failedToSend": "پیغام بھیجنے میں ناکام",
+      "unknownError": "نامعلوم خرابی پیش آگئی",
+      "deleted": "اعلان حذف کر دیا گیا۔",
+      "failedToDelete": "حذف کرنے میں ناکام",
+      "options": "اختیارات",
+      "whatToDo": "آپ کیا کرنا چاہیں گے؟",
+      "edit": "ترمیم کریں۔",
+      "delete": "حذف کریں۔",
+      "cancel": "منسوخ کریں۔",
+      "unknownAuthor": "نامعلوم",
+      "loading": "لوڈ ہو رہا ہے...",
+      "loadOlder": "پرانے پیغامات لوڈ کریں۔",
+      "editPlaceholder": "اعلان میں ترمیم کریں...",
+      "typePlaceholder": "یہاں ٹائپ کریں........"
+    },
+    "roles": {
+      "responsibleFaculty": "ذمہ دار فیکلٹی",
+      "president": "صدر",
+      "vicePresident": "نائب صدر",
+      "mentor": "سرپرست"
+    },
+    "info": {
+      "mentors": "سرپرست:"
+    },
+    "requests": {
+      "failedToLoad": "ڈیٹا لوڈ کرنے میں ناکام۔",
+      "successAccept": "کامیابی سے قبول کر لیا گیا!",
+      "successReject": "کامیابی سے مسترد کر دیا گیا!",
+      "successRemove": "کامیابی سے ہٹا دیا گیا!",
+      "notAuthenticated": "صارف کی توثیق نہیں ہوئی۔",
+      "anErrorOccurred": "ایک خرابی پیش آ گئی۔",
+      "filterAll": "تمام",
+      "filterPending": "زیر التواء",
+      "filterAccepted": "قبول کر لیا",
+      "total": "کل",
+      "acceptedCount": "قبول کر لیا",
+      "pendingCount": "زیر التواء",
+      "requestsLabel": "درخواستیں",
+      "noRequestsMatching": "آپ کی تلاش سے مماثل کوئی درخواستیں نہیں ملیں۔",
+      "noRequestsCategory": "اس زمرے میں کوئی درخواستیں نہیں ملیں۔"
+    },
+    "tabs": {
+      "info": "معلومات",
+      "requests": "درخواستیں",
+      "chat": "گپ شپ",
+      "myClub": "میرا کلب",
+      "explore": "دریافت کریں۔"
+    }
+  },
+  "SharedMeetings": {
+    "subject": {
+      "general": "جنرل"
+    },
+    "status": {
+      "completed": "مکمل",
+      "joinMeeting": "میٹنگ میں شامل ہوں۔"
+    },
+    "details": {
+      "role": "کردار:",
+      "na": "N/A",
+      "date": "تاریخ:",
+      "time": "وقت:",
+      "branch": "برانچ:",
+      "year": "سال:",
+      "section": "سیکشن:"
+    },
+    "toast": {
+      "error": "خرابی",
+      "failedToFetchUpcoming": "آنے والی میٹنگز حاصل کرنے میں ناکام",
+      "failedToFetchPrevious": "پچھلی میٹنگز حاصل کرنے میں ناکام"
+    },
+    "tabs": {
+      "upcoming": "آنے والی میٹنگز",
+      "previous": "پچھلی میٹنگز"
+    },
+    "noUpcomingMeetings": "کوئی آئندہ میٹنگ نہیں ملی۔",
+    "noPreviousMeetings": "کوئی پچھلی میٹنگ نہیں ملی۔"
+  }
 }

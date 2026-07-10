@@ -41,7 +41,6 @@ export default function SharedPaymentDashboard({
     const [feePlan, setFeePlan] = useState<ExtendedFeePlan | null>(null);
     const [paymentHistory, setPaymentHistory] = useState<FeeSummaryItem[]>([]);
 
-    // Flow states
     const [paymentState, setPaymentState] = useState<"DASHBOARD" | "CONFIRM" | "SUCCESS" | "CANCELLED">("DASHBOARD");
     const [paymentContext, setPaymentContext] = useState<{
         amount: number;
@@ -59,21 +58,19 @@ export default function SharedPaymentDashboard({
         if (paymentState === "DASHBOARD") {
             const loadDashboardData = async () => {
                 try {
-                    setIsLoading(true); // Force loading overlay during refresh
-                    const studentId = targetUserId || user?.id;
+                    setIsLoading(true); 
+                    const studentId = targetUserId;
                     if (!studentId) return;
 
-                    // 1. Fetch Profile
                     const profile = await fetchStudentProfileCardData(studentId);
                     setProfileData(profile);
 
-                    // 2. Fetch Fee Plan
                     const plan = await fetchStudentFeePlan(studentId);
-                    if (plan) setFeePlan(plan);
+                    if (plan) setFeePlan(plan as ExtendedFeePlan);
 
-                    // 3. Fetch History (if we have a plan)
-                    if (plan?.studentFeeObligationId) {
-                        const history = await fetchStudentPaymentHistory(plan.studentFeeObligationId);
+                    const typedPlan = plan as ExtendedFeePlan | null;
+                    if (typedPlan?.studentFeeObligationId) {
+                        const history = await fetchStudentPaymentHistory(typedPlan.studentFeeObligationId);
                         setPaymentHistory(history);
                     }
                 } catch (err) {
@@ -99,14 +96,13 @@ export default function SharedPaymentDashboard({
     const handleDownloadReceipt = (item: FeeSummaryItem) => {
         if (!profileData || !feePlan) return;
 
-        // Find the semester associated with this payment, or default to the current/first one
-        const sem = feePlan.semesters?.find((s: any) => s.semesterId === item.semesterId) || feePlan.semesters?.[0] || {};
+        const sem = feePlan.semesterRoadmap?.find((s: any) => s.semesterId === item.semesterId) || feePlan.semesterRoadmap?.[0] || {};
         
         generateSemesterReceipt(
             feePlan,
             sem,
             { name: profileData.name, rollNo: profileData.course?.split('|')[0]?.trim() || "N/A" },
-            [item] // Pass only this specific transaction to the receipt
+            [item] 
         );
     };
 

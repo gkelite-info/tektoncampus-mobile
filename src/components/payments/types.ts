@@ -103,3 +103,13 @@ export interface Transaction {
   paidOn: string;
   status: "Success" | "Failure" | "Pending";
 }
+
+export interface ProfileCardProps {
+  name: string;
+  course: string;
+  year: string | number;
+  rollNo: string;
+  email: string;
+  mobile: string;
+  image?: string | null;
+}

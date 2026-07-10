@@ -46,7 +46,7 @@ export default function SharedClub({ role }: SharedClubProps) {const { t } = use
           setCurrentTab("info");
         }
       } catch (error) {
-        Toast.show({ type: "error", text1: "Failed to fetch club information." });
+        Toast.show({ type: "error", text1: t("SharedClub.toast.failedToFetchClubInfo", "Failed to fetch club information.") });
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +62,7 @@ export default function SharedClub({ role }: SharedClubProps) {const { t } = use
         setStudentRole(data.role);
         setCurrentTab("myclub");
       } catch (error) {
-        Toast.show({ type: "error", text1: "Failed to load club information." });
+        Toast.show({ type: "error", text1: t("SharedClub.toast.failedToLoadClubInfo", "Failed to load club information.") });
         setClubStatus("error");
       } finally {
         setIsLoading(false);
@@ -106,15 +106,15 @@ export default function SharedClub({ role }: SharedClubProps) {const { t } = use
               currentTab={currentTab}
               onTabChange={setCurrentTab}
               tabs={[
-              { id: "info", label: "Info" },
-              { id: "requests", label: "Requests" },
-              { id: "chat", label: "Chat" }]
+              { id: "info", label: t("SharedClub.tabs.info", "Info") },
+              { id: "requests", label: t("SharedClub.tabs.requests", "Requests") },
+              { id: "chat", label: t("SharedClub.tabs.chat", "Chat") }]
               } />
             
                     </View>
 
                     {currentTab === "info" ?
-          <ScrollView contentContainerStyle={tw`pb-10`}>
+          <ScrollView contentContainerStyle={tw`pb-24`}>
                             <ClubInfo info={clubData} />
                         </ScrollView> :
           currentTab === "requests" ?
@@ -153,9 +153,9 @@ export default function SharedClub({ role }: SharedClubProps) {const { t } = use
   }
 
   const studentTabs = [
-  { id: "myclub", label: "My Club" },
-  { id: "chat", label: "Chat" },
-  { id: "all", label: "Explore" }].
+  { id: "myclub", label: t("SharedClub.tabs.myClub", "My Club") },
+  { id: "chat", label: t("SharedClub.tabs.chat", "Chat") },
+  { id: "all", label: t("SharedClub.tabs.explore", "Explore") }].
   filter((t) => t.id !== "chat" || clubStatus === "joined");
 
   return (
@@ -197,7 +197,7 @@ export default function SharedClub({ role }: SharedClubProps) {const { t } = use
             </Text>
                             </View> :
 
-          <ScrollView contentContainerStyle={tw`pb-10`}>
+          <ScrollView contentContainerStyle={tw`pb-24`}>
                                 <ClubInfo info={clubData} />
                             </ScrollView>
           }

@@ -65,7 +65,16 @@ export function StudentDataTable({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigation = useNavigation<DrawerNavigationProp<FacultyDrawerParamList>>();
   const searchInputRef = useRef<TextInput>(null);
-  const tableHeaders = ["Roll No.", "Student Name", "Attendance", "Assignments Done", "Quiz", "Discussion Forum", "Progress %", "Action"];
+  const tableHeaders = [
+    t("StudentProgress.faculty.rollNo", "Roll No."),
+    t("StudentProgress.faculty.studentName", "Student Name"),
+    t("StudentProgress.faculty.attendance", "Attendance"),
+    t("StudentProgress.faculty.assignmentsDone", "Assignments Done"),
+    t("StudentProgress.faculty.quiz", "Quiz"),
+    t("StudentProgress.faculty.discussionForum", "Discussion Forum"),
+    t("StudentProgress.faculty.progressPercent", "Progress %"),
+    t("StudentProgress.faculty.action", "Action"),
+  ];
   useEffect(() => {
     if (isSearchOpen) {
       setTimeout(() => searchInputRef.current?.focus(), 100);
@@ -147,7 +156,7 @@ export function StudentDataTable({
 
             <FlatList data={students} keyExtractor={item => item.studentId.toString()} renderItem={renderStudentRow} scrollEnabled={false} ListEmptyComponent={<View style={tw`py-8 items-center justify-center w-[800px]`}>
                   <Text style={tw`text-sm text-[#6B7280]`}>
-                    {searchQuery ? "No students found for that search." : "No student progress data available."}
+                    {searchQuery ? t("StudentProgress.faculty.noStudentsFound", "No students found for that search.") : t("StudentProgress.faculty.noProgressData", "No student progress data available.")}
                   </Text>
                 </View>} />
             

@@ -115,9 +115,9 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
 
   }
 
-  const semesterLabel = studentInfo.collegeSemester ?
-  `Semester ${studentInfo.collegeSemester}` :
-  "Semester N/A";
+  const semesterLabel = studentInfo.collegeSemester
+    ? `${t("StudentProgress.faculty.semester", "Semester")} ${studentInfo.collegeSemester}`
+    : t("StudentProgress.faculty.semesterNA", "Semester N/A");
 
   return (
     <SafeAreaView style={[tw`flex-1 bg-[#f4f5f6]`, { paddingTop: Math.max(headerHeight + 16, insets.top + 16) }]}>
@@ -145,7 +145,9 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
               
               <View style={tw`flex-row items-center`}>
                 <Text style={[tw`text-gray-600 text-[13px]`, { fontFamily: fonts.medium }]}>
-                  {studentInfo.collegeEducationType === "Inter" ? "Group" : "Branch"} :
+                  {studentInfo.collegeEducationType === "Inter"
+                    ? t("StudentProgress.faculty.group", "Group")
+                    : t("StudentProgress.faculty.branch", "Branch")} :
                 </Text>
                 <View style={tw`bg-[#43C17A]/10 px-2 py-0.5 rounded-full ml-1`}>
                   <Text style={[tw`text-[#43C17A] text-[11px] tracking-wide`, { fontFamily: fonts.semiBold }]}>

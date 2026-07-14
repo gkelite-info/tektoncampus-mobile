@@ -600,7 +600,7 @@
       "Trxn Id": "ट्रांज़ैक्शन आईडी",
       "Paid On": "भुगतान तिथि",
       "Status": "स्थिति",
-      "No Data Available": "कोई डेटा उपलब्ध नहीं",
+      "No Data Available": "कोई डेटा उपलब्ध नहीं है",
       "Success": "सफलता",
       "Failure": "असफलता",
       "Pending": "लंबित",
@@ -3406,5 +3406,27 @@
     },
     "noUpcomingMeetings": "कोई आगामी मीटिंग नहीं मिली.",
     "noPreviousMeetings": "कोई पिछली मीटिंग नहीं मिली."
+  },
+  "StudentProgress": {
+    "faculty": {
+      "rollNo": "रोल नं.",
+      "studentName": "छात्र का नाम",
+      "attendance": "उपस्थिति",
+      "assignmentsDone": "असाइनमेंट पूरा हो गया",
+      "quiz": "प्रश्नोत्तरी",
+      "discussionForum": "चर्चा मंच",
+      "progressPercent": "प्रगति %",
+      "action": "कार्रवाई",
+      "noStudentsFound": "उस खोज के लिए कोई छात्र नहीं मिला.",
+      "noProgressData": "कोई छात्र प्रगति डेटा उपलब्ध नहीं है.",
+      "semester": "छमाही",
+      "semesterNA": "सेमेस्टर एन/ए",
+      "group": "समूह",
+      "branch": "शाखा",
+      "monitorSubtitle": "समग्र छात्र प्रदर्शन की निगरानी और तुलना करें",
+      "totalStudents": "कुल छात्र",
+      "presentToday": "आज प्रस्तुत करें",
+      "lowAttendance": "कम उपस्थिति"
+    }
   }
 }

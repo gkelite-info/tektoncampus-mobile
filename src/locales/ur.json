@@ -2091,7 +2091,7 @@
       "Trxn Id": "Trxn.Id",
       "Paid On": "ادا کیا",
       "Status": "حیثیت",
-      "No Data Available": "کوئی ڈیٹا دستیاب نہیں ہے۔",
+      "No Data Available": "کوئی ڈیٹا دستیاب نہیں ہے",
       "Success": "کامیابی",
       "Failure": "ناکامی",
       "Pending": "زیر التواء",
@@ -3635,5 +3635,27 @@
     },
     "noUpcomingMeetings": "کوئی آئندہ میٹنگ نہیں ملی۔",
     "noPreviousMeetings": "کوئی پچھلی میٹنگ نہیں ملی۔"
+  },
+  "StudentProgress": {
+    "faculty": {
+      "rollNo": "رول نمبر",
+      "studentName": "طالب علم کا نام",
+      "attendance": "حاضری",
+      "assignmentsDone": "اسائنمنٹس ہو گئے۔",
+      "quiz": "کوئز",
+      "discussionForum": "ڈسکشن فورم",
+      "progressPercent": "ترقی %",
+      "action": "ایکشن",
+      "noStudentsFound": "اس تلاش کے لیے کوئی طالب علم نہیں ملا۔",
+      "noProgressData": "طالب علم کی ترقی کا کوئی ڈیٹا دستیاب نہیں ہے۔",
+      "semester": "سمسٹر",
+      "semesterNA": "سمسٹر N/A",
+      "group": "گروپ",
+      "branch": "شاخ",
+      "monitorSubtitle": "طالب علم کی مجموعی کارکردگی کی نگرانی اور موازنہ کریں۔",
+      "totalStudents": "کل طلباء",
+      "presentToday": "آج پیش کریں۔",
+      "lowAttendance": "کم حاضری"
+    }
   }
 }

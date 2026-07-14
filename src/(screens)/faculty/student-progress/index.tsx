@@ -152,7 +152,7 @@ export default function FacultyStudentProgressScreen() {const { t } = useTransla
   const subjectNameUI = faculty_subject && faculty_subject.length > 0 ? faculty_subject[0].subjectName : "N/A";
   const yearNameUI = collegeAcademicYear || "N/A";
 
-  const subtitle = `Monitor and compare overall student performance`;
+  const subtitle = t("StudentProgress.faculty.monitorSubtitle", "Monitor and compare overall student performance");
 
   const topPerformers = useMemo(
     () =>
@@ -179,21 +179,21 @@ export default function FacultyStudentProgressScreen() {const { t } = useTransla
   const cardData = [
   {
     value: summary.totalStudents.toString(),
-    label: "Total Students",
+    label: t("StudentProgress.faculty.totalStudents", "Total Students"),
     bgColor: "bg-[#FFEDDA]",
     icon: <UsersThree size={24} color="#FFBB70" weight="fill" />,
     iconBgColor: "bg-[#FFBB70]/20"
   },
   {
     value: summary.presentToday.toString(),
-    label: "Present Today",
+    label: t("StudentProgress.faculty.presentToday", "Present Today"),
     bgColor: "bg-[#E6FBEA]",
     icon: <UserCircle size={24} color="#43C17A" weight="fill" />,
     iconBgColor: "bg-[#43C17A]/20"
   },
   {
     value: summary.lowAttendance.toString(),
-    label: "Low Attendance",
+    label: t("StudentProgress.faculty.lowAttendance", "Low Attendance"),
     bgColor: "bg-[#FFE0E0]",
     icon: <ChartLineDown size={24} color="#FF2020" weight="fill" />,
     iconBgColor: "bg-[#FF2020]/20"

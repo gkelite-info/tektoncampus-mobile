@@ -3405,5 +3405,27 @@
     },
     "noUpcomingMeetings": "రాబోయే సమావేశాలు ఏవీ కనుగొనబడలేదు.",
     "noPreviousMeetings": "మునుపటి సమావేశాలు ఏవీ కనుగొనబడలేదు."
+  },
+  "StudentProgress": {
+    "faculty": {
+      "rollNo": "రోల్ నెం.",
+      "studentName": "విద్యార్థి పేరు",
+      "attendance": "హాజరు",
+      "assignmentsDone": "అసైన్‌మెంట్‌లు పూర్తయ్యాయి",
+      "quiz": "క్విజ్",
+      "discussionForum": "చర్చా వేదిక",
+      "progressPercent": "పురోగతి %",
+      "action": "చర్య",
+      "noStudentsFound": "ఆ శోధన కోసం విద్యార్థులు కనుగొనబడలేదు.",
+      "noProgressData": "విద్యార్థి పురోగతి డేటా అందుబాటులో లేదు.",
+      "semester": "సెమిస్టర్",
+      "semesterNA": "సెమిస్టర్ N/A",
+      "group": "సమూహం",
+      "branch": "శాఖ",
+      "monitorSubtitle": "మొత్తం విద్యార్థుల పనితీరును పర్యవేక్షించండి మరియు సరిపోల్చండి",
+      "totalStudents": "మొత్తం విద్యార్థులు",
+      "presentToday": "ఈరోజు ప్రదర్శించండి",
+      "lowAttendance": "తక్కువ హాజరు"
+    }
   }
 }

@@ -3216,5 +3216,27 @@
     },
     "noUpcomingMeetings": "No upcoming meetings found.",
     "noPreviousMeetings": "No previous meetings found."
+  },
+  "StudentProgress": {
+    "faculty": {
+      "rollNo": "Roll No.",
+      "studentName": "Student Name",
+      "attendance": "Attendance",
+      "assignmentsDone": "Assignments Done",
+      "quiz": "Quiz",
+      "discussionForum": "Discussion Forum",
+      "progressPercent": "Progress %",
+      "action": "Action",
+      "noStudentsFound": "No students found for that search.",
+      "noProgressData": "No student progress data available.",
+      "semester": "Semester",
+      "semesterNA": "Semester N/A",
+      "group": "Group",
+      "branch": "Branch",
+      "monitorSubtitle": "Monitor and compare overall student performance",
+      "totalStudents": "Total Students",
+      "presentToday": "Present Today",
+      "lowAttendance": "Low Attendance"
+    }
   }
 }

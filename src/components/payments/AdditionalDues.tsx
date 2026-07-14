@@ -134,7 +134,7 @@ export default function AdditionalDues({
         </View>
     );
 
-    const renderEmptyState = (type: string) => (
+    const renderEmptyState = () => (
         <View className="bg-white rounded-xl p-8 items-center justify-center border border-gray-100 border-dashed mt-4">
             <View className="w-16 h-16 rounded-full bg-gray-50 items-center justify-center mb-4">
                 <CheckCircle size={32} color="#9CA3AF" weight="light" />
@@ -143,7 +143,7 @@ export default function AdditionalDues({
                 {t("Payments.student.No Dues Found")}
             </Text>
             <Text className="text-center text-gray-500">
-                {t("Payments.student.You don't have any pending {{type}} dues at the moment.", { type })}
+                {t("Payments.student.No Data Available")}
             </Text>
         </View>
     );
@@ -192,19 +192,19 @@ export default function AdditionalDues({
                 {activeSubTab === "FINANCIAL" && (
                     financialDues.length > 0
                         ? financialDues.map(renderFinancialDue)
-                        : renderEmptyState("financial")
+                        : renderEmptyState()
                 )}
 
                 {activeSubTab === "NON_FINANCIAL" && (
                     nonFinancialDues.length > 0
                         ? nonFinancialDues.map(renderNonFinancialDue)
-                        : renderEmptyState("non-financial")
+                        : renderEmptyState()
                 )}
 
                 {activeSubTab === "EXCESS" && (
                     excessDues.length > 0
                         ? excessDues.map(renderExcessDue)
-                        : renderEmptyState("excess")
+                        : renderEmptyState()
                 )}
             </View>
         </View>

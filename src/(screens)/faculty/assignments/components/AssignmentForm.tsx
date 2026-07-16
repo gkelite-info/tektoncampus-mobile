@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -253,7 +254,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
   return (
     <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
-        <Text className="text-xl font-semibold text-gray-900">
+        <Text className="text-xl text-gray-900" style={{ fontFamily: fonts.semiBold }}>
           {initialData ? t('Edit Assignment') : t('Add New Assignment')}
         </Text>
       </View>
@@ -261,7 +262,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
       <View className="bg-white p-4 rounded-xl">
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.subjectId}
@@ -276,7 +277,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Topic Name */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.TopicName", "Topic Name")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.TopicName", "Topic Name")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.topicName}
             onChangeText={(val) => setForm({ ...form, topicName: val })}
@@ -287,7 +288,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Total Marks */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.TotalMarks", "Total Marks")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.TotalMarks", "Total Marks")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.totalMarks}
             onChangeText={(val) => {
@@ -302,7 +303,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Branch */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Branch", "Branch")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Branch", "Branch")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.branchId}
@@ -317,7 +318,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Year */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Year", "Year")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Year", "Year")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.yearId}
@@ -332,15 +333,15 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
 
         {/* Section Multiple Select */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-medium text-gray-700">{t("Auto.Common.Section", "Section")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Section", "Section")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-white p-2 min-h-[40px] flex-row flex-wrap gap-2">
             {form.sectionIds.map((id) => {
               const section = availableSections.find((s) => String(s.id) === id);
               return (
                 <View key={id} className="flex-row items-center gap-1 bg-[#ECFDF5] px-3 py-1 rounded-full">
-                  <Text className="text-[#065F46] text-xs">{section?.name}</Text>
+                  <Text className="text-[#065F46] text-xs" style={{ fontFamily: fonts.regular }}>{section?.name}</Text>
                   <TouchableOpacity onPress={() => setForm((prev) => ({ ...prev, sectionIds: prev.sectionIds.filter((sid) => sid !== id) }))}>
-                    <Text className="text-red-500 font-bold ml-1">×</Text>
+                    <Text className="text-red-500 ml-1" style={{ fontFamily: fonts.bold }}>×</Text>
                   </TouchableOpacity>
                 </View>);
 
@@ -368,9 +369,9 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
         {/* Dates */}
         <View className="flex-row gap-4 mb-6">
           <View className="flex-1">
-            <Text className="mb-1 text-xs text-gray-500">{t("Auto.Common.DateAssigned", "Date Assigned")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.DateAssigned", "Date Assigned")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setFromDatePickerVisible(true)} className="border border-gray-300 rounded-md px-3 py-2">
-              <Text className="text-sm text-black">{form.fromDate || 'YYYY-MM-DD'}</Text>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.fromDate || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isFromDatePickerVisible}
@@ -383,9 +384,9 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-xs text-gray-500">{t("Auto.Common.SubmissionDeadl", "Submission Deadline")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.SubmissionDeadl", "Submission Deadline")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setToDatePickerVisible(true)} className="border border-gray-300 rounded-md px-3 py-2">
-              <Text className="text-sm text-black">{form.toDate || 'YYYY-MM-DD'}</Text>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.toDate || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isToDatePickerVisible}
@@ -406,14 +407,14 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
             onPress={handleSubmit}
             className={`flex-1 items-center justify-center py-3 rounded-md ${isSaving ? 'bg-[#43C17A]/70' : 'bg-[#43C17A]'}`}>
             
-            {isSaving ? <ActivityIndicator color="white" /> : <Text className="text-white font-bold">{t('Save')}</Text>}
+            {isSaving ? <ActivityIndicator color="white" /> : <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t('Save')}</Text>}
           </TouchableOpacity>
           <TouchableOpacity
             disabled={isSaving}
             onPress={onCancel}
             className="flex-1 items-center justify-center py-3 rounded-md border border-gray-300">
             
-            <Text className="text-gray-700 font-bold">{t('Cancel')}</Text>
+            <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t('Cancel')}</Text>
           </TouchableOpacity>
         </View>
       </View>

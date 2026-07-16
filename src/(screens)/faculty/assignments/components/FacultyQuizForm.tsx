@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -240,17 +241,17 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
   return (
     <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
-        <Text className="text-xl font-semibold text-[#282828]">
+        <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
           {isEditMode ? t('Edit Quiz') : t('Create New Quiz')}
         </Text>
-        <Text className="text-sm text-gray-500">{t('Set up the timing and scoring for your quiz.')}</Text>
+        <Text className="text-sm text-gray-500" style={{ fontFamily: fonts.regular }}>{t('Set up the timing and scoring for your quiz.')}</Text>
       </View>
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.QuizTitle", "Quiz Title")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.QuizTitle", "Quiz Title")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.quizTitle}
             onChangeText={(val) => setForm({ ...form, quizTitle: val })}
@@ -261,7 +262,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
 
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
             <Picker
               selectedValue={form.selectedSubjectId}
@@ -275,7 +276,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
 
         {/* Topic */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Topic", "Topic")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Topic", "Topic")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
             <Picker
               selectedValue={form.selectedTopicId}
@@ -291,7 +292,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         {/* Academic Year & Section */}
         <View className="flex-row gap-4 mb-4">
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.AcademicYear", "Academic Year")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AcademicYear", "Academic Year")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
               <Picker
                 selectedValue={form.selectedYearId}
@@ -304,7 +305,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             </View>
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Section", "Section")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Section", "Section")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
               <Picker
                 selectedValue={form.selectedSectionId}
@@ -321,7 +322,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         {/* Questions and Marks */}
         <View className="bg-gray-50 p-3 rounded-lg mb-4 flex-row gap-4">
           <View className="flex-1">
-            <Text className="mb-1 text-xs font-bold text-gray-500">{t("Auto.Common.NoQuestions", "No. Questions")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.NoQuestions", "No. Questions")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TextInput
               value={form.questionsCount}
               onChangeText={(val) => setForm({ ...form, questionsCount: val })}
@@ -330,7 +331,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-xs font-bold text-gray-500">{t("Auto.Common.MarksQtn", "Marks/Qtn")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MarksQtn", "Marks/Qtn")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TextInput
               value={form.marksPerQuestion}
               onChangeText={(val) => setForm({ ...form, marksPerQuestion: val })}
@@ -339,9 +340,9 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-xs font-bold text-gray-500">{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
+            <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
             <View className="bg-white border border-gray-200 rounded-md px-2 py-2 items-center justify-center">
-              <Text className="text-sm font-bold text-[#43C17A]">{totalMarks}</Text>
+              <Text className="text-sm text-[#43C17A]" style={{ fontFamily: fonts.bold }}>{totalMarks}</Text>
             </View>
           </View>
         </View>
@@ -349,7 +350,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         {/* Duration and Attempts */}
         <View className="flex-row gap-4 mb-4">
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.DurationMins", "Duration (Mins)")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.DurationMins", "Duration (Mins)")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TextInput
               value={form.durationMinutes}
               onChangeText={(val) => setForm({ ...form, durationMinutes: val })}
@@ -358,7 +359,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.MaxAttempts", "Max Attempts")}</Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MaxAttempts", "Max Attempts")}</Text>
             <TextInput
               value={form.maxAttempts}
               onChangeText={(val) => setForm({ ...form, maxAttempts: val })}
@@ -371,9 +372,9 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         {/* Dates */}
         <View className="flex-row gap-4 mb-4">
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.StartDate", "Start Date")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.StartDate", "Start Date")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setStartDatePickerVisible(true)} className="border border-gray-200 rounded-md px-3 py-2">
-              <Text className="text-sm text-black">{form.startDate || 'YYYY-MM-DD'}</Text>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.startDate || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isStartDatePickerVisible}
@@ -383,9 +384,9 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.EndDate", "End Date")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.EndDate", "End Date")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setEndDatePickerVisible(true)} className="border border-gray-200 rounded-md px-3 py-2">
-              <Text className="text-sm text-black">{form.endDate || 'YYYY-MM-DD'}</Text>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.endDate || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isEndDatePickerVisible}
@@ -399,10 +400,10 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         {}
         <View className="flex-row gap-4 mb-6">
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.StartTime", "Start Time")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.StartTime", "Start Time")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setStartTimePickerVisible(true)} className="border border-gray-200 rounded-md px-3 py-2 flex-row items-center justify-between">
-              <Text className="text-sm text-black">{form.startTime}</Text>
-              <View className="bg-[#43C17A]/10 px-1 py-0.5 rounded"><Text className="text-[10px] font-bold text-[#43C17A]">{formatTo12Hour(form.startTime)}</Text></View>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.startTime}</Text>
+              <View className="bg-[#43C17A]/10 px-1 py-0.5 rounded"><Text className="text-[10px] text-[#43C17A]" style={{ fontFamily: fonts.bold }}>{formatTo12Hour(form.startTime)}</Text></View>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isStartTimePickerVisible}
@@ -412,10 +413,10 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.EndTime", "End Time")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.EndTime", "End Time")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setEndTimePickerVisible(true)} className="border border-gray-200 rounded-md px-3 py-2 flex-row items-center justify-between">
-              <Text className="text-sm text-black">{form.endTime}</Text>
-              <View className="bg-blue-50 px-1 py-0.5 rounded"><Text className="text-[10px] font-bold text-blue-500">{formatTo12Hour(form.endTime)}</Text></View>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.endTime}</Text>
+              <View className="bg-blue-50 px-1 py-0.5 rounded"><Text className="text-[10px] text-blue-500" style={{ fontFamily: fonts.bold }}>{formatTo12Hour(form.endTime)}</Text></View>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isEndTimePickerVisible}
@@ -429,13 +430,13 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         {}
         <View className="flex-row items-center justify-between mt-2 border-t border-gray-100 pt-4 gap-2">
           <TouchableOpacity onPress={onCancel} disabled={isSaving || isDraftSaving} className="px-4 py-3 rounded-md border border-[#16284F] flex-1 items-center">
-            <Text className="text-[#16284F] text-sm font-medium">{t("Auto.Common.Cancel", "Cancel")}</Text>
+            <Text className="text-[#16284F] text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleSave('Draft')} disabled={isDraftSaving} className="px-2 py-3 rounded-md bg-[#16284F] flex-1 items-center">
-            {isDraftSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm font-medium text-center">{t("Auto.Common.SaveDraft", "Save Draft")}</Text>}
+            {isDraftSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm text-center" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SaveDraft", "Save Draft")}</Text>}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleSave('Active')} disabled={isSaving} className="px-2 py-3 rounded-md bg-[#43C17A] flex-1 items-center">
-            {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm font-medium text-center">{t("Auto.Common.SaveNext", "Save & Next")}</Text>}
+            {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm text-center" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SaveNext", "Save & Next")}</Text>}
           </TouchableOpacity>
         </View>
       </View>

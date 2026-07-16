@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -142,7 +143,7 @@ export default function LabTab() {
         className="bg-[#16284F] rounded-lg py-3 items-center mb-4 mt-2"
         onPress={handleAdd}
       >
-        <Text className="text-white font-bold">{t('Upload Lab Manual')}</Text>
+        <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t('Upload Lab Manual')}</Text>
       </TouchableOpacity>
 
       {}
@@ -152,7 +153,7 @@ export default function LabTab() {
             <AssignmentSkeleton />
           </View>
         ) : labs.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-10">
+          <Text className="text-center text-gray-500 mt-10" style={{ fontFamily: fonts.regular }}>
             {t('No lab manuals found')}
           </Text>
         ) : (

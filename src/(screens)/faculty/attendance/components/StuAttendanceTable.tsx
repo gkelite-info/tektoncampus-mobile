@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
 import React, { useState } from 'react';
 import { View, ScrollView, TouchableOpacity, TextInput, Image, Modal } from 'react-native';
@@ -48,23 +49,23 @@ function AttendanceToggle({
       text = "text-blue-600";
     }
     return <View className={`px-3 py-1.5 rounded-lg items-center justify-center ${bg}`}>
-        <Text className={`text-xs font-bold ${text}`}>{value === "Not Marked" ? "Unmarked" : value}</Text>
+        <Text className={`text-xs ${text}`} style={{ fontFamily: fonts.bold }}>{value === "Not Marked" ? "Unmarked" : value}</Text>
       </View>;
   }
   return <View className="flex-row items-center gap-1.5">
       <TouchableOpacity onPress={() => onChange("Present")} className={`w-8 h-8 rounded-full items-center justify-center border ${value === 'Present' ? 'bg-[#43C17A] border-[#43C17A]' : 'bg-white border-gray-300'}`}>
         
-        <Text className={`text-xs font-bold ${value === 'Present' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.P", "P")}</Text>
+        <Text className={`text-xs ${value ==='Present' ? 'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.P", "P")}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity onPress={() => onChange("Absent")} className={`w-8 h-8 rounded-full items-center justify-center border ${value === 'Absent' ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'}`}>
         
-        <Text className={`text-xs font-bold ${value === 'Absent' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.A", "A")}</Text>
+        <Text className={`text-xs ${value ==='Absent' ? 'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.A", "A")}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => onChange("Leave")} className={`w-8 h-8 rounded-full items-center justify-center border ${value === 'Leave' ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300'}`}>
         
-        <Text className={`text-xs font-bold ${value === 'Leave' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.L", "L")}</Text>
+        <Text className={`text-xs ${value ==='Leave' ? 'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.L", "L")}</Text>
       </TouchableOpacity>
     </View>;
 }
@@ -134,7 +135,7 @@ export default function StuAttendanceTable({
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-3 py-1">
           {!isTopicMode && onFilterChange && <TouchableOpacity onPress={() => setShowClassFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
             
-              <Text className="text-[#43C17A] text-sm font-medium mr-2">
+              <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>
                 {classes.find(c => c.id === selectedClass)?.label || "No Classes Today"}
               </Text>
               <CaretDown size={14} color="#43C17A" weight="bold" />
@@ -142,7 +143,7 @@ export default function StuAttendanceTable({
 
           {!isTopicMode && onFilterChange && <TouchableOpacity onPress={() => setShowSectionFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
             
-              <Text className="text-[#43C17A] text-sm font-medium mr-2">
+              <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>
                 {sections.find(s => s.id === selectedSection)?.name ? `Section ${sections.find(s => s.id === selectedSection)?.name}` : "All Sections"}
               </Text>
               <CaretDown size={14} color="#43C17A" weight="bold" />
@@ -150,7 +151,7 @@ export default function StuAttendanceTable({
           
           <TouchableOpacity onPress={() => setShowSortFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
             
-            <Text className="text-[#43C17A] text-sm font-medium mr-2">{t("Auto.Common.Sort", "Sort:")}{sort}</Text>
+            <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Sort", "Sort:")}{sort}</Text>
             <CaretDown size={14} color="#43C17A" weight="bold" />
           </TouchableOpacity>
         </ScrollView>
@@ -162,25 +163,25 @@ export default function StuAttendanceTable({
                 
                   {selectedIds.length === filtered.length && filtered.length > 0 && <CheckCircle size={16} color="white" weight="fill" />}
                 </TouchableOpacity>
-                <Text className="ml-2 text-sm text-gray-600 font-medium">{t("Auto.Common.SelectAll", "Select All")}</Text>
+                <Text className="ml-2 text-sm text-gray-600" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SelectAll", "Select All")}</Text>
               </>}
           </View>
 
           {!isEditing ? <TouchableOpacity onPress={onEditClick} disabled={!isTopicMode && !selectedClass || students.length === 0 || loadingFilters} className={`flex-row items-center justify-center gap-2 bg-[#43C17A] px-4 py-2 rounded-lg ${!isTopicMode && !selectedClass || students.length === 0 || loadingFilters ? 'opacity-50' : ''}`}>
             
               <PencilSimple size={16} color="white" weight="bold" />
-              <Text className="text-white text-sm font-medium">{t("Auto.Common.EditAttendance", "Edit Attendance")}</Text>
+              <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EditAttendance", "Edit Attendance")}</Text>
             </TouchableOpacity> : <View className="flex-row items-center gap-2">
               {onCancelEditClick && <TouchableOpacity onPress={onCancelEditClick} className="bg-gray-200 px-3 py-2 rounded-lg">
-                  <Text className="text-gray-700 text-sm font-medium">{t("Auto.Common.CancelEdit", "Cancel Edit")}</Text>
+                  <Text className="text-gray-700 text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CancelEdit", "Cancel Edit")}</Text>
                 </TouchableOpacity>}
               {onMarkCancelClick && !isCancellingMode && <TouchableOpacity onPress={onMarkCancelClick} className="flex-row items-center justify-center bg-[#FFBB70] px-3 py-2 rounded-lg">
                   <Prohibit size={16} color="white" weight="bold" />
-                  <Text className="text-white text-sm font-medium ml-1">{t("Auto.Common.ClassCancel", "Class Cancel")}</Text>
+                  <Text className="text-white text-sm ml-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ClassCancel", "Class Cancel")}</Text>
                 </TouchableOpacity>}
               <TouchableOpacity onPress={handleSaveAttendance} disabled={saving || loadingFilters} className={`bg-[#43C17A] px-4 py-2 rounded-lg ${saving ? 'opacity-50' : ''}`}>
               
-                <Text className="text-white text-sm font-medium">{saving ? "Saving..." : "Save"}</Text>
+                <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{saving ? "Saving..." : "Save"}</Text>
               </TouchableOpacity>
             </View>}
         </View>
@@ -188,18 +189,18 @@ export default function StuAttendanceTable({
 
       {}
       {isEditing && selectedIds.length > 0 && !loadingFilters && <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row bg-white border border-gray-100 rounded-xl px-4 py-2 shadow-sm mb-4">
-          <Text className="text-xs font-bold text-gray-500 mr-4 self-center">{selectedIds.length}{t("Auto.Common.Selected", "Selected")}</Text>
+          <Text className="text-xs text-gray-500 mr-4 self-center" style={{ fontFamily: fonts.bold }}>{selectedIds.length}{t("Auto.Common.Selected", "Selected")}</Text>
           <TouchableOpacity onPress={() => bulkUpdate("Present")} className="flex-row items-center gap-1 px-3 py-1 bg-[#43C17A] rounded-lg mr-2">
             <CheckCircle color="white" size={16} weight="fill" />
-            <Text className="text-white text-xs font-medium">{t("Auto.Common.Present", "Present")}</Text>
+            <Text className="text-white text-xs" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Present", "Present")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => bulkUpdate("Absent")} className="flex-row items-center gap-1 px-3 py-1 bg-red-500 rounded-lg mr-2">
             <XCircle color="white" size={16} weight="fill" />
-            <Text className="text-white text-xs font-medium">{t("Auto.Common.Absent", "Absent")}</Text>
+            <Text className="text-white text-xs" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Absent", "Absent")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => bulkUpdate("Leave")} className="flex-row items-center gap-1 px-3 py-1 bg-blue-500 rounded-lg mr-2">
             <User color="white" size={16} weight="fill" />
-            <Text className="text-white text-xs font-medium">{t("Auto.Common.Leave", "Leave")}</Text>
+            <Text className="text-white text-xs" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Leave", "Leave")}</Text>
           </TouchableOpacity>
         </ScrollView>}
 
@@ -218,12 +219,12 @@ export default function StuAttendanceTable({
                 {s.photo ? <Image source={{
                 uri: s.photo
               }} className="w-10 h-10 rounded-full bg-gray-200" /> : <View className="w-10 h-10 rounded-full bg-indigo-500 items-center justify-center">
-                    <Text className="text-white text-sm font-bold">{s.name?.charAt(0).toUpperCase()}</Text>
+                    <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{s.name?.charAt(0).toUpperCase()}</Text>
                   </View>}
 
                 <View className="ml-3 flex-1 pr-2">
-                  <Text className="font-bold text-gray-800 text-[15px]" numberOfLines={1}>{s.name}</Text>
-                  <Text className="text-gray-500 text-[11px] font-medium mt-0.5">{t("Auto.Common.ID", "ID:")}
+                  <Text className="text-gray-800 text-[15px]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{s.name}</Text>
+                  <Text className="text-gray-500 text-[11px] mt-0.5" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ID", "ID:")}
                   {s.roll}{t("Auto.Common.Attendance", "\u2022 Attendance:")}{s.percentage}
                   </Text>
                 </View>
@@ -232,7 +233,7 @@ export default function StuAttendanceTable({
               {}
               <View className="flex-row items-center">
                 {s.attendance === "Class Cancel" ? <View className="rounded-lg bg-gray-100 py-1.5 px-3 items-center">
-                    <Text className="text-gray-600 text-xs font-bold">{t("Auto.Common.Cancelled", "Cancelled")}</Text>
+                    <Text className="text-gray-600 text-xs" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancelled", "Cancelled")}</Text>
                   </View> : <AttendanceToggle value={s.attendance} onChange={val => updateAttendance(s.id, val as any)} disabled={!isEditing} />}
               </View>
 
@@ -246,13 +247,13 @@ export default function StuAttendanceTable({
                     <NotePencil size={16} color="#9CA3AF" />
                   </View>
                 </View> : s.reason ? <View className="px-4 py-2.5 bg-gray-50 border-t border-gray-100 flex-row items-center">
-                  <Text className="text-xs text-gray-500 italic flex-1" numberOfLines={3}>{t("Auto.Common.Reason", "Reason:")}
+                  <Text className="text-xs text-gray-500 flex-1" numberOfLines={3} style={{ fontFamily: fonts.italic }}>{t("Auto.Common.Reason", "Reason:")}
               {s.reason}
                   </Text>
                 </View> : null)}
           </View>;
       }) : <View className="py-12 items-center justify-center w-full bg-white rounded-2xl border border-gray-100">
-            <Text className="text-gray-400 font-medium">{t("Auto.Common.Nostudentsfound", "No students found.")}</Text>
+            <Text className="text-gray-400" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Nostudentsfound", "No students found.")}</Text>
           </View>}
       </View>
 
@@ -260,18 +261,18 @@ export default function StuAttendanceTable({
       <Modal visible={showClassFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
-            <Text className="text-lg font-bold mb-4">{t("Auto.Common.SelectClass", "Select Class")}</Text>
+            <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SelectClass", "Select Class")}</Text>
             <ScrollView>
               {classes.map(c => <TouchableOpacity key={c.id} onPress={() => {
               onFilterChange && onFilterChange("class", c.id);
               setShowClassFilter(false);
             }} className="py-3 border-b border-gray-100">
                 
-                  <Text className={`text-base ${selectedClass === c.id ? 'text-[#43C17A] font-bold' : 'text-gray-700'}`}>{c.label}</Text>
+                  <Text className={`text-base ${selectedClass === c.id ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{c.label}</Text>
                 </TouchableOpacity>)}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowClassFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
-              <Text className="font-bold text-gray-700">{t("Auto.Common.Close", "Close")}</Text>
+              <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Close", "Close")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -281,7 +282,7 @@ export default function StuAttendanceTable({
       <Modal visible={showSectionFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
-            <Text className="text-lg font-bold mb-4">{t("Auto.Attr.SelectSection", "Select Section")}</Text>
+            <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Attr.SelectSection", "Select Section")}</Text>
             <ScrollView>
               {sections.map(s => {
               const {
@@ -292,12 +293,12 @@ export default function StuAttendanceTable({
                 setShowSectionFilter(false);
               }} className="py-3 border-b border-gray-100">
                 
-                  <Text className={`text-base ${selectedSection === s.id ? 'text-[#43C17A] font-bold' : 'text-gray-700'}`}>{t("Auto.Common.Section", "Section")}{s.name}</Text>
+                  <Text className={`text-base ${selectedSection === s.id ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Section", "Section")}{s.name}</Text>
                 </TouchableOpacity>;
             })}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowSectionFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
-              <Text className="font-bold text-gray-700">{t("Auto.Common.Close", "Close")}</Text>
+              <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Close", "Close")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -307,18 +308,18 @@ export default function StuAttendanceTable({
       <Modal visible={showSortFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
-            <Text className="text-lg font-bold mb-4">{t("Auto.Common.SortBy", "Sort By")}</Text>
+            <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SortBy", "Sort By")}</Text>
             <ScrollView>
               {["All", "Present", "Absent", "Leave", "Class Cancel"].map(s => <TouchableOpacity key={s} onPress={() => {
               setSort(s);
               setShowSortFilter(false);
             }} className="py-3 border-b border-gray-100">
                 
-                  <Text className={`text-base ${sort === s ? 'text-[#43C17A] font-bold' : 'text-gray-700'}`}>{s}</Text>
+                  <Text className={`text-base ${sort === s ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{s}</Text>
                 </TouchableOpacity>)}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowSortFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
-              <Text className="font-bold text-gray-700">{t("Auto.Common.Close", "Close")}</Text>
+              <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Close", "Close")}</Text>
             </TouchableOpacity>
           </View>
         </View>

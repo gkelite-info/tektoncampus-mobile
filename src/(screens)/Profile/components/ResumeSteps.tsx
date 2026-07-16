@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { CheckCircle, CaretLeft, CaretRight } from "phosphor-react-native";
@@ -103,14 +104,14 @@ export default function ResumeSteps({ currentStepId, onStepChange }: ResumeSteps
                                                 <CheckCircle size={32} color="#74CB64" weight="fill" />
                                             ) : (
                                                 <View className="rounded-full border border-[#878787] h-8 w-8 items-center justify-center">
-                                                    <Text className="text-xs text-[#878787]">{index + 1}</Text>
+                                                    <Text className="text-xs text-[#878787]" style={{ fontFamily: fonts.regular }}>{index + 1}</Text>
                                                 </View>
                                             )}
 
                                             <Text
                                                 numberOfLines={2}
-                                                className={`text-xs mt-2 text-center ${isActive ? "text-[#74CB64] font-medium" : "text-[#878787]"}`}
-                                            >
+                                                className={`text-xs mt-2 text-center ${isActive ?"text-[#74CB64] " : "text-[#878787]"}`}
+                                             style={{ fontFamily: fonts.medium }}>
                                                 {step.title}
                                             </Text>
                                         </View>

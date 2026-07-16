@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -174,7 +175,7 @@ export default function QuizTab() {
           t
         } = useTranslation();
         return <TouchableOpacity key={view} onPress={() => setActiveView(view)} className={`flex-1 items-center py-2 rounded-md ${activeView === view ? 'bg-[#43C17A]' : ''}`}>
-            <Text className={`font-bold ${activeView === view ? 'text-white' : 'text-gray-500'}`}>
+            <Text className={`${activeView === view ?'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>
               {t(view)}
             </Text>
           </TouchableOpacity>;
@@ -182,7 +183,7 @@ export default function QuizTab() {
       </View>
 
       {['Draft', 'Active'].includes(activeView) && <TouchableOpacity className="bg-[#16284F] rounded-lg py-3 items-center mb-4 mx-1" onPress={handleAdd}>
-          <Text className="text-white font-bold">{t('Create Quiz')}</Text>
+          <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t('Create Quiz')}</Text>
         </TouchableOpacity>}
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{
@@ -192,7 +193,7 @@ export default function QuizTab() {
 
         {isLoading && currentPage === 1 ? <View className="mt-4">
             <QuizSkeleton />
-          </View> : quizzes.length === 0 ? <Text className="text-center text-gray-500 mt-10">
+          </View> : quizzes.length === 0 ? <Text className="text-center text-gray-500 mt-10" style={{ fontFamily: fonts.regular }}>
             {t('No quizzes found')}
           </Text> : quizzes.map((quiz, index) => <FacultyQuizCard key={index} data={quiz} onEdit={activeView === 'Draft' ? handleEdit : undefined} onDelete={activeView !== 'Completed' ? () => setDeleteQuizId(quiz.quizId) : undefined} onPublish={activeView === 'Draft' ? handlePublishQuiz : undefined} onViewSubmissions={id => navigation.navigate('QuizSubmissions', {
         quizId: id

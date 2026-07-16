@@ -1,6 +1,8 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';
+import { Text } from '@/components/AppText';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, FlatList, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { CaretDown } from 'phosphor-react-native';
@@ -14,7 +16,8 @@ import { CardProps } from '@/lib/types/faculty';
 
 import SubjectCard from './components/SubjectCard';
 
-export default function AcademicsScreen() {const { t } = useTranslation();
+export default function AcademicsScreen() {
+  const { t } = useTranslation();
   const { userId, collegeId } = useUser();
   const { facultyId } = useFaculty();
   const navigation = useNavigation<any>();
@@ -26,6 +29,7 @@ export default function AcademicsScreen() {const { t } = useTranslation();
 
   const [subjectId, setSubjectId] = useState<number | null>(null);
   const [sectionId, setSectionId] = useState<number | null>(null);
+  const [dropdownType, setDropdownType] = useState<'subject' | 'section' | null>(null);
 
   const hasLoadedOnce = useRef(false);
 
@@ -67,9 +71,10 @@ export default function AcademicsScreen() {const { t } = useTranslation();
         if (!isCancelled) {
           setSubjects(data);
         }
-      } catch (err) {
+      } catch (err: any) {
         if (!isCancelled) {
-          Toast.show({ type: "error", text1: "Failed to load subjects" });
+          console.error("Failed to load subjects:", err);
+          Toast.show({ type: "error", text1: "Failed to load subjects", text2: err?.message || JSON.stringify(err) });
         }
       } finally {
         if (!isCancelled) {
@@ -89,7 +94,7 @@ export default function AcademicsScreen() {const { t } = useTranslation();
   const facultySections = facultyCtx?.sections ?? [];
 
   const filteredSections = facultySections.filter((fs: any) =>
-  subjectId ? fs.collegeSubjectId === subjectId : true
+    subjectId ? fs.collegeSubjectId === subjectId : true
   );
 
   const filteredCards = subjects.filter((card: any) => {
@@ -107,36 +112,35 @@ export default function AcademicsScreen() {const { t } = useTranslation();
       <View className="flex-1 justify-center items-center bg-[#F4F4F4]">
         <ActivityIndicator size="large" color="#43C17A" />
       </View>);
-
   }
 
   return (
     <View className="flex-1 bg-[#F4F4F4]" style={{ paddingTop: headerHeight + 16 }}>
       <View className="px-4 mb-4">
-        <Text className="text-[#282828] font-bold text-2xl mb-1">{t("Auto.Common.MyClasses", "My Classes")}</Text>
-        <Text className="text-[#525252] text-xs">{t("Auto.Common.Trackprogressad", "Track progress, add lessons and manage course content")}</Text>
+        <Text className="text-[#282828] text-2xl mb-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MyClasses", "My Classes")}</Text>
+        <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Trackprogressad", "Track progress, add lessons and manage course content")}</Text>
       </View>
 
       <View className="px-4 mb-4 flex-row items-center justify-between">
-         <View className="flex-row items-center gap-2 flex-1">
-            <Text className="text-[#525252] text-xs">{t("Auto.Common.Subject", "Subject:")}</Text>
-            <View className="bg-[#DCEAE2] px-3 py-1 rounded-full flex-row items-center flex-1">
-              <Text className="text-[#43C17A] text-xs font-bold flex-1" numberOfLines={1}>
-                {subjectId ? subjects.find((s) => s.collegeSubjectId === subjectId)?.subjectTitle : "All"}
-              </Text>
-              <CaretDown size={12} color="#43C17A" weight="bold" />
-            </View>
-         </View>
+        <View className="flex-row items-center gap-2 flex-1">
+          <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Subject", "Subject:")}</Text>
+          <TouchableOpacity onPress={() => setDropdownType('subject')} className="bg-[#DCEAE2] px-3 py-1 rounded-full flex-row items-center flex-1">
+            <Text className="text-[#43C17A] text-xs flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+              {subjectId ? subjects.find((s) => s.collegeSubjectId === subjectId)?.subjectTitle : "All"}
+            </Text>
+            <CaretDown size={12} color="#43C17A" weight="bold" />
+          </TouchableOpacity>
+        </View>
 
-         <View className="flex-row items-center gap-2 flex-1 ml-4">
-            <Text className="text-[#525252] text-xs">{t("Auto.Common.Section", "Section:")}</Text>
-            <View className="bg-[#DCEAE2] px-3 py-1 rounded-full flex-row items-center flex-1">
-              <Text className="text-[#43C17A] text-xs font-bold flex-1" numberOfLines={1}>
-                {sectionId ? filteredSections.find((s: any) => s.collegeSectionsId === sectionId)?.college_sections?.collegeSections : "All"}
-              </Text>
-              <CaretDown size={12} color="#43C17A" weight="bold" />
-            </View>
-         </View>
+        <View className="flex-row items-center gap-2 flex-1 ml-4">
+          <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Section", "Section:")}</Text>
+          <TouchableOpacity onPress={() => setDropdownType('section')} className="bg-[#DCEAE2] px-3 py-1 rounded-full flex-row items-center flex-1">
+            <Text className="text-[#43C17A] text-xs flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+              {sectionId ? filteredSections.find((s: any) => s.collegeSectionsId === sectionId)?.college_sections?.collegeSections : "All"}
+            </Text>
+            <CaretDown size={12} color="#43C17A" weight="bold" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FlatList
@@ -145,19 +149,52 @@ export default function AcademicsScreen() {const { t } = useTranslation();
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
         ListEmptyComponent={
-        <View className="items-center justify-center mt-10">
-            <Text className="text-gray-500 font-semibold">{t("Auto.Common.Noclassesassign", "No classes assigned")}</Text>
+          <View className="items-center justify-center mt-10">
+            <Text className="text-gray-500" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Noclassesassign", "No classes assigned")}</Text>
           </View>
         }
         renderItem={({ item }) =>
-        <SubjectCard
-          item={item}
-          onViewDetails={() => {
-            navigation.navigate('SubjectDetailsScreen', { details: item });
-          }} />
-
+          <SubjectCard
+            item={item}
+            onViewDetails={() => {
+              navigation.navigate('SubjectDetailsScreen', { details: item });
+            }} />
         } />
-      
+      <Modal visible={!!dropdownType} transparent animationType="fade" onRequestClose={() => setDropdownType(null)}>
+        <TouchableOpacity activeOpacity={1} onPress={() => setDropdownType(null)} className="flex-1 bg-black/50 justify-center items-center px-4">
+          <View className="bg-white w-full max-h-[60%] rounded-xl overflow-hidden p-4">
+            <Text className="text-lg text-[#282828] mb-4" style={{ fontFamily: fonts.bold }}>
+              {dropdownType === 'subject' ? 'Select Subject' : 'Select Section'}
+            </Text>
+            <FlatList
+              data={dropdownType === 'subject' ?
+                [{ id: null, title: 'All' }, ...Array.from(new Map(subjects.map(s => [s.collegeSubjectId, s])).values()).map(s => ({ id: s.collegeSubjectId, title: s.subjectTitle }))]
+                :
+                [{ id: null, title: 'All' }, ...Array.from(new Map(filteredSections.map((s: any) => [s.collegeSectionsId, s])).values()).map((s: any) => ({ id: s.collegeSectionsId, title: s.college_sections?.collegeSections }))]
+              }
+              keyExtractor={(item, index) => item.id ? item.id.toString() : `all-${index}`}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  className="py-3 border-b border-gray-100 flex-row justify-between items-center"
+                  onPress={() => {
+                    if (dropdownType === 'subject') {
+                      setSubjectId(item.id as number | null);
+                      if (item.id !== subjectId) setSectionId(null);
+                    } else {
+                      setSectionId(item.id as number | null);
+                    }
+                    setDropdownType(null);
+                  }}
+                >
+                  <Text className="text-[#525252] text-sm" style={{ fontFamily: fonts.regular }}>{item.title}</Text>
+                  {((dropdownType === 'subject' && subjectId === item.id) || (dropdownType === 'section' && sectionId === item.id)) && (
+                    <View className="w-2 h-2 rounded-full bg-[#43C17A]" />
+                  )}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>);
-
 }

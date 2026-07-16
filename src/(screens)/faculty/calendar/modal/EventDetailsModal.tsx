@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React from "react";
 import { View, TouchableOpacity, Modal, Linking } from 'react-native';
 import { CalendarBlank, X } from "phosphor-react-native";
@@ -39,7 +40,7 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {cons
               <View className="h-9 w-9 rounded-full bg-purple-100 items-center justify-center">
                 <CalendarBlank size={20} color="#9333ea" weight="fill" />
               </View>
-              <Text className="text-lg font-semibold text-gray-900">{t("Auto.Common.EventDetails", "Event Details")}</Text>
+              <Text className="text-lg text-gray-900" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.EventDetails", "Event Details")}</Text>
             </View>
             <TouchableOpacity onPress={onClose} className="p-2 -mr-2 rounded-full bg-gray-50">
               <X size={18} color="#6b7280" weight="bold" />
@@ -47,26 +48,26 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {cons
           </View>
 
           {}
-          <Text className="font-semibold text-base mb-1 text-gray-900 leading-tight">
+          <Text className="text-base mb-1 text-gray-900 leading-tight" style={{ fontFamily: fonts.semiBold }}>
             {event.type.charAt(0).toUpperCase() + event.type.slice(1)} -{" "}
             {event.subjectName && event.subjectName !== "-" ?
             event.subjectName :
             "General"}{" "}
             {event.subjectKey &&
-            <Text className="text-gray-500 font-medium">[{event.subjectKey}]</Text>
+            <Text className="text-gray-500" style={{ fontFamily: fonts.medium }}>[{event.subjectKey}]</Text>
             }
           </Text>
 
           {event.rawFormData?.topicTitle &&
-          <Text className="text-sm text-gray-600 mb-2 leading-tight">
-              <Text className="font-medium text-gray-800">{t("Auto.Common.EventTopic", "Event Topic:")}</Text>{" "}
+          <Text className="text-sm text-gray-600 mb-2 leading-tight" style={{ fontFamily: fonts.regular }}>
+              <Text className="text-gray-800" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EventTopic", "Event Topic:")}</Text>{" "}
               {event.rawFormData.topicTitle}
             </Text>
           }
 
           {event.type === "meeting" && event.title &&
-          <Text className="text-sm text-gray-600 mb-2 leading-tight">
-              <Text className="font-medium text-gray-800">{t("Auto.Common.MeetingTitle", "Meeting Title:")}</Text> {event.title}
+          <Text className="text-sm text-gray-600 mb-2 leading-tight" style={{ fontFamily: fonts.regular }}>
+              <Text className="text-gray-800" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.MeetingTitle", "Meeting Title:")}</Text> {event.title}
             </Text>
           }
 
@@ -116,18 +117,18 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {cons
 const DetailRow = ({ label, value, isLink }: {label: string;value?: string;isLink?: boolean;}) => {
   return (
     <View className="flex-row items-start mb-1.5">
-      <Text className="w-24 text-gray-500 font-medium text-[13px]">{label}:</Text>
+      <Text className="w-24 text-gray-500 text-[13px]" style={{ fontFamily: fonts.medium }}>{label}:</Text>
       {isLink && value && value !== "-" ?
       <TouchableOpacity
         onPress={() => Linking.openURL(value.startsWith("http") ? value : `https://${value}`)}
         className="flex-1">
         
-          <Text className="text-[13px] font-medium text-blue-600 underline" numberOfLines={1}>
+          <Text className="text-[13px] text-blue-600 underline" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
             {value}
           </Text>
         </TouchableOpacity> :
 
-      <Text className="flex-1 text-[13px] font-semibold text-gray-800">
+      <Text className="flex-1 text-[13px] text-gray-800" style={{ fontFamily: fonts.semiBold }}>
           {value || "-"}
         </Text>
       }

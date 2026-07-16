@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React from "react";
 import { View } from 'react-native';
 import { IconProps } from "phosphor-react-native";
@@ -44,14 +45,14 @@ export default function CardComponent({
       </View>
 
       <View className="flex-col justify-center flex-1">
-        <Text className="text-[17px] font-bold text-gray-900 leading-tight mb-0.5">
+        <Text className="text-[17px] text-gray-900 leading-tight mb-0.5" style={{ fontFamily: fonts.bold }}>
           {value}
         </Text>
         <Text 
-          className="text-[11px] font-medium text-gray-700 leading-tight"
+          className="text-[11px] text-gray-700 leading-tight"
           numberOfLines={1}
           ellipsizeMode="tail"
-        >
+         style={{ fontFamily: fonts.medium }}>
           {label}
         </Text>
       </View>

@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, ActivityIndicator, Alert, Platform, Modal } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -13,6 +13,8 @@ import TopicPdfModal from './modals/TopicPdfModal';
 import AddUnitModal from './modals/AddUnitModal';
 import AddWeightageModal from './modals/AddWeightageModal';
 import { fonts } from '@/constants/fonts';
+import { useUser } from '@/utils/context/UserContext';
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 
 const colorMap = {
   purple: {
@@ -45,12 +47,8 @@ function UnitCard({
   onDeleteTopic,
   onDeleteUnit
 
-
-
-
-
-
-}: {unit: UiUnit;onMarkComplete: (unitId: number, topics: UiTopic[], percentage: number) => Promise<void>;onOpenTopicPdf: (topicId: number, topicTitle: string, unitLabel: string, unitTitle: string) => void;onDeleteTopic: (unitId: number, topicId: number) => void;onDeleteUnit: (unitId: number) => void;}) {const { t } = useTranslation();
+}: { unit: UiUnit; onMarkComplete: (unitId: number, topics: UiTopic[], percentage: number) => Promise<void>; onOpenTopicPdf: (topicId: number, topicTitle: string, unitLabel: string, unitTitle: string) => void; onDeleteTopic: (unitId: number, topicId: number) => void; onDeleteUnit: (unitId: number) => void; }) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [localTopics, setLocalTopics] = useState<UiTopic[]>(unit.topics);
   const [isDirty, setIsDirty] = useState(false);
@@ -78,7 +76,7 @@ function UnitCard({
       <TouchableOpacity
         className="flex-row items-center justify-between mb-2"
         onPress={() => setIsExpanded(!isExpanded)}>
-        
+
         <View className="flex-row items-center gap-2">
           <View className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
           <Text className={`text-base ${colors.title}`} style={{ fontFamily: fonts.bold }}>
@@ -90,7 +88,7 @@ function UnitCard({
           weight="bold"
           color={colors.solidEnd}
           style={{ transform: [{ rotate: isExpanded ? '180deg' : '0deg' }] }} />
-        
+
       </TouchableOpacity>
 
       <View className="bg-white rounded-xl p-3 flex-col relative">
@@ -110,13 +108,13 @@ function UnitCard({
               width: `${percentage}%`,
               backgroundColor: colors.solidEnd
             }} />
-          
+
         </View>
 
         <View className="flex-row items-center justify-between mt-1 mb-2">
           <View className="flex-row items-center gap-1.5">
             <Clock size={12} weight="fill" color={colors.solidEnd} />
-            <Text className={`text-[10px] font-semibold ${colors.title}`}>
+            <Text className={`text-[10px] ${colors.title}`} style={{ fontFamily: fonts.semiBold }}>
               {unit.dateRange || "01-01-1970 - 03-17-2026"}
             </Text>
           </View>
@@ -126,25 +124,25 @@ function UnitCard({
         </View>
 
         {isExpanded &&
-        <View className="border-t border-gray-100 pt-2 mt-2 flex-col gap-1">
+          <View className="border-t border-gray-100 pt-2 mt-2 flex-col gap-1">
             {localTopics.length === 0 &&
-          <Text className="text-gray-400 text-xs text-center" style={{ fontFamily: fonts.italic }}>{t("Auto.Common.Notopicsfound", "No topics found")}</Text>
-          }
+              <Text className="text-gray-400 text-xs text-center" style={{ fontFamily: fonts.italic }}>{t("Auto.Common.Notopicsfound", "No topics found")}</Text>
+            }
             {localTopics.map((topic) =>
-          <View key={topic.id} className="flex-row items-start justify-between gap-2 py-1">
+              <View key={topic.id} className="flex-row items-start justify-between gap-2 py-1">
                 <TouchableOpacity
-              className="flex-row items-start gap-2 flex-1"
-              onPress={() => {
-                setLocalTopics((prev) => prev.map((t) => t.id === topic.id ? { ...t, isCompleted: !t.isCompleted } : t));
-                setIsDirty(true);
-              }}>
-              
+                  className="flex-row items-start gap-2 flex-1"
+                  onPress={() => {
+                    setLocalTopics((prev) => prev.map((t) => t.id === topic.id ? { ...t, isCompleted: !t.isCompleted } : t));
+                    setIsDirty(true);
+                  }}>
+
                   <CheckCircle
-                size={16}
-                weight={topic.isCompleted ? "fill" : "regular"}
-                color={colors.solidEnd}
-                style={{ marginTop: 2 }} />
-              
+                    size={16}
+                    weight={topic.isCompleted ? "fill" : "regular"}
+                    color={colors.solidEnd}
+                    style={{ marginTop: 2 }} />
+
                   <Text className={`text-xs flex-1 ${topic.isCompleted ? "text-gray-400 line-through" : "text-[#3F3F3F]"}`} style={{ fontFamily: fonts.regular }}>
                     {topic.title}
                   </Text>
@@ -159,17 +157,17 @@ function UnitCard({
                   </TouchableOpacity>
                 </View>
               </View>
-          )}
+            )}
           </View>
         }
 
         {isExpanded &&
-        <View className="flex-row justify-end mt-4">
+          <View className="flex-row justify-end mt-4">
             <TouchableOpacity
-            disabled={!isDirty || isSaving}
-            onPress={handleSave}
-            className={`px-4 py-1.5 rounded-lg border text-sm ${!isDirty || isSaving ? 'border-[#43C17A]/50 bg-transparent' : 'border-[#43C17A] bg-[#43C17A]/10'}`}>
-            
+              disabled={!isDirty || isSaving}
+              onPress={handleSave}
+              className={`px-4 py-1.5 rounded-lg border text-sm ${!isDirty || isSaving ? 'border-[#43C17A]/50 bg-transparent' : 'border-[#43C17A] bg-[#43C17A]/10'}`}>
+
               <Text className={`text-xs ${!isDirty || isSaving ? 'text-[#43C17A]/50' : 'text-[#43C17A]'}`} style={{ fontFamily: fonts.bold }}>
                 {isSaving ? "Saving..." : "Save Progress"}
               </Text>
@@ -189,13 +187,8 @@ function ConfirmDeleteModal({
   message,
   isDeleting
 
-
-
-
-
-
-
-}: {visible: boolean;onClose: () => void;onConfirm: () => void;title: string;message: string;isDeleting: boolean;}) {const { t } = useTranslation();
+}: { visible: boolean; onClose: () => void; onConfirm: () => void; title: string; message: string; isDeleting: boolean; }) {
+  const { t } = useTranslation();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View className="flex-1 bg-black/40 justify-center items-center px-4">
@@ -204,26 +197,26 @@ function ConfirmDeleteModal({
             <View className="bg-red-100 p-2.5 rounded-full">
               <Trash size={22} color="#ef4444" weight="fill" />
             </View>
-            <Text className="text-lg font-bold text-gray-800 flex-1">{title}</Text>
+            <Text className="text-lg text-gray-800 flex-1" style={{ fontFamily: fonts.bold }}>{title}</Text>
           </View>
-          <Text className="text-sm text-gray-600 mt-1 leading-5">{message}</Text>
+          <Text className="text-sm text-gray-600 mt-1 leading-5" style={{ fontFamily: fonts.regular }}>{message}</Text>
           <View className="flex-row gap-3 justify-end mt-4">
             <TouchableOpacity
               onPress={onClose}
               disabled={isDeleting}
               className="px-4 py-2 rounded-lg border border-gray-200">
-              
-              <Text className="text-sm font-medium text-gray-600">{t("Auto.Common.Cancel", "Cancel")}</Text>
+
+              <Text className="text-sm text-gray-600" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={onConfirm}
               disabled={isDeleting}
               className="px-4 py-2 rounded-lg bg-red-600">
-              
-              {isDeleting ?
-              <ActivityIndicator size="small" color="white" /> :
 
-              <Text className="text-sm font-medium text-white">{t("Auto.Common.Delete", "Delete")}</Text>
+              {isDeleting ?
+                <ActivityIndicator size="small" color="white" /> :
+
+                <Text className="text-sm text-white" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Delete", "Delete")}</Text>
               }
             </TouchableOpacity>
           </View>
@@ -233,10 +226,12 @@ function ConfirmDeleteModal({
 
 }
 
-export default function SubjectDetailsScreen() {const { t } = useTranslation();
+export default function SubjectDetailsScreen() {
+  const { t } = useTranslation();
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
-  const { details } = route.params as {details: CardProps;};
+  const { details } = route.params as { details: CardProps; };
+  const { collegeEducationType } = useUser();
 
   const [units, setUnits] = useState<UiUnit[]>([]);
   const [loading, setLoading] = useState(true);
@@ -252,7 +247,7 @@ export default function SubjectDetailsScreen() {const { t } = useTranslation();
     unitTitle: string;
   } | null>(null);
 
-  const [deleteTarget, setDeleteTarget] = useState<{type: 'unit' | 'topic';unitId?: number;topicId?: number;} | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ type: 'unit' | 'topic'; unitId?: number; topicId?: number; } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const loadUnits = async () => {
@@ -279,16 +274,16 @@ export default function SubjectDetailsScreen() {const { t } = useTranslation();
     try {
       for (const topic of topics) {
         const { error: topicError } = await supabase.
-        from("college_subject_unit_topics").
-        update({ isCompleted: topic.isCompleted, updatedAt: new Date().toISOString() }).
-        eq("collegeSubjectUnitTopicId", topic.id);
+          from("college_subject_unit_topics").
+          update({ isCompleted: topic.isCompleted, updatedAt: new Date().toISOString() }).
+          eq("collegeSubjectUnitTopicId", topic.id);
         if (topicError) throw topicError;
       }
 
       const { error: unitError } = await supabase.
-      from("college_subject_units").
-      update({ completionPercentage: percentage, updatedAt: new Date().toISOString() }).
-      eq("collegeSubjectUnitId", unitId);
+        from("college_subject_units").
+        update({ completionPercentage: percentage, updatedAt: new Date().toISOString() }).
+        eq("collegeSubjectUnitId", unitId);
 
       if (unitError) throw unitError;
 
@@ -316,60 +311,60 @@ export default function SubjectDetailsScreen() {const { t } = useTranslation();
 
       if (deleteTarget.type === 'unit' && deleteTarget.unitId) {
         const { error: unitError } = await supabase.
-        from("college_subject_units").
-        update({ isActive: false, deletedAt: now, updatedAt: now }).
-        eq("collegeSubjectUnitId", deleteTarget.unitId);
+          from("college_subject_units").
+          update({ isActive: false, deletedAt: now, updatedAt: now }).
+          eq("collegeSubjectUnitId", deleteTarget.unitId);
         if (unitError) throw unitError;
 
         const { error: topicError } = await supabase.
-        from("college_subject_unit_topics").
-        update({ isActive: false, deletedAt: now, updatedAt: now }).
-        eq("collegeSubjectUnitId", deleteTarget.unitId).
-        eq("isActive", true);
+          from("college_subject_unit_topics").
+          update({ isActive: false, deletedAt: now, updatedAt: now }).
+          eq("collegeSubjectUnitId", deleteTarget.unitId).
+          eq("isActive", true);
         if (topicError) throw topicError;
 
         setUnits((prev) => prev.filter((unit) => unit.id !== deleteTarget.unitId));
         Toast.show({ type: "success", text1: "Unit deleted successfully" });
       } else
 
-      if (deleteTarget.type === 'topic' && deleteTarget.topicId && deleteTarget.unitId) {
-        const { error: deleteError } = await supabase.
-        from("college_subject_unit_topics").
-        update({ isActive: false, deletedAt: now, updatedAt: now }).
-        eq("collegeSubjectUnitTopicId", deleteTarget.topicId);
-        if (deleteError) throw deleteError;
+        if (deleteTarget.type === 'topic' && deleteTarget.topicId && deleteTarget.unitId) {
+          const { error: deleteError } = await supabase.
+            from("college_subject_unit_topics").
+            update({ isActive: false, deletedAt: now, updatedAt: now }).
+            eq("collegeSubjectUnitTopicId", deleteTarget.topicId);
+          if (deleteError) throw deleteError;
 
-        const { data: remainingTopics, error: fetchError } = await supabase.
-        from("college_subject_unit_topics").
-        select("isCompleted").
-        eq("collegeSubjectUnitId", deleteTarget.unitId).
-        eq("isActive", true);
-        if (fetchError) throw fetchError;
+          const { data: remainingTopics, error: fetchError } = await supabase.
+            from("college_subject_unit_topics").
+            select("isCompleted").
+            eq("collegeSubjectUnitId", deleteTarget.unitId).
+            eq("isActive", true);
+          if (fetchError) throw fetchError;
 
-        const total = remainingTopics?.length || 0;
-        const completed = remainingTopics?.filter((t) => t.isCompleted).length || 0;
-        const newPercentage = total === 0 ? 0 : Math.round(completed / total * 100);
+          const total = remainingTopics?.length || 0;
+          const completed = remainingTopics?.filter((t) => t.isCompleted).length || 0;
+          const newPercentage = total === 0 ? 0 : Math.round(completed / total * 100);
 
-        const { error: updateUnitError } = await supabase.
-        from("college_subject_units").
-        update({ completionPercentage: newPercentage, updatedAt: now }).
-        eq("collegeSubjectUnitId", deleteTarget.unitId);
-        if (updateUnitError) throw updateUnitError;
+          const { error: updateUnitError } = await supabase.
+            from("college_subject_units").
+            update({ completionPercentage: newPercentage, updatedAt: now }).
+            eq("collegeSubjectUnitId", deleteTarget.unitId);
+          if (updateUnitError) throw updateUnitError;
 
-        setUnits((prev) =>
-        prev.map((unit) => {
-          if (unit.id === deleteTarget.unitId) {
-            return {
-              ...unit,
-              percentage: newPercentage,
-              topics: unit.topics.filter((t) => t.id !== deleteTarget.topicId)
-            };
-          }
-          return unit;
-        })
-        );
-        Toast.show({ type: "success", text1: "Topic deleted successfully" });
-      }
+          setUnits((prev) =>
+            prev.map((unit) => {
+              if (unit.id === deleteTarget.unitId) {
+                return {
+                  ...unit,
+                  percentage: newPercentage,
+                  topics: unit.topics.filter((t) => t.id !== deleteTarget.topicId)
+                };
+              }
+              return unit;
+            })
+          );
+          Toast.show({ type: "success", text1: "Topic deleted successfully" });
+        }
     } catch (error: any) {
       Toast.show({ type: "error", text1: "Failed to delete" });
     } finally {
@@ -402,12 +397,14 @@ export default function SubjectDetailsScreen() {const { t } = useTranslation();
               <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>{details.subjectTitle}</Text>
             </View>
           </View>
-          <View className="flex-row items-center gap-2">
-            <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Semester", "Semester :")}</Text>
-            <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
-              <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>{details.semester}</Text>
+          {!isSchoolEducation(collegeEducationType) && (
+            <View className="flex-row items-center gap-2">
+              <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Semester", "Semester :")}</Text>
+              <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
+                <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>{details.semester}</Text>
+              </View>
             </View>
-          </View>
+          )}
           <View className="flex-row items-center gap-2">
             <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Year", "Year :")}</Text>
             <View className="px-3 py-1 bg-[#DCEAE2] rounded-full">
@@ -416,87 +413,85 @@ export default function SubjectDetailsScreen() {const { t } = useTranslation();
           </View>
         </View>
 
-        <View className="flex-row justify-end mb-4 gap-2">
+        <View className="flex-row justify-end mb-4 gap-2 flex-wrap">
           <TouchableOpacity
             onPress={() => setAddWeightageVisible(true)}
             className="bg-white px-4 py-2 rounded-lg flex-row items-center gap-2 border border-[#43C17A]">
-            
             <Text className="text-[#43C17A] text-xs" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddWeightage", "Add Weightage")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setAddUnitVisible(true)}
             className="bg-[#43C17A] px-4 py-2 rounded-lg flex-row items-center gap-2 border border-[#43C17A]">
-            
-            <Text className="text-white text-xs" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddUnit", "Add Unit")}</Text>
+            <Text className="text-white text-xs" style={{ fontFamily: fonts.bold }}>Add Unit</Text>
           </TouchableOpacity>
         </View>
 
         {loading ?
-        <ActivityIndicator size="large" color="#7E5DFF" className="mt-10" /> :
-        units.length === 0 ?
-        <View className="items-center justify-center mt-10">
-            <Text className="text-gray-500" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Nounitsfound", "No units found")}</Text>
-          </View> :
+          <ActivityIndicator size="large" color="#7E5DFF" className="mt-10" /> :
+          units.length === 0 ?
+            <View className="items-center justify-center mt-10">
+              <Text className="text-gray-500" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Nounitsfound", "No units found")}</Text>
+            </View> :
 
-        units.map((unit) =>
-        <UnitCard
-          key={unit.id}
-          unit={unit}
-          onMarkComplete={handleMarkComplete}
-          onDeleteTopic={handleDeleteTopic}
-          onDeleteUnit={handleDeleteUnit}
-          onOpenTopicPdf={handleOpenTopicPdf} />
+            units.map((unit) =>
+              <UnitCard
+                key={unit.id}
+                unit={unit}
+                onMarkComplete={handleMarkComplete}
+                onDeleteTopic={handleDeleteTopic}
+                onDeleteUnit={handleDeleteUnit}
+                onOpenTopicPdf={handleOpenTopicPdf} />
 
-        )
+            )
         }
       </ScrollView>
 
       {addUnitVisible &&
-      <AddUnitModal
-        visible={addUnitVisible}
-        onClose={() => setAddUnitVisible(false)}
-        onSave={() => {
-          setAddUnitVisible(false);
-          loadUnits();
-        }}
-        subjectDetails={details} />
+        <AddUnitModal
+          visible={addUnitVisible}
+          onClose={() => setAddUnitVisible(false)}
+          onSave={() => {
+            setAddUnitVisible(false);
+            loadUnits();
+          }}
+          subjectDetails={details} />
 
       }
 
       {pdfModalVisible && selectedTopicPdf &&
-      <TopicPdfModal
-        visible={pdfModalVisible}
-        onClose={() => {
-          setPdfModalVisible(false);
-          setSelectedTopicPdf(null);
-        }}
-        topicId={selectedTopicPdf.id}
-        topicTitle={selectedTopicPdf.title}
-        unitLabel={selectedTopicPdf.unitLabel}
-        unitTitle={selectedTopicPdf.unitTitle} />
+        <TopicPdfModal
+          visible={pdfModalVisible}
+          onClose={() => {
+            setPdfModalVisible(false);
+            setSelectedTopicPdf(null);
+          }}
+          topicId={selectedTopicPdf.id}
+          topicTitle={selectedTopicPdf.title}
+          unitLabel={selectedTopicPdf.unitLabel}
+          unitTitle={selectedTopicPdf.unitTitle} />
 
       }
 
       {addWeightageVisible &&
-      <AddWeightageModal
-        visible={addWeightageVisible}
-        onClose={() => setAddWeightageVisible(false)}
-        subjectDetails={details} />
+        <AddWeightageModal
+          visible={addWeightageVisible}
+          onClose={() => setAddWeightageVisible(false)}
+          subjectDetails={details} />
 
       }
 
       {deleteTarget &&
-      <ConfirmDeleteModal
-        visible={true}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={performDelete}
-        isDeleting={isDeleting}
-        title={deleteTarget.type === 'unit' ? "Delete Unit" : "Delete Topic"}
-        message={
-        deleteTarget.type === 'unit' ?
-        "Are you sure you want to permanently delete this unit and all its topics?" :
-        "Are you sure you want to permanently delete this topic?"
-        } />
+        <ConfirmDeleteModal
+          visible={true}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={performDelete}
+          isDeleting={isDeleting}
+          title={deleteTarget.type === 'unit' ? "Delete Unit" : "Delete Topic"}
+          message={
+            deleteTarget.type === 'unit' ?
+              "Are you sure you want to permanently delete this unit and all its topics?" :
+              "Are you sure you want to permanently delete this topic?"
+          } />
 
       }
     </View>);

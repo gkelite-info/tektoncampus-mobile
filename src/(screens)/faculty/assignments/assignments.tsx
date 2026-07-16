@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState } from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -27,13 +28,13 @@ export default function FacultyAssignments() {
       <View style={{ flex: 1, paddingTop: headerHeight + 16, paddingHorizontal: 16 }}>
         {}
         <View className="mb-3 mt-0">
-          <Text className="font-bold text-2xl mb-1 text-[#282828]">
+          <Text className="text-2xl mb-1 text-[#282828]" style={{ fontFamily: fonts.bold }}>
             {activeTab === 'assignments' && t('Assignments')}
             {activeTab === 'quiz' && t('Quiz')}
             {activeTab === 'discussion' && t('Discussion forum')}
             {activeTab === 'lab' && t('Lab')}
           </Text>
-          <Text className="text-[#282828] text-sm">
+          <Text className="text-[#282828] text-sm" style={{ fontFamily: fonts.regular }}>
             {activeTab === 'assignments' && t('Create, manage, and evaluate assignments for your students efficiently.')}
             {activeTab === 'quiz' && t('Design, organize, and publish quizzes to assess your students effectively.')}
             {activeTab === 'discussion' && t('Create and manage project discussions for students.')}
@@ -61,9 +62,8 @@ export default function FacultyAssignments() {
                   }}
                 >
                   <Text
-                    style={{
+                    style={{ fontFamily: fonts.bold, 
                       fontSize: 16,
-                      fontWeight: 'bold',
                       color: isActive ? '#43C17A' : '#6B7280',
                     }}
                   >

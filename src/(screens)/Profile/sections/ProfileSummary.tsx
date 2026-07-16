@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
 import { View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Toast from "react-native-toast-message";
@@ -68,13 +69,13 @@ export default function ProfileSummary() {const { t } = useTranslation();
 
   return (
     <View className="bg-white rounded-xl  p-6 mt-4">
-            <Text className="text-xl font-bold text-[#282828] mb-6">{t("Auto.Common.ProfileSummary", "Profile Summary")}</Text>
+            <Text className="text-xl text-[#282828] mb-6" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ProfileSummary", "Profile Summary")}</Text>
 
             <View>
-                <Text className="text-base font-medium text-[#282828] mb-1">{t("Auto.Common.WriteYourProfes", "Write Your Professional Summary")}
+                <Text className="text-base text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.WriteYourProfes", "Write Your Professional Summary")}
 
         </Text>
-                <Text className="text-sm text-[#525252] mb-4">{t("Auto.Common.Shareashortover", "Share a short overview of your education, skills, and career goals what drives you and where you see your future.")}
+                <Text className="text-sm text-[#525252] mb-4" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Shareashortover", "Share a short overview of your education, skills, and career goals what drives you and where you see your future.")}
 
         </Text>
 
@@ -88,7 +89,7 @@ export default function ProfileSummary() {const { t } = useTranslation();
             textAlignVertical="top"
             className="w-full border border-[#CCCCCC] rounded-lg p-4 text-sm text-[#525252] min-h-[160px] bg-white" />
           
-                    <Text className="absolute bottom-3 right-4 text-xs text-gray-400">
+                    <Text className="absolute bottom-3 right-4 text-xs text-gray-400" style={{ fontFamily: fonts.regular }}>
                         {description.length}/1000
                     </Text>
                 </View>
@@ -104,7 +105,7 @@ export default function ProfileSummary() {const { t } = useTranslation();
                         {isSubmitting ?
             <ActivityIndicator size="small" color="#ffffff" className="mr-2" /> :
             null}
-                        <Text className="text-white font-bold">
+                        <Text className="text-white" style={{ fontFamily: fonts.bold }}>
                             {isSubmitting ? t("Dashboard.profile.Submitting", "Submitting...") : t("Dashboard.profile.Submit", "Submit")}
                         </Text>
                     </TouchableOpacity>

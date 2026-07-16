@@ -89,6 +89,11 @@ export const FacultyProvider = ({ children }: { children: React.ReactNode }) => 
             try {
                 const faculty = await fetchFacultyContext(userId);
 
+                if (!faculty) {
+                    setState((s) => ({ ...s, loading: false }));
+                    return;
+                }
+
                 setState({
                     loading: false,
                     facultyId: faculty.facultyId,

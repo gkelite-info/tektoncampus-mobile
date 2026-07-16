@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, FlatList, ActivityIndicator, Image, Linking, TextInput } from 'react-native';
 import { CaretLeft, FilePdf, PencilSimple, Check, X } from 'phosphor-react-native';
@@ -93,9 +94,9 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
               }
             </View>
             <View className="flex-col flex-1 pr-2">
-              <Text className="text-sm font-bold text-[#43C17A]" numberOfLines={1}>{item.profiles?.full_name || "Unknown"}</Text>
-              <Text className="text-xs text-gray-500">{t("Auto.Common.ID", "ID:")}{item.profiles?.rollNumber || item.studentId}</Text>
-              <Text className="text-[10px] text-gray-500">{t("Auto.Common.Section", "Section:")}{item.profiles?.section || "N/A"}</Text>
+              <Text className="text-sm text-[#43C17A]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{item.profiles?.full_name || "Unknown"}</Text>
+              <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.ID", "ID:")}{item.profiles?.rollNumber || item.studentId}</Text>
+              <Text className="text-[10px] text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Section", "Section:")}{item.profiles?.section || "N/A"}</Text>
             </View>
           </View>
 
@@ -108,7 +109,7 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
                 keyboardType="numeric"
                 className="border border-gray-300 rounded px-2 py-1 w-12 text-center text-xs" />
               
-                <Text className="text-xs font-bold text-gray-500">/ {item.totalMarks}</Text>
+                <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.bold }}>/ {item.totalMarks}</Text>
                 <TouchableOpacity onPress={() => handleSaveMarks(item.studentId)} className="bg-[#43C17A] p-1 rounded">
                   <Check size={14} color="white" />
                 </TouchableOpacity>
@@ -124,7 +125,7 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
               }}
               className="bg-[#16284F] px-3 py-1.5 rounded-md flex-row items-center gap-1">
               
-                <Text className="text-xs font-bold text-white">
+                <Text className="text-xs text-white" style={{ fontFamily: fonts.bold }}>
                   {item.marksObtained != null ? `${item.marksObtained} / ${item.totalMarks}` : "Add Marks"}
                 </Text>
                 <PencilSimple size={12} color="white" />
@@ -134,7 +135,7 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
         </View>
 
         <View className="border-t border-gray-100 pt-3 flex-col gap-2">
-          <Text className="text-[10px] text-gray-500 font-bold">{t("Auto.Common.Filesuploaded", "Files uploaded:")}</Text>
+          <Text className="text-[10px] text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Filesuploaded", "Files uploaded:")}</Text>
           <View className="flex-row flex-wrap gap-2">
             {item.files?.map((file: any) =>
             <TouchableOpacity
@@ -143,13 +144,13 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
               className="flex-row items-center gap-1 bg-red-50 px-2 py-1.5 rounded-md border border-red-100">
               
                 <FilePdf size={14} color="#ef4444" weight="fill" />
-                <Text className="text-[10px] text-red-500 font-medium max-w-[120px]" numberOfLines={1}>
+                <Text className="text-[10px] text-red-500 max-w-[120px]" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                   {formatFileName ? formatFileName(file.url) : file.url.split('/').pop()}
                 </Text>
               </TouchableOpacity>
             )}
           </View>
-          <Text className="text-[10px] text-gray-400 self-end mt-1">{t("Auto.Common.Submitted", "Submitted:")}{formatDate(item.submittedAt)}</Text>
+          <Text className="text-[10px] text-gray-400 self-end mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Submitted", "Submitted:")}{formatDate(item.submittedAt)}</Text>
         </View>
       </View>);
 
@@ -162,7 +163,7 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
           <CaretLeft size={24} weight="bold" color="#16284F" />
         </TouchableOpacity>
         <View>
-          <Text className="text-xl font-bold text-[#16284F]">{t("Auto.Common.DiscussionSubmi", "Discussion Submissions")}</Text>
+          <Text className="text-xl text-[#16284F]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.DiscussionSubmi", "Discussion Submissions")}</Text>
         </View>
       </View>
 
@@ -171,18 +172,18 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
         <View className="mb-4">
             <View className="flex-row gap-3">
               <View className="flex-1 bg-[#E2DAFF] rounded-xl p-3 items-center justify-center border border-[#D5CAFF] shadow-sm">
-                <Text className="text-[10px] font-bold text-[#714EF2] uppercase mb-1 tracking-wider">{t("Auto.Common.DueDate", "Due Date")}</Text>
-                <Text className="text-sm font-black text-[#282828]">{formatDate(discussionDetails.deadline)}</Text>
+                <Text className="text-[10px] text-[#714EF2] uppercase mb-1 tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.DueDate", "Due Date")}</Text>
+                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{formatDate(discussionDetails.deadline)}</Text>
               </View>
               <View className="flex-1 bg-[#FFEDDA] rounded-xl p-3 items-center justify-center border border-[#FFDFBC] shadow-sm">
-                <Text className="text-[10px] font-bold text-[#FF9E3D] uppercase mb-1 tracking-wider">{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
-                <Text className="text-sm font-black text-[#282828]">
+                <Text className="text-[10px] text-[#FF9E3D] uppercase mb-1 tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
+                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>
                   {discussionDetails.discussion_forum_sections?.[0]?.marks || "-"}
                 </Text>
               </View>
               <View className="flex-1 bg-[#E6FBEA] rounded-xl p-3 items-center justify-center border border-[#BDECC9] shadow-sm">
-                <Text className="text-[10px] font-bold text-[#43C17A] uppercase mb-1 tracking-wider">{t("Auto.Common.Submissions", "Submissions")}</Text>
-                <Text className="text-sm font-black text-[#282828]">{submissions.length}</Text>
+                <Text className="text-[10px] text-[#43C17A] uppercase mb-1 tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Submissions", "Submissions")}</Text>
+                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{submissions.length}</Text>
               </View>
             </View>
           </View>
@@ -192,7 +193,7 @@ export default function DiscussionSubmissions() {const { t } = useTranslation();
         <ActivityIndicator size="large" color="#43C17A" className="mt-10" /> :
         submissions.length === 0 ?
         <View className="items-center justify-center mt-10">
-            <Text className="text-gray-500 font-semibold">{t("Auto.Common.Nosubmissionsye", "No submissions yet.")}</Text>
+            <Text className="text-gray-500" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Nosubmissionsye", "No submissions yet.")}</Text>
           </View> :
 
         <FlatList

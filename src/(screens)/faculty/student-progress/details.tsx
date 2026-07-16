@@ -106,10 +106,10 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
   if (errorMsg || !studentInfo || !progressData) {
     return (
       <View style={[tw`flex-1 items-center justify-center bg-[#F9FAFB]`, { paddingTop: insets.top }]}>
-        <Text style={tw`text-red-500 font-medium mb-2`}>{t("Auto.Common.Failedtoloadstu", "Failed to load student progress")}</Text>
-        <Text style={tw`text-gray-600 text-center px-4`}>{errorMsg}</Text>
+        <Text style={[{ fontFamily: fonts.medium }, tw`text-red-500  mb-2`]}>{t("Auto.Common.Failedtoloadstu", "Failed to load student progress")}</Text>
+        <Text style={[{ fontFamily: fonts.regular }, tw`text-gray-600 text-center px-4`]}>{errorMsg}</Text>
         <TouchableOpacity onPress={() => (navigation as any).navigate("StudentProgress")} style={tw`mt-4 bg-[#43C17A] px-4 py-2 rounded-lg`}>
-          <Text style={tw`text-white font-semibold`}>{t("Auto.Common.GoBack", "Go Back")}</Text>
+          <Text style={[{ fontFamily: fonts.semiBold }, tw`text-white `]}>{t("Auto.Common.GoBack", "Go Back")}</Text>
         </TouchableOpacity>
       </View>);
 
@@ -127,7 +127,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
         <TouchableOpacity onPress={() => (navigation as any).navigate("StudentProgress")} style={tw`mr-3 bg-white p-2 rounded-full shadow-sm`}>
           <CaretLeft size={20} color="#374151" weight="bold" />
         </TouchableOpacity>
-        <Text style={[tw`text-xl font-bold text-gray-800`, { fontFamily: fonts.bold }]}>{t("Auto.Common.StudentDetails", "Student Details")}</Text>
+        <Text style={[tw`text-xl text-gray-800`, { fontFamily: fonts.bold }]}>{t("Auto.Common.StudentDetails", "Student Details")}</Text>
       </View>
 
       <ScrollView

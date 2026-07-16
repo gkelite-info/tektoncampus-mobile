@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React from "react";
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import {
@@ -49,10 +50,10 @@ const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
                 weight={isActive ? "fill" : "regular"}
               />
               <Text 
-                className={`text-sm font-medium ${
+                className={`text-sm  ${
                   isActive ? "text-emerald-600" : "text-gray-500"
                 }`}
-              >
+               style={{ fontFamily: fonts.medium }}>
                 {tab.name}
               </Text>
             </TouchableOpacity>

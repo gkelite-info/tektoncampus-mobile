@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { Plus, CaretDown, CaretUp } from 'phosphor-react-native';
@@ -43,7 +44,7 @@ const CalendarHeader = ({
           className="flex-row items-center justify-between px-3 py-1.5"
           onPress={() => setIsMonthModalOpen(true)}>
           
-                    <Text className="text-sm font-semibold text-gray-700 mr-2">
+                    <Text className="text-sm text-gray-700 mr-2" style={{ fontFamily: fonts.semiBold }}>
                         {MONTHS[currentMonth]}
                     </Text>
                     <CaretDown size={14} color="#6B7280" weight="bold" />
@@ -56,7 +57,7 @@ const CalendarHeader = ({
           className="flex-row items-center justify-between px-3 py-1.5"
           onPress={() => setIsYearModalOpen(true)}>
           
-                    <Text className="text-sm font-semibold text-gray-700 mr-2">
+                    <Text className="text-sm text-gray-700 mr-2" style={{ fontFamily: fonts.semiBold }}>
                         {currentYear}
                     </Text>
                     <CaretDown size={14} color="#6B7280" weight="bold" />
@@ -68,7 +69,7 @@ const CalendarHeader = ({
         className="flex-row items-center gap-1.5 px-4 py-2 bg-[#43C17A] rounded-lg shadow-sm">
         
                 <Plus size={16} color="white" weight="bold" />
-                <Text className="text-white text-sm font-bold">{t("Auto.Common.AddNew", "Add New")}</Text>
+                <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddNew", "Add New")}</Text>
             </TouchableOpacity>
 
             {}
@@ -89,7 +90,7 @@ const CalendarHeader = ({
                   setIsMonthModalOpen(false);
                 }}>
                 
-                                    <Text className={`text-center ${index === currentMonth ? 'text-emerald-600 font-bold' : 'text-gray-700'}`}>
+                                    <Text className={`text-center ${index === currentMonth ?'text-emerald-600 ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>
                                         {item}
                                     </Text>
                                 </TouchableOpacity>
@@ -117,7 +118,7 @@ const CalendarHeader = ({
                   setIsYearModalOpen(false);
                 }}>
                 
-                                    <Text className={`text-center ${item === currentYear ? 'text-emerald-600 font-bold' : 'text-gray-700'}`}>
+                                    <Text className={`text-center ${item === currentYear ?'text-emerald-600 ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>
                                         {item}
                                     </Text>
                                 </TouchableOpacity>

@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useRef, useState } from "react";
 import { View, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -349,8 +350,8 @@ export default function CalendarScreen() {const { t } = useTranslation();
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-4 py-2 border-b border-gray-100 flex-row justify-between items-center mb-2">
         <View>
-          <Text className="text-xl font-bold text-gray-900">{t("Auto.Common.CalendarEvents", "Calendar & Events")}</Text>
-          <Text className="text-xs text-gray-500">{t("Auto.Common.Stayorganizedwi", "Stay organized with your schedule")}</Text>
+          <Text className="text-xl text-gray-900" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.CalendarEvents", "Calendar & Events")}</Text>
+          <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Stayorganizedwi", "Stay organized with your schedule")}</Text>
         </View>
       </View>
 
@@ -360,14 +361,14 @@ export default function CalendarScreen() {const { t } = useTranslation();
             onPress={() => setMainTab("Faculty")}
             className={`px-4 py-2 rounded-lg shadow-sm border border-gray-200 ${mainTab === "Faculty" ? "bg-emerald-500 border-emerald-500" : "bg-white"}`}>
             
-            <Text className={`font-semibold text-sm ${mainTab === "Faculty" ? "text-white" : "text-gray-600"}`}>{t("Auto.Common.Academics", "Academics")}</Text>
+            <Text className={`text-sm ${mainTab ==="Faculty" ? "text-white" : "text-gray-600"}`} style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Academics", "Academics")}</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
             onPress={() => setMainTab("HR")}
             className={`px-4 py-2 rounded-lg shadow-sm border border-gray-200 ${mainTab === "HR" ? "bg-emerald-500 border-emerald-500" : "bg-white"}`}>
             
-            <Text className={`font-semibold text-sm ${mainTab === "HR" ? "text-white" : "text-gray-600"}`}>{t("Auto.Common.HRSchedule", "HR Schedule")}</Text>
+            <Text className={`text-sm ${mainTab ==="HR" ? "text-white" : "text-gray-600"}`} style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.HRSchedule", "HR Schedule")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -375,7 +376,7 @@ export default function CalendarScreen() {const { t } = useTranslation();
         <CalendarToolbar activeTab={activeTab} setActiveTab={setActiveTab} /> :
 
         <View className="bg-gray-50 rounded-xl border border-gray-200 px-4 py-3 mb-4">
-            <Text className="text-sm font-semibold text-gray-600">{t("Auto.Common.HRCollegeSchedu", "HR College Schedule")}</Text>
+            <Text className="text-sm text-gray-600" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.HRCollegeSchedu", "HR College Schedule")}</Text>
           </View>
         }
 

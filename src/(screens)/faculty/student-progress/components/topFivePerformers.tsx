@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React from "react";
 import { View, Image } from 'react-native';
 import tw from "twrnc";
@@ -31,7 +32,7 @@ const PerformerRow = ({ performer }: {performer: TopPerformer;}) => {
 
       <View style={tw`flex-1`}>
         <Text
-          style={tw`text-[12px] md:text-[14px] font-medium leading-tight text-gray-800`}
+          style={[{ fontFamily: fonts.medium }, tw`text-[12px] md:text-[14px]  leading-tight text-gray-800`]}
           numberOfLines={1}>
           
           {performer.name}
@@ -50,7 +51,7 @@ const PerformerRow = ({ performer }: {performer: TopPerformer;}) => {
       </View>
 
       <View style={tw`w-10 md:w-12 items-end`}>
-        <Text style={tw`text-[12px] md:text-[14px] font-bold text-gray-700`}>
+        <Text style={[{ fontFamily: fonts.bold }, tw`text-[12px] md:text-[14px]  text-gray-700`]}>
           {performer.score}%
         </Text>
       </View>
@@ -61,7 +62,7 @@ const PerformerRow = ({ performer }: {performer: TopPerformer;}) => {
 export default function TopFivePerformers({ performers }: TopPerformersProps) {const { t } = useTranslation();
   return (
     <View style={tw`w-full flex-col overflow-hidden rounded-xl bg-white p-4 lg:p-5 shadow-sm border border-gray-100 min-h-[300px]`}>
-      <Text style={tw`text-[15px] md:text-[18px] font-bold text-gray-900 mb-1`}>{t("Auto.Common.Top5Performers", "Top 5 Performers")}
+      <Text style={[{ fontFamily: fonts.bold }, tw`text-[15px] md:text-[18px]  text-gray-900 mb-1`]}>{t("Auto.Common.Top5Performers", "Top 5 Performers")}
 
       </Text>
 
@@ -72,7 +73,7 @@ export default function TopFivePerformers({ performers }: TopPerformersProps) {c
         ) :
 
         <View style={tw`flex-1 items-center justify-center py-8`}>
-            <Text style={tw`text-sm text-[#6B7280]`}>{t("Auto.Common.Noperformerdata", "No performer data available.")}
+            <Text style={[{ fontFamily: fonts.regular }, tw`text-sm text-[#6B7280]`]}>{t("Auto.Common.Noperformerdata", "No performer data available.")}
 
           </Text>
           </View>

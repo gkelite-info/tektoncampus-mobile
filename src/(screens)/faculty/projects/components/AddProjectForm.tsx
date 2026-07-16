@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, ScrollView, Alert, SafeAreaView } from 'react-native';
 import tw from "twrnc";
@@ -27,12 +28,12 @@ const MultiSelectDropdown = ({ items, selectedIds, onToggle, placeholder, label 
   const [isOpen, setIsOpen] = useState(false);
   return (
     <View style={tw`mb-4 mt-5`}>
-            <Text style={tw`text-sm font-semibold mb-1 text-gray-800`}>{label} <Text style={tw`text-red-500`}>*</Text></Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 text-gray-800`]}>{label} <Text style={tw`text-red-500`}>*</Text></Text> 
             <TouchableOpacity
         style={tw`border border-gray-300 bg-white p-3 rounded-lg flex-row justify-between items-center`}
         onPress={() => setIsOpen(!isOpen)}>
         
-                <Text style={tw`text-gray-700`}>
+                <Text style={[{ fontFamily: fonts.regular }, tw`text-gray-700`]}>
                     {selectedIds.length > 0 ? `${selectedIds.length} selected` : placeholder}
                 </Text>
                 <CaretDown size={16} color="#4b5563" />
@@ -50,10 +51,10 @@ const MultiSelectDropdown = ({ items, selectedIds, onToggle, placeholder, label 
                                 <View style={tw`w-4 h-4 rounded-full border border-green-500 mr-3 items-center justify-center`}>
                                     {selectedIds.includes(item.id) && <View style={tw`w-2 h-2 rounded-full bg-green-500`} />}
                                 </View>
-                                <Text style={tw`text-gray-800`}>{item.name}</Text>
+                                <Text style={[{ fontFamily: fonts.regular }, tw`text-gray-800`]}>{item.name}</Text>
                             </TouchableOpacity>
           ) :
-          <Text style={tw`p-3 text-gray-500`}>{t("Auto.Common.Noitemsfound", "No items found")}</Text>
+          <Text style={[{ fontFamily: fonts.regular }, tw`p-3 text-gray-500`]}>{t("Auto.Common.Noitemsfound", "No items found")}</Text>
           }
                     </ScrollView>
                 </View>
@@ -63,7 +64,7 @@ const MultiSelectDropdown = ({ items, selectedIds, onToggle, placeholder, label 
       <View style={tw`flex-row flex-wrap gap-2 mt-3`}>
                     {items.filter((item: any) => selectedIds.includes(item.id)).map((item: any) =>
         <View key={item.id} style={tw`bg-green-100 flex-row items-center px-3 py-1.5 rounded-full`}>
-                            <Text style={tw`text-green-800 text-xs mr-2 font-medium`}>{item.name}</Text>
+ <Text style={[{ fontFamily: fonts.medium }, tw`text-green-800 text-xs mr-2`]}>{item.name}</Text> 
                             <TouchableOpacity onPress={() => onToggle(item.id)}>
                                 <X size={12} color="#166534" />
                             </TouchableOpacity>
@@ -237,27 +238,27 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
                 <TouchableOpacity onPress={onCancel} style={tw`mr-3`}>
                     <CaretLeft size={24} color="#000" />
                 </TouchableOpacity>
-                <Text style={tw`text-xl font-bold`}>{t("Auto.Common.AddProject", "Add Project")}</Text>
+ <Text style={[{ fontFamily: fonts.bold }, tw`text-xl`]}>{t("Auto.Common.AddProject", "Add Project")}</Text> 
             </View>
 
             <ScrollView style={tw`flex-1 px-4`} contentContainerStyle={{ paddingBottom: 100 }}>
                 <View style={tw`bg-white p-4 rounded-xl shadow-sm mb-6 mt-4`}>
                     {/* Selectors */}
-                    <Text style={tw`text-sm font-semibold mb-1 mt-3 text-gray-800`}>{t("Auto.Common.Year", "Year")}</Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-3 text-gray-800`]}>{t("Auto.Common.Year", "Year")}</Text> 
                     <View style={tw`border border-gray-300 rounded-lg`}>
                         <Picker selectedValue={selectedYear} onValueChange={setSelectedYear}>
                             {years.map((y) => <Picker.Item key={y.id} label={y.label} value={y.id.toString()} />)}
                         </Picker>
                     </View>
 
-                    <Text style={tw`text-sm font-semibold mb-1 mt-3 text-gray-800`}>{t("Auto.Common.Subject", "Subject")}</Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-3 text-gray-800`]}>{t("Auto.Common.Subject", "Subject")}</Text> 
                     <View style={tw`border border-gray-300 rounded-lg`}>
                         <Picker selectedValue={selectedSubject} onValueChange={setSelectedSubject}>
                             {subjects.map((s) => <Picker.Item key={s.id} label={s.label} value={s.id.toString()} />)}
                         </Picker>
                     </View>
 
-                    <Text style={tw`text-sm font-semibold mb-1 mt-3 text-gray-800`}>{t("Auto.Common.Section", "Section")}</Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-3 text-gray-800`]}>{t("Auto.Common.Section", "Section")}</Text> 
                     <View style={tw`border border-gray-300 rounded-lg`}>
                         <Picker selectedValue={selectedSection} onValueChange={setSelectedSection}>
                             {sections.map((s) => <Picker.Item key={s.facultySectionId} label={s.college_sections?.collegeSections} value={s.college_sections?.collegeSectionsId.toString()} />)}
@@ -265,16 +266,16 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
                     </View>
 
                     {/* Basic Info */}
-                    <Text style={tw`text-sm font-semibold mb-1 mt-5 text-gray-800`}>{t("Auto.Common.Title", "Title")}<Text style={tw`text-red-500`}>*</Text></Text>
-                    <TextInput style={tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`} placeholder={t("Auto.Attr.ProjectTitle", "Project Title")} value={title} onChangeText={setTitle} />
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-5 text-gray-800`]}>{t("Auto.Common.Title", "Title")}<Text style={tw`text-red-500`}>*</Text></Text> 
+                    <TextInput style={[{ fontFamily: fonts.regular }, tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder={t("Auto.Attr.ProjectTitle", "Project Title")} value={title} onChangeText={setTitle} />
 
-                    <Text style={tw`text-sm font-semibold mb-1 mt-4 text-gray-800`}>{t("Auto.Common.Description", "Description")}<Text style={tw`text-red-500`}>*</Text></Text>
-                    <TextInput style={tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`} placeholder={t("Auto.Attr.ProjectDescript", "Project Description")} value={description} onChangeText={setDescription} multiline numberOfLines={4} textAlignVertical="top" />
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-4 text-gray-800`]}>{t("Auto.Common.Description", "Description")}<Text style={tw`text-red-500`}>*</Text></Text> 
+                    <TextInput style={[{ fontFamily: fonts.regular }, tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder={t("Auto.Attr.ProjectDescript", "Project Description")} value={description} onChangeText={setDescription} multiline numberOfLines={4} textAlignVertical="top" />
 
                     {/* Domains */}
-                    <Text style={tw`text-sm font-semibold mb-1 mt-4 text-gray-800`}>{t("Auto.Common.Domains", "Domains")}<Text style={tw`text-red-500`}>*</Text></Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-4 text-gray-800`]}>{t("Auto.Common.Domains", "Domains")}<Text style={tw`text-red-500`}>*</Text></Text> 
                     <View style={tw`flex-row items-center gap-2 mb-2`}>
-                        <TextInput style={tw`flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white`} placeholder={t("Auto.Attr.AddDomain", "Add Domain")} value={domainInput} onChangeText={setDomainInput} onSubmitEditing={handleAddDomain} />
+                        <TextInput style={[{ fontFamily: fonts.regular }, tw`flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder={t("Auto.Attr.AddDomain", "Add Domain")} value={domainInput} onChangeText={setDomainInput} onSubmitEditing={handleAddDomain} />
                         <TouchableOpacity style={tw`bg-green-500 p-2.5 rounded-lg`} onPress={handleAddDomain}>
                             <Plus color="#fff" size={18} />
                         </TouchableOpacity>
@@ -282,7 +283,7 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
                     <View style={tw`flex-row flex-wrap gap-2`}>
                         {domains.map((d, i) =>
             <View key={i} style={tw`bg-green-100 flex-row items-center px-3 py-1 rounded-full`}>
-                                <Text style={tw`text-green-800 text-xs`}>{d}</Text>
+                                <Text style={[{ fontFamily: fonts.regular }, tw`text-green-800 text-xs`]}>{d}</Text>
                                 <TouchableOpacity onPress={() => setDomains(domains.filter((x) => x !== d))} style={tw`ml-2`}>
                                     <X size={12} color="#166534" />
                                 </TouchableOpacity>
@@ -291,21 +292,21 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
                     </View>
 
                     {/* Marks */}
-                    <Text style={tw`text-sm font-semibold mb-1 mt-4 text-gray-800`}>{t("Auto.Common.Marks", "Marks")}<Text style={tw`text-red-500`}>*</Text></Text>
-                    <TextInput style={tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`} placeholder="100" keyboardType="numeric" value={marks} onChangeText={setMarks} />
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-4 text-gray-800`]}>{t("Auto.Common.Marks", "Marks")}<Text style={tw`text-red-500`}>*</Text></Text> 
+                    <TextInput style={[{ fontFamily: fonts.regular }, tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder="100" keyboardType="numeric" value={marks} onChangeText={setMarks} />
 
                     {/* Dates */}
                     <View style={tw`flex-row gap-4 mt-4`}>
                         <View style={tw`flex-1`}>
-                            <Text style={tw`text-sm font-semibold mb-1 text-gray-800`}>{t("Auto.Common.StartDate", "Start Date")}<Text style={tw`text-red-500`}>*</Text></Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 text-gray-800`]}>{t("Auto.Common.StartDate", "Start Date")}<Text style={tw`text-red-500`}>*</Text></Text> 
                             <TouchableOpacity onPress={() => setStartDatePickerVisibility(true)} style={tw`border border-gray-300 rounded-lg px-3 py-3 bg-white`}>
-                                <Text>{startDate ? startDate.toLocaleDateString() : "Select Date"}</Text>
+                                <Text style={[{ fontFamily: fonts.regular }]}>{startDate ? startDate.toLocaleDateString() : "Select Date"}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={tw`flex-1`}>
-                            <Text style={tw`text-sm font-semibold mb-1 text-gray-800`}>{t("Auto.Common.EndDate", "End Date")}<Text style={tw`text-red-500`}>*</Text></Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 text-gray-800`]}>{t("Auto.Common.EndDate", "End Date")}<Text style={tw`text-red-500`}>*</Text></Text> 
                             <TouchableOpacity onPress={() => setEndDatePickerVisibility(true)} style={tw`border border-gray-300 rounded-lg px-3 py-3 bg-white`}>
-                                <Text>{endDate ? endDate.toLocaleDateString() : "Select Date"}</Text>
+                                <Text style={[{ fontFamily: fonts.regular }]}>{endDate ? endDate.toLocaleDateString() : "Select Date"}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -328,13 +329,13 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
           
 
                     {/* Files */}
-                    <Text style={tw`text-sm font-semibold mb-1 mt-5 text-gray-800`}>{t("Auto.Common.Attachments", "Attachments")}</Text>
+ <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-5 text-gray-800`]}>{t("Auto.Common.Attachments", "Attachments")}</Text> 
                     <TouchableOpacity onPress={handleFilePick} style={tw`border-2 border-dashed border-gray-300 rounded-xl p-8 items-center bg-gray-50`}>
-                        <Text style={tw`text-gray-500`}>{t("Auto.Common.Taptobrowsefile", "Tap to browse files")}</Text>
+                        <Text style={[{ fontFamily: fonts.regular }, tw`text-gray-500`]}>{t("Auto.Common.Taptobrowsefile", "Tap to browse files")}</Text>
                     </TouchableOpacity>
                     {files.map((f, i) =>
           <View key={i} style={tw`flex-row items-center mt-2 p-2 bg-gray-100 rounded`}>
-                            <Text style={tw`flex-1`} numberOfLines={1}>{f.name}</Text>
+                            <Text style={[{ fontFamily: fonts.regular }, tw`flex-1`]} numberOfLines={1}>{f.name}</Text>
                             <TouchableOpacity onPress={() => setFiles(files.filter((x) => x !== f))}>
                                 <X size={16} color="red" />
                             </TouchableOpacity>
@@ -347,7 +348,7 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
             onPress={handleSave}
             disabled={loading}>
             
-                        <Text style={tw`text-white font-bold text-lg`}>{loading ? "Saving..." : "Save Project"}</Text>
+ <Text style={[{ fontFamily: fonts.bold }, tw`text-white text-lg`]}>{loading ? "Saving..." : "Save Project"}</Text> 
                     </TouchableOpacity>
 
                 </View>

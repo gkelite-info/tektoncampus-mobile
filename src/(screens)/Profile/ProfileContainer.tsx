@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useRef, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -77,13 +78,13 @@ export default function ProfileContainer() {const { t } = useTranslation();
                         <ArrowLeft size={24} color="#282828" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleModeSwitch(true)}>
-                        <Text className={`text-lg font-bold ${isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>{t("Auto.Common.Profile", "Profile")}
+                        <Text className={`text-lg ${isProfileMode ?"text-[#43C17A]" : "text-gray-400"}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Profile", "Profile")}
 
             </Text>
                     </TouchableOpacity>
-                    <Text className="text-gray-400 mx-3 text-lg">/</Text>
+                    <Text className="text-gray-400 mx-3 text-lg" style={{ fontFamily: fonts.regular }}>/</Text>
                     <TouchableOpacity onPress={() => handleModeSwitch(false)}>
-                        <Text className={`text-lg font-bold ${!isProfileMode ? "text-[#43C17A]" : "text-gray-400"}`}>{t("Auto.Common.Resume", "Resume")}
+                        <Text className={`text-lg ${!isProfileMode ?"text-[#43C17A]" : "text-gray-400"}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Resume", "Resume")}
 
             </Text>
                     </TouchableOpacity>

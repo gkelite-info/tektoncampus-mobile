@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -141,7 +142,7 @@ export default function AssignmentTab() {
           onPress={() => setActiveView('active')}
           className={`flex-1 items-center py-3 ${activeView === 'active' ? 'border-b-2 border-[#43C17A]' : ''}`}
         >
-          <Text className={`font-bold ${activeView === 'active' ? 'text-[#43C17A]' : 'text-gray-500'}`}>
+          <Text className={`${activeView ==='active' ? 'text-[#43C17A]' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>
             {t('Active Assignments')}
           </Text>
         </TouchableOpacity>
@@ -149,7 +150,7 @@ export default function AssignmentTab() {
           onPress={() => setActiveView('previous')}
           className={`flex-1 items-center py-3 ${activeView === 'previous' ? 'border-b-2 border-[#43C17A]' : ''}`}
         >
-          <Text className={`font-bold ${activeView === 'previous' ? 'text-[#43C17A]' : 'text-gray-500'}`}>
+          <Text className={`${activeView ==='previous' ? 'text-[#43C17A]' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>
             {t('Evaluated Assignments')}
           </Text>
         </TouchableOpacity>
@@ -161,7 +162,7 @@ export default function AssignmentTab() {
           className="bg-[#16284F] rounded-lg py-3 items-center mb-4"
           onPress={handleAdd}
         >
-          <Text className="text-white font-bold">{t('Add Assignment')}</Text>
+          <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t('Add Assignment')}</Text>
         </TouchableOpacity>
       )}
 
@@ -172,7 +173,7 @@ export default function AssignmentTab() {
             <AssignmentSkeleton />
           </View>
         ) : assignments.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-10">
+          <Text className="text-center text-gray-500 mt-10" style={{ fontFamily: fonts.regular }}>
             {t('No assignments found')}
           </Text>
         ) : (

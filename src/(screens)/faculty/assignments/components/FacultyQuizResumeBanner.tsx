@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { supabase } from '@/lib/supabaseServer';
@@ -103,7 +104,7 @@ export default function FacultyQuizResumeBanner({ marginTop = 0, onResume }: Fac
 
   return (
     <View className="w-full bg-[#FFF8E7] border border-[#F5C842] rounded-xl p-4 mb-4" style={{ marginTop }}>
-      <Text className="text-sm font-bold text-[#282828] mb-3">{t("Auto.Common.ContinueLeftove", "\uD83D\uDD50 Continue Leftover Quizzes")}
+      <Text className="text-sm text-[#282828] mb-3" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ContinueLeftove", "\uD83D\uDD50 Continue Leftover Quizzes")}
 
       </Text>
 
@@ -120,17 +121,17 @@ export default function FacultyQuizResumeBanner({ marginTop = 0, onResume }: Fac
               className="bg-white rounded-lg px-4 py-3 flex-row items-center justify-between border border-gray-200 shadow-sm">
               
               <View className="flex-col flex-1 pr-2">
-                <Text className="text-sm font-bold text-[#282828]" numberOfLines={1}>
+                <Text className="text-sm text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
                   {quiz.quizTitle}
                 </Text>
-                <Text className="text-xs text-gray-500 mt-1" numberOfLines={1}>
+                <Text className="text-xs text-gray-500 mt-1" numberOfLines={1} style={{ fontFamily: fonts.regular }}>
                   {quiz.totalMarks}{t("Auto.Common.Marks", "Marks \u2022")}{formatDate(quiz.startDate)} → {formatDate(quiz.endDate)}
                 </Text>
               </View>
 
               <View className="flex-row items-center gap-3">
                 <View className={`px-2 py-1 rounded-md ${quiz.status === 'Draft' ? 'bg-gray-100' : 'bg-[#D5FFE7]'}`}>
-                  <Text className={`text-[10px] font-bold ${quiz.status === 'Draft' ? 'text-gray-500' : 'text-[#43C17A]'}`}>
+                  <Text className={`text-[10px] ${quiz.status ==='Draft' ? 'text-gray-500' : 'text-[#43C17A]'}`} style={{ fontFamily: fonts.bold }}>
                     {quiz.status.toUpperCase()}
                   </Text>
                 </View>
@@ -138,7 +139,7 @@ export default function FacultyQuizResumeBanner({ marginTop = 0, onResume }: Fac
                   onPress={() => onResume(quiz.quizId)}
                   className="bg-[#43C17A] px-3 py-1.5 rounded-md">
                   
-                  <Text className="text-xs font-bold text-white">{t("Auto.Common.Resume", "Resume")}</Text>
+                  <Text className="text-xs text-white" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Resume", "Resume")}</Text>
                 </TouchableOpacity>
               </View>
             </View>);

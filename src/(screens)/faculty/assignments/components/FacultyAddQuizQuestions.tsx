@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
@@ -275,8 +276,8 @@ export default function FacultyAddQuizQuestions({
           <CaretLeft size={24} weight="bold" color="#16284F" />
         </TouchableOpacity>
         <View className="flex-1 pr-4">
-          <Text className="text-xl font-bold text-[#16284F]" numberOfLines={1}>{t("Auto.Common.AddQuestions", "Add Questions")}</Text>
-          <Text className="text-xs text-gray-500">{t("Auto.Common.Createquizquest", "Create quiz questions for students")}</Text>
+          <Text className="text-xl text-[#16284F]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddQuestions", "Add Questions")}</Text>
+          <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Createquizquest", "Create quiz questions for students")}</Text>
         </View>
       </View>
 
@@ -286,13 +287,13 @@ export default function FacultyAddQuizQuestions({
         {}
         <View className="bg-white rounded-xl px-4 py-3 mb-4 min-h-[60px] flex-row items-center justify-between border-2 border-[#43C17A]">
           <View className="flex-col flex-1 pr-2">
-            <Text className="font-bold text-[#282828] text-sm" numberOfLines={1}>{quizDetails?.quizTitle}</Text>
-            <Text className="text-xs text-gray-500 mt-0.5" numberOfLines={1}>{quizDetails?.topicTitle}</Text>
+            <Text className="text-[#282828] text-sm" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{quizDetails?.quizTitle}</Text>
+            <Text className="text-xs text-gray-500 mt-0.5" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{quizDetails?.topicTitle}</Text>
           </View>
           <View className="items-end shrink-0">
-            <Text className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("Auto.Common.Added", "Added")}</Text>
-            <Text className={`text-xl font-black ${isMaxReached ? 'text-[#43C17A]' : 'text-[#16284F]'}`}>
-              {questions.length} <Text className="text-gray-300 text-sm font-medium">/ {quizDetails?.maxQuestions}</Text>
+            <Text className="text-[10px] text-gray-400 uppercase tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Added", "Added")}</Text>
+            <Text className={`text-xl ${isMaxReached ?'text-[#43C17A]' : 'text-[#16284F]'}`} style={{ fontFamily: fonts.bold }}>
+              {questions.length} <Text className="text-gray-300 text-sm" style={{ fontFamily: fonts.medium }}>/ {quizDetails?.maxQuestions}</Text>
             </Text>
           </View>
         </View>
@@ -300,7 +301,7 @@ export default function FacultyAddQuizQuestions({
         <View className="flex-row justify-between items-center mb-3">
           <View className="flex-1 pr-2">
             {hasMultipleChoice && <View className="bg-blue-50/50 border border-blue-100 px-3 py-1.5 rounded-md">
-                <Text className="text-blue-500 text-[10px] font-medium leading-tight">{t("Auto.Common.NoteSelecttheco", "* Note: Select the correct answer via radio button.")}
+                <Text className="text-blue-500 text-[10px] leading-tight" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.NoteSelecttheco", "* Note: Select the correct answer via radio button.")}
 
               </Text>
               </View>}
@@ -308,7 +309,7 @@ export default function FacultyAddQuizQuestions({
           <TouchableOpacity onPress={addQuestion} disabled={!!isMaxReached} className={`flex-row items-center gap-1.5 px-3 py-2 rounded-md ${isMaxReached ? 'bg-gray-300' : 'bg-[#43C17A]'}`}>
             
             <PlusCircle size={16} color="white" weight="fill" />
-            <Text className="text-white text-xs font-bold">{t("Auto.Common.AddQuestion", "Add Question")}</Text>
+            <Text className="text-white text-xs" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddQuestion", "Add Question")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -344,12 +345,12 @@ export default function FacultyAddQuizQuestions({
                 
                     </View>) : <View className="flex-col gap-3 mt-1">
                     <View className="bg-amber-50/50 border border-amber-100 rounded-md p-2">
-                      <Text className="text-[10px] text-amber-700 leading-tight">{t("Auto.Common.TipUseunderscor", "\uD83D\uDCA1 Tip: Use underscores (___) in the question title to indicate where the blank appears.")}
+                      <Text className="text-[10px] text-amber-700 leading-tight" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.TipUseunderscor", "\uD83D\uDCA1 Tip: Use underscores (___) in the question title to indicate where the blank appears.")}
 
                   </Text>
                     </View>
                     <View className="bg-[#43C17A]/5 border border-[#43C17A]/20 rounded-lg p-3">
-                      <Text className="text-xs font-bold text-[#205B3A] mb-1">{t("Auto.Common.CorrectAnswer", "Correct Answer")}</Text>
+                      <Text className="text-xs text-[#205B3A] mb-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.CorrectAnswer", "Correct Answer")}</Text>
                       <TextInput value={question.correctAnswer} onChangeText={val => setQuestions(prev => prev.map(q => q.id === question.id ? {
                     ...q,
                     correctAnswer: val
@@ -362,7 +363,7 @@ export default function FacultyAddQuizQuestions({
               {}
               <View className="flex-row items-center justify-between mt-3 pt-3 border-t border-gray-100">
                 {question.type === "Multiple Choice" ? <TouchableOpacity onPress={() => addOption(question.id)} className="px-2 py-1 bg-blue-50 rounded">
-                    <Text className="text-blue-600 text-xs font-bold">{t("Auto.Common.AddOption", "Add Option")}</Text>
+                    <Text className="text-blue-600 text-xs" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddOption", "Add Option")}</Text>
                   </TouchableOpacity> : <View />}
                 
                 <TouchableOpacity onPress={() => deleteQuestion(question.id)} className="p-1.5 bg-red-50 rounded-full">
@@ -379,11 +380,11 @@ export default function FacultyAddQuizQuestions({
       <View className="bg-white border-t border-gray-200 p-4 flex-row justify-end gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
         <TouchableOpacity onPress={() => handleSave("Draft")} disabled={isDrafting} className="flex-1 py-3 rounded-lg border border-[#16284F] items-center justify-center bg-white">
           
-          {isDrafting ? <ActivityIndicator size="small" color="#16284F" /> : <Text className="text-[#16284F] text-sm font-bold">{t("Auto.Common.SaveDraft", "Save Draft")}</Text>}
+          {isDrafting ? <ActivityIndicator size="small" color="#16284F" /> : <Text className="text-[#16284F] text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SaveDraft", "Save Draft")}</Text>}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleSave("Active")} disabled={isSaving} className="flex-1 py-3 rounded-lg bg-[#43C17A] items-center justify-center">
           
-          {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm font-bold">{t("Auto.Common.PublishQuiz", "Publish Quiz")}</Text>}
+          {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.PublishQuiz", "Publish Quiz")}</Text>}
         </TouchableOpacity>
       </View>
 

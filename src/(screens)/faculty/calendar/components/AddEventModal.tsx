@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Modal, ScrollView, TextInput, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -230,7 +231,7 @@ export default function AddEventModal({
         <View className="bg-white h-[90%] rounded-t-3xl overflow-hidden">
           {}
           <View className="flex-row items-center justify-between p-5 border-b border-gray-100">
-            <Text className="text-xl font-bold text-gray-800">
+            <Text className="text-xl text-gray-800" style={{ fontFamily: fonts.bold }}>
               {mode === "edit" ? "Edit Event" : "New Event"}
             </Text>
             <TouchableOpacity onPress={onClose} className="p-2 -mr-2 bg-gray-50 rounded-full">
@@ -240,7 +241,7 @@ export default function AddEventModal({
 
           <ScrollView className="flex-1 p-5" contentContainerStyle={{ paddingBottom: 40 }}>
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-2">{t("Auto.Common.Type", "Type")}</Text>
+            <Text className="text-sm text-gray-700 mb-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Type", "Type")}</Text>
             <View className="flex-row gap-2 mb-4">
               {["class", "meeting", "exam"].map((t) =>
               <TouchableOpacity
@@ -250,7 +251,7 @@ export default function AddEventModal({
                 selectedType === t ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"}`
                 }>
                 
-                  <Text className={`text-sm font-medium ${selectedType === t ? "text-white" : "text-gray-700"}`}>
+                  <Text className={`text-sm ${selectedType === t ?"text-white" : "text-gray-700"}`} style={{ fontFamily: fonts.medium }}>
                     {t.charAt(0).toUpperCase() + t.slice(1)}
                   </Text>
                 </TouchableOpacity>
@@ -258,7 +259,7 @@ export default function AddEventModal({
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Subject", "Subject")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Subject", "Subject")}</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={subjectId} onValueChange={(val) => {setSubjectId(val);setTopicId(null);}}>
                 <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value={undefined} />
@@ -267,7 +268,7 @@ export default function AddEventModal({
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Topic", "Topic")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Topic", "Topic")}</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={topicId} onValueChange={setTopicId}>
                 <Picker.Item label={t("Auto.Attr.SelectTopic", "Select Topic")} value={null} />
@@ -278,7 +279,7 @@ export default function AddEventModal({
             {}
             {selectedType === "meeting" &&
             <>
-                <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.MeetingTitle", "Meeting Title")}</Text>
+                <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.MeetingTitle", "Meeting Title")}</Text>
                 <TextInput
                 value={title}
                 onChangeText={setTitle}
@@ -286,7 +287,7 @@ export default function AddEventModal({
                 className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" />
               
                 {}
-                <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.MeetingLink", "Meeting Link")}</Text>
+                <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.MeetingLink", "Meeting Link")}</Text>
                 <TextInput
                 value={meetingLink}
                 onChangeText={setMeetingLink}
@@ -297,12 +298,12 @@ export default function AddEventModal({
             }
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Date", "Date")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Date", "Date")}</Text>
             <TouchableOpacity
               onPress={() => setDatePickerVisibility(true)}
               className="border border-gray-300 rounded-lg px-4 py-3 mb-4 bg-gray-50">
               
-              <Text className="text-gray-800">{date.toDateString()}</Text>
+              <Text className="text-gray-800" style={{ fontFamily: fonts.regular }}>{date.toDateString()}</Text>
             </TouchableOpacity>
             
             <DateTimePickerModal
@@ -314,7 +315,7 @@ export default function AddEventModal({
             
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.StartTime", "Start Time")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.StartTime", "Start Time")}</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={startHour} onValueChange={setStartHour}>
@@ -334,7 +335,7 @@ export default function AddEventModal({
               </View>
             </View>
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.EndTime", "End Time")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EndTime", "End Time")}</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                 <Picker selectedValue={endHour} onValueChange={setEndHour}>
@@ -355,7 +356,7 @@ export default function AddEventModal({
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">Room No.</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>Room No.</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={collegeRoomId} onValueChange={setCollegeRoomId}>
                 <Picker.Item label="Select Room" value={null} />
@@ -364,16 +365,16 @@ export default function AddEventModal({
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.EducationType", "Education Type")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EducationType", "Education Type")}</Text>
             <TextInput editable={false} value={educations.find((e) => e.collegeEducationId === educationId)?.collegeEducationType || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Branch", "Branch")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Branch", "Branch")}</Text>
             <TextInput editable={false} value={branches.find((b) => b.collegeBranchId === branchId)?.collegeBranchCode || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Year", "Year")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Year", "Year")}</Text>
             <TextInput editable={false} value={academicYears.find((y) => y.collegeAcademicYearId === academicYearId)?.collegeAcademicYear || ""} className="border border-gray-200 rounded-lg px-4 py-3 mb-4 bg-gray-100 text-gray-500" />
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Semester", "Semester")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Semester", "Semester")}</Text>
             <View className="border border-gray-300 rounded-lg mb-4 bg-gray-50 overflow-hidden">
               <Picker selectedValue={semester} onValueChange={setSemester}>
                 <Picker.Item label={t("Auto.Attr.SelectSemester", "Select Semester")} value={undefined} />
@@ -382,7 +383,7 @@ export default function AddEventModal({
             </View>
 
             {}
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Sections", "Sections")}</Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Sections", "Sections")}</Text>
             <View className="border border-gray-300 rounded-lg p-2 mb-6">
               {sections.map((s) => {
                 const isSelected = sectionIds.includes(s.collegeSectionsId);
@@ -395,7 +396,7 @@ export default function AddEventModal({
                     <View className={`w-5 h-5 rounded border items-center justify-center ${isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300'}`}>
                       {isSelected && <Check size={14} color="white" weight="bold" />}
                     </View>
-                    <Text className="text-gray-800">{s.collegeSections}</Text>
+                    <Text className="text-gray-800" style={{ fontFamily: fonts.regular }}>{s.collegeSections}</Text>
                   </TouchableOpacity>);
 
               })}
@@ -406,7 +407,7 @@ export default function AddEventModal({
               disabled={isSubmitting}
               className={`py-4 rounded-xl items-center ${isSubmitting ? 'bg-emerald-400' : 'bg-emerald-500'}`}>
               
-              {isSubmitting ? <ActivityIndicator color="white" /> : <Text className="text-white font-bold text-base">{mode === 'edit' ? 'Update Event' : 'Save Event'}</Text>}
+              {isSubmitting ? <ActivityIndicator color="white" /> : <Text className="text-white text-base" style={{ fontFamily: fonts.bold }}>{mode === 'edit' ? 'Update Event' : 'Save Event'}</Text>}
             </TouchableOpacity>
           </ScrollView>
         </View>

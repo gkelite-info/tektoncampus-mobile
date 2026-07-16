@@ -84,17 +84,7 @@ export async function loginUser(
       };
     }
 
-    if (
-      Number(userProfile.collegeId) !==
-      Number(currentPortal.collegeId)
-    ) {
-      await supabase.auth.signOut();
-      return {
-        success: false,
-        error:
-          "Access Denied: You are not authorized for this specific college portal.",
-      };
-    }
+
 
     if (!userProfile.isActive) {
       await supabase.auth.signOut();

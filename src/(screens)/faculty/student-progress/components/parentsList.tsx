@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React from "react";
 import { View, Image, TouchableOpacity } from 'react-native';
 import { ChatCircleDots } from "phosphor-react-native";
@@ -18,7 +19,7 @@ interface ParentsListProps {
 export default function ParentsList({ parents, onChatOpen }: ParentsListProps) {const { t } = useTranslation();
   return (
     <View style={tw`h-full w-full rounded-xl bg-white p-4 md:p-6 shadow-sm border border-gray-100 min-h-[220px]`}>
-      <Text style={tw`mb-4 md:mb-6 text-[16px] md:text-xl font-bold text-[#333333]`}>{t("Auto.Common.ParentsInformat", "Parent's Information")}
+      <Text style={[{ fontFamily: fonts.bold }, tw`mb-4 md:mb-6 text-[16px] md:text-xl  text-[#333333]`]}>{t("Auto.Common.ParentsInformat", "Parent's Information")}
 
       </Text>
 
@@ -36,10 +37,10 @@ export default function ParentsList({ parents, onChatOpen }: ParentsListProps) {
               style={tw`h-10 w-10 md:h-14 md:w-14 rounded-full border-2 border-white`} />
             
                 <View style={tw`flex-col min-w-0 flex-1`}>
-                  <Text style={tw`text-sm md:text-base font-bold text-[#333333]`} numberOfLines={1}>
+                  <Text style={[{ fontFamily: fonts.bold }, tw`text-sm md:text-base  text-[#333333]`]} numberOfLines={1}>
                     {parent.name}
                   </Text>
-                  <Text style={tw`text-[11px] md:text-sm font-medium text-[#666666]`} numberOfLines={1}>
+                  <Text style={[{ fontFamily: fonts.medium }, tw`text-[11px] md:text-sm  text-[#666666]`]} numberOfLines={1}>
                     {parent.relation}
                   </Text>
                 </View>
@@ -55,7 +56,7 @@ export default function ParentsList({ parents, onChatOpen }: ParentsListProps) {
         </View> :
 
       <View style={tw`flex-1 items-center justify-center rounded-[20px] border border-dashed border-[#D6DADF] bg-[#FAFBFC] px-4 md:px-6 mt-2`}>
-          <Text style={tw`text-center text-[13px] md:text-base font-medium text-[#8A8F98]`}>{t("Auto.Common.Parentregistrat", "Parent registration not done for this student.")}
+          <Text style={[{ fontFamily: fonts.medium }, tw`text-center text-[13px] md:text-base  text-[#8A8F98]`]}>{t("Auto.Common.Parentregistrat", "Parent registration not done for this student.")}
 
         </Text>
         </View>

@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { CardProps } from '@/lib/types/faculty';
@@ -14,33 +15,33 @@ export default function SubjectCard({ item, onViewDetails }: SubjectCardProps) {
   return (
     <View className="bg-white rounded-xl p-4 flex-col gap-3 shadow-sm border border-gray-100 mb-4 mx-4">
       <View className="flex-row justify-between items-center">
-        <Text className="text-[#282828] font-semibold text-lg flex-1 mr-3" numberOfLines={2}>
+        <Text className="text-[#282828] text-lg flex-1 mr-3" numberOfLines={2} style={{ fontFamily: fonts.semiBold }}>
           {item.subjectTitle} – {item.year}
         </Text>
         <TouchableOpacity
           onPress={onViewDetails}
           className="bg-[#7051E1] px-3 py-1.5 rounded-md">
           
-          <Text className="text-white font-medium text-xs">{t("Auto.Common.ViewDetails", "View Details")}</Text>
+          <Text className="text-white text-xs" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ViewDetails", "View Details")}</Text>
         </TouchableOpacity>
       </View>
 
       <View className="flex-row flex-wrap gap-x-6 gap-y-2 mt-1">
         <View className="flex-row items-center">
-          <Text className="font-bold text-[#282828] text-sm mr-1">{t("Auto.Common.Units", "Units:")}</Text>
-          <Text className="text-[#525252] text-sm">{item.units.toString().padStart(2, "0")}</Text>
+          <Text className="text-[#282828] text-sm mr-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Units", "Units:")}</Text>
+          <Text className="text-[#525252] text-sm" style={{ fontFamily: fonts.regular }}>{item.units.toString().padStart(2, "0")}</Text>
         </View>
         <View className="flex-row items-center">
-          <Text className="font-bold text-[#282828] text-sm mr-1">{t("Auto.Common.TopicsCovered", "Topics Covered:")}</Text>
-          <Text className="text-[#525252] text-sm">{item.topicsCovered}</Text>
+          <Text className="text-[#282828] text-sm mr-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TopicsCovered", "Topics Covered:")}</Text>
+          <Text className="text-[#525252] text-sm" style={{ fontFamily: fonts.regular }}>{item.topicsCovered}</Text>
         </View>
         <View className="flex-row items-center w-full">
-          <Text className="font-bold text-[#282828] text-sm mr-1">{t("Auto.Common.Nextlesson", "Next lesson:")}</Text>
-          <Text className="text-[#525252] text-sm" numberOfLines={1}>{item.nextLesson}</Text>
+          <Text className="text-[#282828] text-sm mr-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Nextlesson", "Next lesson:")}</Text>
+          <Text className="text-[#525252] text-sm" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{item.nextLesson}</Text>
         </View>
         <View className="flex-row items-center">
-          <Text className="font-bold text-[#282828] text-sm mr-1">{t("Auto.Common.Students", "Students:")}</Text>
-          <Text className="text-[#525252] text-sm">{item.students}</Text>
+          <Text className="text-[#282828] text-sm mr-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Students", "Students:")}</Text>
+          <Text className="text-[#525252] text-sm" style={{ fontFamily: fonts.regular }}>{item.students}</Text>
         </View>
       </View>
 
@@ -63,8 +64,8 @@ export default function SubjectCard({ item, onViewDetails }: SubjectCardProps) {
       </View>
       <View className="relative w-full mt-1 flex-row">
          <Text
-          className="text-[#7153E1] font-bold text-[10px]"
-          style={{
+          className="text-[#7153E1] text-[10px]"
+          style={{ fontFamily: fonts.bold, 
             marginLeft: percentage > 90 ? 'auto' : percentage < 10 ? 0 : `${percentage}%`,
             transform: percentage > 90 || percentage < 10 ? [] : [{ translateX: -10 }]
           }}>

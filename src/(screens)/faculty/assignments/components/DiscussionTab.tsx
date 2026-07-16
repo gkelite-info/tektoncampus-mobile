@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -130,7 +131,7 @@ export default function DiscussionTab() {
           onPress={() => setActiveView('active')}
           className={`flex-1 items-center py-2 rounded-md ${activeView === 'active' ? 'bg-[#43C17A]' : ''}`}
         >
-          <Text className={`font-bold ${activeView === 'active' ? 'text-white' : 'text-gray-500'}`}>
+          <Text className={`${activeView ==='active' ? 'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>
             {t('Active')}
           </Text>
         </TouchableOpacity>
@@ -138,7 +139,7 @@ export default function DiscussionTab() {
           onPress={() => setActiveView('completed')}
           className={`flex-1 items-center py-2 rounded-md ${activeView === 'completed' ? 'bg-[#43C17A]' : ''}`}
         >
-          <Text className={`font-bold ${activeView === 'completed' ? 'text-white' : 'text-gray-500'}`}>
+          <Text className={`${activeView ==='completed' ? 'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>
             {t('Evaluated')}
           </Text>
         </TouchableOpacity>
@@ -150,7 +151,7 @@ export default function DiscussionTab() {
           className="bg-[#16284F] rounded-lg py-3 items-center mb-4"
           onPress={handleAdd}
         >
-          <Text className="text-white font-bold">{t('Create Discussion')}</Text>
+          <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t('Create Discussion')}</Text>
         </TouchableOpacity>
       )}
 
@@ -161,7 +162,7 @@ export default function DiscussionTab() {
             <AssignmentSkeleton />
           </View>
         ) : discussions.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-10">
+          <Text className="text-center text-gray-500 mt-10" style={{ fontFamily: fonts.regular }}>
             {t('No discussions found')}
           </Text>
         ) : (

@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useRef, useState } from "react";
 import { View, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -304,8 +305,8 @@ export default function CalendarScreen() {const { t } = useTranslation();
     <View style={{ flex: 1, backgroundColor: 'white', paddingTop: headerHeight }}>
       <View className="px-4 py-2 flex-row justify-between items-center mb-2">
         <View>
-          <Text className="text-xl font-bold text-gray-900">{t("Auto.Common.CalendarEvents", "Calendar & Events")}</Text>
-          <Text className="text-xs text-gray-500">{t("Auto.Common.Stayorganizedwi", "Stay organized with your schedule")}</Text>
+          <Text className="text-xl text-gray-900" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.CalendarEvents", "Calendar & Events")}</Text>
+          <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Stayorganizedwi", "Stay organized with your schedule")}</Text>
         </View>
       </View>
 

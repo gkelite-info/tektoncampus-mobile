@@ -5,7 +5,7 @@ import { CardProps } from "@/lib/types/faculty";
 export async function getFacultySubjects(params: {
   collegeId: number;
   collegeEducationId: number;
-  collegeBranchId: number;
+  collegeBranchId: number | null;
   academicYearIds: number[];
   subjectIds: number[];
   sectionIds: number[];

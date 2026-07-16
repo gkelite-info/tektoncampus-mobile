@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React from "react";
 import { View, TouchableOpacity } from 'react-native';
 import {
@@ -94,8 +95,8 @@ const EventCard = ({
         </View>
 
         <Text 
-          className="text-[10px] font-bold tracking-wide uppercase"
-          style={{ color: style.text }}
+          className="text-[10px] tracking-wide uppercase"
+          style={{ fontFamily: fonts.bold,  color: style.text }}
         >
           {timeStr}
         </Text>
@@ -127,9 +128,9 @@ const EventCard = ({
         style={{ backgroundColor: style.lightBg }}
       >
         <Text
-          className="text-xs font-semibold leading-tight mb-2"
+          className="text-xs leading-tight mb-2"
           numberOfLines={2}
-          style={{ color: style.text }}
+          style={{ fontFamily: fonts.semiBold,  color: style.text }}
         >
           {event.title}
         </Text>
@@ -140,9 +141,9 @@ const EventCard = ({
         />
 
         <Text 
-          className="text-[10px] font-medium" 
+          className="text-[10px]" 
           numberOfLines={1}
-          style={{ color: style.text }}
+          style={{ fontFamily: fonts.medium,  color: style.text }}
         >
           {event.branch} {event.year ? `- ${event.year}` : ''} {event.section ? `- ${event.section}` : ''}
         </Text>

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, FlatList, ActivityIndicator, Image } from 'react-native';
@@ -71,20 +72,20 @@ export default function QuizSubmissions() {
           }} />}
         </View>
         <View className="flex-col gap-0.5 flex-1 pr-2">
-          <Text className="text-sm font-bold text-[#43C17A]" numberOfLines={1}>{item.students?.fullName || "-"}</Text>
-          <Text className="text-xs text-gray-500">{t("Auto.Common.ID", "ID:")}{item.students?.rollNumber || item.studentId}</Text>
-          <Text className="text-xs text-gray-500">{t("Auto.Common.Section", "Section:")}{item.students?.section || "-"}</Text>
+          <Text className="text-sm text-[#43C17A]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{item.students?.fullName || "-"}</Text>
+          <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.ID", "ID:")}{item.students?.rollNumber || item.studentId}</Text>
+          <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Section", "Section:")}{item.students?.section || "-"}</Text>
         </View>
       </View>
 
       <View className="flex-col items-end gap-1 shrink-0">
         <View className="flex-row items-center gap-2">
-          <Text className="text-xs font-bold text-[#282828]">{t("Auto.Common.Marks", "Marks:")}</Text>
+          <Text className="text-xs text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Marks", "Marks:")}</Text>
           <View className="bg-[#16284F] px-2 py-1 rounded-md">
-            <Text className="text-xs font-bold text-white">{item.totalMarksObtained} / {quizDetails?.totalMarks}</Text>
+            <Text className="text-xs text-white" style={{ fontFamily: fonts.bold }}>{item.totalMarksObtained} / {quizDetails?.totalMarks}</Text>
           </View>
         </View>
-        <Text className="text-[10px] text-gray-500">{t("Auto.Common.Attempted", "Attempted:")}{formatDate(item.submittedAt)}</Text>
+        <Text className="text-[10px] text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Attempted", "Attempted:")}{formatDate(item.submittedAt)}</Text>
       </View>
     </View>;
   };
@@ -94,8 +95,8 @@ export default function QuizSubmissions() {
           <CaretLeft size={24} weight="bold" color="#16284F" />
         </TouchableOpacity>
         <View>
-          <Text className="text-xl font-bold text-[#16284F]">{t("Auto.Common.QuizSubmissions", "Quiz Submissions")}</Text>
-          <Text className="text-xs text-gray-500">{t("Auto.Common.Studentswhoatte", "Students who attempted the quiz")}</Text>
+          <Text className="text-xl text-[#16284F]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.QuizSubmissions", "Quiz Submissions")}</Text>
+          <Text className="text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Studentswhoatte", "Students who attempted the quiz")}</Text>
         </View>
       </View>
 
@@ -103,22 +104,22 @@ export default function QuizSubmissions() {
         {quizDetails && <View className="mb-4">
             <View className="flex-row gap-3">
               <View className="flex-1 bg-[#E2DAFF] rounded-xl p-3 items-center justify-center border border-[#D5CAFF] shadow-sm">
-                <Text className="text-[10px] font-bold text-[#714EF2] uppercase mb-1 tracking-wider">{t("Auto.Common.DueDate", "Due Date")}</Text>
-                <Text className="text-sm font-black text-[#282828]">{formatDate(quizDetails.endDate)}</Text>
+                <Text className="text-[10px] text-[#714EF2] uppercase mb-1 tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.DueDate", "Due Date")}</Text>
+                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{formatDate(quizDetails.endDate)}</Text>
               </View>
               <View className="flex-1 bg-[#FFEDDA] rounded-xl p-3 items-center justify-center border border-[#FFDFBC] shadow-sm">
-                <Text className="text-[10px] font-bold text-[#FF9E3D] uppercase mb-1 tracking-wider">{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
-                <Text className="text-sm font-black text-[#282828]">{quizDetails.totalMarks}</Text>
+                <Text className="text-[10px] text-[#FF9E3D] uppercase mb-1 tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
+                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{quizDetails.totalMarks}</Text>
               </View>
               <View className="flex-1 bg-[#E6FBEA] rounded-xl p-3 items-center justify-center border border-[#BDECC9] shadow-sm">
-                <Text className="text-[10px] font-bold text-[#43C17A] uppercase mb-1 tracking-wider">{t("Auto.Common.Submissions", "Submissions")}</Text>
-                <Text className="text-sm font-black text-[#282828]">{submissions.length}</Text>
+                <Text className="text-[10px] text-[#43C17A] uppercase mb-1 tracking-wider" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Submissions", "Submissions")}</Text>
+                <Text className="text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{submissions.length}</Text>
               </View>
             </View>
           </View>}
 
         {isLoading ? <ActivityIndicator size="large" color="#43C17A" className="mt-10" /> : submissions.length === 0 ? <View className="items-center justify-center mt-10">
-            <Text className="text-gray-500 font-semibold">{t("Auto.Common.Nosubmissionsye", "No submissions yet.")}</Text>
+            <Text className="text-gray-500" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Nosubmissionsye", "No submissions yet.")}</Text>
           </View> : <FlatList data={submissions} keyExtractor={item => item.submissionId.toString()} renderItem={renderSubmissionCard} contentContainerStyle={{
         paddingBottom: 100
       }} showsVerticalScrollIndicator={false} />}

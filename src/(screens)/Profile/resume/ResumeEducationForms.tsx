@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Toast from "react-native-toast-message";
@@ -44,25 +45,25 @@ export function ResumePrimaryEducationForm({ data, onSave, studentId }: SharedPr
 
   return (
     <View className="border border-gray-200 rounded-lg p-4 bg-white mb-4">
-            <Text className="text-[#43C17A] font-bold text-lg mb-4">{t("Auto.Common.PrimaryEducatio", "Primary Education")}</Text>
+            <Text className="text-[#43C17A] text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.PrimaryEducatio", "Primary Education")}</Text>
             
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.SchoolName", "School Name*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SchoolName", "School Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={schoolName} onChangeText={setSchoolName} placeholder={t("Auto.Attr.EnterSchoolName", "Enter School Name")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Board", "Board")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Board", "Board")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={board} onChangeText={setBoard} placeholder={t("Auto.Attr.egCBSEStateBoar", "e.g. CBSE, State Board")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.MediumofStudy", "Medium of Study")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.MediumofStudy", "Medium of Study")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={mediumOfStudy} onChangeText={setMediumOfStudy} placeholder={t("Auto.Attr.egEnglish", "e.g. English")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.YearofPassing", "Year of Passing*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.YearofPassing", "Year of Passing*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={yearOfPassing} onChangeText={setYearOfPassing} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Location", "Location")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Location", "Location")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-4" value={location} onChangeText={setLocation} placeholder={t("Auto.Attr.CityState", "City, State")} />
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SavePrimaryEducation", "Save Primary Education")}</Text>
+                <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SavePrimaryEducation", "Save Primary Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -103,7 +104,7 @@ export function ResumeSecondaryEducationForm({ data, onSave, onDelete, studentId
   return (
     <View className="border border-gray-200 rounded-lg p-4 bg-white mb-4">
             <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-[#43C17A] font-bold text-lg">{t("Auto.Common.SecondaryEducat", "Secondary Education")}</Text>
+                <Text className="text-[#43C17A] text-lg" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SecondaryEducat", "Secondary Education")}</Text>
                 {onDelete &&
         <TouchableOpacity onPress={onDelete} className="p-2">
                         <Trash size={20} color="#ef4444" />
@@ -111,20 +112,20 @@ export function ResumeSecondaryEducationForm({ data, onSave, onDelete, studentId
         }
             </View>
             
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.InstitutionName", "Institution Name*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.InstitutionName", "Institution Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={institutionName} onChangeText={setInstitutionName} placeholder={t("Auto.Attr.EnterInstitutio", "Enter Institution Name")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Board", "Board")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Board", "Board")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={board} onChangeText={setBoard} placeholder={t("Auto.Attr.egCBSEStateBoar", "e.g. CBSE, State Board")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.YearofPassing", "Year of Passing*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.YearofPassing", "Year of Passing*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={yearOfPassing} onChangeText={setYearOfPassing} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.PercentageCGPA", "Percentage/CGPA*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.PercentageCGPA", "Percentage/CGPA*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-4" value={percentage} onChangeText={setPercentage} placeholder={t("Auto.Attr.eg855", "e.g. 85.5")} keyboardType="numeric" />
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveSecondaryEducation", "Save Secondary Education")}</Text>
+                <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveSecondaryEducation", "Save Secondary Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -165,7 +166,7 @@ export function ResumeUndergraduateEducationForm({ data, onSave, onDelete, stude
   return (
     <View className="border border-gray-200 rounded-lg p-4 bg-white mb-4">
             <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-[#43C17A] font-bold text-lg">{t("Auto.Common.UndergraduateEd", "Undergraduate Education")}</Text>
+                <Text className="text-[#43C17A] text-lg" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.UndergraduateEd", "Undergraduate Education")}</Text>
                 {onDelete &&
         <TouchableOpacity onPress={onDelete} className="p-2">
                         <Trash size={20} color="#ef4444" />
@@ -173,31 +174,31 @@ export function ResumeUndergraduateEducationForm({ data, onSave, onDelete, stude
         }
             </View>
             
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CollegeUniversi", "College/University Name*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CollegeUniversi", "College/University Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={collegeName} onChangeText={setCollegeName} placeholder={t("Auto.Attr.EnterCollegeNam", "Enter College Name")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CourseName", "Course Name*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CourseName", "Course Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={courseName} onChangeText={setCourseName} placeholder={t("Auto.Attr.egBTechBSc", "e.g. B.Tech, B.Sc")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Specialization", "Specialization")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Specialization", "Specialization")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={specialization} onChangeText={setSpecialization} placeholder={t("Auto.Attr.egComputerScien", "e.g. Computer Science")} />
 
             <View className="flex-row gap-3 mb-3">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.StartYear", "Start Year*")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.StartYear", "Start Year*")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={startYear} onChangeText={setStartYear} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.EndYear", "End Year")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EndYear", "End Year")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={endYear} onChangeText={setEndYear} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
                 </View>
             </View>
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CGPA", "CGPA")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CGPA", "CGPA")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-4" value={cgpa} onChangeText={setCgpa} placeholder={t("Auto.Attr.eg85", "e.g. 8.5")} keyboardType="numeric" />
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveUndergraduateEducation", "Save Undergraduate Education")}</Text>
+                <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveUndergraduateEducation", "Save Undergraduate Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -236,7 +237,7 @@ export function ResumePhdEducationForm({ data, onSave, onDelete, studentId }: Sh
   return (
     <View className="border border-gray-200 rounded-lg p-4 bg-white mb-4">
             <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-[#43C17A] font-bold text-lg">{t("Auto.Common.PhDEducation", "PhD Education")}</Text>
+                <Text className="text-[#43C17A] text-lg" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.PhDEducation", "PhD Education")}</Text>
                 {onDelete &&
         <TouchableOpacity onPress={onDelete} className="p-2">
                         <Trash size={20} color="#ef4444" />
@@ -244,28 +245,28 @@ export function ResumePhdEducationForm({ data, onSave, onDelete, studentId }: Sh
         }
             </View>
             
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.UniversityName", "University Name*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.UniversityName", "University Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={universityName} onChangeText={setUniversityName} placeholder={t("Auto.Attr.EnterUniversity", "Enter University Name")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.ResearchArea", "Research Area*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ResearchArea", "Research Area*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={researchArea} onChangeText={setResearchArea} placeholder={t("Auto.Attr.egArtificialInt", "e.g. Artificial Intelligence")} />
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.SupervisorName", "Supervisor Name")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SupervisorName", "Supervisor Name")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={supervisorName} onChangeText={setSupervisorName} placeholder={t("Auto.Attr.EnterSupervisor", "Enter Supervisor Name")} />
 
             <View className="flex-row gap-3 mb-4">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.StartYear", "Start Year*")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.StartYear", "Start Year*")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={startYear} onChangeText={setStartYear} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.EndYear", "End Year")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EndYear", "End Year")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={endYear} onChangeText={setEndYear} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
                 </View>
             </View>
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SavePhDEducation", "Save PhD Education")}</Text>
+                <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SavePhDEducation", "Save PhD Education")}</Text>
             </TouchableOpacity>
         </View>);
 
@@ -311,51 +312,51 @@ export function ResumeMastersEducationForm({ data, onSave, onDelete, studentId, 
   return (
     <View className="border border-gray-200 rounded-lg p-4 bg-white mb-4">
             <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-[#43C17A] font-bold text-lg">{t("Auto.Common.MastersEducatio", "Master's Education")}</Text>
+                <Text className="text-[#43C17A] text-lg" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MastersEducatio", "Master's Education")}</Text>
                 {onDelete &&
         <TouchableOpacity onPress={onDelete} className="p-2">
                         <Trash size={20} color="#ef4444" />
                     </TouchableOpacity>
         }
             </View>
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.InstitutionName", "Institution Name*")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.InstitutionName", "Institution Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={institutionName} onChangeText={setInstitutionName} placeholder={t("Auto.Attr.EnterInstitutio", "Enter Institution Name")} />
 
             <View className="flex-row gap-3 mb-3">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CourseName", "Course Name*")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CourseName", "Course Name*")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={courseName} onChangeText={setCourseName} placeholder={t("Auto.Attr.egMTech", "e.g. M.Tech")} />
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Specialization", "Specialization")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Specialization", "Specialization")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={specialization} onChangeText={setSpecialization} placeholder={t("Auto.Attr.egComputerScien", "e.g. Computer Science")} />
                 </View>
             </View>
 
             <View className="flex-row gap-3 mb-3">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CGPA", "CGPA")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CGPA", "CGPA")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={cgpa} onChangeText={setCgpa} placeholder={t("Auto.Attr.eg85", "e.g. 8.5")} keyboardType="numeric" />
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Percentage", "Percentage")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Percentage", "Percentage")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={percentage} onChangeText={setPercentage} placeholder={t("Auto.Attr.eg85", "e.g. 85")} keyboardType="numeric" />
                 </View>
             </View>
 
             <View className="flex-row gap-3 mb-4">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.StartYear", "Start Year*")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.StartYear", "Start Year*")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={startYear} onChangeText={setStartYear} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.YearofPassing", "Year of Passing")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.YearofPassing", "Year of Passing")}</Text>
                     <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2" value={yearOfPassing} onChangeText={setYearOfPassing} placeholder={t("Auto.Attr.YYYY", "YYYY")} keyboardType="numeric" maxLength={4} />
                 </View>
             </View>
 
             <TouchableOpacity onPress={handleSubmit} disabled={isLoading} className="bg-[#43C17A] py-2 rounded-md items-center">
-                <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveMastersEducation", "Save Master's Education")}</Text>
+                <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.SaveMastersEducation", "Save Master's Education")}</Text>
             </TouchableOpacity>
         </View>);
 

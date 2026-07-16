@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { User, Image as ImageIcon } from "phosphor-react-native";
@@ -41,8 +42,8 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {const { t } =
 
   const ProfileRow = ({ label, value }: {label: string;value?: string | null;}) =>
   <View className="flex-row items-center py-3 border-b border-gray-100">
-            <Text className="w-[120px] text-gray-500 font-medium text-sm">{label}</Text>
-            <Text className="flex-1 text-gray-800 text-sm font-medium">{value || "—"}</Text>
+            <Text className="w-[120px] text-gray-500 text-sm" style={{ fontFamily: fonts.medium }}>{label}</Text>
+            <Text className="flex-1 text-gray-800 text-sm" style={{ fontFamily: fonts.medium }}>{value || "—"}</Text>
         </View>;
 
 
@@ -50,7 +51,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {const { t } =
     return (
       <View className="flex-1 bg-white rounded-xl p-4  items-center justify-center">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-400 mt-2">{t("Auto.Common.Loadingprofile", "Loading profile...")}</Text>
+                <Text className="text-gray-400 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Loadingprofile", "Loading profile...")}</Text>
             </View>);
 
   }
@@ -58,12 +59,12 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {const { t } =
   return (
     <View className="flex-1 bg-white rounded-xl  overflow-hidden">
             <View className="flex-row justify-between items-center p-4 border-b border-gray-100">
-                <Text className="text-xl font-bold text-gray-900">{t("Auto.Common.Profile", "Profile")}</Text>
+                <Text className="text-xl text-gray-900" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Profile", "Profile")}</Text>
                 <TouchableOpacity
           onPress={onNext}
           className="bg-[#43C17A] px-6 py-2 rounded-lg">
           
-                    <Text className="text-white font-bold">{t("Auto.Common.Next", "Next")}</Text>
+                    <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Next", "Next")}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -89,13 +90,13 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {const { t } =
                         <View className="bg-white p-1 rounded-full">
                             <ImageIcon size={16} weight="bold" color="#16284F" />
                         </View>
-                        <Text className="text-white font-semibold text-sm">{t("Auto.Common.UploadPhoto", "Upload Photo")}</Text>
+                        <Text className="text-white text-sm" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.UploadPhoto", "Upload Photo")}</Text>
                     </TouchableOpacity>
                 </View>
 
                 {}
                 <View className="px-2">
-                    <Text className="text-2xl font-bold text-[#1B2B5B] mb-6">{fullName}</Text>
+                    <Text className="text-2xl text-[#1B2B5B] mb-6" style={{ fontFamily: fonts.bold }}>{fullName}</Text>
 
                     <View className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                         <ProfileRow label={t("Auto.Attr.RegistrationID", "Registration ID")} value={String(registrationId)} />

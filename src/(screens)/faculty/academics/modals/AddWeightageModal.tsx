@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, Modal, ActivityIndicator } from 'react-native';
@@ -184,49 +185,49 @@ export default function AddWeightageModal({
   return <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       <View className="flex-1 bg-white pt-5">
         <View className="px-4 py-3 border-b border-gray-200 flex-row items-center justify-between">
-          <Text className="text-xl font-bold text-[#282828]">{t("Auto.Common.AddWeightage", "Add Weightage")}</Text>
+          <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddWeightage", "Add Weightage")}</Text>
           <TouchableOpacity onPress={onClose} className="p-2">
-            <Text className="text-[#43C17A] font-bold">{t("Auto.Common.Cancel", "Cancel")}</Text>
+            <Text className="text-[#43C17A]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
           </TouchableOpacity>
         </View>
 
         {loading ? <View className="flex-1 items-center justify-center">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-500 mt-2">{t("Auto.Common.LoadingWeightag", "Loading Weightages...")}</Text>
+                <Text className="text-gray-500 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.LoadingWeightag", "Loading Weightages...")}</Text>
             </View> : <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{
         paddingBottom: 100
       }}>
             
                 <View className={`flex-row items-center gap-2 p-3 rounded-lg mb-6 self-start ${isTotalValid ? 'bg-green-100' : 'bg-red-50'}`}>
                     {isTotalValid ? <CheckCircle color="#16a34a" weight="fill" /> : <WarningCircle color="#ef4444" weight="fill" />}
-                    <Text className={`font-bold ${isTotalValid ? 'text-green-700' : 'text-red-500'}`}>{t("Auto.Common.Total", "Total:")}{totalPercentage}%</Text>
+                    <Text className={`${isTotalValid ?'text-green-700' : 'text-red-500'}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Total", "Total:")}{totalPercentage}%</Text>
                 </View>
 
                 {}
                 <View className="flex-col gap-3 mb-6">
                     <View className="flex-row gap-3">
                         <View className="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                            <Text className="text-xs text-gray-500 mb-1">{t("Auto.Common.Subject", "Subject")}</Text>
-                            <Text className="font-bold text-gray-800 text-sm" numberOfLines={1}>{subjectDetails?.subjectTitle || "---"}</Text>
+                            <Text className="text-xs text-gray-500 mb-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Subject", "Subject")}</Text>
+                            <Text className="text-gray-800 text-sm" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{subjectDetails?.subjectTitle || "---"}</Text>
                         </View>
                         <View className="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                            <Text className="text-xs text-gray-500 mb-1">{t("Auto.Common.Section", "Section")}</Text>
-                            <Text className="font-bold text-gray-800 text-sm" numberOfLines={1}>{subjectDetails?.sectionName || "---"}</Text>
+                            <Text className="text-xs text-gray-500 mb-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Section", "Section")}</Text>
+                            <Text className="text-gray-800 text-sm" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{subjectDetails?.sectionName || "---"}</Text>
                         </View>
                     </View>
                     <View className="flex-row gap-3">
                         <View className="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                            <Text className="text-xs text-gray-500 mb-1">{t("Auto.Common.Branch", "Branch")}</Text>
-                            <Text className="font-bold text-gray-800 text-sm" numberOfLines={1}>{(subjectDetails as any)?.collegeBranchCode || "---"}</Text>
+                            <Text className="text-xs text-gray-500 mb-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Branch", "Branch")}</Text>
+                            <Text className="text-gray-800 text-sm" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{(subjectDetails as any)?.collegeBranchCode || "---"}</Text>
                         </View>
                         <View className="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                            <Text className="text-xs text-gray-500 mb-1">{t("Auto.Common.Semester", "Semester")}</Text>
-                            <Text className="font-bold text-gray-800 text-sm" numberOfLines={1}>{(subjectDetails as any)?.collegeSemesterId || "---"}</Text>
+                            <Text className="text-xs text-gray-500 mb-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Semester", "Semester")}</Text>
+                            <Text className="text-gray-800 text-sm" numberOfLines={1} style={{ fontFamily: fonts.bold }}>{(subjectDetails as any)?.collegeSemesterId || "---"}</Text>
                         </View>
                     </View>
                 </View>
 
-                <Text className="text-base font-bold text-[#282828] mb-3">{t("Auto.Common.WeightageDistri", "Weightage Distribution")}</Text>
+                <Text className="text-base text-[#282828] mb-3" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.WeightageDistri", "Weightage Distribution")}</Text>
                 
                 <View className="bg-[#F0FBF5] border border-[#43C17A]/30 p-4 rounded-xl flex-col gap-6">
                     
@@ -241,7 +242,7 @@ export default function AddWeightageModal({
                     ...aw,
                     label: val
                   } : aw));
-                }} /> : <Text className="flex-1 font-medium text-[#525252]">{item.label} :</Text>}
+                }} /> : <Text className="flex-1 text-[#525252]" style={{ fontFamily: fonts.medium }}>{item.label} :</Text>}
                                 <View className="flex-row items-center gap-2">
                                     <TextInput className={`w-16 border rounded-lg p-2 text-center text-sm font-bold ${isTotalValid ? 'border-green-200 text-[#43C17A]' : 'border-gray-200 text-red-400'}`} value={item.value} onChangeText={val => handleValueChange(item.id, val)} placeholder="0%" keyboardType="number-pad" />
                   
@@ -256,17 +257,17 @@ export default function AddWeightageModal({
                     <View className="flex-row flex-wrap gap-2">
                         {availableOptions.map(opt => <TouchableOpacity key={opt} onPress={() => handleAddItem(opt)} className="bg-white px-3 py-2 rounded-lg flex-row items-center gap-2 border border-gray-200">
                                 <PlusCircle size={16} color="#43C17A" />
-                                <Text className="text-sm font-semibold text-[#525252]">{opt}</Text>
+                                <Text className="text-sm text-[#525252]" style={{ fontFamily: fonts.semiBold }}>{opt}</Text>
                             </TouchableOpacity>)}
                         <TouchableOpacity onPress={handleAddOther} className="bg-white px-3 py-2 rounded-lg flex-row items-center gap-2 border border-dashed border-gray-300">
                             <PlusCircle size={16} color="#43C17A" />
-                            <Text className="text-sm font-semibold text-[#525252]">{t("Auto.Common.Others", "Others")}</Text>
+                            <Text className="text-sm text-[#525252]" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Others", "Others")}</Text>
                         </TouchableOpacity>
                     </View>
 
                 </View>
 
-                {!isTotalValid && <Text className="text-xs text-red-500 mt-2 font-medium">{t("Auto.Common.Weightagemusteq", "* Weightage must equal exactly 100% to save. (Currently")}
+                {!isTotalValid && <Text className="text-xs text-red-500 mt-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Weightagemusteq", "* Weightage must equal exactly 100% to save. (Currently")}
             {totalPercentage}%)
                     </Text>}
 
@@ -276,7 +277,7 @@ export default function AddWeightageModal({
           <TouchableOpacity disabled={isSaving || !isTotalValid} onPress={handleSave} className={`w-full rounded-xl py-3.5 items-center justify-center flex-row gap-2 ${isSaving || !isTotalValid ? 'bg-[#43C17A]/50' : 'bg-[#43C17A]'}`}>
             
             {isSaving && <ActivityIndicator color="white" size="small" />}
-            <Text className="text-white font-bold text-base">{t("Auto.Common.SaveWeightage", "Save Weightage")}</Text>
+            <Text className="text-white text-base" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SaveWeightage", "Save Weightage")}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, ActivityIndicator, Image, Linking } from 'react-native';
@@ -13,9 +14,7 @@ export default function StudentSubmissions({
   projectId,
   projectTitle
 }: StudentSubmissionsProps) {
-  const {
-    t
-  } = useTranslation();
+  const { t } = useTranslation();
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const insets = useSafeAreaInsets();
@@ -55,38 +54,35 @@ export default function StudentSubmissions({
     getSubmissions();
   }, [projectId]);
   return <View style={tw`flex-1 p-4`}>
-            <View style={tw`mb-4`}>
-                <Text style={tw`text-[#16a34a] text-xl font-bold`}>{projectTitle}</Text>
-                <Text style={tw`text-gray-500 text-sm mt-1`}>{submissions.length}{t("Auto.Common.TotalSubmission", "Total Submissions")}</Text>
-            </View>
+    <View style={tw`mb-4`}>
+      <Text style={[{ fontFamily: fonts.bold }, tw`text-[#16a34a] text-xl`]}>{projectTitle}</Text>
+      <Text style={[{ fontFamily: fonts.regular }, tw`text-gray-500 text-sm mt-1`]}>{submissions.length} {t("Auto.Common.TotalSubmission", "Total Submissions")}</Text>
+    </View>
 
-            {isLoading ? <View style={tw`flex-1 justify-center items-center py-10`}>
-                    <ActivityIndicator size="large" color="#16a34a" />
-                </View> : submissions.length === 0 ? <View style={tw`flex-1 justify-center items-center py-10`}>
-                    <Text style={tw`text-gray-500`}>{t("Auto.Common.Nosubmissionsfo", "No submissions found.")}</Text>
-                </View> : <ScrollView style={tw`flex-1`}>
-                    {submissions.map(sub => {
-        const {
-          t
-        } = useTranslation();
+    {isLoading ? <View style={tw`flex-1 justify-center items-center py-10`}>
+      <ActivityIndicator size="large" color="#16a34a" />
+    </View> : submissions.length === 0 ? <View style={tw`flex-1 justify-center items-center py-10`}>
+      <Text style={[{ fontFamily: fonts.regular }, tw`text-gray-500`]}>{t("Auto.Common.Nosubmissionsfo", "No submissions found.")}</Text>
+    </View> : <ScrollView style={tw`flex-1`}>
+      {submissions.map(sub => {
         return <View key={sub.id} style={tw`flex-row items-center justify-between p-4 bg-white rounded-xl shadow-sm mb-3 border border-gray-100`}>
-                            <View style={tw`flex-row items-center flex-1`}>
-                                <Image source={{
+          <View style={tw`flex-row items-center flex-1`}>
+            <Image source={{
               uri: sub.photo || "https://ui-avatars.com/api/?name=Student"
             }} style={tw`w-12 h-12 rounded-full mr-3 bg-gray-200`} />
-            
-                                <View style={tw`flex-1 pr-2`}>
-                                    <Text style={tw`text-base font-semibold text-gray-900`} numberOfLines={1}>{sub.name}</Text>
-                                    <Text style={tw`text-xs text-gray-500 mt-0.5`}>{sub.rollNo}</Text>
-                                    <Text style={tw`text-xs text-gray-400 mt-0.5`}>{t("Auto.Common.Submitted", "Submitted:")}{sub.date}</Text>
-                                </View>
-                            </View>
-                            {sub.fileUrl && <TouchableOpacity style={tw`bg-green-50 px-3 py-1.5 rounded-full border border-green-200`} onPress={() => Linking.openURL(sub.fileUrl)}>
-            
-                                    <Text style={tw`text-green-700 text-sm font-semibold`}>{t("Auto.Common.ViewFile", "View File")}</Text>
-                                </TouchableOpacity>}
-                        </View>;
-      })}
-                </ScrollView>}
+
+            <View style={tw`flex-1 pr-2`}>
+              <Text style={[{ fontFamily: fonts.semiBold }, tw`text-base text-gray-900`]} numberOfLines={1}>{sub.name}</Text>
+              <Text style={[{ fontFamily: fonts.regular }, tw`text-xs text-gray-500 mt-0.5`]}>{sub.rollNo}</Text>
+              <Text style={[{ fontFamily: fonts.regular }, tw`text-xs text-gray-400 mt-0.5`]}>{t("Auto.Common.Submitted", "Submitted:")}{sub.date}</Text>
+            </View>
+          </View>
+          {sub.fileUrl && <TouchableOpacity style={tw`bg-green-50 px-3 py-1.5 rounded-full border border-green-200`} onPress={() => Linking.openURL(sub.fileUrl)}>
+
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-green-700 text-sm`]}>{t("Auto.Common.ViewFile", "View File")}</Text>
+          </TouchableOpacity>}
         </View>;
+      })}
+    </ScrollView>}
+  </View>;
 }

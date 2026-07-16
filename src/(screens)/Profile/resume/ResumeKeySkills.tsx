@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from "react-native-toast-message";
@@ -68,7 +69,7 @@ export default function ResumeKeySkills() {const { t } = useTranslation();
     return (
       <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-400 mt-2">{t("Auto.Common.Loadingskills", "Loading skills...")}</Text>
+                <Text className="text-gray-400 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Loadingskills", "Loading skills...")}</Text>
             </View>);
 
   }
@@ -77,13 +78,13 @@ export default function ResumeKeySkills() {const { t } = useTranslation();
     <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
             <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row justify-between items-center mb-6">
-                    <Text className="text-lg font-semibold text-[#000000]">{t("Auto.Common.KeySkills", "Key Skills")}</Text>
+                    <Text className="text-lg text-[#000000]" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.KeySkills", "Key Skills")}</Text>
                     <TouchableOpacity
             onPress={handleSave}
             disabled={isSaving}
             className={`bg-[#43C17A] px-6 py-2 rounded-lg ${isSaving ? 'opacity-50' : ''}`}>
             
-                        <Text className="text-white font-bold">{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
+                        <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isSaving ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -94,7 +95,7 @@ export default function ResumeKeySkills() {const { t } = useTranslation();
 
             return (
               <View key={group.category.resumeSkillCategoryId}>
-                                <Text className="text-sm font-medium text-[#43C17A] mb-3">
+                                <Text className="text-sm text-[#43C17A] mb-3" style={{ fontFamily: fonts.medium }}>
                                     {group.category.name}
                                 </Text>
                                 <View className="flex-row flex-wrap gap-2">
@@ -110,7 +111,7 @@ export default function ResumeKeySkills() {const { t } = useTranslation();
                         'bg-white border-gray-300'}`
                         }>
                         
-                                                <Text className={`text-sm ${isSelected ? 'text-white font-medium' : 'text-gray-600'}`}>
+                                                <Text className={`text-sm ${isSelected ?'text-white ' : 'text-gray-600'}`} style={{ fontFamily: fonts.medium }}>
                                                     {skill.name}
                                                 </Text>
                                             </TouchableOpacity>);
@@ -123,7 +124,7 @@ export default function ResumeKeySkills() {const { t } = useTranslation();
                 </View>
                 
                 {groupedSkills.length === 0 &&
-        <Text className="text-center text-gray-500 mt-4">{t("Auto.Common.Noskillsavailab", "No skills available.")}</Text>
+        <Text className="text-center text-gray-500 mt-4" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Noskillsavailab", "No skills available.")}</Text>
         }
             </View>
         </ScrollView>);

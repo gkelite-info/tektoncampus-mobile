@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Image, LayoutAnimation, UIManager, Platform } from 'react-native';
 import { Book, CalendarDots, Trash, CaretDown, PencilSimple } from 'phosphor-react-native';
@@ -86,10 +87,10 @@ export default function AssignmentCard({
               <View className="flex-1 flex-col py-0.5 justify-between">
                 <View className="flex-row justify-between items-start w-full">
                   <View className="flex-1">
-                    <Text className="text-[#282828] font-bold text-[15px] leading-tight" numberOfLines={1}>
+                    <Text className="text-[#282828] text-[15px] leading-tight" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
                       {item.title}
                     </Text>
-                    <Text className="text-gray-800 text-[13px] font-medium mt-0.5 leading-snug" numberOfLines={1}>
+                    <Text className="text-gray-800 text-[13px] mt-0.5 leading-snug" numberOfLines={1} style={{ fontFamily: fonts.medium }}>
                       {item.description}
                     </Text>
                   </View>
@@ -122,9 +123,9 @@ export default function AssignmentCard({
 
                 <View className="flex-row justify-between items-center w-full mt-2">
                   <View className="flex-row items-center gap-1.5">
-                    <Text className="text-[10px] text-gray-500 font-medium">{t("Auto.Common.Submissions", "Submissions:")}</Text>
+                    <Text className="text-[10px] text-gray-500" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Submissions", "Submissions:")}</Text>
                     <View className="bg-[#E2F3E9] px-2 py-0.5 rounded-full">
-                      <Text className="text-[#43C17A] text-[10px] font-bold">
+                      <Text className="text-[#43C17A] text-[10px]" style={{ fontFamily: fonts.bold }}>
                         {item.totalSubmitted} / {item.totalSubmissions}
                       </Text>
                     </View>
@@ -132,7 +133,7 @@ export default function AssignmentCard({
                   <TouchableOpacity
                     onPress={() => navigation.navigate('AssignmentSubmissions', { assignmentId: item.assignmentId })}>
                     
-                    <Text className="text-[#43C17A] text-[11px] font-semibold underline">{t("Auto.Common.ViewSubmissions", "View Submissions")}
+                    <Text className="text-[#43C17A] text-[11px] underline" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.ViewSubmissions", "View Submissions")}
 
                     </Text>
                   </TouchableOpacity>
@@ -144,14 +145,14 @@ export default function AssignmentCard({
             <View className="mt-2 border-t border-gray-100 pt-2 w-full flex-row justify-between items-center">
                 <View className="flex-row items-center gap-1.5">
                   <CalendarDots size={14} color="#43C17A" />
-                  <Text className="text-[10px] text-gray-600">
+                  <Text className="text-[10px] text-gray-600" style={{ fontFamily: fonts.regular }}>
                     {formatDate(item.fromDate)} - {formatDate(item.toDate)}
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1.5">
-                  <Text className="font-semibold text-[#16284F] text-[10px]">{t("Auto.Common.TotalMarks", "Total Marks:")}</Text>
+                  <Text className="text-[#16284F] text-[10px]" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.TotalMarks", "Total Marks:")}</Text>
                   <View className="bg-[#16284F] px-2 py-0.5 rounded">
-                    <Text className="text-white font-bold text-[10px]">{item.marks ?? 0}</Text>
+                    <Text className="text-white text-[10px]" style={{ fontFamily: fonts.bold }}>{item.marks ?? 0}</Text>
                   </View>
                 </View>
               </View>

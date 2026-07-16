@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -252,17 +253,17 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
   return (
     <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
-        <Text className="text-xl font-semibold text-[#282828]">
+        <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
           {isEditMode ? t('Edit Discussion') : t('Create New Discussion')}
         </Text>
-        <Text className="text-sm text-gray-500">{t('Manage project discussions for students.')}</Text>
+        <Text className="text-sm text-gray-500" style={{ fontFamily: fonts.regular }}>{t('Manage project discussions for students.')}</Text>
       </View>
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Title", "Title")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Title", "Title")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.title}
             onChangeText={(val) => setForm({ ...form, title: val })}
@@ -273,7 +274,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
 
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Description", "Description")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Description", "Description")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.description}
             onChangeText={(val) => setForm({ ...form, description: val })}
@@ -287,7 +288,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
 
         {}
         <View className="mb-4">
-            <Text className="text-xs font-bold text-gray-400 mb-2">{t("Auto.Common.FILTERSECTIONS", "FILTER SECTIONS")}</Text>
+            <Text className="text-xs text-gray-400 mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.FILTERSECTIONS", "FILTER SECTIONS")}</Text>
             <View className="flex-row gap-2 mb-2">
                 <View className="flex-1 border border-gray-200 rounded-md bg-white overflow-hidden">
                     <Picker
@@ -314,9 +315,9 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
               const section = availableSections.find((s) => String(s.id) === id);
               return (
                 <View key={id} className="flex-row items-center bg-[#ECFDF5] px-2 py-1 rounded-full mr-1 mb-1">
-                            <Text className="text-[#065F46] text-[10px]">{section?.name || `ID ${id}`}</Text>
+                            <Text className="text-[#065F46] text-[10px]" style={{ fontFamily: fonts.regular }}>{section?.name || `ID ${id}`}</Text>
                             <TouchableOpacity onPress={() => setForm((prev) => ({ ...prev, sectionIds: prev.sectionIds.filter((sid) => sid !== id) }))}>
-                                <Text className="text-red-500 font-bold ml-1 text-xs">×</Text>
+                                <Text className="text-red-500 ml-1 text-xs" style={{ fontFamily: fonts.bold }}>×</Text>
                             </TouchableOpacity>
                         </View>);
 
@@ -344,9 +345,9 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
         {/* Deadline & Marks */}
         <View className="flex-row gap-4 mb-4">
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Deadline", "Deadline")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Deadline", "Deadline")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TouchableOpacity onPress={() => setDatePickerVisible(true)} className="border border-gray-200 rounded-md px-3 py-2">
-              <Text className="text-sm text-black">{form.deadline || 'YYYY-MM-DD'}</Text>
+              <Text className="text-sm text-black" style={{ fontFamily: fonts.regular }}>{form.deadline || 'YYYY-MM-DD'}</Text>
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -356,7 +357,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
             
           </View>
           <View className="flex-1">
-            <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Marks", "Marks")}<Text className="text-red-500">*</Text></Text>
+            <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Marks", "Marks")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
             <TextInput
               value={form.marks}
               onChangeText={(val) => setForm({ ...form, marks: val })}
@@ -369,9 +370,9 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
 
         {}
         <View className="mt-2 mb-4">
-            <Text className="font-bold text-[#282828] text-sm mb-2">{t("Auto.Common.ProjectFiles", "Project Files")}</Text>
+            <Text className="text-[#282828] text-sm mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ProjectFiles", "Project Files")}</Text>
             <TouchableOpacity onPress={handlePickFile} className="border-2 border-dashed border-gray-300 rounded-xl p-6 items-center justify-center bg-gray-50/50 mb-3">
-                <Text className="text-gray-500 text-sm mb-2">{t("Auto.Common.Taptouploadfile", "Tap to upload files")}</Text>
+                <Text className="text-gray-500 text-sm mb-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Taptouploadfile", "Tap to upload files")}</Text>
             </TouchableOpacity>
             
             {existingFiles.length > 0 &&
@@ -380,7 +381,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
             <View key={file.discussionFileUploadId} className="flex-row items-center justify-between border border-blue-100 rounded-md p-2 bg-white">
                             <View className="flex-row items-center flex-1 pr-2">
                                 <File size={20} color="#3B82F6" weight="fill" />
-                                <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1}>{file.fileUrl.split('/').pop()}</Text>
+                                <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{file.fileUrl.split('/').pop()}</Text>
                             </View>
                             <TouchableOpacity onPress={() => removeExistingFile(file.discussionFileUploadId)} className="p-1.5 bg-red-50 rounded-full">
                                 <Trash size={16} color="#EF4444" />
@@ -396,7 +397,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
             <View key={idx} className="flex-row items-center justify-between border border-red-100 rounded-md p-2 bg-white">
                             <View className="flex-row items-center flex-1 pr-2">
                                 <File size={20} color="#EF4444" weight="fill" />
-                                <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1}>{file.name}</Text>
+                                <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{file.name}</Text>
                             </View>
                             <TouchableOpacity onPress={() => removeNewFile(idx)} className="p-1.5 bg-red-50 rounded-full">
                                 <Trash size={16} color="#EF4444" />
@@ -410,10 +411,10 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
         {}
         <View className="flex-row items-center justify-end mt-2 border-t border-gray-100 pt-4 gap-3">
           <TouchableOpacity onPress={onCancel} disabled={isSaving} className="px-6 py-2 rounded-md border border-[#7B7B7B]">
-            <Text className="text-[#7B7B7B] text-sm font-bold">{t("Auto.Common.Cancel", "Cancel")}</Text>
+            <Text className="text-[#7B7B7B] text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleSave} disabled={isSaving} className="px-8 py-2 rounded-md bg-[#43C17A]">
-            {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm font-bold">{t("Auto.Common.Save", "Save")}</Text>}
+            {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Save", "Save")}</Text>}
           </TouchableOpacity>
         </View>
       </View>

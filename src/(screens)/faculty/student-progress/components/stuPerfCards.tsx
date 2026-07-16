@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React from "react";
 import { View } from 'react-native';
 import tw from "twrnc";
@@ -31,10 +32,10 @@ export default function CardComponent({
 
       {/* Text Area */}
       <View style={tw`mt-auto`}>
-        <Text style={tw`text-[18px] md:text-3xl font-bold text-gray-900 leading-none`} numberOfLines={1}>
+        <Text style={[{ fontFamily: fonts.bold }, tw`text-[18px] md:text-3xl  text-gray-900 leading-none`]} numberOfLines={1}>
           {value}
         </Text>
-        <Text style={tw`text-[10px] md:text-sm font-medium text-gray-600 mt-1`} numberOfLines={1}>
+        <Text style={[{ fontFamily: fonts.medium }, tw`text-[10px] md:text-sm  text-gray-600 mt-1`]} numberOfLines={1}>
           {label}
         </Text>
       </View>

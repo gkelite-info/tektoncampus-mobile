@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React from "react";
 import { View, Image } from 'react-native';
 import { User } from "phosphor-react-native";
@@ -39,12 +40,12 @@ export default function StudentProfileCard({
             style={tw`h-12 w-12 rounded-full border border-gray-100`} />
           
           <View style={tw`flex-col gap-1 flex-1`}>
-            <Text style={tw`text-base md:text-xl font-bold text-[#333333] leading-tight flex-wrap`}>
+            <Text style={[{ fontFamily: fonts.bold }, tw`text-base md:text-xl  text-[#333333] leading-tight flex-wrap`]}>
               {name}
             </Text>
             <View style={tw`flex-row`}>
               <View style={tw`rounded-full bg-[#E8F5E9] px-2 py-0.5 md:px-3 md:py-1`}>
-                <Text style={tw`text-[10px] md:text-xs font-semibold text-[#4CAF50]`}>
+                <Text style={[{ fontFamily: fonts.semiBold }, tw`text-[10px] md:text-xs  text-[#4CAF50]`]}>
                   {department}
                 </Text>
               </View>
@@ -52,7 +53,7 @@ export default function StudentProfileCard({
           </View>
         </View>
         <View style={tw`rounded-full bg-[#E8F5E9] px-2 py-0.5 md:px-4 md:py-1 mt-1 md:mt-0`}>
-          <Text style={tw`text-[10px] md:text-xs font-semibold text-[#4CAF50]`}>{t("Auto.Common.ID", "ID")}
+          <Text style={[{ fontFamily: fonts.semiBold }, tw`text-[10px] md:text-xs  text-[#4CAF50]`]}>{t("Auto.Common.ID", "ID")}
             {studentId}
           </Text>
         </View>
@@ -60,26 +61,26 @@ export default function StudentProfileCard({
 
       <View style={tw`mt-5 md:mt-8 flex-row justify-between mb-3`}>
         <View style={tw`flex-1 mr-2`}>
-          <Text style={tw`text-[10px] md:text-sm text-[#666666] font-medium`}>{t("Auto.Common.Number", "Number")}
+          <Text style={[{ fontFamily: fonts.medium }, tw`text-[10px] md:text-sm text-[#666666] `]}>{t("Auto.Common.Number", "Number")}
 
           </Text>
-          <Text style={tw`mt-0.5 md:mt-1 text-[11px] md:text-base font-semibold text-[#333333]`} numberOfLines={1}>
+          <Text style={[{ fontFamily: fonts.semiBold }, tw`mt-0.5 md:mt-1 text-[11px] md:text-base  text-[#333333]`]} numberOfLines={1}>
             {phone}
           </Text>
         </View>
         <View style={tw`flex-1 mx-2`}>
-          <Text style={tw`text-[10px] md:text-sm text-[#666666] font-medium`}>{t("Auto.Common.Email", "Email")}
+          <Text style={[{ fontFamily: fonts.medium }, tw`text-[10px] md:text-sm text-[#666666] `]}>{t("Auto.Common.Email", "Email")}
 
           </Text>
-          <Text style={tw`mt-0.5 md:mt-1 text-[11px] md:text-base font-semibold text-[#333333]`} numberOfLines={1}>
+          <Text style={[{ fontFamily: fonts.semiBold }, tw`mt-0.5 md:mt-1 text-[11px] md:text-base  text-[#333333]`]} numberOfLines={1}>
             {email}
           </Text>
         </View>
         <View style={tw`flex-1 ml-2`}>
-          <Text style={tw`text-[10px] md:text-sm text-[#666666] font-medium`}>{t("Auto.Common.Address", "Address")}
+          <Text style={[{ fontFamily: fonts.medium }, tw`text-[10px] md:text-sm text-[#666666] `]}>{t("Auto.Common.Address", "Address")}
 
           </Text>
-          <Text style={tw`mt-0.5 md:mt-1 text-[11px] md:text-base font-semibold text-[#333333]`} numberOfLines={1}>
+          <Text style={[{ fontFamily: fonts.semiBold }, tw`mt-0.5 md:mt-1 text-[11px] md:text-base  text-[#333333]`]} numberOfLines={1}>
             {address}
           </Text>
         </View>
@@ -132,10 +133,10 @@ function StatCard({
         <User size={16} color="white" weight="fill" />
       </View>
       <View style={tw`flex-1 min-w-0`}>
-        <Text style={tw`text-[11px] md:text-base font-bold text-[#333333] leading-none mb-0.5 md:mb-1`} numberOfLines={1}>
+        <Text style={[{ fontFamily: fonts.bold }, tw`text-[11px] md:text-base  text-[#333333] leading-none mb-0.5 md:mb-1`]} numberOfLines={1}>
           {value}
         </Text>
-        <Text style={tw`text-[9px] md:text-sm font-medium text-[#666666] leading-none`} numberOfLines={1}>
+        <Text style={[{ fontFamily: fonts.medium }, tw`text-[9px] md:text-sm  text-[#666666] leading-none`]} numberOfLines={1}>
           {title}
         </Text>
       </View>

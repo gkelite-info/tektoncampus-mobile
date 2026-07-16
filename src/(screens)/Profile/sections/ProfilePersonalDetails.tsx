@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Lock } from "phosphor-react-native";
@@ -119,20 +120,20 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
     return (
       <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-400 mt-2">{t("Auto.Common.Loadingdetails", "Loading details...")}</Text>
+                <Text className="text-gray-400 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Loadingdetails", "Loading details...")}</Text>
             </View>);
 
   }
 
   return (
     <ScrollView className="flex-1 bg-white rounded-xl " contentContainerStyle={{ padding: 16 }}>
-            <Text className="text-lg font-semibold text-[#000000] mb-6">{t("Auto.Common.PersonalDetails", "Personal Details")}</Text>
+            <Text className="text-lg text-[#000000] mb-6" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.PersonalDetails", "Personal Details")}</Text>
 
             <View className="gap-5">
                 {}
                 <View>
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.FullName", "Full Name")}
-            <Text className="text-red-500">*</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.FullName", "Full Name")}
+            <Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text>
                     </Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
@@ -144,8 +145,8 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
 
                 {}
                 <View>
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.MobileNumber", "Mobile Number")}
-            <Text className="text-red-500">*</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.MobileNumber", "Mobile Number")}
+            <Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text>
                     </Text>
                     <View className="relative justify-center">
                         <TextInput
@@ -161,8 +162,8 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
 
                 {}
                 <View>
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.EmailID", "Email ID")}
-            <Text className="text-red-500">*</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EmailID", "Email ID")}
+            <Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text>
                     </Text>
                     <View className="relative justify-center">
                         <TextInput
@@ -179,7 +180,7 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
                 {}
                 {!isSuperAdmin &&
         <View>
-                        <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CollegeCode", "College Code")}</Text>
+                        <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CollegeCode", "College Code")}</Text>
                         <View className="relative justify-center">
                             <TextInput
               className="bg-gray-50 border border-gray-200 text-gray-500 rounded-md px-3 py-2 pr-10"
@@ -195,7 +196,7 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
 
                 {}
                 <View>
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.LinkedInID", "LinkedIn ID")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.LinkedInID", "LinkedIn ID")}</Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
             placeholder={t("Auto.Attr.EnterLinkedInID", "Enter LinkedIn ID")}
@@ -208,7 +209,7 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
 
                 {}
                 <View>
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CurrentCity", "Current City")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CurrentCity", "Current City")}</Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
             placeholder={t("Auto.Attr.EnterCurrentCit", "Enter Current City")}
@@ -220,8 +221,8 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
                 {}
                 {!isSuperAdmin &&
         <View>
-                        <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CollegeID", "College ID")}
-            <Text className="text-red-500">*</Text>
+                        <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CollegeID", "College ID")}
+            <Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text>
                         </Text>
                         <View className="relative justify-center">
                             <TextInput
@@ -239,17 +240,17 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
                 {}
                 {role !== "Parent" &&
         <View className="mt-2">
-                        <Text className="text-sm font-medium text-[#282828] mb-2">{t("Auto.Common.WorkStatus", "Work Status")}</Text>
+                        <Text className="text-sm text-[#282828] mb-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.WorkStatus", "Work Status")}</Text>
                         <View className="gap-3">
                             <TouchableOpacity
               onPress={() => setWorkStatus("experience")}
               className={`border rounded-md p-4 flex-row ${workStatus === "experience" ? "border-[#43C17A] bg-[#eefaf3]" : "border-[#CCCCCC]"}`}>
               
                                 <View className="flex-1">
-                                    <Text className={`font-medium ${workStatus === "experience" ? "text-[#43C17A]" : "text-[#282828]"}`}>{t("Auto.Common.Imexperienced", "I'm experienced")}
+                                    <Text className={`${workStatus ==="experience" ? "text-[#43C17A]" : "text-[#282828]"}`} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Imexperienced", "I'm experienced")}
 
                 </Text>
-                                    <Text className="text-xs mt-1 text-[#525252]">{t("Auto.Common.Ihaveworkexperi", "I have work experience (excluding internships)")}
+                                    <Text className="text-xs mt-1 text-[#525252]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Ihaveworkexperi", "I have work experience (excluding internships)")}
 
                 </Text>
                                 </View>
@@ -260,10 +261,10 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
               className={`border rounded-md p-4 flex-row ${workStatus === "fresher" ? "border-[#43C17A] bg-[#eefaf3]" : "border-[#CCCCCC]"}`}>
               
                                 <View className="flex-1">
-                                    <Text className={`font-medium ${workStatus === "fresher" ? "text-[#43C17A]" : "text-[#282828]"}`}>{t("Auto.Common.Imafresher", "I'm a fresher")}
+                                    <Text className={`${workStatus ==="fresher" ? "text-[#43C17A]" : "text-[#282828]"}`} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Imafresher", "I'm a fresher")}
 
                 </Text>
-                                    <Text className="text-xs mt-1 text-[#525252]">{t("Auto.Common.IamastudentHave", "I am a student/Haven't worked after graduation")}
+                                    <Text className="text-xs mt-1 text-[#525252]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.IamastudentHave", "I am a student/Haven't worked after graduation")}
 
                 </Text>
                                 </View>
@@ -278,7 +279,7 @@ export default function ProfilePersonalDetails() {const { t } = useTranslation()
             disabled={isLoading}
             className={`bg-[#43C17A] px-6 py-2.5 rounded-lg ${isLoading ? "opacity-50" : ""}`}>
             
-                        <Text className="text-white font-bold">{isLoading ? t("Dashboard.profile.Submitting", "Submitting...") : t("Dashboard.profile.Submit", "Submit")}</Text>
+                        <Text className="text-white" style={{ fontFamily: fonts.bold }}>{isLoading ? t("Dashboard.profile.Submitting", "Submitting...") : t("Dashboard.profile.Submit", "Submit")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

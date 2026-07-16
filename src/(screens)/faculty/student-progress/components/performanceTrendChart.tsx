@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React from "react";
 import { View, Dimensions } from 'react-native';
 import { BarChart } from "react-native-gifted-charts";
@@ -24,7 +25,7 @@ export default function PerformanceTrendChart({
       if (!item.value && item.value !== 0) return null;
       return (
         <View style={tw`bg-[#DFF2D6] rounded-full px-2 py-1 -mt-6 items-center justify-center opacity-95`}>
-              <Text style={tw`text-[#6DB951] text-[10px] font-bold`}>{`${Math.round(item.value)}%`}</Text>
+              <Text style={[{ fontFamily: fonts.bold }, tw`text-[#6DB951] text-[10px] `]}>{`${Math.round(item.value)}%`}</Text>
             </View>);
 
     }
@@ -33,7 +34,7 @@ export default function PerformanceTrendChart({
 
   return (
     <View style={tw`w-full flex-col rounded-xl bg-white p-4 shadow-sm border border-gray-100 min-h-[300px]`}>
-      <Text style={tw`mb-4 text-lg font-bold text-[#282828]`}>{t("Auto.Common.PerformanceTren", "Performance Trend")}
+      <Text style={[{ fontFamily: fonts.bold }, tw`mb-4 text-lg  text-[#282828]`]}>{t("Auto.Common.PerformanceTren", "Performance Trend")}
 
       </Text>
 

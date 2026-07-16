@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { PencilSimple, X } from "phosphor-react-native";
@@ -75,7 +76,7 @@ export default function ProfileKeySkills() {const { t } = useTranslation();
 
   const renderPill = (skill: Skill) =>
   <View key={skill.skillId} className="bg-gray-100 rounded-full pl-4 pr-2 py-1.5 m-1 flex-row items-center gap-2 border border-gray-200">
-            <Text className="text-gray-700 font-medium text-sm">{skill.name}</Text>
+            <Text className="text-gray-700 text-sm" style={{ fontFamily: fonts.medium }}>{skill.name}</Text>
             <TouchableOpacity onPress={() => handleDeleteSkill(skill.skillId)} className="bg-gray-200 rounded-full p-1">
                 <X size={12} color="#525252" weight="bold" />
             </TouchableOpacity>
@@ -86,7 +87,7 @@ export default function ProfileKeySkills() {const { t } = useTranslation();
     return (
       <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-400 mt-2">{t("Auto.Common.Loadingskills", "Loading skills...")}</Text>
+                <Text className="text-gray-400 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Loadingskills", "Loading skills...")}</Text>
             </View>);
 
   }
@@ -94,13 +95,13 @@ export default function ProfileKeySkills() {const { t } = useTranslation();
   return (
     <ScrollView className="flex-1 bg-white rounded-xl " contentContainerStyle={{ padding: 16 }}>
             <View className="flex-row justify-between items-center mb-6">
-                <Text className="text-lg font-semibold text-[#000000]">{t("Auto.Common.Skills", "Skills")}</Text>
+                <Text className="text-lg text-[#000000]" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Skills", "Skills")}</Text>
                 <View className="flex-row gap-2">
                     <TouchableOpacity onPress={() => setIsAddModalOpen(true)} className="bg-[#43C17A] px-4 py-1.5 rounded-md flex-row items-center justify-center">
-                        <Text className="text-white font-medium text-sm">{t("Auto.Common.Add", "Add +")}</Text>
+                        <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Add", "Add +")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity className="bg-[#43C17A] px-4 py-1.5 rounded-md flex-row items-center justify-center">
-                        <Text className="text-white font-medium text-sm">{t("Auto.Common.Next", "Next")}</Text>
+                        <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Next", "Next")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -109,33 +110,33 @@ export default function ProfileKeySkills() {const { t } = useTranslation();
                 {}
                 <View>
                     <View className="flex-row items-center justify-between mb-3">
-                        <Text className="text-lg text-[#43C17A] font-medium">{t("Auto.Common.TechnicalSkills", "Technical Skills")}</Text>
+                        <Text className="text-lg text-[#43C17A]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.TechnicalSkills", "Technical Skills")}</Text>
                     </View>
                     <View className="border border-[#C0C0C0] rounded-md p-3 min-h-[68px] flex-row flex-wrap items-center relative pr-12">
                         {technical.map(renderPill)}
-                        {technical.length === 0 && <Text className="text-sm text-gray-400">{t("Auto.Common.Notechnicalskil", "No technical skills added.")}</Text>}
+                        {technical.length === 0 && <Text className="text-sm text-gray-400" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Notechnicalskil", "No technical skills added.")}</Text>}
                     </View>
                 </View>
 
                 {}
                 <View>
                     <View className="flex-row items-center justify-between mb-3">
-                        <Text className="text-lg text-[#43C17A] font-medium">{t("Auto.Common.SoftSkills", "Soft Skills")}</Text>
+                        <Text className="text-lg text-[#43C17A]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SoftSkills", "Soft Skills")}</Text>
                     </View>
                     <View className="border border-[#C0C0C0] rounded-md p-3 min-h-[68px] flex-row flex-wrap items-center relative pr-12">
                         {soft.map(renderPill)}
-                        {soft.length === 0 && <Text className="text-sm text-gray-400">{t("Auto.Common.Nosoftskillsadd", "No soft skills added.")}</Text>}
+                        {soft.length === 0 && <Text className="text-sm text-gray-400" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Nosoftskillsadd", "No soft skills added.")}</Text>}
                     </View>
                 </View>
 
                 {}
                 <View>
                     <View className="flex-row items-center justify-between mb-3">
-                        <Text className="text-lg text-[#43C17A] font-medium">{t("Auto.Common.ToolsFrameworks", "Tools & Frameworks")}</Text>
+                        <Text className="text-lg text-[#43C17A]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ToolsFrameworks", "Tools & Frameworks")}</Text>
                     </View>
                     <View className="border border-[#C0C0C0] rounded-md p-3 min-h-[68px] flex-row flex-wrap items-center relative pr-12">
                         {tools.map(renderPill)}
-                        {tools.length === 0 && <Text className="text-sm text-gray-400">{t("Auto.Common.Notoolsadded", "No tools added.")}</Text>}
+                        {tools.length === 0 && <Text className="text-sm text-gray-400" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Notoolsadded", "No tools added.")}</Text>}
                     </View>
                 </View>
             </View>

@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Toast from "react-native-toast-message";
@@ -80,7 +81,7 @@ export default function ResumeEducation() {const { t } = useTranslation();
     return (
       <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-400 mt-2">{t("Auto.Common.Loadingeducatio", "Loading education...")}</Text>
+                <Text className="text-gray-400 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Loadingeducatio", "Loading education...")}</Text>
             </View>);
 
   }
@@ -89,7 +90,7 @@ export default function ResumeEducation() {const { t } = useTranslation();
     <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
             <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row justify-between items-center mb-6">
-                    <Text className="text-lg font-semibold text-[#000000]">{t("Auto.Common.Education", "Education")}</Text>
+                    <Text className="text-lg text-[#000000]" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Education", "Education")}</Text>
                 </View>
 
                 <View className="gap-4">
@@ -143,32 +144,32 @@ export default function ResumeEducation() {const { t } = useTranslation();
             onPress={() => setShowOptions(true)}
             className="border-2 border-dashed border-[#43C17A] rounded-lg p-4 items-center justify-center bg-[#43C17A]/5">
             
-                            <Text className="text-[#43C17A] font-bold">{t("Auto.Common.AddEducation", "+ Add Education")}</Text>
+                            <Text className="text-[#43C17A]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddEducation", "+ Add Education")}</Text>
                         </TouchableOpacity> :
 
           <View className="border border-gray-200 rounded-lg p-2 bg-white mt-2 ">
                             {!addedForms.includes("secondary") &&
             <TouchableOpacity onPress={() => addForm("secondary")} className="p-3 border-b border-gray-100">
-                                    <Text className="text-[#282828] font-medium">{t("Auto.Common.SecondaryEducat", "Secondary Education")}</Text>
+                                    <Text className="text-[#282828]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.SecondaryEducat", "Secondary Education")}</Text>
                                 </TouchableOpacity>
             }
                             {!addedForms.includes("undergraduate") &&
             <TouchableOpacity onPress={() => addForm("undergraduate")} className="p-3 border-b border-gray-100">
-                                    <Text className="text-[#282828] font-medium">{t("Auto.Common.UndergraduateDe", "Undergraduate Degree")}</Text>
+                                    <Text className="text-[#282828]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.UndergraduateDe", "Undergraduate Degree")}</Text>
                                 </TouchableOpacity>
             }
                             {!addedForms.includes("masters") &&
             <TouchableOpacity onPress={() => addForm("masters")} className="p-3 border-b border-gray-100">
-                                    <Text className="text-[#282828] font-medium">{t("Auto.Common.MastersDegree", "Masters Degree")}</Text>
+                                    <Text className="text-[#282828]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.MastersDegree", "Masters Degree")}</Text>
                                 </TouchableOpacity>
             }
                             {!addedForms.includes("phd") &&
             <TouchableOpacity onPress={() => addForm("phd")} className="p-3">
-                                    <Text className="text-[#282828] font-medium">{t("Auto.Common.PhD", "PhD")}</Text>
+                                    <Text className="text-[#282828]" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.PhD", "PhD")}</Text>
                                 </TouchableOpacity>
             }
                             <TouchableOpacity onPress={() => setShowOptions(false)} className="p-3 bg-gray-100 rounded-md mt-2 items-center">
-                                <Text className="text-gray-500 font-bold">{t("Auto.Common.Cancel", "Cancel")}</Text>
+                                <Text className="text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
                             </TouchableOpacity>
                         </View>
           }

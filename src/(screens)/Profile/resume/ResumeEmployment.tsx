@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import Toast from "react-native-toast-message";
@@ -83,7 +84,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
 
   return (
     <View className="border border-gray-200 rounded-xl p-4 bg-white mb-4 ">
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.CompanyName", "Company Name *")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CompanyName", "Company Name *")}</Text>
             <TextInput
         className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828] mb-3"
         placeholder={t("Auto.Attr.EgGoogle", "E.g. Google")}
@@ -91,7 +92,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
         onChangeText={setCompanyName} />
       
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Designation", "Designation *")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Designation", "Designation *")}</Text>
             <TextInput
         className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828] mb-3"
         placeholder={t("Auto.Attr.EgSoftwareEngin", "E.g. Software Engineer")}
@@ -101,7 +102,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
 
             <View className="flex-row gap-3 mb-3">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.ExpYears", "Exp (Years)")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ExpYears", "Exp (Years)")}</Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
             keyboardType="numeric"
@@ -110,7 +111,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
           
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.ExpMonths", "Exp (Months)")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ExpMonths", "Exp (Months)")}</Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
             keyboardType="numeric"
@@ -122,7 +123,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
 
             <View className="flex-row gap-3 mb-3">
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.StartDate", "Start Date *")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.StartDate", "Start Date *")}</Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
             placeholder={t("Auto.Attr.YYYYMMDD", "YYYY-MM-DD")}
@@ -131,7 +132,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
           
                 </View>
                 <View className="flex-1">
-                    <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.EndDate", "End Date")}</Text>
+                    <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EndDate", "End Date")}</Text>
                     <TextInput
             className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828]"
             placeholder={t("Auto.Attr.YYYYMMDDLeaveem", "YYYY-MM-DD (Leave empty if current)")}
@@ -141,7 +142,7 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
                 </View>
             </View>
 
-            <Text className="text-sm font-medium text-[#282828] mb-1">{t("Auto.Common.Description", "Description")}</Text>
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Description", "Description")}</Text>
             <TextInput
         className="border border-[#CCCCCC] rounded-md px-3 py-2 text-[#282828] mb-4"
         placeholder={t("Auto.Attr.Whatdidyoudo", "What did you do?")}
@@ -154,10 +155,10 @@ function EmploymentFormItem({ item, studentId, onSaved, onDelete }: any) {const 
 
             <View className="flex-row justify-end gap-3">
                 <TouchableOpacity onPress={handleDelete} disabled={isLoading} className="px-4 py-2 bg-red-50 rounded-lg">
-                    <Text className="text-red-500 font-medium">{t("Auto.Common.Delete", "Delete")}</Text>
+                    <Text className="text-red-500" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Delete", "Delete")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSave} disabled={isLoading} className="px-4 py-2 bg-[#43C17A] rounded-lg">
-                    <Text className="text-white font-medium">{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
+                    <Text className="text-white" style={{ fontFamily: fonts.medium }}>{isLoading ? t("Dashboard.profile.Saving", "Saving...") : t("Dashboard.profile.Save", "Save")}</Text>
                 </TouchableOpacity>
             </View>
         </View>);
@@ -193,7 +194,7 @@ export default function ResumeEmployment() {const { t } = useTranslation();
     return (
       <View className="flex-1 bg-white rounded-xl  items-center justify-center p-4">
                 <ActivityIndicator size="large" color="#43C17A" />
-                <Text className="text-gray-400 mt-2">{t("Auto.Common.Loadingemployme", "Loading employment...")}</Text>
+                <Text className="text-gray-400 mt-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Loadingemployme", "Loading employment...")}</Text>
             </View>);
 
   }
@@ -202,7 +203,7 @@ export default function ResumeEmployment() {const { t } = useTranslation();
     <ScrollView className="flex-1 bg-[#f6f7f9] p-4">
             <View className="bg-white rounded-lg p-6  mb-10">
                 <View className="flex-row justify-between items-center mb-6">
-                    <Text className="text-lg font-semibold text-[#000000]">{t("Auto.Common.Employment", "Employment")}</Text>
+                    <Text className="text-lg text-[#000000]" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Employment", "Employment")}</Text>
                 </View>
 
                 {employments.map((item, index) =>
@@ -219,7 +220,7 @@ export default function ResumeEmployment() {const { t } = useTranslation();
           onPress={handleAdd}
           className="border-2 border-dashed border-[#43C17A] rounded-lg p-4 items-center justify-center bg-[#43C17A]/5 mt-2">
           
-                    <Text className="text-[#43C17A] font-bold">{t("Auto.Common.AddEmployment", "+ Add Employment")}</Text>
+                    <Text className="text-[#43C17A]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.AddEmployment", "+ Add Employment")}</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>);

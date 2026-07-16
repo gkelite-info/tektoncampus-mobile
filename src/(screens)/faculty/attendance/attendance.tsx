@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, TextInput } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -257,17 +258,17 @@ export default function FacultyAttendance() {const { t } = useTranslation();
               </TouchableOpacity>
               }
             <View>
-              <Text className="text-2xl font-bold text-gray-900">{t("Auto.Common.Attendance", "Attendance")}</Text>
-              <Text className="text-sm text-[#282828] mt-1">{t("Auto.Common.Trackverifyandm", "Track, verify, and manage attendance.")}</Text>
+              <Text className="text-2xl text-gray-900" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Attendance", "Attendance")}</Text>
+              <Text className="text-sm text-[#282828] mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Trackverifyandm", "Track, verify, and manage attendance.")}</Text>
             </View>
           </View>
         </View>
 
         {classData &&
           <View className="bg-[#1E2952] px-4 py-4 rounded-xl shadow-sm mb-4">
-            <Text className="text-white text-sm font-medium">{t("Auto.Common.ClassTime", "Class Time :")}<Text className="text-gray-200">{classTime}</Text></Text>
-            <Text className="text-white text-sm mt-1">{classData.department?.map((item: any) => item.name).join(", ")}</Text>
-            <Text className="text-white text-sm mt-1">{t("Auto.Common.Year", "Year")}{classData.year} - {classData.degree}</Text>
+            <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ClassTime", "Class Time :")}<Text className="text-gray-200" style={{ fontFamily: fonts.regular }}>{classTime}</Text></Text>
+            <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{classData.department?.map((item: any) => item.name).join(", ")}</Text>
+            <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Year", "Year")}{classData.year} - {classData.degree}</Text>
           </View>
           }
       </View>
@@ -283,8 +284,8 @@ export default function FacultyAttendance() {const { t } = useTranslation();
       {urlClassId &&
         <View className="flex-row items-center justify-between py-2 mb-2 min-h-[40px]">
           <View className="flex-1 mr-2">
-            <Text className="text-lg font-bold text-gray-800" numberOfLines={1}>
-              <Text className="text-[#43C17A]">{t("Auto.Common.Topic", "Topic :")}</Text>
+            <Text className="text-lg text-gray-800" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+              <Text className="text-[#43C17A]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Topic", "Topic :")}</Text>
               {topicName}
             </Text>
           </View>
@@ -293,7 +294,7 @@ export default function FacultyAttendance() {const { t } = useTranslation();
 
       {isCancellingMode &&
         <View className="flex-row items-center justify-between bg-gray-50 p-2 rounded-lg mb-4 border border-gray-200">
-          <Text className="text-gray-700 ml-2">{t("Auto.Common.Reason", "Reason:")}</Text>
+          <Text className="text-gray-700 ml-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Reason", "Reason:")}</Text>
           <TextInput
             className="flex-1 ml-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200 text-sm"
             placeholder={t("Auto.Attr.Typereasonhere", "Type reason here...")}
@@ -331,7 +332,7 @@ export default function FacultyAttendance() {const { t } = useTranslation();
 
 
           <View className="py-16 items-center justify-center">
-            <Text className="text-gray-500">{t("Auto.Common.Nostudentsfound", "No students found")}</Text>
+            <Text className="text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Nostudentsfound", "No students found")}</Text>
           </View>
           }
       </View>

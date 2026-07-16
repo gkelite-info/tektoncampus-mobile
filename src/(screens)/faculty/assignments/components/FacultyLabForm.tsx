@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -182,17 +183,17 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
   return (
     <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
-        <Text className="text-xl font-semibold text-[#282828]">
+        <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
           {initialData ? t('Edit Lab Manual') : t('Upload Lab Manual')}
         </Text>
-        <Text className="text-sm text-gray-500">{t('Upload a PDF lab manual for your assigned sections.')}</Text>
+        <Text className="text-sm text-gray-500" style={{ fontFamily: fonts.regular }}>{t('Upload a PDF lab manual for your assigned sections.')}</Text>
       </View>
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.LabTitle", "Lab Title")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.LabTitle", "Lab Title")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.labTitle}
             onChangeText={(val) => setForm({ ...form, labTitle: val })}
@@ -203,7 +204,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
 
         {}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden mb-3">
             <Picker
               selectedValue={form.selectedSubjectId}
@@ -216,7 +217,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
 
           <View className="flex-row gap-3">
             <View className="flex-1">
-              <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Year", "Year")}<Text className="text-red-500">*</Text></Text>
+              <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Year", "Year")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
               <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
                 <Picker
                   selectedValue={form.selectedYearId}
@@ -229,7 +230,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
               </View>
             </View>
             <View className="flex-1">
-              <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Section", "Section")}<Text className="text-red-500">*</Text></Text>
+              <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Section", "Section")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
               <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
                 <Picker
                   selectedValue={form.selectedSectionId}
@@ -246,7 +247,7 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
 
         {/* Description */}
         <View className="mb-4">
-          <Text className="mb-1 text-sm font-bold text-[#282828]">{t("Auto.Common.Description", "Description")}<Text className="text-gray-400 font-normal">{t("Auto.Common.optional", "(optional)")}</Text></Text>
+          <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Description", "Description")}<Text className="text-gray-400" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.optional", "(optional)")}</Text></Text>
           <TextInput
             value={form.description}
             onChangeText={(val) => setForm({ ...form, description: val })}
@@ -260,12 +261,12 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
 
         {/* File Section */}
         <View className="mb-4">
-          <Text className="mb-2 text-sm font-bold text-[#282828]">{t("Auto.Common.LabManualPDF", "Lab Manual PDF")}<Text className="text-red-500">*</Text></Text>
+          <Text className="mb-2 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.LabManualPDF", "Lab Manual PDF")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           
           {!pdfFile && !existingFileName ?
           <TouchableOpacity onPress={handlePickFile} className="border-2 border-dashed border-gray-300 rounded-xl p-6 items-center justify-center bg-gray-50/50">
-                <Text className="text-gray-500 text-sm font-bold mb-1">{t("Auto.Common.UploadPDF", "Upload PDF")}</Text>
-                <Text className="text-gray-400 text-xs">{t("Auto.Common.Taptobrowsefile", "Tap to browse files")}</Text>
+                <Text className="text-gray-500 text-sm mb-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.UploadPDF", "Upload PDF")}</Text>
+                <Text className="text-gray-400 text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Taptobrowsefile", "Tap to browse files")}</Text>
             </TouchableOpacity> :
 
           <View className="border border-[#43C17A]/30 bg-[#F0FFF7] rounded-xl p-3 flex-row items-center gap-3">
@@ -273,10 +274,10 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
                 <FilePdf size={20} color="#43C17A" weight="fill" />
               </View>
               <View className="flex-1">
-                <Text className="text-sm font-bold text-[#282828]" numberOfLines={1}>
+                <Text className="text-sm text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
                   {pdfFile ? pdfFile.name : existingFileName}
                 </Text>
-                <Text className="text-xs text-gray-500 mt-0.5">
+                <Text className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: fonts.regular }}>
                   {pdfFile ? `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` : 'Already uploaded'}
                 </Text>
               </View>
@@ -290,10 +291,10 @@ export default function FacultyLabForm({ initialData, onCancel, onSaved }: Facul
         {}
         <View className="flex-row items-center justify-end mt-2 border-t border-gray-100 pt-4 gap-3">
           <TouchableOpacity onPress={onCancel} disabled={isSaving} className="px-6 py-2.5 rounded-md border border-[#7B7B7B]">
-            <Text className="text-[#7B7B7B] text-sm font-bold">{t("Auto.Common.Cancel", "Cancel")}</Text>
+            <Text className="text-[#7B7B7B] text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleSave} disabled={isSaving} className="px-6 py-2.5 rounded-md bg-[#16284F]">
-            {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm font-bold">{initialData ? 'Update Lab Manual' : 'Upload Lab Manual'}</Text>}
+            {isSaving ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{initialData ? 'Update Lab Manual' : 'Upload Lab Manual'}</Text>}
           </TouchableOpacity>
         </View>
       </View>

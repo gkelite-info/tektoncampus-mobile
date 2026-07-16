@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useRef, useEffect } from "react";
 import { View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { CheckCircle } from "phosphor-react-native";
@@ -66,15 +67,15 @@ export default function ProfileSteps({ currentStepId, onStepChange }: ProfileSte
                                             <View 
                                                 className={`rounded-full border h-8 w-8 items-center justify-center ${isActive ? 'border-[#74CB64]' : 'border-[#878787]'}`}
                                             >
-                                                <Text className={`text-xs ${isActive ? 'text-[#74CB64] font-bold' : 'text-[#878787]'}`}>
+                                                <Text className={`text-xs ${isActive ?'text-[#74CB64] ' : 'text-[#878787]'}`} style={{ fontFamily: fonts.bold }}>
                                                     {step.id}
                                                 </Text>
                                             </View>
                                         )}
                                         <Text 
-                                            className={`text-[10px] mt-2 text-center w-[80px] ${isActive ? 'text-[#74CB64] font-bold' : 'text-[#878787]'}`}
+                                            className={`text-[10px] mt-2 text-center w-[80px] ${isActive ?'text-[#74CB64] ' : 'text-[#878787]'}`}
                                             numberOfLines={1}
-                                        >
+                                         style={{ fontFamily: fonts.bold }}>
                                             {step.title}
                                         </Text>
                                     </View>

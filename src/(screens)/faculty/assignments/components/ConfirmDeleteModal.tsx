@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React from 'react';
 import { View, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import { WarningCircle } from 'phosphor-react-native';
@@ -32,10 +33,10 @@ export default function ConfirmDeleteModal({
               <WarningCircle size={24} color="#DC2626" />
             </View>
 
-            <Text className="text-lg font-semibold text-gray-900 text-center">
+            <Text className="text-lg text-gray-900 text-center" style={{ fontFamily: fonts.semiBold }}>
               {t("Confirm Deletion")}
             </Text>
-            <Text className="mt-2 text-sm text-gray-500 leading-relaxed text-center">
+            <Text className="mt-2 text-sm text-gray-500 leading-relaxed text-center" style={{ fontFamily: fonts.regular }}>
               {t(`Are you sure you want to delete this ${name}? This action cannot be undone and will permanently remove the data.`)}
             </Text>
           </View>
@@ -48,7 +49,7 @@ export default function ConfirmDeleteModal({
                 isDeleting ? 'bg-gray-100' : 'bg-gray-100'
               }`}
             >
-              <Text className={`font-bold ${isDeleting ? 'text-gray-400' : 'text-gray-700'}`}>
+              <Text className={`${isDeleting ?'text-gray-400' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>
                 {t("Cancel")}
               </Text>
             </TouchableOpacity>
@@ -63,10 +64,10 @@ export default function ConfirmDeleteModal({
               {isDeleting ? (
                 <>
                   <ActivityIndicator size="small" color="white" />
-                  <Text className="font-bold text-white">{t("Deleting...")}</Text>
+                  <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t("Deleting...")}</Text>
                 </>
               ) : (
-                <Text className="font-bold text-white">{t("Delete")}</Text>
+                <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t("Delete")}</Text>
               )}
             </TouchableOpacity>
           </View>

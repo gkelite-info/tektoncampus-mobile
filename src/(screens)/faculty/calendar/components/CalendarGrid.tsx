@@ -1,4 +1,5 @@
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { CaretLeft, CaretRight } from "phosphor-react-native";
@@ -71,11 +72,11 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         
         <View className="flex-1 flex-row items-center justify-center px-1">
           <Text 
-            className="text-sm font-bold uppercase tracking-wider text-slate-800 text-center"
+            className="text-sm uppercase tracking-wider text-slate-800 text-center"
             numberOfLines={1}
             adjustsFontSizeToFit
             minimumFontScale={0.5}
-          >
+           style={{ fontFamily: fonts.bold }}>
             {selectedDayObj?.day} {selectedDayObj?.date}
           </Text>
         </View>
@@ -95,7 +96,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                 key={time}
                 className="h-[120px] items-center pt-2 border-b border-gray-100 border-dashed"
               >
-                <Text className="text-[10px] font-medium text-gray-400">
+                <Text className="text-[10px] text-gray-400" style={{ fontFamily: fonts.medium }}>
                   {time}
                 </Text>
               </View>

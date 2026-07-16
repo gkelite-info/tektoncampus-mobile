@@ -131,7 +131,7 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
   return (
     <View className="flex-1 bg-white" style={{ paddingTop: headerHeight, paddingBottom: 130 }}>
             <View className="flex-row justify-between items-center px-4 py-4 border-b border-gray-100">
-                <Text className="text-xl font-bold text-[#282828]">{t("Auto.Common.ProfileDashboar", "Profile Dashboard")}</Text>
+                <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ProfileDashboar", "Profile Dashboard")}</Text>
             </View>
 
             <ScrollView
@@ -166,7 +166,7 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
                             <CaretRight size={20} color="#43C17A" weight="bold" />
                         </View>
 
-                        <Text className="text-sm text-gray-500 font-medium mt-1">{t("Auto.Common.ID", "ID -")}
+                        <Text className="text-sm text-gray-500 mt-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ID", "ID -")}
               {displayId || "-"}
                         </Text>
 
@@ -176,23 +176,23 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
                             </Text>
             }
                         {role === "Faculty" &&
-            <Text className="text-xs text-[#282828] font-medium mt-1">
+            <Text className="text-xs text-[#282828] mt-1" style={{ fontFamily: fonts.medium }}>
                                 {collegeEducationType || "—"} {collegeBranchCode || "—"}
                             </Text>
             }
                         {role !== "Student" && role !== "Faculty" &&
-            <Text className="text-xs text-[#282828] font-medium mt-1">{displayRole}</Text>
+            <Text className="text-xs text-[#282828] mt-1" style={{ fontFamily: fonts.medium }}>{displayRole}</Text>
             }
 
                         <View className="flex-row flex-wrap items-center gap-3 mt-3">
                             <View className="flex-row items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#43C17A]/20">
                                 <EnvelopeSimple size={14} color="#43C17A" weight="bold" />
-                                <Text className="text-sm text-gray-700">{email || "N/A"}</Text>
+                                <Text className="text-sm text-gray-700" style={{ fontFamily: fonts.regular }}>{email || "N/A"}</Text>
                             </View>
 
                             <View className="flex-row items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#43C17A]/20">
                                 <Phone size={14} color="#43C17A" weight="bold" />
-                                <Text className="text-sm text-gray-700">{mobile || "N/A"}</Text>
+                                <Text className="text-sm text-gray-700" style={{ fontFamily: fonts.regular }}>{mobile || "N/A"}</Text>
                             </View>
                         </View>
                     </View>
@@ -209,7 +209,7 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
                                 <View className="bg-[#43C17A]/10 p-2 rounded-full mr-3">
                                     {option.icon}
                                 </View>
-                                <Text className="flex-shrink text-base font-semibold text-[#282828]">
+                                <Text className="flex-shrink text-base text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
                                     {option.name}
                                 </Text>
                             </View>
@@ -225,7 +225,7 @@ export default function ProfileDashboard({ onOpenProfileDetails }: ProfileDashbo
                             <View className="bg-red-50 p-2 rounded-full mr-3">
                                 <SignOut size={24} color="#ef4444" weight="bold" />
                             </View>
-                            <Text className="flex-shrink text-base font-semibold text-red-500">{t("Auto.Common.LogOut", "Log Out")}
+                            <Text className="flex-shrink text-base text-red-500" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.LogOut", "Log Out")}
 
               </Text>
                         </View>

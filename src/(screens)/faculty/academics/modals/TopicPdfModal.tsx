@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next';
+import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, Modal, ActivityIndicator, Linking } from 'react-native';
 import { X, Trash, UploadSimple, FilePdf, ArrowSquareOut } from 'phosphor-react-native';
@@ -179,15 +180,15 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
 
           <ScrollView className="px-6 py-6" contentContainerStyle={{ paddingBottom: 20 }}>
             {}
-            <Text className="text-base font-semibold text-gray-800 pr-6 flex-row flex-wrap leading-6 mb-5">
-              <Text className="text-[#7E5DFF]">{unitLabel}</Text>
-              <Text className="text-gray-400"> → </Text>
-              <Text className="text-gray-700">{unitTitle}</Text>
-              <Text className="text-gray-400"> → </Text>
-              <Text className="text-gray-700">{topicTitle}</Text>
+            <Text className="text-base text-gray-800 pr-6 flex-row flex-wrap leading-6 mb-5" style={{ fontFamily: fonts.semiBold }}>
+              <Text className="text-[#7E5DFF]" style={{ fontFamily: fonts.regular }}>{unitLabel}</Text>
+              <Text className="text-gray-400" style={{ fontFamily: fonts.regular }}> → </Text>
+              <Text className="text-gray-700" style={{ fontFamily: fonts.regular }}>{unitTitle}</Text>
+              <Text className="text-gray-400" style={{ fontFamily: fonts.regular }}> → </Text>
+              <Text className="text-gray-700" style={{ fontFamily: fonts.regular }}>{topicTitle}</Text>
             </Text>
 
-            <Text className="text-sm font-semibold text-gray-700 mb-2">{t("Auto.Common.Upload", "Upload")}</Text>
+            <Text className="text-sm text-gray-700 mb-2" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Upload", "Upload")}</Text>
 
             {}
             <TouchableOpacity
@@ -197,16 +198,16 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
               <View className="bg-white rounded-full p-3 shadow-sm mb-2">
                 <UploadSimple size={28} color="#9ca3af" weight="bold" />
               </View>
-              <Text className="text-sm text-gray-500 mb-2">{t("Auto.Common.Tapheretoselect", "Tap here to select PDF files")}</Text>
+              <Text className="text-sm text-gray-500 mb-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Tapheretoselect", "Tap here to select PDF files")}</Text>
               <View className="px-5 py-1.5 border border-gray-300 rounded-md bg-white">
-                <Text className="text-sm text-gray-600">{t("Auto.Common.BrowseFiles", "Browse Files")}</Text>
+                <Text className="text-sm text-gray-600" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.BrowseFiles", "Browse Files")}</Text>
               </View>
             </TouchableOpacity>
 
             {}
             {stagedFiles.length > 0 &&
             <View className="mb-6">
-                <Text className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">{t("Auto.Common.Readytoupload", "Ready to upload (")}
+                <Text className="text-xs text-gray-400 uppercase tracking-wide mb-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Readytoupload", "Ready to upload (")}
                 {stagedFiles.length})
                 </Text>
                 <View className="flex-col gap-2">
@@ -217,8 +218,8 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
                           <FilePdf size={20} color="#ef4444" weight="duotone" />
                         </View>
                         <View className="flex-1">
-                          <Text className="text-sm font-medium text-gray-700" numberOfLines={1}>{f.previewName}</Text>
-                          <Text className="text-xs text-gray-400">{f.sizeLabel}</Text>
+                          <Text className="text-sm text-gray-700" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{f.previewName}</Text>
+                          <Text className="text-xs text-gray-400" style={{ fontFamily: fonts.regular }}>{f.sizeLabel}</Text>
                         </View>
                       </View>
                       <TouchableOpacity
@@ -237,7 +238,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
             {}
             {savedResources.length > 0 &&
             <View>
-                <Text className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">{t("Auto.Common.Uploaded", "Uploaded (")}
+                <Text className="text-xs text-gray-400 uppercase tracking-wide mb-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Uploaded", "Uploaded (")}
                 {savedResources.length})
                 </Text>
                 <View className="flex-col gap-2">
@@ -250,8 +251,8 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
                             <FilePdf size={20} color="#ef4444" weight="duotone" />
                           </View>
                           <View className="flex-1">
-                            <Text className="text-sm font-medium text-gray-700" numberOfLines={1}>{r.resourceName}</Text>
-                            <Text className="text-xs text-gray-400">{t("Auto.Common.PDF", "PDF")}</Text>
+                            <Text className="text-sm text-gray-700" numberOfLines={1} style={{ fontFamily: fonts.medium }}>{r.resourceName}</Text>
+                            <Text className="text-xs text-gray-400" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.PDF", "PDF")}</Text>
                           </View>
                         </View>
                         <View className="flex-row items-center gap-2">
@@ -288,7 +289,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
               onPress={onClose}
               className="flex-1 py-2.5 rounded-lg border border-gray-200 items-center justify-center">
               
-              <Text className="text-sm font-medium text-gray-600">{t("Auto.Common.Cancel", "Cancel")}</Text>
+              <Text className="text-sm text-gray-600" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Cancel", "Cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleUpload}
@@ -298,7 +299,7 @@ export default function TopicPdfModal({ visible, onClose, topicId, topicTitle, u
               }>
               
               {isUploading && <ActivityIndicator size="small" color="white" />}
-              <Text className="text-sm font-semibold text-white">
+              <Text className="text-sm text-white" style={{ fontFamily: fonts.semiBold }}>
                 {isUploading ? "Uploading..." : `Upload File${stagedFiles.length > 1 ? "s" : ""}`}
               </Text>
             </TouchableOpacity>

@@ -20,11 +20,11 @@ const formatTo12Hour = (time24: string) => {
 
 const getTopicsBySubjectId = async (subjectId: number) => {
   const { data, error } = await supabase.
-  from('college_subject_unit_topics').
-  select('topicTitle, collegeSubjectUnitId, collegeSubjectUnitTopicId').
-  eq('collegeSubjectId', subjectId).
-  eq('isActive', true).
-  is('deletedAt', null);
+    from('college_subject_unit_topics').
+    select('topicTitle, collegeSubjectUnitId, collegeSubjectUnitTopicId').
+    eq('collegeSubjectId', subjectId).
+    eq('isActive', true).
+    is('deletedAt', null);
 
   if (error) {
     console.error('Error fetching topics:', error);
@@ -80,18 +80,18 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
         if (!auth?.user) throw new Error('Not authenticated');
 
         const { data: userRecord } = await supabase.
-        from('users').
-        select('userId').
-        eq('auth_id', auth.user.id).
-        single();
+          from('users').
+          select('userId').
+          eq('auth_id', auth.user.id).
+          single();
 
         if (!userRecord) throw new Error('User record not found');
 
         const { data: facultyData } = await supabase.
-        from('faculty').
-        select('facultyId').
-        eq('userId', userRecord.userId).
-        single();
+          from('faculty').
+          select('facultyId').
+          eq('userId', userRecord.userId).
+          single();
 
         if (!facultyData) throw new Error('Faculty record not found');
         setFacultyId(facultyData.facultyId);
@@ -153,13 +153,13 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
     if (!form.selectedSubjectId) return [];
     const map = new Map();
     facultySections.
-    filter((s) => s.collegeSubjectId === Number(form.selectedSubjectId)).
-    forEach((s) => {
-      const yearObj = getSafe(s.college_academic_year);
-      if (yearObj) {
-        map.set(s.collegeAcademicYearId, yearObj.collegeAcademicYear);
-      }
-    });
+      filter((s) => s.collegeSubjectId === Number(form.selectedSubjectId)).
+      forEach((s) => {
+        const yearObj = getSafe(s.college_academic_year);
+        if (yearObj) {
+          map.set(s.collegeAcademicYearId, yearObj.collegeAcademicYear);
+        }
+      });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.selectedSubjectId]);
 
@@ -167,35 +167,35 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
     if (!form.selectedSubjectId || !form.selectedYearId) return [];
     const map = new Map();
     facultySections.
-    filter(
-      (s) =>
-      s.collegeSubjectId === Number(form.selectedSubjectId) &&
-      s.collegeAcademicYearId === Number(form.selectedYearId)
-    ).
-    forEach((s) => {
-      const sectionObj = getSafe(s.college_sections);
-      if (sectionObj) {
-        map.set(s.collegeSectionsId, sectionObj.collegeSections);
-      }
-    });
+      filter(
+        (s) =>
+          s.collegeSubjectId === Number(form.selectedSubjectId) &&
+          s.collegeAcademicYearId === Number(form.selectedYearId)
+      ).
+      forEach((s) => {
+        const sectionObj = getSafe(s.college_sections);
+        if (sectionObj) {
+          map.set(s.collegeSectionsId, sectionObj.collegeSections);
+        }
+      });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.selectedSubjectId, form.selectedYearId]);
 
   const totalMarks = Number(form.questionsCount) * Number(form.marksPerQuestion) || 0;
 
   const handleSave = async (status: 'Draft' | 'Active') => {
-    if (!form.quizTitle.trim()) {Toast.show({ type: 'error', text1: 'Quiz title is required' });return;}
-    if (!form.selectedTopicId) {Toast.show({ type: 'error', text1: 'Please select a topic' });return;}
-    if (!form.selectedYearId || !form.selectedSectionId) {Toast.show({ type: 'error', text1: 'Year and Section are required' });return;}
-    if (!form.durationMinutes) {Toast.show({ type: 'error', text1: 'Duration is required' });return;}
-    if (form.startTime === '00:00' || form.endTime === '00:00') {Toast.show({ type: 'error', text1: 'Please set valid Start and End times' });return;}
-    if (form.endTime <= form.startTime) {Toast.show({ type: 'error', text1: 'End time must be later than start time' });return;}
-    if (!form.startDate || !form.endDate) {Toast.show({ type: 'error', text1: 'Dates are required' });return;}
-    if (!facultyId) {Toast.show({ type: 'error', text1: 'Faculty not found' });return;}
+    if (!form.quizTitle.trim()) { Toast.show({ type: 'error', text1: 'Quiz title is required' }); return; }
+    if (!form.selectedTopicId) { Toast.show({ type: 'error', text1: 'Please select a topic' }); return; }
+    if (!form.selectedYearId || !form.selectedSectionId) { Toast.show({ type: 'error', text1: 'Year and Section are required' }); return; }
+    if (!form.durationMinutes) { Toast.show({ type: 'error', text1: 'Duration is required' }); return; }
+    if (form.startTime === '00:00' || form.endTime === '00:00') { Toast.show({ type: 'error', text1: 'Please set valid Start and End times' }); return; }
+    if (form.endTime <= form.startTime) { Toast.show({ type: 'error', text1: 'End time must be later than start time' }); return; }
+    if (!form.startDate || !form.endDate) { Toast.show({ type: 'error', text1: 'Dates are required' }); return; }
+    if (!facultyId) { Toast.show({ type: 'error', text1: 'Faculty not found' }); return; }
 
     try {
-      if (status === 'Active') setIsSaving(true);else
-      setIsDraftSaving(true);
+      if (status === 'Active') setIsSaving(true); else
+        setIsDraftSaving(true);
 
       const selectedTopicObj = topics.find((t) => String(t.collegeSubjectUnitTopicId) === String(form.selectedTopicId));
       if (!selectedTopicObj) throw new Error('Invalid topic selected.');
@@ -239,7 +239,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
   }
 
   return (
-    <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+    <ScrollView className="flex-1 w-full mb-20" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
         <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
           {isEditMode ? t('Edit Quiz') : t('Create New Quiz')}
@@ -248,28 +248,31 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
       </View>
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        
-        {}
+
+        { }
         <View className="mb-4">
           <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.QuizTitle", "Quiz Title")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.quizTitle}
             onChangeText={(val) => setForm({ ...form, quizTitle: val })}
             placeholder={t("Auto.Attr.egUnit1Assessme", "e.g. Unit 1 Assessment")}
+            style={{ fontFamily: fonts.medium }}
             className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black" />
-          
+
         </View>
 
-        {}
+        { }
         <View className="mb-4">
           <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
             <Picker
               selectedValue={form.selectedSubjectId}
-              onValueChange={(val) => setForm({ ...form, selectedSubjectId: val, selectedTopicId: '', selectedYearId: '', selectedSectionId: '' })}>
-              
+              onValueChange={(val) => setForm({ ...form, selectedSubjectId: val, selectedTopicId: '', selectedYearId: '', selectedSectionId: '' })}
+              style={{ fontFamily: fonts.medium }}
+              itemStyle={{ fontFamily: fonts.medium }}>
+
               <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" />
-              {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
+              {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={String(s.id)} />)}
             </Picker>
           </View>
         </View>
@@ -281,10 +284,12 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             <Picker
               selectedValue={form.selectedTopicId}
               onValueChange={(val) => setForm({ ...form, selectedTopicId: val })}
-              enabled={!!form.selectedSubjectId}>
-              
+              enabled={!!form.selectedSubjectId}
+              style={{ fontFamily: fonts.medium }}
+              itemStyle={{ fontFamily: fonts.medium }}>
+
               <Picker.Item label={t("Auto.Attr.SelectTopic", "Select Topic")} value="" color="#9CA3AF" />
-              {topics.map((t, idx) => <Picker.Item key={idx} label={t.topicTitle} value={t.collegeSubjectUnitTopicId} />)}
+              {topics.map((t, idx) => <Picker.Item key={idx} label={t.topicTitle} value={String(t.collegeSubjectUnitTopicId)} />)}
             </Picker>
           </View>
         </View>
@@ -297,10 +302,12 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               <Picker
                 selectedValue={form.selectedYearId}
                 onValueChange={(val) => setForm({ ...form, selectedYearId: val, selectedSectionId: '' })}
-                enabled={!!form.selectedSubjectId}>
-                
+                enabled={!!form.selectedSubjectId}
+                style={{ fontFamily: fonts.medium }}
+                itemStyle={{ fontFamily: fonts.medium }}>
+
                 <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" />
-                {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} />)}
+                {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={String(y.id)} />)}
               </Picker>
             </View>
           </View>
@@ -310,10 +317,12 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               <Picker
                 selectedValue={form.selectedSectionId}
                 onValueChange={(val) => setForm({ ...form, selectedSectionId: val })}
-                enabled={!!form.selectedYearId}>
-                
+                enabled={!!form.selectedYearId}
+                style={{ fontFamily: fonts.medium }}
+                itemStyle={{ fontFamily: fonts.medium }}>
+
                 <Picker.Item label={t("Auto.Attr.SelectSection", "Select Section")} value="" color="#9CA3AF" />
-                {availableSections.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
+                {availableSections.map((s) => <Picker.Item key={s.id} label={s.name} value={String(s.id)} />)}
               </Picker>
             </View>
           </View>
@@ -328,7 +337,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               onChangeText={(val) => setForm({ ...form, questionsCount: val })}
               keyboardType="number-pad"
               className="w-full rounded-md border border-gray-200 px-2 py-2 text-sm bg-white text-black" />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MarksQtn", "Marks/Qtn")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
@@ -337,7 +346,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               onChangeText={(val) => setForm({ ...form, marksPerQuestion: val })}
               keyboardType="number-pad"
               className="w-full rounded-md border border-gray-200 px-2 py-2 text-sm bg-white text-black" />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TotalMarks", "Total Marks")}</Text>
@@ -356,7 +365,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               onChangeText={(val) => setForm({ ...form, durationMinutes: val })}
               keyboardType="number-pad"
               className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black" />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MaxAttempts", "Max Attempts")}</Text>
@@ -365,7 +374,7 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               onChangeText={(val) => setForm({ ...form, maxAttempts: val })}
               keyboardType="number-pad"
               className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black" />
-            
+
           </View>
         </View>
 
@@ -379,9 +388,9 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             <DateTimePickerModal
               isVisible={isStartDatePickerVisible}
               mode="date"
-              onConfirm={(date) => {setForm((prev) => ({ ...prev, startDate: date.toISOString().split('T')[0] }));setStartDatePickerVisible(false);}}
+              onConfirm={(date) => { setForm((prev) => ({ ...prev, startDate: date.toISOString().split('T')[0] })); setStartDatePickerVisible(false); }}
               onCancel={() => setStartDatePickerVisible(false)} />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.EndDate", "End Date")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
@@ -391,13 +400,13 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             <DateTimePickerModal
               isVisible={isEndDatePickerVisible}
               mode="date"
-              onConfirm={(date) => {setForm((prev) => ({ ...prev, endDate: date.toISOString().split('T')[0] }));setEndDatePickerVisible(false);}}
+              onConfirm={(date) => { setForm((prev) => ({ ...prev, endDate: date.toISOString().split('T')[0] })); setEndDatePickerVisible(false); }}
               onCancel={() => setEndDatePickerVisible(false)} />
-            
+
           </View>
         </View>
 
-        {}
+        { }
         <View className="flex-row gap-4 mb-6">
           <View className="flex-1">
             <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.StartTime", "Start Time")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
@@ -408,9 +417,9 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             <DateTimePickerModal
               isVisible={isStartTimePickerVisible}
               mode="time"
-              onConfirm={(date) => {setForm((prev) => ({ ...prev, startTime: date.toTimeString().substring(0, 5) }));setStartTimePickerVisible(false);}}
+              onConfirm={(date) => { setForm((prev) => ({ ...prev, startTime: date.toTimeString().substring(0, 5) })); setStartTimePickerVisible(false); }}
               onCancel={() => setStartTimePickerVisible(false)} />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.EndTime", "End Time")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
@@ -421,13 +430,13 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             <DateTimePickerModal
               isVisible={isEndTimePickerVisible}
               mode="time"
-              onConfirm={(date) => {setForm((prev) => ({ ...prev, endTime: date.toTimeString().substring(0, 5) }));setEndTimePickerVisible(false);}}
+              onConfirm={(date) => { setForm((prev) => ({ ...prev, endTime: date.toTimeString().substring(0, 5) })); setEndTimePickerVisible(false); }}
               onCancel={() => setEndTimePickerVisible(false)} />
-            
+
           </View>
         </View>
 
-        {}
+        { }
         <View className="flex-row items-center justify-between mt-2 border-t border-gray-100 pt-4 gap-2">
           <TouchableOpacity onPress={onCancel} disabled={isSaving || isDraftSaving} className="px-4 py-3 rounded-md border border-[#16284F] flex-1 items-center">
             <Text className="text-[#16284F] text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Cancel", "Cancel")}</Text>

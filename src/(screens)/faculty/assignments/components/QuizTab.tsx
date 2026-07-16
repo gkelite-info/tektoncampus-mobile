@@ -27,9 +27,7 @@ export default function QuizTab() {
   const [deleteQuizId, setDeleteQuizId] = useState<number | null>(null);
   const [isDeletingQuiz, setIsDeletingQuiz] = useState(false);
   const loadQuizzes = async (page: number, view: 'Draft' | 'Active' | 'Completed') => {
-    const {
-      t
-    } = useTranslation();
+
     setIsLoading(true);
     try {
       const {
@@ -86,9 +84,7 @@ export default function QuizTab() {
     setCurrentPage(1);
   }, [activeView]);
   const executeDeleteQuiz = async () => {
-    const {
-      t
-    } = useTranslation();
+
     if (!deleteQuizId) return;
     setIsDeletingQuiz(true);
     try {
@@ -116,9 +112,7 @@ export default function QuizTab() {
     }
   };
   const handlePublishQuiz = async (quizId: number) => {
-    const {
-      t
-    } = useTranslation();
+
     const res = await updateQuizStatus(quizId, 'Active');
     if (res.success) {
       Toast.show({
@@ -171,9 +165,7 @@ export default function QuizTab() {
   }}>
       <View className="flex-row border-b border-gray-200 mb-4 bg-white rounded-lg p-1 shadow-sm mx-1">
         {(['Draft', 'Active', 'Completed'] as const).map(view => {
-        const {
-          t
-        } = useTranslation();
+
         return <TouchableOpacity key={view} onPress={() => setActiveView(view)} className={`flex-1 items-center py-2 rounded-md ${activeView === view ? 'bg-[#43C17A]' : ''}`}>
             <Text className={`${activeView === view ?'text-white' : 'text-gray-500'}`} style={{ fontFamily: fonts.bold }}>
               {t(view)}

@@ -10,6 +10,8 @@ import { upsertFacultyAssignment } from '@/lib/helpers/faculty/assignment/upsert
 import { Assignment } from './AssignmentCard';
 import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
+import { useUser } from '@/utils/context/UserContext';
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 
 type Props = {
   initialData?: Assignment | null;
@@ -35,6 +37,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [sectionSelect, setSectionSelect] = useState('');
+  const { collegeEducationType } = useUser();
 
   // Date picker states
   const [isFromDatePickerVisible, setFromDatePickerVisible] = useState(false);
@@ -61,10 +64,10 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
         if (!auth?.user) throw new Error('Not authenticated');
 
         const { data: userRecord } = await supabase.
-        from('users').
-        select('userId').
-        eq('auth_id', auth.user.id).
-        single();
+          from('users').
+          select('userId').
+          eq('auth_id', auth.user.id).
+          single();
 
         if (!userRecord) throw new Error('User record not found');
 
@@ -109,7 +112,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
         map.set(s.collegeSubjectId, subjectObj.subjectName);
       }
     });
-    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+    return Array.from(map.entries()).map(([id, name]) => ({ id: String(id), name }));
   }, [facultySections]);
 
   useEffect(() => {
@@ -122,17 +125,17 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
     if (!form.subjectId) return [];
     const map = new Map();
     facultySections.
-    filter((s) => s.collegeSubjectId === Number(form.subjectId)).
-    forEach((s) => {
-      const sectionObj = getSafe(s.college_sections);
-      const branchObj = getSafe(sectionObj?.college_branch);
-      if (sectionObj && branchObj) {
-        const bId = sectionObj.collegeBranchId;
-        const bName = branchObj.collegeBranchCode;
-        if (!map.has(bId)) map.set(bId, bName);
-      }
-    });
-    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+      filter((s) => s.collegeSubjectId === Number(form.subjectId)).
+      forEach((s) => {
+        const sectionObj = getSafe(s.college_sections);
+        const branchObj = getSafe(sectionObj?.college_branch);
+        if (sectionObj && branchObj) {
+          const bId = sectionObj.collegeBranchId;
+          const bName = branchObj.collegeBranchCode;
+          if (!map.has(bId)) map.set(bId, bName);
+        }
+      });
+    return Array.from(map.entries()).map(([id, name]) => ({ id: String(id), name }));
   }, [facultySections, form.subjectId]);
 
   useEffect(() => {
@@ -142,67 +145,67 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
   }, [availableBranches, form.branchId]);
 
   const availableSections = useMemo(() => {
-    if (!form.subjectId || !form.branchId || !form.yearId) return [];
+    if (!form.subjectId || (!isSchoolEducation(collegeEducationType) && !form.branchId) || !form.yearId) return [];
     const map = new Map();
     facultySections.
-    filter((s) => {
-      const sectionObj = getSafe(s.college_sections);
-      return (
-        s.collegeSubjectId === Number(form.subjectId) &&
-        sectionObj?.collegeBranchId === Number(form.branchId) &&
-        s.collegeAcademicYearId === Number(form.yearId));
+      filter((s) => {
+        const sectionObj = getSafe(s.college_sections);
+        return (
+          s.collegeSubjectId === Number(form.subjectId) &&
+          (isSchoolEducation(collegeEducationType) || sectionObj?.collegeBranchId === Number(form.branchId)) &&
+          s.collegeAcademicYearId === Number(form.yearId));
 
-    }).
-    forEach((s) => {
-      const sectionObj = getSafe(s.college_sections);
-      if (sectionObj) {
-        const secId = s.collegeSectionsId;
-        const secName = sectionObj.collegeSections;
-        if (!map.has(secId)) map.set(secId, secName);
-      }
-    });
-    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+      }).
+      forEach((s) => {
+        const sectionObj = getSafe(s.college_sections);
+        if (sectionObj) {
+          const secId = s.collegeSectionsId;
+          const secName = sectionObj.collegeSections;
+          if (!map.has(secId)) map.set(secId, secName);
+        }
+      });
+    return Array.from(map.entries()).map(([id, name]) => ({ id: String(id), name }));
   }, [facultySections, form.subjectId, form.branchId, form.yearId]);
 
   const availableYears = useMemo(() => {
-    if (!form.subjectId || !form.branchId) return [];
+    if (!form.subjectId || (!isSchoolEducation(collegeEducationType) && !form.branchId)) return [];
     const map = new Map();
     facultySections.
-    filter((s) => {
-      const sectionObj = getSafe(s.college_sections);
-      return (
-        s.collegeSubjectId === Number(form.subjectId) &&
-        sectionObj?.collegeBranchId === Number(form.branchId));
+      filter((s) => {
+        const sectionObj = getSafe(s.college_sections);
+        return (
+          s.collegeSubjectId === Number(form.subjectId) &&
+          (isSchoolEducation(collegeEducationType) || sectionObj?.collegeBranchId === Number(form.branchId)));
 
-    }).
-    forEach((s) => {
-      const yearObj = getSafe(s.college_academic_year);
-      if (yearObj) {
-        const yId = s.collegeAcademicYearId;
-        const yName = yearObj.collegeAcademicYear;
-        if (!map.has(yId)) map.set(yId, yName);
-      }
-    });
-    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+      }).
+      forEach((s) => {
+        const yearObj = getSafe(s.college_academic_year);
+        if (yearObj) {
+          const yId = s.collegeAcademicYearId;
+          const yName = yearObj.collegeAcademicYear;
+          if (!map.has(yId)) map.set(yId, yName);
+        }
+      });
+    return Array.from(map.entries()).map(([id, name]) => ({ id: String(id), name }));
   }, [facultySections, form.subjectId, form.branchId]);
 
   const validateForm = () => {
     if (!facultyId) return false;
-    if (!form.subjectId) {Toast.show({ type: 'error', text1: 'Please select a Subject.' });return false;}
-    if (!form.topicName.trim()) {Toast.show({ type: 'error', text1: 'Topic Name is required.' });return false;}
-    if (!form.totalMarks) {Toast.show({ type: 'error', text1: 'Total Marks are required.' });return false;}
-    if (!form.branchId) {Toast.show({ type: 'error', text1: 'Please select a Branch.' });return false;}
-    if (form.sectionIds.length === 0) {Toast.show({ type: 'error', text1: 'Please select at least one Section.' });return false;}
-    if (!form.yearId) {Toast.show({ type: 'error', text1: 'Please select an Academic Year.' });return false;}
-    if (!form.fromDate || !form.toDate) {Toast.show({ type: 'error', text1: 'Both start and end dates are required.' });return false;}
+    if (!form.subjectId) { Toast.show({ type: 'error', text1: 'Please select a Subject.' }); return false; }
+    if (!form.topicName.trim()) { Toast.show({ type: 'error', text1: 'Topic Name is required.' }); return false; }
+    if (!form.totalMarks) { Toast.show({ type: 'error', text1: 'Total Marks are required.' }); return false; }
+    if (!isSchoolEducation(collegeEducationType) && !form.branchId) { Toast.show({ type: 'error', text1: 'Please select a Branch.' }); return false; }
+    if (!form.yearId) { Toast.show({ type: 'error', text1: 'Please select an Academic Year.' }); return false; }
+    if (form.sectionIds.length === 0) { Toast.show({ type: 'error', text1: 'Please select atleast one Section.' }); return false; }
+    if (!form.fromDate || !form.toDate) { Toast.show({ type: 'error', text1: 'Both start and end dates are required.' }); return false; }
 
     const fromDateObj = new Date(form.fromDate);
     const toDateObj = new Date(form.toDate);
     const todayObj = new Date(today);
 
-    if (!initialData && fromDateObj < todayObj) {Toast.show({ type: 'error', text1: 'Assigned date cannot be in the past.' });return false;}
-    if (!initialData && toDateObj < todayObj) {Toast.show({ type: 'error', text1: 'Submission deadline cannot be in the past.' });return false;}
-    if (fromDateObj > toDateObj) {Toast.show({ type: 'error', text1: 'Assigned date must be before the submission deadline.' });return false;}
+    if (!initialData && fromDateObj < todayObj) { Toast.show({ type: 'error', text1: 'Assigned date cannot be in the past.' }); return false; }
+    if (!initialData && toDateObj < todayObj) { Toast.show({ type: 'error', text1: 'Submission deadline cannot be in the past.' }); return false; }
+    if (fromDateObj > toDateObj) { Toast.show({ type: 'error', text1: 'Assigned date must be before the submission deadline.' }); return false; }
 
     return true;
   };
@@ -220,7 +223,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
           topicName: form.topicName.trim(),
           dateAssigned: form.fromDate,
           submissionDeadline: form.toDate,
-          collegeBranchId: form.branchId,
+          collegeBranchId: isSchoolEducation(collegeEducationType) ? null : form.branchId,
           collegeSectionsId: sectionId,
           collegeAcademicYearId: form.yearId,
           marks: form.totalMarks
@@ -252,7 +255,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
   }
 
   return (
-    <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+    <ScrollView className="flex-1 w-full mb-20" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
         <Text className="text-xl text-gray-900" style={{ fontFamily: fonts.semiBold }}>
           {initialData ? t('Edit Assignment') : t('Add New Assignment')}
@@ -260,17 +263,20 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
       </View>
 
       <View className="bg-white p-4 rounded-xl">
-        {}
+        { }
         <View className="mb-4">
           <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Subject", "Subject")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
             <Picker
               selectedValue={form.subjectId}
               onValueChange={(val) => setForm({ ...form, subjectId: val, branchId: '', sectionIds: [], yearId: '' })}
-              enabled={uniqueSubjects.length > 1}>
-              
-              <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" />
-              {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
+              enabled={uniqueSubjects.length > 1}
+              style={{ fontFamily: fonts.regular }}
+              itemStyle={{ fontFamily: fonts.regular }}
+            >
+
+              <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
+              {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} style={{ fontFamily: fonts.regular }} />)}
             </Picker>
           </View>
         </View>
@@ -282,8 +288,9 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
             value={form.topicName}
             onChangeText={(val) => setForm({ ...form, topicName: val })}
             placeholder={t("Auto.Attr.egImplementatio", "e.g., Implementation of Stack and Queue")}
+            style={{ fontFamily: fonts.regular }}
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-black" />
-          
+
         </View>
 
         {/* Total Marks */}
@@ -297,24 +304,29 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
             }}
             keyboardType="number-pad"
             placeholder={t("Auto.Attr.eg100", "e.g., 100")}
+            style={{ fontFamily: fonts.regular }}
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-black" />
-          
+
         </View>
 
         {/* Branch */}
-        <View className="mb-4">
-          <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Branch", "Branch")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
-          <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
-            <Picker
-              selectedValue={form.branchId}
-              onValueChange={(val) => setForm({ ...form, branchId: val, sectionIds: [], yearId: '' })}
-              enabled={!!form.subjectId && availableBranches.length > 1}>
-              
-              <Picker.Item label={t("Auto.Attr.SelectBranch", "Select Branch")} value="" color="#9CA3AF" />
-              {availableBranches.map((b) => <Picker.Item key={b.id} label={b.name} value={b.id} />)}
-            </Picker>
+        {!isSchoolEducation(collegeEducationType) && (
+          <View className="mb-4">
+            <Text className="mb-1 text-sm text-gray-700" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Branch", "Branch")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
+            <View className="border border-gray-300 rounded-md bg-gray-50 overflow-hidden">
+              <Picker
+                selectedValue={form.branchId}
+                onValueChange={(val) => setForm({ ...form, branchId: val, sectionIds: [], yearId: '' })}
+                enabled={!!form.subjectId && availableBranches.length > 1}
+                style={{ fontFamily: fonts.regular }}
+                itemStyle={{ fontFamily: fonts.regular }}>
+
+                <Picker.Item label={t("Auto.Attr.SelectBranch", "Select Branch")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
+                {availableBranches.map((b) => <Picker.Item key={b.id} label={b.name} value={b.id} style={{ fontFamily: fonts.regular }} />)}
+              </Picker>
+            </View>
           </View>
-        </View>
+        )}
 
         {/* Year */}
         <View className="mb-4">
@@ -323,10 +335,12 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
             <Picker
               selectedValue={form.yearId}
               onValueChange={(val) => setForm({ ...form, yearId: val, sectionIds: [] })}
-              enabled={!!form.branchId}>
-              
-              <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" />
-              {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} />)}
+              enabled={isSchoolEducation(collegeEducationType) ? !!form.subjectId : !!form.branchId}
+              style={{ fontFamily: fonts.regular }}
+              itemStyle={{ fontFamily: fonts.regular }}>
+
+              <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
+              {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} style={{ fontFamily: fonts.regular }} />)}
             </Picker>
           </View>
         </View>
@@ -355,11 +369,13 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
                   }
                   setSectionSelect('');
                 }}
-                enabled={!!form.yearId}>
-                
-                <Picker.Item label={form.yearId ? "Select section" : "Select year first"} value="" color="#9CA3AF" />
+                enabled={!!form.yearId}
+                style={{ fontFamily: fonts.regular }}
+                itemStyle={{ fontFamily: fonts.regular }}>
+
+                <Picker.Item label={form.yearId ? "Select section" : "Select year first"} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
                 {availableSections.filter((s) => !form.sectionIds.includes(String(s.id))).map((s) =>
-                <Picker.Item key={s.id} label={s.name} value={s.id} />
+                  <Picker.Item key={s.id} label={s.name} value={s.id} style={{ fontFamily: fonts.regular }} />
                 )}
               </Picker>
             </View>
@@ -381,7 +397,7 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
                 setFromDatePickerVisible(false);
               }}
               onCancel={() => setFromDatePickerVisible(false)} />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.SubmissionDeadl", "Submission Deadline")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
@@ -396,24 +412,24 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
                 setToDatePickerVisible(false);
               }}
               onCancel={() => setToDatePickerVisible(false)} />
-            
+
           </View>
         </View>
 
-        {}
+        { }
         <View className="flex-row gap-3 mt-4">
           <TouchableOpacity
             disabled={isSaving}
             onPress={handleSubmit}
             className={`flex-1 items-center justify-center py-3 rounded-md ${isSaving ? 'bg-[#43C17A]/70' : 'bg-[#43C17A]'}`}>
-            
+
             {isSaving ? <ActivityIndicator color="white" /> : <Text className="text-white" style={{ fontFamily: fonts.bold }}>{t('Save')}</Text>}
           </TouchableOpacity>
           <TouchableOpacity
             disabled={isSaving}
             onPress={onCancel}
             className="flex-1 items-center justify-center py-3 rounded-md border border-gray-300">
-            
+
             <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t('Cancel')}</Text>
           </TouchableOpacity>
         </View>

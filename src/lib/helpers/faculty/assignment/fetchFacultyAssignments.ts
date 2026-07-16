@@ -34,13 +34,12 @@ export const fetchFacultyAssignments = async (
 
     const enrichedData = await Promise.all(
       (data || []).map(async (assignment: any) => {
-        const { count: expectedStudentsCount, error: stuError } = await supabase
+        let studentQuery = supabase
           .from("students")
           .select(
             "studentId, student_academic_history!inner(collegeAcademicYearId, collegeSectionsId)",
             { count: "exact", head: true },
           )
-          .eq("collegeBranchId", assignment.collegeBranchId)
           .eq(
             "student_academic_history.collegeAcademicYearId",
             assignment.collegeAcademicYearId,
@@ -51,6 +50,14 @@ export const fetchFacultyAssignments = async (
           )
           .eq("student_academic_history.isCurrent", true)
           .eq("isActive", true);
+
+        if (assignment.collegeBranchId) {
+          studentQuery = studentQuery.eq("collegeBranchId", assignment.collegeBranchId);
+        } else {
+          studentQuery = studentQuery.is("collegeBranchId", null);
+        }
+
+        const { count: expectedStudentsCount, error: stuError } = await studentQuery;
 
         if (stuError)
           console.error("Error fetching student count:", stuError.message);

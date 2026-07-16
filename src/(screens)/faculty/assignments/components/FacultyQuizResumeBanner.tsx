@@ -104,8 +104,7 @@ export default function FacultyQuizResumeBanner({ marginTop = 0, onResume }: Fac
 
   return (
     <View className="w-full bg-[#FFF8E7] border border-[#F5C842] rounded-xl p-4 mb-4" style={{ marginTop }}>
-      <Text className="text-sm text-[#282828] mb-3" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ContinueLeftove", "\uD83D\uDD50 Continue Leftover Quizzes")}
-
+      <Text className="text-sm text-[#282828] mb-3" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ContinueLeftove", "🕐 Continue Leftover Quizzes")}
       </Text>
 
       <View className="flex-col gap-2">

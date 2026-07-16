@@ -3,9 +3,9 @@ import { supabase } from "@/lib/supabaseClient";
 export async function saveAcademicUnit(params: {
   collegeId: number;
   collegeEducationId: number;
-  collegeBranchId: number;
+  collegeBranchId: number | null;
   collegeAcademicYearId: number;
-  collegeSemesterId: number;
+  collegeSemesterId: number | null;
   collegeSubjectId: number;
   collegeSectionId: number;
   collegeSubjectUnitId: number;

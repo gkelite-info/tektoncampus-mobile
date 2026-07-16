@@ -54,18 +54,18 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
         if (!auth?.user) throw new Error('Not authenticated');
 
         const { data: userRecord } = await supabase.
-        from('users').
-        select('userId').
-        eq('auth_id', auth.user.id).
-        single();
+          from('users').
+          select('userId').
+          eq('auth_id', auth.user.id).
+          single();
 
         if (!userRecord) throw new Error('User record not found');
 
         const { data: facultyData } = await supabase.
-        from('faculty').
-        select('facultyId').
-        eq('userId', userRecord.userId).
-        single();
+          from('faculty').
+          select('facultyId').
+          eq('userId', userRecord.userId).
+          single();
 
         if (!facultyData) throw new Error('Faculty record not found');
         setFacultyId(facultyData.facultyId);
@@ -100,7 +100,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
 
             setExistingFiles(
               (discussionData.discussion_file_uploads ?? []).
-              filter((f: any) => f.isActive && !f.is_deleted && !f.deletedAt)
+                filter((f: any) => f.isActive && !f.is_deleted && !f.deletedAt)
             );
           }
         }
@@ -130,13 +130,13 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
     if (!form.selectedSubjectId) return [];
     const map = new Map();
     facultySections.
-    filter((s) => s.collegeSubjectId === Number(form.selectedSubjectId)).
-    forEach((s) => {
-      const yearObj = getSafe(s.college_academic_year);
-      if (yearObj) {
-        map.set(s.collegeAcademicYearId, yearObj.collegeAcademicYear);
-      }
-    });
+      filter((s) => s.collegeSubjectId === Number(form.selectedSubjectId)).
+      forEach((s) => {
+        const yearObj = getSafe(s.college_academic_year);
+        if (yearObj) {
+          map.set(s.collegeAcademicYearId, yearObj.collegeAcademicYear);
+        }
+      });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.selectedSubjectId]);
 
@@ -144,17 +144,17 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
     if (!form.selectedSubjectId || !form.selectedYearId) return [];
     const map = new Map();
     facultySections.
-    filter(
-      (s) =>
-      s.collegeSubjectId === Number(form.selectedSubjectId) &&
-      s.collegeAcademicYearId === Number(form.selectedYearId)
-    ).
-    forEach((s) => {
-      const sectionObj = getSafe(s.college_sections);
-      if (sectionObj) {
-        map.set(s.collegeSectionsId, sectionObj.collegeSections);
-      }
-    });
+      filter(
+        (s) =>
+          s.collegeSubjectId === Number(form.selectedSubjectId) &&
+          s.collegeAcademicYearId === Number(form.selectedYearId)
+      ).
+      forEach((s) => {
+        const sectionObj = getSafe(s.college_sections);
+        if (sectionObj) {
+          map.set(s.collegeSectionsId, sectionObj.collegeSections);
+        }
+      });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [facultySections, form.selectedSubjectId, form.selectedYearId]);
 
@@ -192,12 +192,12 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
   };
 
   const handleSave = async () => {
-    if (!form.title.trim()) {Toast.show({ type: 'error', text1: 'Title is required' });return;}
-    if (!form.description.trim()) {Toast.show({ type: 'error', text1: 'Description is required' });return;}
-    if (!form.deadline) {Toast.show({ type: 'error', text1: 'Deadline is required' });return;}
-    if (!form.marks || Number(form.marks) <= 0) {Toast.show({ type: 'error', text1: 'Valid marks are required' });return;}
-    if (form.sectionIds.length === 0) {Toast.show({ type: 'error', text1: 'Please select at least one section' });return;}
-    if (!facultyId) {Toast.show({ type: 'error', text1: 'Faculty not found' });return;}
+    if (!form.title.trim()) { Toast.show({ type: 'error', text1: 'Title is required' }); return; }
+    if (!form.description.trim()) { Toast.show({ type: 'error', text1: 'Description is required' }); return; }
+    if (!form.deadline) { Toast.show({ type: 'error', text1: 'Deadline is required' }); return; }
+    if (!form.marks || Number(form.marks) <= 0) { Toast.show({ type: 'error', text1: 'Valid marks are required' }); return; }
+    if (form.sectionIds.length === 0) { Toast.show({ type: 'error', text1: 'Please select at least one section' }); return; }
+    if (!facultyId) { Toast.show({ type: 'error', text1: 'Faculty not found' }); return; }
 
     try {
       setIsSaving(true);
@@ -251,7 +251,7 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
   }
 
   return (
-    <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+    <ScrollView className="min-h-[57vh] w-full mb-20" showsVerticalScrollIndicator={false}>
       <View className="mb-4">
         <Text className="text-xl text-[#282828]" style={{ fontFamily: fonts.semiBold }}>
           {isEditMode ? t('Edit Discussion') : t('Create New Discussion')}
@@ -260,19 +260,21 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
       </View>
 
       <View className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        
-        {}
+
+        { }
         <View className="mb-4">
           <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Title", "Title")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
             value={form.title}
             onChangeText={(val) => setForm({ ...form, title: val })}
             placeholder={t("Auto.Attr.EnterDiscussion", "Enter Discussion Title here")}
-            className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black" />
-          
+            className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black"
+            style={{ fontFamily: fonts.regular }}
+          />
+
         </View>
 
-        {}
+        { }
         <View className="mb-4">
           <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Description", "Description")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
           <TextInput
@@ -282,48 +284,50 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
             multiline
             numberOfLines={4}
             textAlignVertical="top"
-            className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black min-h-[100px]" />
-          
+            className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black min-h-[100px]"
+            style={{ fontFamily: fonts.regular }}
+          />
+
         </View>
 
-        {}
+        { }
         <View className="mb-4">
-            <Text className="text-xs text-gray-400 mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.FILTERSECTIONS", "FILTER SECTIONS")}</Text>
-            <View className="flex-row gap-2 mb-2">
-                <View className="flex-1 border border-gray-200 rounded-md bg-white overflow-hidden">
-                    <Picker
+          <Text className="text-xs text-gray-400 mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.FILTERSECTIONS", "FILTER SECTIONS")}</Text>
+          <View className="flex-row gap-2 mb-2">
+            <View className="flex-1 border border-gray-200 rounded-md bg-white overflow-hidden">
+              <Picker
                 selectedValue={form.selectedSubjectId}
                 onValueChange={(val) => setForm({ ...form, selectedSubjectId: val, selectedYearId: '' })}>
-                
-                    <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" />
-                    {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
-                    </Picker>
-                </View>
-                <View className="flex-1 border border-gray-200 rounded-md bg-white overflow-hidden">
-                    <Picker
+
+                <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
+                {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} style={{ fontFamily: fonts.regular }} />)}
+              </Picker>
+            </View>
+            <View className="flex-1 border border-gray-200 rounded-md bg-white overflow-hidden">
+              <Picker
                 selectedValue={form.selectedYearId}
                 onValueChange={(val) => setForm({ ...form, selectedYearId: val })}
                 enabled={!!form.selectedSubjectId}>
-                
-                    <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" />
-                    {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} />)}
-                    </Picker>
-                </View>
+
+                <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
+                {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} style={{ fontFamily: fonts.regular }} />)}
+              </Picker>
             </View>
-            <View className="flex-row items-center gap-2 border border-gray-200 rounded-md p-2 bg-white flex-wrap">
-                {form.sectionIds.map((id) => {
+          </View>
+          <View className="flex-row items-center gap-2 border border-gray-200 rounded-md p-2 bg-white flex-wrap">
+            {form.sectionIds.map((id) => {
               const section = availableSections.find((s) => String(s.id) === id);
               return (
                 <View key={id} className="flex-row items-center bg-[#ECFDF5] px-2 py-1 rounded-full mr-1 mb-1">
-                            <Text className="text-[#065F46] text-[10px]" style={{ fontFamily: fonts.regular }}>{section?.name || `ID ${id}`}</Text>
-                            <TouchableOpacity onPress={() => setForm((prev) => ({ ...prev, sectionIds: prev.sectionIds.filter((sid) => sid !== id) }))}>
-                                <Text className="text-red-500 ml-1 text-xs" style={{ fontFamily: fonts.bold }}>×</Text>
-                            </TouchableOpacity>
-                        </View>);
+                  <Text className="text-[#065F46] text-[10px]" style={{ fontFamily: fonts.regular }}>{section?.name || `ID ${id}`}</Text>
+                  <TouchableOpacity onPress={() => setForm((prev) => ({ ...prev, sectionIds: prev.sectionIds.filter((sid) => sid !== id) }))}>
+                    <Text className="text-red-500 ml-1 text-xs" style={{ fontFamily: fonts.bold }}>×</Text>
+                  </TouchableOpacity>
+                </View>);
 
             })}
-                <View className="flex-1 min-w-[120px] bg-gray-50 rounded-md overflow-hidden h-8 justify-center">
-                    <Picker
+            <View className="flex-1 min-w-[120px] bg-gray-50 rounded-md overflow-hidden h-8 justify-center">
+              <Picker
                 selectedValue={sectionSelect}
                 onValueChange={(val) => {
                   if (val && !form.sectionIds.includes(val)) {
@@ -332,14 +336,14 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
                   setSectionSelect('');
                 }}
                 enabled={!!form.selectedYearId}>
-                
-                        <Picker.Item label={t("Auto.Attr.Selectsection", "Select section")} value="" color="#9CA3AF" style={{ fontSize: 12 }} />
-                        {availableSections.filter((s) => !form.sectionIds.includes(String(s.id))).map((s) =>
-                <Picker.Item key={s.id} label={s.name} value={s.id} style={{ fontSize: 12 }} />
+
+                <Picker.Item label={t("Auto.Attr.Selectsection", "Select section")} value="" color="#9CA3AF" style={{ fontSize: 12, fontFamily: fonts.regular }} />
+                {availableSections.filter((s) => !form.sectionIds.includes(String(s.id))).map((s) =>
+                  <Picker.Item key={s.id} label={s.name} value={s.id} style={{ fontSize: 12, fontFamily: fonts.regular }} />
                 )}
-                    </Picker>
-                </View>
+              </Picker>
             </View>
+          </View>
         </View>
 
         {/* Deadline & Marks */}
@@ -352,9 +356,9 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
-              onConfirm={(date) => {setForm((prev) => ({ ...prev, deadline: date.toISOString().split('T')[0] }));setDatePickerVisible(false);}}
+              onConfirm={(date) => { setForm((prev) => ({ ...prev, deadline: date.toISOString().split('T')[0] })); setDatePickerVisible(false); }}
               onCancel={() => setDatePickerVisible(false)} />
-            
+
           </View>
           <View className="flex-1">
             <Text className="mb-1 text-sm text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Marks", "Marks")}<Text className="text-red-500" style={{ fontFamily: fonts.regular }}>*</Text></Text>
@@ -363,52 +367,54 @@ export default function FacultyDiscussionForm({ discussionId, isEditMode, onCanc
               onChangeText={(val) => setForm({ ...form, marks: val })}
               keyboardType="number-pad"
               placeholder={t("Auto.Attr.eg100", "e.g. 100")}
-              className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black" />
-            
+              className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black"
+              style={{ fontFamily: fonts.regular }}
+            />
+
           </View>
         </View>
 
-        {}
+        { }
         <View className="mt-2 mb-4">
-            <Text className="text-[#282828] text-sm mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ProjectFiles", "Project Files")}</Text>
-            <TouchableOpacity onPress={handlePickFile} className="border-2 border-dashed border-gray-300 rounded-xl p-6 items-center justify-center bg-gray-50/50 mb-3">
-                <Text className="text-gray-500 text-sm mb-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Taptouploadfile", "Tap to upload files")}</Text>
-            </TouchableOpacity>
-            
-            {existingFiles.length > 0 &&
-          <View className="flex-col gap-2 mb-2">
-                    {existingFiles.map((file) =>
-            <View key={file.discussionFileUploadId} className="flex-row items-center justify-between border border-blue-100 rounded-md p-2 bg-white">
-                            <View className="flex-row items-center flex-1 pr-2">
-                                <File size={20} color="#3B82F6" weight="fill" />
-                                <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{file.fileUrl.split('/').pop()}</Text>
-                            </View>
-                            <TouchableOpacity onPress={() => removeExistingFile(file.discussionFileUploadId)} className="p-1.5 bg-red-50 rounded-full">
-                                <Trash size={16} color="#EF4444" />
-                            </TouchableOpacity>
-                        </View>
-            )}
+          <Text className="text-[#282828] text-sm mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ProjectFiles", "Project Files")}</Text>
+          <TouchableOpacity onPress={handlePickFile} className="border-2 border-dashed border-gray-300 rounded-xl p-6 items-center justify-center bg-gray-50/50 mb-3">
+            <Text className="text-gray-500 text-sm mb-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Taptouploadfile", "Tap to upload files")}</Text>
+          </TouchableOpacity>
+
+          {existingFiles.length > 0 &&
+            <View className="flex-col gap-2 mb-2">
+              {existingFiles.map((file) =>
+                <View key={file.discussionFileUploadId} className="flex-row items-center justify-between border border-blue-100 rounded-md p-2 bg-white">
+                  <View className="flex-row items-center flex-1 pr-2">
+                    <File size={20} color="#3B82F6" weight="fill" />
+                    <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{file.fileUrl.split('/').pop()}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => removeExistingFile(file.discussionFileUploadId)} className="p-1.5 bg-red-50 rounded-full">
+                    <Trash size={16} color="#EF4444" />
+                  </TouchableOpacity>
                 </View>
+              )}
+            </View>
           }
 
-            {newFiles.length > 0 &&
-          <View className="flex-col gap-2">
-                    {newFiles.map((file, idx) =>
-            <View key={idx} className="flex-row items-center justify-between border border-red-100 rounded-md p-2 bg-white">
-                            <View className="flex-row items-center flex-1 pr-2">
-                                <File size={20} color="#EF4444" weight="fill" />
-                                <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{file.name}</Text>
-                            </View>
-                            <TouchableOpacity onPress={() => removeNewFile(idx)} className="p-1.5 bg-red-50 rounded-full">
-                                <Trash size={16} color="#EF4444" />
-                            </TouchableOpacity>
-                        </View>
-            )}
+          {newFiles.length > 0 &&
+            <View className="flex-col gap-2">
+              {newFiles.map((file, idx) =>
+                <View key={idx} className="flex-row items-center justify-between border border-red-100 rounded-md p-2 bg-white">
+                  <View className="flex-row items-center flex-1 pr-2">
+                    <File size={20} color="#EF4444" weight="fill" />
+                    <Text className="text-sm ml-2 text-[#282828]" numberOfLines={1} style={{ fontFamily: fonts.regular }}>{file.name}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => removeNewFile(idx)} className="p-1.5 bg-red-50 rounded-full">
+                    <Trash size={16} color="#EF4444" />
+                  </TouchableOpacity>
                 </View>
+              )}
+            </View>
           }
         </View>
 
-        {}
+        { }
         <View className="flex-row items-center justify-end mt-2 border-t border-gray-100 pt-4 gap-3">
           <TouchableOpacity onPress={onCancel} disabled={isSaving} className="px-6 py-2 rounded-md border border-[#7B7B7B]">
             <Text className="text-[#7B7B7B] text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancel", "Cancel")}</Text>

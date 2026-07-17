@@ -17,11 +17,12 @@ interface Props {
   sections?: SectionOption[];
   selectedClass?: string;
   selectedSection?: string;
-  onFilterChange?: (type: "class" | "section", value: string) => void;
+  onFilterChange?: (type: "class" | "section" | "calendarType", value: string) => void;
   loadingFilters?: boolean;
   onCancelEditClick?: () => void;
   onMarkCancelClick?: () => void;
   isCancellingMode?: boolean;
+  calendarType?: "Single" | "Bulk";
 }
 function AttendanceToggle({
   value,
@@ -85,7 +86,8 @@ export default function StuAttendanceTable({
   loadingFilters = false,
   onCancelEditClick,
   onMarkCancelClick,
-  isCancellingMode
+  isCancellingMode,
+  calendarType = "Single"
 }: Props) {
   const {
     t
@@ -93,10 +95,13 @@ export default function StuAttendanceTable({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   // Custom simple filters
+  const [showCalendarTypeFilter, setShowCalendarTypeFilter] = useState(false);
   const [showClassFilter, setShowClassFilter] = useState(false);
   const [showSectionFilter, setShowSectionFilter] = useState(false);
   const [showSortFilter, setShowSortFilter] = useState(false);
   const [sort, setSort] = useState("All");
+
+  const visibleClasses = classes.filter(c => calendarType === "Bulk" ? c.id.startsWith("bulk-") : !c.id.startsWith("bulk-"));
   const filtered = students.filter(s => sort === "All" || s.attendance === sort);
   const updateAttendance = (id: string, value: UIStudent["attendance"]) => {
     if (!isEditing) return;
@@ -133,13 +138,23 @@ export default function StuAttendanceTable({
       <View className="flex-col gap-4 mb-2">
         {}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-3 py-1">
-          {!isTopicMode && onFilterChange && <TouchableOpacity onPress={() => setShowClassFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
-            
-              <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>
-                {classes.find(c => c.id === selectedClass)?.label || "No Classes Today"}
-              </Text>
-              <CaretDown size={14} color="#43C17A" weight="bold" />
-            </TouchableOpacity>}
+          {!isTopicMode && onFilterChange && (
+            <>
+              <TouchableOpacity onPress={() => setShowCalendarTypeFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
+                <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>
+                  {calendarType}
+                </Text>
+                <CaretDown size={14} color="#43C17A" weight="bold" />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => setShowClassFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
+                <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>
+                  {visibleClasses.find(c => c.id === selectedClass)?.label || "No Classes Today"}
+                </Text>
+                <CaretDown size={14} color="#43C17A" weight="bold" />
+              </TouchableOpacity>
+            </>
+          )}
 
           {!isTopicMode && onFilterChange && <TouchableOpacity onPress={() => setShowSectionFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
             
@@ -258,16 +273,34 @@ export default function StuAttendanceTable({
       </View>
 
       {}
+      <Modal visible={showCalendarTypeFilter} transparent animationType="slide">
+        <View className="flex-1 justify-end bg-black/50">
+          <View className="bg-white rounded-t-3xl p-6 min-h-[250px]">
+            <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>Select Calendar Type</Text>
+            <ScrollView>
+              {["Single", "Bulk"].map(t => <TouchableOpacity key={t} onPress={() => {
+              onFilterChange && onFilterChange("calendarType", t);
+              setShowCalendarTypeFilter(false);
+            }} className="py-3 border-b border-gray-100">
+                  <Text className={`text-base ${calendarType === t ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{t}</Text>
+                </TouchableOpacity>)}
+            </ScrollView>
+            <TouchableOpacity onPress={() => setShowCalendarTypeFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
+              <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <Modal visible={showClassFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
             <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SelectClass", "Select Class")}</Text>
             <ScrollView>
-              {classes.map(c => <TouchableOpacity key={c.id} onPress={() => {
+              {visibleClasses.map(c => <TouchableOpacity key={c.id} onPress={() => {
               onFilterChange && onFilterChange("class", c.id);
               setShowClassFilter(false);
             }} className="py-3 border-b border-gray-100">
-                
                   <Text className={`text-base ${selectedClass === c.id ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{c.label}</Text>
                 </TouchableOpacity>)}
             </ScrollView>

@@ -4,7 +4,7 @@ type AcademicDropdownParams = {
     collegeId: number;
  
     educationId?: number;
-    branchId?: number;
+    branchId?: number | null;
     academicYearId?: number;
     semester?: number;
  
@@ -61,7 +61,7 @@ export function fetchAcademicDropdowns(params: {
     type: "academicYear";
     collegeId: number;
     educationId: number;
-    branchId: number;
+    branchId?: number | null;
 }): Promise<AcademicDropdownMap["academicYear"][]>;
  
 export function fetchAcademicDropdowns(params: {
@@ -85,7 +85,7 @@ export function fetchAcademicDropdowns(params: {
     type: "section";
     collegeId: number;
     educationId: number;
-    branchId: number;
+    branchId?: number | null;
     academicYearId: number;
 }): Promise<AcademicDropdownMap["section"][]>;
  
@@ -134,15 +134,21 @@ export async function fetchAcademicDropdowns(
  
  
         case "academicYear": {
-            if (!educationId || !branchId) return [];
+            if (!educationId) return [];
  
-            const { data, error } = await supabase
+            let query = supabase
                 .from("college_academic_year")
                 .select("collegeAcademicYearId, collegeAcademicYear")
                 .eq("collegeId", collegeId)
-                .eq("collegeEducationId", educationId)
-                .eq("collegeBranchId", branchId)
-                .order("collegeAcademicYear");
+                .eq("collegeEducationId", educationId);
+                
+            if (branchId) {
+                query = query.eq("collegeBranchId", branchId);
+            } else {
+                query = query.is("collegeBranchId", null);
+            }
+            
+            const { data, error } = await query.order("collegeAcademicYear");
  
             if (error) throw error;
             return data;
@@ -197,17 +203,23 @@ export async function fetchAcademicDropdowns(
         }
  
         case "section": {
-            if (!collegeId || !educationId || !branchId || !academicYearId) return [];
+            if (!collegeId || !educationId || !academicYearId) return [];
  
-            const { data, error } = await supabase
+            let query = supabase
                 .from("college_sections")
                 .select("collegeSectionsId, collegeSections")
                 .eq("collegeId", collegeId)
                 .eq("collegeEducationId", educationId)
-                .eq("collegeBranchId", branchId)
                 .eq("collegeAcademicYearId", academicYearId)
-                .eq("isActive", true)
-                .order("collegeSections");
+                .eq("isActive", true);
+                
+            if (branchId) {
+                query = query.eq("collegeBranchId", branchId);
+            } else {
+                query = query.is("collegeBranchId", null);
+            }
+            
+            const { data, error } = await query.order("collegeSections");
  
             if (error) throw error;
             return data;

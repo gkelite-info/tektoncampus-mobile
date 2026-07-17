@@ -14,13 +14,16 @@ import RequestLeaveModal from './modals/RequestLeaveModal';
 import { Avatar } from '@/components/Avatar';
 import ConfirmStatusModal from './modals/ConfirmStatusModal';
 import FacultyLeaveDetailsModal from './modals/FacultyLeaveDetailsModal';
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 export default function LeaveRequestsScreen() {
   const {
     t
   } = useTranslation();
   const {
-    userId
+    userId,
+    collegeEducationType
   } = useUser();
+  const isSchool = isSchoolEducation(collegeEducationType);
   const [facultyId, setFacultyId] = useState<number | null>(null);
   const [mainTab, setMainTab] = useState<'students' | 'my_leaves' | 'tagged'>('students');
   const [activeTab, setActiveTab] = useState<'all' | 'approved' | 'pending' | 'rejected'>('all');
@@ -141,8 +144,8 @@ export default function LeaveRequestsScreen() {
           <Avatar src={item.photo} size={40} />
           <View className="flex-1">
             <Text style={[{ fontFamily: fonts.bold }]} className="text-[#282828] text-sm">{item.name}</Text>
-            <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-500 text-xs">{t("Auto.Common.ID", "ID:")}<Text style={[{ fontFamily: fonts.semiBold }]} className=" text-gray-700">{item.rollNo}</Text> • {item.branch}</Text>
-            <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-500 text-xs">{item.semester}</Text>
+            <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-500 text-xs">{t("Auto.Common.ID", "ID:")}<Text style={[{ fontFamily: fonts.semiBold }]} className=" text-gray-700">{item.rollNo}</Text>{!isSchool && ` • ${item.branch}`}</Text>
+            {!isSchool && <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-500 text-xs">{item.semester}</Text>}
           </View>
         </View>
         <View className={`px-2.5 py-1 rounded-full ${item.status === 'approved' ? 'bg-[#E7F8EE]' : item.status === 'rejected' ? 'bg-[#FFE5E5]' : 'bg-[#FFF4EB]'}`}>

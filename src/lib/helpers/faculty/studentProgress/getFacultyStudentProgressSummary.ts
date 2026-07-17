@@ -8,7 +8,7 @@ type FacultyStudentProgressScope = {
   facultyId: number;
   collegeId: number;
   collegeEducationId: number;
-  collegeBranchId: number;
+  collegeBranchId: number | null;
   academicYearIds: number[];
   sectionIds: number[];
   subjectIds: number[];
@@ -36,13 +36,13 @@ type StudentAcademicHistoryRawRow = {
   collegeSectionsId: number;
   college_sections: { collegeSections: string }[] | { collegeSections: string } | null;
   college_academic_year:
-    | { collegeAcademicYear: string }[]
-    | { collegeAcademicYear: string }
-    | null;
+  | { collegeAcademicYear: string }[]
+  | { collegeAcademicYear: string }
+  | null;
   college_semester:
-    | { collegeSemester: number }[]
-    | { collegeSemester: number }
-    | null;
+  | { collegeSemester: number }[]
+  | { collegeSemester: number }
+  | null;
 };
 
 type AttendanceRecordRow = {
@@ -50,15 +50,15 @@ type AttendanceRecordRow = {
   status: string;
   markedAt?: string | null;
   calendar_event:
-    | {
-        facultyId: number | null;
-        subject: number | null;
-      }
-    | {
-        facultyId: number | null;
-        subject: number | null;
-      }[]
-    | null;
+  | {
+    facultyId: number | null;
+    subject: number | null;
+  }
+  | {
+    facultyId: number | null;
+    subject: number | null;
+  }[]
+  | null;
 };
 
 type MarkedStudentSummary = {
@@ -149,9 +149,9 @@ type FacultyWeightageConfigRow = {
   collegeSemesterId: number;
   totalPercentage: number;
   faculty_weightage_items:
-    | FacultyWeightageItemRow[]
-    | FacultyWeightageItemRow
-    | null;
+  | FacultyWeightageItemRow[]
+  | FacultyWeightageItemRow
+  | null;
 };
 
 type FacultySectionScopeRawRow = {
@@ -161,35 +161,35 @@ type FacultySectionScopeRawRow = {
   faculty_subject: { subjectName: string }[] | { subjectName: string } | null;
   college_sections: { collegeSections: string }[] | { collegeSections: string } | null;
   college_academic_year:
-    | { collegeAcademicYear: string }[]
-    | { collegeAcademicYear: string }
-    | null;
+  | { collegeAcademicYear: string }[]
+  | { collegeAcademicYear: string }
+  | null;
 };
 
 type CalendarEventScopeRawRow = {
   subject: number | null;
   college_subjects:
-    | { subjectName: string }[]
-    | { subjectName: string }
-    | null;
+  | { subjectName: string }[]
+  | { subjectName: string }
+  | null;
   calendar_event_section:
-    | {
-        collegeEducationId: number;
-        collegeBranchId: number;
-        collegeAcademicYearId: number;
-        collegeSectionId: number;
-        isActive: boolean | null;
-        deletedAt: string | null;
-        college_sections:
-          | { collegeSections: string }[]
-          | { collegeSections: string }
-          | null;
-        college_academic_year:
-          | { collegeAcademicYear: string }[]
-          | { collegeAcademicYear: string }
-          | null;
-      }[]
+  | {
+    collegeEducationId: number;
+    collegeBranchId: number;
+    collegeAcademicYearId: number;
+    collegeSectionId: number;
+    isActive: boolean | null;
+    deletedAt: string | null;
+    college_sections:
+    | { collegeSections: string }[]
+    | { collegeSections: string }
     | null;
+    college_academic_year:
+    | { collegeAcademicYear: string }[]
+    | { collegeAcademicYear: string }
+    | null;
+  }[]
+  | null;
 };
 
 type StudentScopeRow = {
@@ -450,11 +450,11 @@ const computeProgressPercent = (
 
   return totalWeight
     ? Math.round(
-        weightedComponents.reduce(
-          (sum, component) => sum + component.value * component.weight,
-          0,
-        ) / totalWeight,
-      )
+      weightedComponents.reduce(
+        (sum, component) => sum + component.value * component.weight,
+        0,
+      ) / totalWeight,
+    )
     : 0;
 };
 
@@ -535,8 +535,8 @@ async function resolveFacultyStudentProgressScope(
         scope.subjectLabel && scope.subjectLabel !== "N/A"
           ? scope.subjectLabel
           : uniqueJoinedLabel(
-              sectionRows.map((row) => firstJoin(row.faculty_subject)?.subjectName),
-            ),
+            sectionRows.map((row) => firstJoin(row.faculty_subject)?.subjectName),
+          ),
     };
   }
 
@@ -844,19 +844,19 @@ export async function getFacultyStudentProgressSummary(
       : Promise.resolve({ data: [], error: null }),
     userIds.length
       ? supabase
-          .from("user_profile")
-          .select("userId, profileUrl")
-          .in("userId", userIds)
-          .eq("is_deleted", false)
-          .is("deletedAt", null)
+        .from("user_profile")
+        .select("userId, profileUrl")
+        .in("userId", userIds)
+        .eq("is_deleted", false)
+        .is("deletedAt", null)
       : Promise.resolve({ data: [], error: null }),
     studentIds.length
       ? supabase
-          .from("student_pins")
-          .select("studentId, pinNumber")
-          .in("studentId", studentIds)
-          .eq("isActive", true)
-          .is("deletedAt", null)
+        .from("student_pins")
+        .select("studentId, pinNumber")
+        .in("studentId", studentIds)
+        .eq("isActive", true)
+        .is("deletedAt", null)
       : Promise.resolve({ data: [], error: null }),
     supabase
       .from("assignments")
@@ -931,38 +931,38 @@ export async function getFacultyStudentProgressSummary(
   ] = await Promise.all([
     assignmentIds.length && studentIds.length
       ? supabase
-          .from("student_assignments_submission")
-          .select("studentId, assignmentId, submittedOn, createdAt")
-          .in("studentId", studentIds)
-          .in("assignmentId", assignmentIds)
-          .is("deletedAt", null)
+        .from("student_assignments_submission")
+        .select("studentId, assignmentId, submittedOn, createdAt")
+        .in("studentId", studentIds)
+        .in("assignmentId", assignmentIds)
+        .is("deletedAt", null)
       : Promise.resolve({ data: [], error: null }),
     discussionIds.length
       ? supabase
-          .from("discussion_forum_sections")
-          .select("discussionId, collegeSectionsId, marks")
-          .in("discussionId", discussionIds)
-          .in("collegeSectionsId", scope.sectionIds)
-          .eq("is_deleted", false)
-          .is("deletedAt", null)
+        .from("discussion_forum_sections")
+        .select("discussionId, collegeSectionsId, marks")
+        .in("discussionId", discussionIds)
+        .in("collegeSectionsId", scope.sectionIds)
+        .eq("is_deleted", false)
+        .is("deletedAt", null)
       : Promise.resolve({ data: [], error: null }),
     discussionIds.length && studentIds.length
       ? supabase
-          .from("student_discussion_uploads")
-          .select("studentId, discussionId, marksObtained, submittedAt, createdAt")
-          .in("studentId", studentIds)
-          .in("discussionId", discussionIds)
-          .eq("isActive", true)
-          .eq("is_deleted", false)
+        .from("student_discussion_uploads")
+        .select("studentId, discussionId, marksObtained, submittedAt, createdAt")
+        .in("studentId", studentIds)
+        .in("discussionId", discussionIds)
+        .eq("isActive", true)
+        .eq("is_deleted", false)
       : Promise.resolve({ data: [], error: null }),
     quizIds.length && studentIds.length
       ? supabase
-          .from("quiz_submissions")
-          .select("quizId, studentId, totalMarksObtained, submittedAt, createdAt")
-          .in("studentId", studentIds)
-          .in("quizId", quizIds)
-          .eq("isActive", true)
-          .is("deletedAt", null)
+        .from("quiz_submissions")
+        .select("quizId, studentId, totalMarksObtained, submittedAt, createdAt")
+        .in("studentId", studentIds)
+        .in("quizId", quizIds)
+        .eq("isActive", true)
+        .is("deletedAt", null)
       : Promise.resolve({ data: [], error: null }),
   ]);
 
@@ -1226,8 +1226,8 @@ export async function getFacultyStudentProgressSummary(
         : null;
       const discussionPercentage = totalDiscussionForumMarks
         ? Math.round(
-            (discussionForumMarksObtained / totalDiscussionForumMarks) * 100,
-          )
+          (discussionForumMarksObtained / totalDiscussionForumMarks) * 100,
+        )
         : null;
 
       const matchedWeightageConfigs = weightageConfigs.filter(
@@ -1271,13 +1271,13 @@ export async function getFacultyStudentProgressSummary(
 
   const filteredStudentProgressRows = searchQuery
     ? studentProgressRows.filter((student) => {
-        const rollNo = student.rollNo.toLowerCase();
-        const studentName = student.studentName.toLowerCase();
+      const rollNo = student.rollNo.toLowerCase();
+      const studentName = student.studentName.toLowerCase();
 
-        return (
-          rollNo.includes(searchQuery) || studentName.includes(searchQuery)
-        );
-      })
+      return (
+        rollNo.includes(searchQuery) || studentName.includes(searchQuery)
+      );
+    })
     : studentProgressRows;
 
   const tableTotalCount = filteredStudentProgressRows.length;
@@ -1326,145 +1326,145 @@ export async function getFacultyStudentProgressSummary(
 
   const trendData: FacultyStudentProgressTrendPoint[] = buildYearMonthRange(trendYear).map(
     (monthKey) => {
-        if (!activeTrendMonths.has(monthKey)) {
-          return {
-            month: getMonthLabel(monthKey),
-            value: 0,
-          };
-        }
-
-        const monthEnd = getMonthEnd(monthKey);
-
-        const classAverage =
-          studentIds.length === 0
-            ? 0
-            : Math.round(
-                studentIds.reduce((sum, studentId) => {
-                  const history = historyByStudentId.get(studentId);
-                  if (!history) return sum;
-
-                  const matchedWeightageConfigs = weightageConfigs.filter(
-                    (config) =>
-                      config.collegeSectionsId === history.collegeSectionsId &&
-                      config.collegeSemesterId === history.collegeSemesterId &&
-                      scope.subjectIds.includes(config.collegeSubjectId),
-                  );
-                  const progressWeights = buildProgressWeightsFromConfigs(
-                    matchedWeightageConfigs,
-                  );
-
-                  const monthlyAttendanceStats =
-                    attendanceByStudentMonth.get(studentId) ?? new Map();
-                  let attendedClasses = 0;
-                  let conductedClasses = 0;
-
-                  for (const [key, stats] of monthlyAttendanceStats.entries()) {
-                    if (key <= monthKey) {
-                      attendedClasses += stats.attended;
-                      conductedClasses += stats.conducted;
-                    }
-                  }
-
-                  const attendancePercentage =
-                    conductedClasses > 0
-                      ? Math.round((attendedClasses / conductedClasses) * 100)
-                      : 0;
-
-                  const contextKey = `${history.collegeAcademicYearId}:${history.collegeSectionsId}`;
-                  const applicableAssignmentIds = (assignmentsByContext.get(contextKey) ?? []).filter(
-                    (assignmentId) => {
-                      const assignment = assignments.find(
-                        (item) => item.assignmentId === assignmentId,
-                      );
-                      const deadline = parseIntDate(assignment?.submissionDeadlineInt);
-
-                      return !!deadline && deadline.getTime() <= monthEnd.getTime();
-                    },
-                  );
-                  const assignmentDates =
-                    assignmentSubmissionDateByStudent.get(studentId) ?? new Map<number, Date>();
-                  const assignmentsDoneCount = applicableAssignmentIds.filter((assignmentId) => {
-                    const submissionDate = assignmentDates.get(assignmentId);
-                    return !!submissionDate && submissionDate.getTime() <= monthEnd.getTime();
-                  }).length;
-
-                  const applicableQuizzes = (quizzesByContext.get(contextKey) ?? []).filter(
-                    (quiz) => {
-                      const endDate = parseIsoDate(quiz.endDate);
-                      return !!endDate && endDate.getTime() <= monthEnd.getTime();
-                    },
-                  );
-                  const quizMarksMap =
-                    bestQuizSubmissionByStudent.get(studentId) ?? new Map<number, number>();
-                  const quizDateMap =
-                    quizSubmissionDateByStudent.get(studentId) ?? new Map<number, Date>();
-                  const totalQuizMarks = applicableQuizzes.reduce(
-                    (sum, quiz) => sum + (quiz.totalMarks ?? 0),
-                    0,
-                  );
-                  const quizMarksObtained = applicableQuizzes.reduce((sum, quiz) => {
-                    const submissionDate = quizDateMap.get(quiz.quizId);
-                    if (!submissionDate || submissionDate.getTime() > monthEnd.getTime()) {
-                      return sum;
-                    }
-                    return sum + (quizMarksMap.get(quiz.quizId) ?? 0);
-                  }, 0);
-
-                  const applicableDiscussions = (
-                    discussionsBySection.get(history.collegeSectionsId) ?? []
-                  ).filter((discussion) => {
-                    const discussionRow = discussionById.get(discussion.discussionId);
-                    const deadline = parseIsoDate(discussionRow?.deadline);
-                    return !!deadline && deadline.getTime() <= monthEnd.getTime();
-                  });
-                  const discussionMarksMap =
-                    discussionMarksByStudent.get(studentId) ?? new Map<number, number>();
-                  const discussionDateMap =
-                    discussionSubmissionDateByStudent.get(studentId) ?? new Map<number, Date>();
-                  const totalDiscussionForumMarks = applicableDiscussions.reduce(
-                    (sum, discussion) => sum + (discussion.marks ?? 0),
-                    0,
-                  );
-                  const discussionForumMarksObtained = applicableDiscussions.reduce(
-                    (sum, discussion) => {
-                      const submissionDate = discussionDateMap.get(discussion.discussionId);
-                      if (!submissionDate || submissionDate.getTime() > monthEnd.getTime()) {
-                        return sum;
-                      }
-                      return sum + (discussionMarksMap.get(discussion.discussionId) ?? 0);
-                    },
-                    0,
-                  );
-
-                  const assignmentPercentage = applicableAssignmentIds.length
-                    ? Math.round((assignmentsDoneCount / applicableAssignmentIds.length) * 100)
-                    : null;
-                  const quizPercentage = totalQuizMarks
-                    ? Math.round((quizMarksObtained / totalQuizMarks) * 100)
-                    : null;
-                  const discussionPercentage = totalDiscussionForumMarks
-                    ? Math.round(
-                        (discussionForumMarksObtained / totalDiscussionForumMarks) * 100,
-                      )
-                    : null;
-
-                  return (
-                    sum +
-                    computeProgressPercent(progressWeights, {
-                      attendancePercentage,
-                      assignmentPercentage,
-                      quizPercentage,
-                      discussionPercentage,
-                    })
-                  );
-                }, 0) / studentIds.length,
-              );
-
+      if (!activeTrendMonths.has(monthKey)) {
         return {
           month: getMonthLabel(monthKey),
-          value: classAverage,
+          value: 0,
         };
-      },
+      }
+
+      const monthEnd = getMonthEnd(monthKey);
+
+      const classAverage =
+        studentIds.length === 0
+          ? 0
+          : Math.round(
+            studentIds.reduce((sum, studentId) => {
+              const history = historyByStudentId.get(studentId);
+              if (!history) return sum;
+
+              const matchedWeightageConfigs = weightageConfigs.filter(
+                (config) =>
+                  config.collegeSectionsId === history.collegeSectionsId &&
+                  config.collegeSemesterId === history.collegeSemesterId &&
+                  scope.subjectIds.includes(config.collegeSubjectId),
+              );
+              const progressWeights = buildProgressWeightsFromConfigs(
+                matchedWeightageConfigs,
+              );
+
+              const monthlyAttendanceStats =
+                attendanceByStudentMonth.get(studentId) ?? new Map();
+              let attendedClasses = 0;
+              let conductedClasses = 0;
+
+              for (const [key, stats] of monthlyAttendanceStats.entries()) {
+                if (key <= monthKey) {
+                  attendedClasses += stats.attended;
+                  conductedClasses += stats.conducted;
+                }
+              }
+
+              const attendancePercentage =
+                conductedClasses > 0
+                  ? Math.round((attendedClasses / conductedClasses) * 100)
+                  : 0;
+
+              const contextKey = `${history.collegeAcademicYearId}:${history.collegeSectionsId}`;
+              const applicableAssignmentIds = (assignmentsByContext.get(contextKey) ?? []).filter(
+                (assignmentId) => {
+                  const assignment = assignments.find(
+                    (item) => item.assignmentId === assignmentId,
+                  );
+                  const deadline = parseIntDate(assignment?.submissionDeadlineInt);
+
+                  return !!deadline && deadline.getTime() <= monthEnd.getTime();
+                },
+              );
+              const assignmentDates =
+                assignmentSubmissionDateByStudent.get(studentId) ?? new Map<number, Date>();
+              const assignmentsDoneCount = applicableAssignmentIds.filter((assignmentId) => {
+                const submissionDate = assignmentDates.get(assignmentId);
+                return !!submissionDate && submissionDate.getTime() <= monthEnd.getTime();
+              }).length;
+
+              const applicableQuizzes = (quizzesByContext.get(contextKey) ?? []).filter(
+                (quiz) => {
+                  const endDate = parseIsoDate(quiz.endDate);
+                  return !!endDate && endDate.getTime() <= monthEnd.getTime();
+                },
+              );
+              const quizMarksMap =
+                bestQuizSubmissionByStudent.get(studentId) ?? new Map<number, number>();
+              const quizDateMap =
+                quizSubmissionDateByStudent.get(studentId) ?? new Map<number, Date>();
+              const totalQuizMarks = applicableQuizzes.reduce(
+                (sum, quiz) => sum + (quiz.totalMarks ?? 0),
+                0,
+              );
+              const quizMarksObtained = applicableQuizzes.reduce((sum, quiz) => {
+                const submissionDate = quizDateMap.get(quiz.quizId);
+                if (!submissionDate || submissionDate.getTime() > monthEnd.getTime()) {
+                  return sum;
+                }
+                return sum + (quizMarksMap.get(quiz.quizId) ?? 0);
+              }, 0);
+
+              const applicableDiscussions = (
+                discussionsBySection.get(history.collegeSectionsId) ?? []
+              ).filter((discussion) => {
+                const discussionRow = discussionById.get(discussion.discussionId);
+                const deadline = parseIsoDate(discussionRow?.deadline);
+                return !!deadline && deadline.getTime() <= monthEnd.getTime();
+              });
+              const discussionMarksMap =
+                discussionMarksByStudent.get(studentId) ?? new Map<number, number>();
+              const discussionDateMap =
+                discussionSubmissionDateByStudent.get(studentId) ?? new Map<number, Date>();
+              const totalDiscussionForumMarks = applicableDiscussions.reduce(
+                (sum, discussion) => sum + (discussion.marks ?? 0),
+                0,
+              );
+              const discussionForumMarksObtained = applicableDiscussions.reduce(
+                (sum, discussion) => {
+                  const submissionDate = discussionDateMap.get(discussion.discussionId);
+                  if (!submissionDate || submissionDate.getTime() > monthEnd.getTime()) {
+                    return sum;
+                  }
+                  return sum + (discussionMarksMap.get(discussion.discussionId) ?? 0);
+                },
+                0,
+              );
+
+              const assignmentPercentage = applicableAssignmentIds.length
+                ? Math.round((assignmentsDoneCount / applicableAssignmentIds.length) * 100)
+                : null;
+              const quizPercentage = totalQuizMarks
+                ? Math.round((quizMarksObtained / totalQuizMarks) * 100)
+                : null;
+              const discussionPercentage = totalDiscussionForumMarks
+                ? Math.round(
+                  (discussionForumMarksObtained / totalDiscussionForumMarks) * 100,
+                )
+                : null;
+
+              return (
+                sum +
+                computeProgressPercent(progressWeights, {
+                  attendancePercentage,
+                  assignmentPercentage,
+                  quizPercentage,
+                  discussionPercentage,
+                })
+              );
+            }, 0) / studentIds.length,
+          );
+
+      return {
+        month: getMonthLabel(monthKey),
+        value: classAverage,
+      };
+    },
   );
 
   const studentProgressIds = new Set(

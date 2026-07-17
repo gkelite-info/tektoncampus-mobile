@@ -5,6 +5,8 @@ import { View, TextInput, TouchableOpacity, ScrollView, Alert, SafeAreaView } fr
 import tw from "twrnc";
 import { CaretLeft, Plus, X, CaretDown } from "phosphor-react-native";
 import { useFaculty } from "@/utils/context/faculty/useFaculty";
+import { useUser } from "@/utils/context/UserContext";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 import { fetchFacultySections, fetchFacultySubjects, fetchFacultyYears } from "@/lib/helpers/faculty/facultyAPI";
 import { fetchFilteredFaculties } from "@/lib/helpers/faculty/fetchFaculties";
 import { fetchStudentsWithProfile } from "@/lib/helpers/faculty/fetchStudents";
@@ -78,6 +80,8 @@ const MultiSelectDropdown = ({ items, selectedIds, onToggle, placeholder, label 
 
 export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormProps) {const { t } = useTranslation();
   const { facultyId, collegeId } = useFaculty();
+  const { collegeEducationType } = useUser();
+  const isSchool = isSchoolEducation(collegeEducationType);
   const insets = useSafeAreaInsets();
 
   const [title, setTitle] = useState("");
@@ -178,7 +182,7 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
       Alert.alert("Error", "Please fill in all required fields.");
       return;
     }
-    if (domains.length === 0) {
+    if (!isSchool && domains.length === 0) {
       Alert.alert("Error", "Please add at least one domain.");
       return;
     }
@@ -196,7 +200,7 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
       const projectResult = await saveProject({
         title,
         description,
-        domain: domains,
+        domain: isSchool ? [] : domains,
         marks: Number(marks),
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
@@ -273,23 +277,27 @@ export default function AddProjectForm({ onCancel, onSuccess }: AddProjectFormPr
                     <TextInput style={[{ fontFamily: fonts.regular }, tw`border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder={t("Auto.Attr.ProjectDescript", "Project Description")} value={description} onChangeText={setDescription} multiline numberOfLines={4} textAlignVertical="top" />
 
                     {/* Domains */}
- <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-4 text-gray-800`]}>{t("Auto.Common.Domains", "Domains")}<Text style={tw`text-red-500`}>*</Text></Text> 
-                    <View style={tw`flex-row items-center gap-2 mb-2`}>
-                        <TextInput style={[{ fontFamily: fonts.regular }, tw`flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder={t("Auto.Attr.AddDomain", "Add Domain")} value={domainInput} onChangeText={setDomainInput} onSubmitEditing={handleAddDomain} />
-                        <TouchableOpacity style={tw`bg-green-500 p-2.5 rounded-lg`} onPress={handleAddDomain}>
-                            <Plus color="#fff" size={18} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={tw`flex-row flex-wrap gap-2`}>
-                        {domains.map((d, i) =>
-            <View key={i} style={tw`bg-green-100 flex-row items-center px-3 py-1 rounded-full`}>
-                                <Text style={[{ fontFamily: fonts.regular }, tw`text-green-800 text-xs`]}>{d}</Text>
-                                <TouchableOpacity onPress={() => setDomains(domains.filter((x) => x !== d))} style={tw`ml-2`}>
-                                    <X size={12} color="#166534" />
+                    {!isSchool && (
+                        <View>
+                            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-4 text-gray-800`]}>{t("Auto.Common.Domains", "Domains")}<Text style={tw`text-red-500`}>*</Text></Text> 
+                            <View style={tw`flex-row items-center gap-2 mb-2`}>
+                                <TextInput style={[{ fontFamily: fonts.regular }, tw`flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-white`]} placeholder={t("Auto.Attr.AddDomain", "Add Domain")} value={domainInput} onChangeText={setDomainInput} onSubmitEditing={handleAddDomain} />
+                                <TouchableOpacity style={tw`bg-green-500 p-2.5 rounded-lg`} onPress={handleAddDomain}>
+                                    <Plus color="#fff" size={18} />
                                 </TouchableOpacity>
                             </View>
-            )}
-                    </View>
+                            <View style={tw`flex-row flex-wrap gap-2`}>
+                                {domains.map((d, i) =>
+                <View key={i} style={tw`bg-green-100 flex-row items-center px-3 py-1 rounded-full`}>
+                                        <Text style={[{ fontFamily: fonts.regular }, tw`text-green-800 text-xs`]}>{d}</Text>
+                                        <TouchableOpacity onPress={() => setDomains(domains.filter((x) => x !== d))} style={tw`ml-2`}>
+                                            <X size={12} color="#166534" />
+                                        </TouchableOpacity>
+                                    </View>
+                )}
+                            </View>
+                        </View>
+                    )}
 
                     {/* Marks */}
  <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm mb-1 mt-4 text-gray-800`]}>{t("Auto.Common.Marks", "Marks")}<Text style={tw`text-red-500`}>*</Text></Text> 

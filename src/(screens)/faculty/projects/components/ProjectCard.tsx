@@ -124,8 +124,8 @@ export const ProjectDetailsModal = ({
  <Text style={[{ fontFamily: fonts.semiBold }, tw`text-2xl text-[#16a34a] mb-6`]}>{project.title}</Text> 
 
                         <View style={tw`mb-5`}>
- <Text style={[{ fontFamily: fonts.semiBold }, tw`text-lg text-gray-900 mb-2`]}>{t("Auto.Common.Description", "Description")}</Text> 
-                            <Text style={[{ fontFamily: fonts.regular }, tw`text-base text-gray-700 leading-relaxed`]}>{project.description || "No description provided."}</Text>
+                            <Text style={tw`text-lg font-semibold text-gray-900 mb-2`}>{t("Auto.Common.Description", "Description")}</Text>
+                            <Text style={tw`text-base text-gray-700 leading-relaxed`}>{project.description || t("FacultyProjects.noDescriptionProvided", "No description provided.")}</Text>
                         </View>
 
                         <View style={tw`mb-5`}>
@@ -177,8 +177,8 @@ export const ProjectDetailsModal = ({
                         <View style={tw`mb-6`}>
  <Text style={[{ fontFamily: fonts.semiBold }, tw`text-lg text-gray-900 mb-2`]}>{t("Auto.Common.Attachments", "Attachments")}</Text> 
                             {project.fileUrls.length > 0 ? project.fileUrls.map((url, i) => <TouchableOpacity key={i} onPress={() => Linking.openURL(url)} style={tw`mb-2`}>
-                                        <Text style={[{ fontFamily: fonts.regular }, tw`text-blue-600 underline`]}>{url.split("/").pop() || "Attachment"}</Text>
- </TouchableOpacity>) : <Text style={[{ fontFamily: fonts.italic }, tw`text-gray-400 text-sm`]}>{t("Auto.Common.Noattachmentsup", "No attachments uploaded")}</Text>} 
+                                        <Text style={tw`text-blue-600 underline`}>{url.split("/").pop() || t("FacultyProjects.attachment", "Attachment")}</Text>
+                                    </TouchableOpacity>) : <Text style={tw`text-gray-400 text-sm italic`}>{t("Auto.Common.Noattachmentsup", "No attachments uploaded")}</Text>}
                         </View>
                     </ScrollView>
             </SafeAreaView>

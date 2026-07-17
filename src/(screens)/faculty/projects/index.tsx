@@ -80,13 +80,13 @@ export default function FacultyProjects() {
   if (view === "submissions" && selectedProject && selectedProject.projectId) {
     return (
       <View style={[tw`flex-1 bg-white`, { paddingTop: insets.top + 105 }]}>
-        <View style={tw`p-4 border-b border-gray-100 flex-row items-center`}>
-          <TouchableOpacity onPress={() => setView("list")} style={tw`mr-3`}>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-blue-600 text-base`]}>{"< Back to List"}</Text>
-          </TouchableOpacity>
-        </View>
-        <StudentSubmissions projectId={selectedProject.projectId} projectTitle={selectedProject.title} />
-      </View>);
+                <View style={tw`p-4 border-b border-gray-100 flex-row items-center`}>
+                    <TouchableOpacity onPress={() => setView("list")} style={tw`mr-3`}>
+                        <Text style={tw`text-blue-600 font-semibold text-base`}>{"< "}{t("FacultyProjects.backToList", "Back to List")}</Text>
+                    </TouchableOpacity>
+                </View>
+                <StudentSubmissions projectId={selectedProject.projectId} projectTitle={selectedProject.title} />
+            </View>);
 
   }
 
@@ -140,17 +140,22 @@ export default function FacultyProjects() {
           </View>
         </View>
 
-        {isLoading ?
-          <View style={tw`py-10 items-center justify-center`}>
-            <ActivityIndicator size="large" color="#10B981" />
-          </View> :
-          filteredProjects.length === 0 ?
-            <View style={tw`items-center justify-center py-20 bg-white rounded-3xl border border-dashed border-gray-200`}>
-              <Text style={[{ fontFamily: fonts.semiBold }, tw`text-lg  text-gray-400`]}>{t("Auto.Common.No", "No")} {activeTab} {t("Auto.Common.projectsfound", "projects found")}</Text>
-              <Text style={[{ fontFamily: fonts.regular }, tw`text-sm text-gray-400 mt-1`]}>
-                {activeTab === "active" ? "Click 'Add Project' to get started!" : "Projects will appear here once they are completed."}
-              </Text>
-            </View> :
+                {/* Content */}
+                {isLoading ?
+        <View style={tw`py-10 items-center justify-center`}>
+                        <ActivityIndicator size="large" color="#10B981" />
+                    </View> :
+        filteredProjects.length === 0 ?
+        <View style={tw`items-center justify-center py-20 bg-white rounded-3xl border border-dashed border-gray-200`}>
+                        <Text style={tw`text-lg font-semibold text-gray-400`}>
+                            {activeTab === "active" 
+                                ? t("FacultyProjects.noActiveProjectsFound", "No active projects found") 
+                                : t("FacultyProjects.noPreviousProjectsFound", "No previous projects found")}
+                        </Text>
+                        <Text style={tw`text-sm text-gray-400 mt-1`}>
+                            {activeTab === "active" ? t("FacultyProjects.clickAddProjectToCreateOne", "Click '+ Add Project' to create one.") : t("FacultyProjects.projectsWillAppearHere", "Projects will appear here once they are completed.")}
+                        </Text>
+                    </View> :
 
             <ProjectCard
               data={filteredProjects}

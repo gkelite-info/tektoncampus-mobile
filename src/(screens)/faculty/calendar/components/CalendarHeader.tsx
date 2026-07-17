@@ -10,9 +10,10 @@ type CalendarHeaderProps = {
   onMonthYearChange: (month: number, year: number) => void;
 };
 
-const MONTHS = [
-"January", "February", "March", "April", "May", "June",
-"July", "August", "September", "October", "November", "December"];
+const getMonths = (t: any) => [
+  t("Calendar.faculty.january", "January"), t("Calendar.faculty.february", "February"), t("Calendar.faculty.march", "March"), t("Calendar.faculty.april", "April"), t("Calendar.faculty.may", "May"), t("Calendar.faculty.june", "June"),
+  t("Calendar.faculty.july", "July"), t("Calendar.faculty.august", "August"), t("Calendar.faculty.september", "September"), t("Calendar.faculty.october", "October"), t("Calendar.faculty.november", "November"), t("Calendar.faculty.december", "December")
+];
 
 
 const CalendarHeader = ({
@@ -20,6 +21,7 @@ const CalendarHeader = ({
   currentDate,
   onMonthYearChange
 }: CalendarHeaderProps) => {const { t } = useTranslation();
+  const MONTHS = getMonths(t);
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 

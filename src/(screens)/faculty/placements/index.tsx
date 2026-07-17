@@ -98,7 +98,7 @@ export default function FacultyPlacementsScreen() {
   };
   const filters: FilterConfig[] = [{
     id: 'cycle',
-    label: 'Cycle',
+    label: t('FacultyPlacements.cycle', 'Cycle'),
     options: serverCycles.map(c => ({
       label: c,
       value: c
@@ -108,9 +108,9 @@ export default function FacultyPlacementsScreen() {
     isLoading: filterLoadingKey === "cycle"
   }, {
     id: 'branch',
-    label: 'Branch',
+    label: t('FacultyPlacements.branch', 'Branch'),
     options: [{
-      label: 'All',
+      label: t('FacultyPlacements.all', 'All'),
       value: 'All'
     }, ...serverBranches.map(b => ({
       label: b,
@@ -121,15 +121,15 @@ export default function FacultyPlacementsScreen() {
     isLoading: filterLoadingKey === "branch"
   }, {
     id: 'status',
-    label: 'Status',
+    label: t('FacultyPlacements.status', 'Status'),
     options: [{
-      label: 'All',
+      label: t('FacultyPlacements.all', 'All'),
       value: 'All'
     }, {
-      label: 'Open',
+      label: t('FacultyPlacements.open', 'Open'),
       value: 'Open'
     }, {
-      label: 'Completed',
+      label: t('FacultyPlacements.completed', 'Completed'),
       value: 'Completed'
     }],
     selectedValue: status,
@@ -137,24 +137,24 @@ export default function FacultyPlacementsScreen() {
     isLoading: filterLoadingKey === "status"
   }, {
     id: 'sort',
-    label: 'Sort By',
+    label: t('FacultyPlacements.sortBy', 'Sort By'),
     options: [{
-      label: 'Recently Uploaded',
+      label: t('FacultyPlacements.recentlyUploaded', 'Recently Uploaded'),
       value: 'Recently Uploaded'
     }, {
-      label: 'Oldest First',
+      label: t('FacultyPlacements.oldestFirst', 'Oldest First'),
       value: 'Oldest First'
     }, {
-      label: 'Company Name A-Z',
+      label: t('FacultyPlacements.companyNameAZ', 'Company Name A-Z'),
       value: 'Company Name A-Z'
     }, {
-      label: 'Company Name Z-A',
+      label: t('FacultyPlacements.companyNameZA', 'Company Name Z-A'),
       value: 'Company Name Z-A'
     }, {
-      label: 'CTC (High to Low)',
+      label: t('FacultyPlacements.ctcHighToLow', 'CTC (High to Low)'),
       value: 'CTC (High to Low)'
     }, {
-      label: 'CTC (Low to High)',
+      label: t('FacultyPlacements.ctcLowToHigh', 'CTC (Low to High)'),
       value: 'CTC (Low to High)'
     }],
     selectedValue: sortBy,

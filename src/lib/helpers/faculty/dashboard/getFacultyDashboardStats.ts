@@ -47,7 +47,7 @@ export async function getFacultyDashboardStats(facultyId: number) {
       const sessions = Array.isArray(ev.faculty_class_sessions)
         ? ev.faculty_class_sessions
         : [ev.faculty_class_sessions];
-      const isAccepted = sessions[0]?.status === "Accepted";
+      const isAccepted = (sessions[0]?.status || "").toLowerCase() === "accepted";
 
       if (isAccepted) {
         acceptedClasses++;

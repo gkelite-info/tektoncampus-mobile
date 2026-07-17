@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { supabase } from "@/lib/supabaseClient";
 import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
 import React, { useEffect, useRef, useState } from "react";
@@ -141,39 +142,64 @@ export default function CalendarScreen() {
     const currentFetchId = ++fetchIdRef.current;
     try {
       setLoading(true);
-      const startStr = new Date(year, month, -7).toISOString().split("T")[0];
-      const endStr = new Date(year, month + 1, 7).toISOString().split("T")[0];
+      const sd = new Date(year, month, -7);
+      const startStr = `${sd.getFullYear()}-${String(sd.getMonth() + 1).padStart(2, "0")}-${String(sd.getDate()).padStart(2, "0")}`;
+      const ed = new Date(year, month + 1, 7);
+      const endStr = `${ed.getFullYear()}-${String(ed.getMonth() + 1).padStart(2, "0")}-${String(ed.getDate()).padStart(2, "0")}`;
       const rows = await fetchCalendarEvents({ facultyId, startDate: startStr, endDate: endStr });
       if (currentFetchId !== fetchIdRef.current) return;
       if (!rows || rows.length === 0) {
         setEvents([]);
         return;
       }
-      const firstEventSections = await fetchCalendarEventSections(rows[0].calendarEventId);
-      if (!firstEventSections || firstEventSections.length === 0) {
-        setEvents([]);
-        return;
-      }
-      const educationId = firstEventSections[0].collegeEducationId;
-      const branchId = firstEventSections[0].collegeBranchId;
-      const academicYearId = firstEventSections[0].collegeAcademicYearId;
-      const branches = await fetchAcademicDropdowns({ type: "branch", collegeId: collegeId!, educationId });
-      const academicYears = await fetchAcademicDropdowns({ type: "academicYear", collegeId: collegeId!, educationId, branchId });
-      const allSections = await fetchAcademicDropdowns({ type: "section", collegeId: collegeId!, educationId, branchId, academicYearId });
-      const branchMap = new Map<number, string>(branches.map((b: any) => [b.collegeBranchId, b.collegeBranchCode]));
-      const yearMap = new Map<number, string>(academicYears.map((y: any) => [y.collegeAcademicYearId, y.collegeAcademicYear]));
-      const sectionNameMap = new Map<number, string>(allSections.map((s: any) => [s.collegeSectionsId, s.collegeSections]));
       const sectionMap = new Map<number, number[]>();
+      const eventToBranch = new Map<number, number | null>();
+      const eventToYear = new Map<number, number | null>();
+      const branchIds = new Set<number>();
+      const yearIds = new Set<number>();
+
       await Promise.all(rows.map(async (row: any) => {
         const sections = await fetchCalendarEventSections(row.calendarEventId);
-        sectionMap.set(row.calendarEventId, (sections ?? []).map((s: any) => s.collegeSectionId));
+        const sectionIds = (sections ?? []).map((s: any) => s.collegeSectionId);
+        sectionMap.set(row.calendarEventId, sectionIds);
+        
+        if (sections && sections.length > 0) {
+          const bId = sections[0].collegeBranchId;
+          const yId = sections[0].collegeAcademicYearId;
+          if (bId) branchIds.add(bId);
+          if (yId) yearIds.add(yId);
+          eventToBranch.set(row.calendarEventId, bId);
+          eventToYear.set(row.calendarEventId, yId);
+        }
       }));
+
+      const allSectionIds = Array.from(new Set(Array.from(sectionMap.values()).flat()));
+      
+      const { data: branchData } = branchIds.size > 0 
+        ? await supabase.from('college_branch').select('collegeBranchId, collegeBranchCode').in('collegeBranchId', Array.from(branchIds)) 
+        : { data: [] };
+        
+      const { data: yearData } = yearIds.size > 0 
+        ? await supabase.from('college_academic_year').select('collegeAcademicYearId, collegeAcademicYear').in('collegeAcademicYearId', Array.from(yearIds)) 
+        : { data: [] };
+        
+      const { data: sectionData } = allSectionIds.length > 0 
+        ? await supabase.from('college_sections').select('collegeSectionsId, collegeSections').in('collegeSectionsId', allSectionIds) 
+        : { data: [] };
+
+      const branchMap = new Map<number, string>((branchData || []).map((b: any) => [b.collegeBranchId, b.collegeBranchCode]));
+      const yearMap = new Map<number, string>((yearData || []).map((y: any) => [y.collegeAcademicYearId, y.collegeAcademicYear]));
+      const sectionNameMap = new Map<number, string>((sectionData || []).map((s: any) => [s.collegeSectionsId, s.collegeSections]));
+
       const expandedEvents: CalendarEvent[] = [];
       rows.forEach((row: any) => {
         const startTime = `${row.date}T${row.fromTime}`;
         const endTime = `${row.date}T${row.toTime}`;
         const sectionIds = sectionMap.get(row.calendarEventId) ?? [];
+        const bId = eventToBranch.get(row.calendarEventId);
+        const yId = eventToYear.get(row.calendarEventId);
         const safelyExtractedTopic = row.college_subject_unit_topics?.topicTitle || (Array.isArray(row.college_subject_unit_topics) ? row.college_subject_unit_topics[0]?.topicTitle : null);
+        
         sectionIds.forEach((sectionId) => {
           expandedEvents.push({
             id: `${row.calendarEventId}-${sectionId}`,
@@ -184,8 +210,8 @@ export default function CalendarScreen() {
             day: [t("Calendar.faculty.sun", "SUN"), t("Calendar.faculty.mon", "MON"), t("Calendar.faculty.tue", "TUE"), t("Calendar.faculty.wed", "WED"), t("Calendar.faculty.thu", "THU"), t("Calendar.faculty.fri", "FRI"), t("Calendar.faculty.sat", "SAT")][new Date(row.date).getDay()],
             startTime,
             endTime,
-            branch: branchMap.get(branchId) ?? "",
-            year: yearMap.get(academicYearId) ?? "",
+            branch: (bId ? branchMap.get(bId) : "") ?? "",
+            year: (yId ? yearMap.get(yId) : "") ?? "",
             section: sectionNameMap.get(sectionId) ?? "",
             calendarEventId: row.calendarEventId,
             sectionId: sectionId,

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Modal, TextInput, ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { X } from "phosphor-react-native";
+import { useNavigation } from "@react-navigation/native";
 import { UpcomingLesson } from "@/lib/helpers/faculty/attendance/getClasses";
 
 interface ActionModalProps {
@@ -21,7 +22,9 @@ export const ClassActionModal: React.FC<ActionModalProps> = ({
   lesson,
   onAccept,
   onCancelClass
-}) => {const { t } = useTranslation();
+}) => {
+  const { t } = useTranslation();
+  const navigation = useNavigation<any>();
   const [step, setStep] = useState<"initial" | "confirm_accept" | "cancel_reason">("initial");
   const [reason, setReason] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -109,15 +112,17 @@ export const ClassActionModal: React.FC<ActionModalProps> = ({
               <View className="px-5 py-4 flex-row gap-3">
                 <TouchableOpacity
                     onPress={() => {
-                      if (!isAccepted) setStep("confirm_accept");
+                      if (isAccepted) {
+                        navigation.navigate("Attendance", { classId: lesson.id });
+                        onClose();
+                      } else {
+                        setStep("confirm_accept");
+                      }
                     }}
-                    disabled={isAccepted}
-                    className={`flex-1 items-center justify-center py-3.5 rounded-xl ${
-                    isAccepted ? "bg-gray-200" : "bg-[#43C17A]"}`
-                    }>
+                    className="flex-1 items-center justify-center py-3.5 rounded-xl bg-[#43C17A]">
                     
-                  <Text className={`text-sm ${isAccepted ? "text-gray-500" : "text-white"}`} style={{ fontFamily: fonts.bold }}>
-                    {isAccepted ? "Accepted" : "Accept"}
+                  <Text className="text-sm text-white" style={{ fontFamily: fonts.bold }}>
+                    {isAccepted ? "Mark Attendance" : "Accept"}
                   </Text>
                 </TouchableOpacity>
 
@@ -156,7 +161,7 @@ export const ClassActionModal: React.FC<ActionModalProps> = ({
                   {isProcessing ?
                     <ActivityIndicator size="small" color="white" /> :
 
-                    <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.YesAccept", "Yes, Accept")}</Text>
+                    <Text className="text-white text-sm" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.MarkAttendance", "Mark Attendance")}</Text>
                     }
                 </TouchableOpacity>
                 <TouchableOpacity

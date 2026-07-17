@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, Easing, Image, ImageBackground, Platform, ScrollView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,8 +11,9 @@ import {
   GraduationCap,
   Info,
   Lock,
-  SpinnerGap } from
-'phosphor-react-native';
+  SpinnerGap
+} from
+  'phosphor-react-native';
 import { BlurView } from 'expo-blur';
 import { loginUser } from '@/services/auth/login';
 import Toast from 'react-native-toast-message';
@@ -94,56 +95,56 @@ const F = {
 };
 
 const SLIDES = [
-{
-  heading: 'Managing Campus Excellence and Operations',
-  para: 'Oversee students, faculty, academics, and daily campus activities — all in one place.',
-  image: require('../../../assets/loginslide1.png')
-},
-{
-  heading: 'Managing Operations and User Activities',
-  para: 'Handle day-to-day tasks, manage users, and ensure smooth system operations — all in one place.',
-  image: require('../../../assets/loginslide2.png')
-},
-{
-  heading: 'Handling Faculty and Staff Operations',
-  para: 'Track attendance, manage records, and streamline HR processes with ease.',
-  image: require('../../../assets/loginslide3.png')
-},
-{
-  heading: 'Managing Financial Operations and Transparency',
-  para: 'Oversee budgets, track expenses, and manage financial records — all in one place.',
-  image: require('../../../assets/loginslide4.png')
-},
-{
-  heading: 'Handling Financial Transactions and Operations',
-  para: 'Manage fee collections, track payments, and maintain financial records — all in one place.',
-  image: require('../../../assets/loginslide5.png')
-},
-{
-  heading: 'Driving Student Placements and Success',
-  para: 'Manage job opportunities, campus drives, and student career growth efficiently.',
-  image: require('../../../assets/loginslide6.png')
-},
-{
-  heading: 'Empowering Teaching and Student Success',
-  para: 'Manage classes, track student progress, and deliver quality education — all in one place.',
-  image: require('../../../assets/loginslide7.png')
-},
-{
-  heading: 'Managing Learning and Academic Progress',
-  para: 'Track attendance, assignments, and academic performance — all in one place.',
-  image: require('../../../assets/loginslide8.png')
-},
-{
-  heading: "Staying Connected to Your Child's Academic Journey",
-  para: 'Track attendance, monitor performance, and stay updated — all in one place',
-  image: require('../../../assets/loginslide9.png')
-},
-{
-  heading: 'Managing Student Well-Being Activities',
-  para: 'Track issues, handle requests, and ensure student support with ease.',
-  image: require('../../../assets/loginslide10.png')
-}];
+  {
+    heading: 'Managing Campus Excellence and Operations',
+    para: 'Oversee students, faculty, academics, and daily campus activities — all in one place.',
+    image: require('../../../assets/loginslide1.png')
+  },
+  {
+    heading: 'Managing Operations and User Activities',
+    para: 'Handle day-to-day tasks, manage users, and ensure smooth system operations — all in one place.',
+    image: require('../../../assets/loginslide2.png')
+  },
+  {
+    heading: 'Handling Faculty and Staff Operations',
+    para: 'Track attendance, manage records, and streamline HR processes with ease.',
+    image: require('../../../assets/loginslide3.png')
+  },
+  {
+    heading: 'Managing Financial Operations and Transparency',
+    para: 'Oversee budgets, track expenses, and manage financial records — all in one place.',
+    image: require('../../../assets/loginslide4.png')
+  },
+  {
+    heading: 'Handling Financial Transactions and Operations',
+    para: 'Manage fee collections, track payments, and maintain financial records — all in one place.',
+    image: require('../../../assets/loginslide5.png')
+  },
+  {
+    heading: 'Driving Student Placements and Success',
+    para: 'Manage job opportunities, campus drives, and student career growth efficiently.',
+    image: require('../../../assets/loginslide6.png')
+  },
+  {
+    heading: 'Empowering Teaching and Student Success',
+    para: 'Manage classes, track student progress, and deliver quality education — all in one place.',
+    image: require('../../../assets/loginslide7.png')
+  },
+  {
+    heading: 'Managing Learning and Academic Progress',
+    para: 'Track attendance, assignments, and academic performance — all in one place.',
+    image: require('../../../assets/loginslide8.png')
+  },
+  {
+    heading: "Staying Connected to Your Child's Academic Journey",
+    para: 'Track attendance, monitor performance, and stay updated — all in one place',
+    image: require('../../../assets/loginslide9.png')
+  },
+  {
+    heading: 'Managing Student Well-Being Activities',
+    para: 'Track issues, handle requests, and ensure student support with ease.',
+    image: require('../../../assets/loginslide10.png')
+  }];
 
 
 const N = SLIDES.length;
@@ -164,18 +165,18 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
     if (position === 'center') {
       floatLoopRef.current = Animated.loop(
         Animated.sequence([
-        Animated.timing(floatAnim, {
-          toValue: -8,
-          duration: 1800,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true
-        }),
-        Animated.timing(floatAnim, {
-          toValue: 0,
-          duration: 1800,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true
-        })]
+          Animated.timing(floatAnim, {
+            toValue: -8,
+            duration: 1800,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true
+          }),
+          Animated.timing(floatAnim, {
+            toValue: 0,
+            duration: 1800,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true
+          })]
         )
       );
       floatLoopRef.current.start();
@@ -188,7 +189,7 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
 
   const cardWidth = containerWidth * 1;
 
-  const TRANSFORM: Record<string, {tx: number;ty: number;rot: string;sc: number;op: number;}> =
+  const TRANSFORM: Record<string, { tx: number; ty: number; rot: string; sc: number; op: number; }> =
   {
     center: { tx: 0, ty: 0, rot: '0deg', sc: 1, op: 1 },
     right: {
@@ -214,17 +215,16 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
     <View
       pointerEvents="none"
       style={[
-      sCard.wrapper,
-      {
-        width: cardWidth,
-
-        height: cardWidth * 0.75,
-        opacity: op,
-        zIndex: position === 'center' ? 10 : 0,
-        transform: [{ translateX: tx }, { translateY: ty }, { rotate: rot }, { scale: sc }]
-      }]
+        sCard.wrapper,
+        {
+          width: cardWidth,
+          height: cardWidth * 0.75,
+          opacity: op,
+          zIndex: position === 'center' ? 10 : 0,
+          transform: [{ translateX: tx }, { translateY: ty }, { rotate: rot }, { scale: sc }]
+        }]
       }>
-      {}
+      { }
       <Animated.View
         style={[StyleSheet.absoluteFillObject, { transform: [{ translateY: floatAnim }] }]}>
         <Image source={slide.image} style={sCard.image} resizeMode="cover" />
@@ -250,10 +250,8 @@ const sCard = StyleSheet.create({
   }
 });
 
-
-
-
-export default function LoginScreen() {const { t } = useTranslation();
+export default function LoginScreen() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -265,24 +263,16 @@ export default function LoginScreen() {const { t } = useTranslation();
     (state) => state.setUser
   );
 
-
-
-
-
   const textOpacity = useRef(new Animated.Value(1)).current;
   const textSlideX = useRef(new Animated.Value(0)).current;
-
 
   const leftX = useRef(new Animated.Value(0)).current;
   const rightX = useRef(new Animated.Value(SW)).current;
 
-
   const spinVal = useRef(new Animated.Value(0)).current;
   const spinLoopRef = useRef<Animated.CompositeAnimation | null>(null);
 
-
   const btnEntrance = useRef(new Animated.Value(0)).current;
-
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
 
@@ -321,29 +311,29 @@ export default function LoginScreen() {const { t } = useTranslation();
 
   const advanceSlide = useCallback(() => {
     Animated.parallel([
-    Animated.timing(textOpacity, { toValue: 0, duration: 250, useNativeDriver: true }),
-    Animated.timing(textSlideX, {
-      toValue: 60,
-      duration: 250,
-      easing: Easing.in(Easing.quad),
-      useNativeDriver: true
-    })]
+      Animated.timing(textOpacity, { toValue: 0, duration: 250, useNativeDriver: true }),
+      Animated.timing(textSlideX, {
+        toValue: 60,
+        duration: 250,
+        easing: Easing.in(Easing.quad),
+        useNativeDriver: true
+      })]
     ).start(() => {
       setCurrent((prev) => (prev + 1) % N);
       textSlideX.setValue(60);
       Animated.parallel([
-      Animated.timing(textOpacity, {
-        toValue: 1,
-        duration: 500,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true
-      }),
-      Animated.timing(textSlideX, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true
-      })]
+        Animated.timing(textOpacity, {
+          toValue: 1,
+          duration: 500,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true
+        }),
+        Animated.timing(textSlideX, {
+          toValue: 0,
+          duration: 500,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true
+        })]
       ).start();
     });
   }, []);
@@ -359,36 +349,36 @@ export default function LoginScreen() {const { t } = useTranslation();
   const handleProceed = useCallback(() => {
     setPanelState('login');
     Animated.parallel([
-    Animated.timing(leftX, {
-      toValue: -SW,
-      duration: 500,
-      easing: Easing.inOut(Easing.quad),
-      useNativeDriver: true
-    }),
-    Animated.timing(rightX, {
-      toValue: 0,
-      duration: 500,
-      easing: Easing.inOut(Easing.quad),
-      useNativeDriver: true
-    })]
+      Animated.timing(leftX, {
+        toValue: -SW,
+        duration: 500,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver: true
+      }),
+      Animated.timing(rightX, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver: true
+      })]
     ).start();
   }, []);
 
 
   const handleBack = useCallback(() => {
     Animated.parallel([
-    Animated.timing(leftX, {
-      toValue: 0,
-      duration: 500,
-      easing: Easing.inOut(Easing.quad),
-      useNativeDriver: true
-    }),
-    Animated.timing(rightX, {
-      toValue: SW,
-      duration: 500,
-      easing: Easing.inOut(Easing.quad),
-      useNativeDriver: true
-    })]
+      Animated.timing(leftX, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver: true
+      }),
+      Animated.timing(rightX, {
+        toValue: SW,
+        duration: 500,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver: true
+      })]
     ).start(() => setPanelState('slides'));
   }, []);
 
@@ -482,7 +472,7 @@ export default function LoginScreen() {const { t } = useTranslation();
               source={require('../../../assets/login-logo.png')}
               style={s.logoImg}
               resizeMode="contain" />
-            
+
             <Text style={s.logoSubtext}>{t("Auto.Common.PoweredbyGKElit", "Powered by GK Elite-Info")}</Text>
           </View>
 
@@ -492,9 +482,9 @@ export default function LoginScreen() {const { t } = useTranslation();
                 opacity: textOpacity,
                 transform: [{ translateX: textSlideX }]
               }}>
-              {}
+              { }
               <Text style={s.slideHeading}>{SLIDES[current].heading}</Text>
-              {}
+              { }
               <Text style={s.slidePara}>{SLIDES[current].para}</Text>
             </Animated.View>
           </View>
@@ -502,9 +492,9 @@ export default function LoginScreen() {const { t } = useTranslation();
           <View style={s.carouselContainer} onLayout={onCarouselLayout}>
             {SLIDES.map((slide, idx) => {
               let position: 'center' | 'left' | 'right' | 'hidden' = 'hidden';
-              if (idx === current) position = 'center';else
-              if (idx === (current - 1 + N) % N) position = 'left';else
-              if (idx === (current + 1) % N) position = 'right';
+              if (idx === current) position = 'center'; else
+                if (idx === (current - 1 + N) % N) position = 'left'; else
+                  if (idx === (current + 1) % N) position = 'right';
 
               return (
                 <SlideCard key={idx} slide={slide} position={position} containerWidth={carouselW} />);
@@ -512,28 +502,28 @@ export default function LoginScreen() {const { t } = useTranslation();
             })}
           </View>
 
-          {}
+          { }
           <View style={s.dotsRow}>
             {SLIDES.map((_, i) =>
-            <View key={i} style={[s.dot, i === current ? s.dotActive : s.dotInactive]} />
+              <View key={i} style={[s.dot, i === current ? s.dotActive : s.dotInactive]} />
             )}
           </View>
 
-          {}
+          { }
           <Animated.View
             style={[
-            s.proceedWrapper,
-            {
-              opacity: btnEntrance,
-              transform: [
+              s.proceedWrapper,
               {
-                translateY: btnEntrance.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [20, 0]
-                })
-              }]
+                opacity: btnEntrance,
+                transform: [
+                  {
+                    translateY: btnEntrance.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0]
+                    })
+                  }]
 
-            }]
+              }]
             }>
             <TouchableOpacity activeOpacity={0.85} onPress={handleProceed} style={s.proceedBtn}>
               <Text style={s.proceedBtnText}>{t("Auto.Common.ProceedtoLogin", "Proceed to Login")}</Text>
@@ -542,53 +532,53 @@ export default function LoginScreen() {const { t } = useTranslation();
           </Animated.View>
         </LinearGradient>
       </Animated.View>
-      {}
+      { }
 
-      {}
+      { }
       <Animated.View
         style={[s.panel, { transform: [{ translateX: rightX }] }]}
         pointerEvents={panelState === 'login' ? 'auto' : 'none'}>
-        {}
+        { }
         <ImageBackground
           source={require('../../../assets/loginpagebg.webp')}
           resizeMode="cover"
           style={s.rightBg}>
-          {}
+          { }
           <View style={s.rightOverlay} />
 
-          {}
+          { }
           <TouchableOpacity activeOpacity={0.8} onPress={handleBack} style={s.backBtn}>
             <ArrowLeft size={16} color={C.white} weight="bold" />
             <Text style={s.backBtnText}>{t("Auto.Common.Backtoslides", "Back to slides")}</Text>
           </TouchableOpacity>
 
-          {}
+          { }
           <ScrollView
             style={s.formScroll}
             contentContainerStyle={s.formScrollContent}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled">
-            {}
+            { }
             <View style={s.glassCard}>
-              {}
+              { }
               <BlurView
                 intensity={35}
                 tint="light"
                 style={StyleSheet.absoluteFillObject} />
-              
 
-              {}
+
+              { }
               <View style={s.iconCircleRow}>
                 <View style={s.iconCircle}>
                   <GraduationCap size={26} color={C.white} weight="fill" />
                 </View>
               </View>
 
-              {}
+              { }
               <Text style={s.cardTitle}>{t("Auto.Common.LogintoYourAcco", "Login to Your Account")}</Text>
               <Text style={s.cardSubtitle}>{t("Auto.Common.Pleaseenteryour", "Please enter your credentials to proceed.")}</Text>
 
-              {}
+              { }
               <View>
                 <Text style={s.fieldLabel}>{t("Auto.Common.Email", "Email")}</Text>
                 <View style={s.inputRow}>
@@ -604,11 +594,11 @@ export default function LoginScreen() {const { t } = useTranslation();
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={s.textInput} />
-                  
+
                 </View>
               </View>
 
-              {}
+              { }
               <View style={{ marginTop: T.s5 }}>
                 <Text style={s.fieldLabel}>{t("Auto.Common.Password", "Password")}</Text>
                 <View style={s.inputRow}>
@@ -622,21 +612,21 @@ export default function LoginScreen() {const { t } = useTranslation();
                     placeholderTextColor={C.white60}
                     secureTextEntry={!showPassword}
                     style={[s.textInput, { paddingRight: T.s12 }]} />
-                  
+
                   <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => setShowPassword((v) => !v)}
                     style={s.eyeBtn}>
                     {showPassword ?
-                    <EyeSlash size={20} color={C.white60} /> :
+                      <EyeSlash size={20} color={C.white60} /> :
 
-                    <Eye size={20} color={C.white60} />
+                      <Eye size={20} color={C.white60} />
                     }
                   </TouchableOpacity>
                 </View>
               </View>
 
-              {}
+              { }
               <View style={s.infoRow}>
                 <TouchableOpacity activeOpacity={0.7} style={s.forgotBtn}>
                   <Text style={s.forgotText}>{t("Auto.Common.ForgotPassword", "Forgot Password?")}</Text>
@@ -650,44 +640,38 @@ export default function LoginScreen() {const { t } = useTranslation();
                 </View>
               </View>
 
-              {}
+              { }
               <LinearGradient
                 colors={['transparent', C.white20, 'transparent']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={s.divider} />
-              
-
-              {}
+              { }
               <TouchableOpacity
                 activeOpacity={0.8}
                 disabled={loading}
                 onPress={handleLogin}
                 style={[s.loginBtn, loading && s.loginBtnDisabled]}>
                 {loading ?
-                <View style={s.loadingRow}>
+                  <View style={s.loadingRow}>
                     <Animated.View style={{ transform: [{ rotate: spinDeg }], marginRight: 8 }}>
                       <SpinnerGap size={18} color={C.white} />
                     </Animated.View>
                     <Text style={s.loginBtnText}>{t("Auto.Common.Loggingin", "Logging in...")}</Text>
                   </View> :
 
-                <Text style={s.loginBtnText}>{t("Auto.Common.Login", "Login")}</Text>
+                  <Text style={s.loginBtnText}>{t("Auto.Common.Login", "Login")}</Text>
                 }
               </TouchableOpacity>
             </View>
-            {}
+            { }
           </ScrollView>
-          {}
+          { }
         </ImageBackground>
       </Animated.View>
-      {}
+      { }
     </View>);
-
 }
-
-
-
 
 const s = StyleSheet.create({
 
@@ -705,9 +689,6 @@ const s = StyleSheet.create({
     bottom: 0,
     zIndex: 10
   },
-
-
-
 
   leftGradient: {
     flex: 1,

@@ -52,7 +52,7 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {cons
             {event.type.charAt(0).toUpperCase() + event.type.slice(1)} -{" "}
             {event.subjectName && event.subjectName !== "-" ?
             event.subjectName :
-            "General"}{" "}
+            t("Calendar.faculty.general", "General")}{" "}
             {event.subjectKey &&
             <Text className="text-gray-500" style={{ fontFamily: fonts.medium }}>[{event.subjectKey}]</Text>
             }

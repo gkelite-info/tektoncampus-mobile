@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { updateDeviceSessionForEvent } from "@/lib/helpers/devices/classSessionActivation";
 
 export type CalendarEventRow = {
   facultyId: number;
@@ -142,6 +143,15 @@ export async function saveCalendarEvent(payload: {
     if (error) {
       console.error("updateCalendarEvent error:", error);
       return { success: false, error };
+    }
+
+    if (payload.type === "class") {
+      await updateDeviceSessionForEvent({
+        calendarEventId: payload.calendarEventId,
+        eventDate: payload.date,
+        fromTime: payload.fromTime,
+        toTime: payload.toTime,
+      });
     }
 
     return {

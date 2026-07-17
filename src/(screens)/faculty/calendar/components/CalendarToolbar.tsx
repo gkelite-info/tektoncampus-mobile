@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/AppText';
 import { fonts } from '@/constants/fonts';
 import React from "react";
@@ -18,11 +19,12 @@ const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
   activeTab,
   setActiveTab,
 }) => {
+  const { t } = useTranslation();
   const tabs = [
-    { name: "All Scheduled", filterValue: "All", icon: CalendarBlank },
-    { name: "Meetings", filterValue: "meeting", icon: VideoConference },
-    { name: "Classes", filterValue: "class", icon: ChalkboardTeacher },
-    { name: "Exams", filterValue: "exam", icon: Exam },
+    { name: t("Calendar.faculty.allScheduled", "All Scheduled"), filterValue: "All", icon: CalendarBlank },
+    { name: t("Calendar.faculty.meetings", "Meetings"), filterValue: "meeting", icon: VideoConference },
+    { name: t("Calendar.faculty.classes", "Classes"), filterValue: "class", icon: ChalkboardTeacher },
+    { name: t("Calendar.faculty.exams", "Exams"), filterValue: "exam", icon: Exam },
   ];
 
   return (

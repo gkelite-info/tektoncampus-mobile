@@ -4,8 +4,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
-import { ChartLineDown, UserCircle, UsersThree, CaretDown } from "phosphor-react-native";
-import { Picker } from "@react-native-picker/picker";
+import { ChartLineDown, UserCircle, UsersThree } from "phosphor-react-native";
+import { AppPicker } from "@/components/AppPicker";
 import { useFaculty } from "@/utils/context/faculty/useFaculty";
 import { getFacultyStudentProgressSummary } from "@/lib/helpers/faculty/studentProgress/getFacultyStudentProgressSummary";
 
@@ -235,34 +235,29 @@ export default function FacultyStudentProgressScreen() {
         { }
         <View style={tw`mb-4 flex-row flex-wrap items-center gap-4`}>
           <View style={tw`flex-col gap-1 w-[45%]`}>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs  text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Subject", "Subject")}</Text>
-            <View style={tw`bg-[#43C17A]/10 px-3 py-2 rounded-xl`}>
-              <Text style={[{ fontFamily: fonts.bold }, tw`text-[#43C17A] text-xs `]} numberOfLines={1}>{subjectNameUI}</Text>
+            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Subject", "Subject")}</Text>
+            <View style={tw`bg-[#43C17A]/10 px-3 rounded-xl justify-center h-[46px]`}>
+              <Text style={tw`text-[#43C17A] text-xs font-bold`} numberOfLines={1}>{subjectNameUI}</Text>
             </View>
           </View>
 
           <View style={tw`flex-col gap-1 w-[25%]`}>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs  text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Year", "Year")}</Text>
-            <View style={tw`bg-[#43C17A]/10 px-3 py-2 rounded-xl`}>
-              <Text style={[{ fontFamily: fonts.bold }, tw`text-[#43C17A] text-xs `]} numberOfLines={1}>{yearNameUI}</Text>
+            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Year", "Year")}</Text>
+            <View style={tw`bg-[#43C17A]/10 px-3 rounded-xl justify-center h-[46px]`}>
+              <Text style={tw`text-[#43C17A] text-xs font-bold`} numberOfLines={1}>{yearNameUI}</Text>
             </View>
           </View>
 
           <View style={tw`flex-col gap-1 flex-1`}>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs  text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Sec", "Sec")}</Text>
-            <View style={tw`bg-white border border-gray-200 rounded-xl overflow-hidden h-[32px] justify-center`}>
-              <Picker
-                selectedValue={selectedSectionId}
-                onValueChange={(itemValue) => setSelectedSectionId(itemValue)}
-                style={[{ fontFamily: fonts.bold }, tw`text-xs text-gray-800 bg-transparent`]}
-                itemStyle={[{ fontFamily: fonts.bold }, tw`text-xs`]}>
-
-                <Picker.Item label={t("Auto.Attr.All", "All")} value="all" />
-                {uniqueSections.map((sec) =>
-                  <Picker.Item key={sec.id} label={sec.name} value={sec.id} />
-                )}
-              </Picker>
-            </View>
+            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Sec", "Sec")}</Text>
+            <AppPicker
+              selectedValue={selectedSectionId}
+              onValueChange={(itemValue) => setSelectedSectionId(itemValue)}
+              items={[
+                { label: t("Auto.Attr.All", "All"), value: "all" },
+                ...uniqueSections.map((sec) => ({ label: sec.name, value: sec.id }))
+              ]}
+            />
           </View>
         </View>
 

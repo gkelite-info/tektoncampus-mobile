@@ -39,7 +39,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
   useEffect(() => {
-    setSelectedDayIndex(0);
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const todayIndex = weekDays.findIndex((wd) => wd.fullDate === todayStr);
+    setSelectedDayIndex(todayIndex !== -1 ? todayIndex : 0);
   }, [weekDays]);
 
   const handlePrevDay = () => {

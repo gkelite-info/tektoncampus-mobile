@@ -32,7 +32,7 @@ export const getWeekDays = (currentDate: Date): WeekDay[] => {
     week.push({
       day: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][d.getDay()],
       date: d.getDate(),
-      fullDate: d.toISOString().split("T")[0],
+      fullDate: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
     });
   }
   return week;

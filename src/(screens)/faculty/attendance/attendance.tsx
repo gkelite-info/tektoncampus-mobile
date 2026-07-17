@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts'; import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, TextInput } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -12,8 +12,9 @@ import StuAttendanceTable from "./components/StuAttendanceTable";
 import AttendanceSkeleton from "./shimmer/AttendanceSkeleton";
 import {
   getClassDetails,
-  UpcomingLesson } from
-"@/lib/helpers/faculty/attendance/getClasses";
+  UpcomingLesson
+} from
+  "@/lib/helpers/faculty/attendance/getClasses";
 import {
   getStudentsForClass,
   saveAttendance,
@@ -21,14 +22,17 @@ import {
   ClassOption,
   SectionOption,
   getFacultyClasses,
-  getClassSections } from
-"@/lib/helpers/faculty/attendance/attendanceActions";
+  getClassSections
+} from
+  "@/lib/helpers/faculty/attendance/attendanceActions";
+import { useAttendanceRealtime, recalculateAttendancePercentage } from "@/lib/helpers/faculty/attendance/liveAttendanceAPI";
 
 type ParamList = {
-  Attendance: {classId?: string;};
+  Attendance: { classId?: string; };
 };
 
-export default function FacultyAttendance() {const { t } = useTranslation();
+export default function FacultyAttendance() {
+  const { t } = useTranslation();
   const route = useRoute<RouteProp<ParamList, 'Attendance'>>();
   const navigation = useNavigation<any>();
   const headerHeight = useHeaderHeight();
@@ -47,6 +51,7 @@ export default function FacultyAttendance() {const { t } = useTranslation();
   const [sectionOptions, setSectionOptions] = useState<SectionOption[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>("");
   const [selectedSectionId, setSelectedSectionId] = useState<string>("");
+  const [selectedCalendarType, setSelectedCalendarType] = useState<"Single" | "Bulk">("Single");
 
   const [isEditing, setIsEditing] = useState(false);
   const [isCancellingMode, setIsCancellingMode] = useState(false);
@@ -54,6 +59,62 @@ export default function FacultyAttendance() {const { t } = useTranslation();
 
   const activeClassId = urlClassId || selectedClassId;
   const isTopicMode = !!urlClassId;
+
+  const isBulk = activeClassId ? activeClassId.startsWith("bulk-") : false;
+  const eventId = activeClassId ? parseInt(isBulk ? activeClassId.split("-")[1].split("_")[0] : activeClassId.split("-")[0]) : null;
+
+  useAttendanceRealtime(
+    eventId,
+    isBulk,
+    (payload) => {
+      const newRecord = payload.new;
+      if (newRecord && newRecord.studentId) {
+        let matchedStudentName = "";
+        let status = "Not Marked";
+
+        setStudentsList((prev) => {
+          return prev.map((s) => {
+            if (s.id === String(newRecord.studentId)) {
+              if (newRecord.status === "PRESENT") status = "Present";
+              else if (newRecord.status === "LATE") status = "Late";
+              else if (newRecord.status === "ABSENT") status = "Absent";
+
+              if (s.attendance !== status) {
+                matchedStudentName = s.name;
+              }
+
+              let newPercentage = s.percentage;
+              let newStats = s.stats;
+              if (s.stats) {
+                const recalc = recalculateAttendancePercentage(
+                  s.attendance,
+                  newRecord.status,
+                  s.stats
+                );
+                newPercentage = recalc.newPercentage;
+                newStats = recalc.newStats;
+              }
+
+              return {
+                ...s,
+                attendance: status as any,
+                reason: newRecord.reason || "",
+                percentage: newPercentage,
+                stats: newStats,
+              };
+            }
+            return s;
+          });
+        });
+
+        if (matchedStudentName) {
+          setTimeout(() => {
+            Toast.show({ type: 'success', text1: `${matchedStudentName} was marked ${status}!` });
+          }, 0);
+        }
+      }
+    }
+  );
 
   const confirmClassCancel = () => {
     if (!cancelReason.trim()) {
@@ -103,12 +164,18 @@ export default function FacultyAttendance() {const { t } = useTranslation();
           const classes = await getFacultyClasses(facultyId!);
           setClassOptions(classes);
 
-          if (classes.length === 0) {
+          const filteredClasses = classes.filter(c => selectedCalendarType === "Bulk" ? c.id.startsWith("bulk-") : !c.id.startsWith("bulk-"));
+
+          if (filteredClasses.length === 0) {
             setStudentsList([]);
+            setSelectedClassId("");
+            setSelectedSectionId("");
+            setSectionOptions([]);
+            setClassData(null);
             return;
           }
 
-          const firstClass = classes[0];
+          const firstClass = filteredClasses[0];
           setSelectedClassId(firstClass.id);
 
           const sections = await getClassSections(firstClass.id);
@@ -127,10 +194,28 @@ export default function FacultyAttendance() {const { t } = useTranslation();
       }
       initFilters();
     }
-  }, [urlClassId, facultyId, contextLoading]);
+  }, [urlClassId, facultyId, contextLoading, selectedCalendarType]);
 
-  const handleFilterChange = async (type: "class" | "section", value: string) => {
-    if (type === "class") {
+  const handleFilterChange = async (type: "class" | "section" | "calendarType", value: string) => {
+    if (type === "calendarType") {
+      setSelectedCalendarType(value as "Single" | "Bulk");
+      const filteredClasses = classOptions.filter(c => value === "Bulk" ? c.id.startsWith("bulk-") : !c.id.startsWith("bulk-"));
+      if (filteredClasses.length === 0) {
+        setStudentsList([]);
+        setSelectedClassId("");
+        setSelectedSectionId("");
+        setSectionOptions([]);
+        setClassData(null);
+        return;
+      }
+      const firstClass = filteredClasses[0];
+      setSelectedClassId(firstClass.id);
+      const sections = await getClassSections(firstClass.id);
+      setSectionOptions(sections);
+      const firstSec = sections.length > 0 ? sections[0].id : "";
+      setSelectedSectionId(firstSec);
+      loadStudents(firstClass.id, firstSec);
+    } else if (type === "class") {
       setSelectedClassId(value);
       const sections = await getClassSections(value);
       setSectionOptions(sections);
@@ -190,8 +275,8 @@ export default function FacultyAttendance() {const { t } = useTranslation();
 
   const topicName = classData?.description || "Select a Class";
   const classTime = classData ?
-  `${classData.fromTime} - ${classData.toTime}` :
-  "-- : --";
+    `${classData.fromTime} - ${classData.toTime}` :
+    "-- : --";
   const attendanceStats = studentsList.reduce(
     (acc, s) => {
       if (s.attendance === "Present") acc.present++;
@@ -203,34 +288,34 @@ export default function FacultyAttendance() {const { t } = useTranslation();
   );
 
   const baseCardData: CardProps[] = [
-  {
-    value: String(studentsList.length),
-    label: "Total Students",
-    bgColor: "bg-[#FFEDDA]",
-    icon: <UsersThree color="white" />,
-    iconBgColor: "bg-[#FFBB70]"
-  },
-  {
-    value: String(attendanceStats.present),
-    label: "Total Students Present",
-    bgColor: "bg-[#E6FBEA]",
-    icon: <UsersThree color="white" />,
-    iconBgColor: "bg-[#43C17A]"
-  },
-  {
-    value: String(attendanceStats.absent),
-    label: "Total Students Absent",
-    bgColor: "bg-[#FFE0E0]",
-    icon: <UserCircle color="white" />,
-    iconBgColor: "bg-[#FF2020]"
-  },
-  {
-    value: String(attendanceStats.leave),
-    label: "Total Students on Leave",
-    bgColor: "bg-[#CEE6FF]",
-    icon: <ChartLineDown color="white" />,
-    iconBgColor: "bg-[#60AEFF]"
-  }];
+    {
+      value: String(studentsList.length),
+      label: "Total Students",
+      bgColor: "bg-[#FFEDDA]",
+      icon: <UsersThree color="white" />,
+      iconBgColor: "bg-[#FFBB70]"
+    },
+    {
+      value: String(attendanceStats.present),
+      label: "Total Students Present",
+      bgColor: "bg-[#E6FBEA]",
+      icon: <UsersThree color="white" />,
+      iconBgColor: "bg-[#43C17A]"
+    },
+    {
+      value: String(attendanceStats.absent),
+      label: "Total Students Absent",
+      bgColor: "bg-[#FFE0E0]",
+      icon: <UserCircle color="white" />,
+      iconBgColor: "bg-[#FF2020]"
+    },
+    {
+      value: String(attendanceStats.leave),
+      label: "Total Students on Leave",
+      bgColor: "bg-[#CEE6FF]",
+      icon: <ChartLineDown color="white" />,
+      iconBgColor: "bg-[#60AEFF]"
+    }];
 
 
   if (!initialized || loading || contextLoading) {
@@ -242,101 +327,102 @@ export default function FacultyAttendance() {const { t } = useTranslation();
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 20}>
-      
+
       <ScrollView
         className="flex-1 bg-white px-4 pb-4"
         style={{ paddingTop: headerHeight + 16 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled">
-        
-      <View className="mb-4">
-        <View className="flex-row items-center justify-between mb-4">
-          <View className="flex-row items-center flex-1">
-            {urlClassId &&
-              <TouchableOpacity onPress={handleCancel} className="mr-2">
-                <CaretLeft size={24} color="#2D3748" weight="bold" />
-              </TouchableOpacity>
+
+        <View className="mb-4">
+          <View className="flex-row items-center justify-between mb-4">
+            <View className="flex-row items-center flex-1">
+              {urlClassId &&
+                <TouchableOpacity onPress={handleCancel} className="mr-2">
+                  <CaretLeft size={24} color="#2D3748" weight="bold" />
+                </TouchableOpacity>
               }
-            <View>
-              <Text className="text-2xl text-gray-900" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Attendance", "Attendance")}</Text>
-              <Text className="text-sm text-[#282828] mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Trackverifyandm", "Track, verify, and manage attendance.")}</Text>
+              <View>
+                <Text className="text-2xl text-gray-900" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Attendance", "Attendance")}</Text>
+                <Text className="text-sm text-[#282828] mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Trackverifyandm", "Track, verify, and manage attendance.")}</Text>
+              </View>
             </View>
           </View>
+
+          {classData &&
+            <View className="bg-[#1E2952] px-4 py-4 rounded-xl shadow-sm mb-4">
+              <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ClassTime", "Class Time :")}<Text className="text-gray-200" style={{ fontFamily: fonts.regular }}>{classTime}</Text></Text>
+              <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{classData.department?.map((item: any) => item.name).join(", ")}</Text>
+              <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Year", "Year")}{classData.year} - {classData.degree}</Text>
+            </View>
+          }
         </View>
 
-        {classData &&
-          <View className="bg-[#1E2952] px-4 py-4 rounded-xl shadow-sm mb-4">
-            <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ClassTime", "Class Time :")}<Text className="text-gray-200" style={{ fontFamily: fonts.regular }}>{classTime}</Text></Text>
-            <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{classData.department?.map((item: any) => item.name).join(", ")}</Text>
-            <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Year", "Year")}{classData.year} - {classData.degree}</Text>
-          </View>
-          }
-      </View>
-
-      <View className="flex-row flex-wrap justify-between">
-        {baseCardData.map((item, index) =>
-          <View key={index} className="w-[48%] mb-4">
-            <CardComponent {...item} />
-          </View>
+        <View className="flex-row flex-wrap justify-between">
+          {baseCardData.map((item, index) =>
+            <View key={index} className="w-[48%] mb-4">
+              <CardComponent {...item} />
+            </View>
           )}
-      </View>
-
-      {urlClassId &&
-        <View className="flex-row items-center justify-between py-2 mb-2 min-h-[40px]">
-          <View className="flex-1 mr-2">
-            <Text className="text-lg text-gray-800" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
-              <Text className="text-[#43C17A]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Topic", "Topic :")}</Text>
-              {topicName}
-            </Text>
-          </View>
         </View>
+
+        {urlClassId &&
+          <View className="flex-row items-center justify-between py-2 mb-2 min-h-[40px]">
+            <View className="flex-1 mr-2">
+              <Text className="text-lg text-gray-800" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+                <Text className="text-[#43C17A]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Topic", "Topic :")}</Text>
+                {topicName}
+              </Text>
+            </View>
+          </View>
         }
 
-      {isCancellingMode &&
-        <View className="flex-row items-center justify-between bg-gray-50 p-2 rounded-lg mb-4 border border-gray-200">
-          <Text className="text-gray-700 ml-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Reason", "Reason:")}</Text>
-          <TextInput
-            className="flex-1 ml-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200 text-sm"
-            placeholder={t("Auto.Attr.Typereasonhere", "Type reason here...")}
-            value={cancelReason}
-            onChangeText={setCancelReason} />
-          
-          <TouchableOpacity onPress={confirmClassCancel} className="bg-green-500 p-2 rounded-lg ml-2">
-            <Check size={18} color="white" weight="bold" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsCancellingMode(false)} className="bg-gray-300 p-2 rounded-lg ml-2">
-            <X size={18} color="gray" weight="bold" />
-          </TouchableOpacity>
-        </View>
+        {isCancellingMode &&
+          <View className="flex-row items-center justify-between bg-gray-50 p-2 rounded-lg mb-4 border border-gray-200">
+            <Text className="text-gray-700 ml-2" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Reason", "Reason:")}</Text>
+            <TextInput
+              className="flex-1 ml-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200 text-sm"
+              placeholder={t("Auto.Attr.Typereasonhere", "Type reason here...")}
+              value={cancelReason}
+              onChangeText={setCancelReason} />
+
+            <TouchableOpacity onPress={confirmClassCancel} className="bg-green-500 p-2 rounded-lg ml-2">
+              <Check size={18} color="white" weight="bold" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIsCancellingMode(false)} className="bg-gray-300 p-2 rounded-lg ml-2">
+              <X size={18} color="gray" weight="bold" />
+            </TouchableOpacity>
+          </View>
         }
 
-      <View className="flex-1 pb-20">
-        {tableLoading || urlClassId || classOptions.length > 0 || sectionOptions.length > 0 ?
-          <StuAttendanceTable
-            students={studentsList}
-            setStudents={setStudentsList}
-            handleSaveAttendance={handleSaveAttendance}
-            saving={saving}
-            isTopicMode={isTopicMode}
-            classes={classOptions}
-            sections={sectionOptions}
-            selectedClass={selectedClassId}
-            selectedSection={selectedSectionId}
-            onFilterChange={urlClassId ? undefined : handleFilterChange}
-            loadingFilters={tableLoading}
-            isEditing={isEditing}
-            onEditClick={() => setIsEditing(true)}
-            onCancelEditClick={handleCancelEdit}
-            onMarkCancelClick={() => {setCancelReason("");setIsCancellingMode(true);}}
-            isCancellingMode={isCancellingMode} /> :
+        <View className="flex-1 pb-20">
+          {tableLoading || urlClassId || classOptions.length > 0 || sectionOptions.length > 0 ?
+            <StuAttendanceTable
+              students={studentsList}
+              setStudents={setStudentsList}
+              handleSaveAttendance={handleSaveAttendance}
+              saving={saving}
+              isTopicMode={isTopicMode}
+              classes={classOptions}
+              sections={sectionOptions}
+              selectedClass={selectedClassId}
+              selectedSection={selectedSectionId}
+              onFilterChange={urlClassId ? undefined : handleFilterChange}
+              loadingFilters={tableLoading}
+              isEditing={isEditing}
+              onEditClick={() => setIsEditing(true)}
+              onCancelEditClick={handleCancelEdit}
+              onMarkCancelClick={() => { setCancelReason(""); setIsCancellingMode(true); }}
+              isCancellingMode={isCancellingMode}
+              calendarType={selectedCalendarType} /> :
 
 
-          <View className="py-16 items-center justify-center">
-            <Text className="text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Nostudentsfound", "No students found")}</Text>
-          </View>
+            <View className="py-16 items-center justify-center">
+              <Text className="text-gray-500" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Nostudentsfound", "No students found")}</Text>
+            </View>
           }
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>);
 
 }

@@ -7,11 +7,11 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { supabase } from "@/lib/supabaseServer";
 
 import { STUDENT_DATA } from "./data";
-import { 
-    UserInfoCard, 
-    CardComponent, 
-    StudentPerformanceCard, 
-    UpcomingClasses 
+import {
+    UserInfoCard,
+    CardComponent,
+    StudentPerformanceCard,
+    UpcomingClasses
 } from "@/utils/dashboardCards";
 
 import { getUpcomingClasses, UpcomingLesson } from "@/lib/helpers/faculty/attendance/getClasses";
@@ -62,13 +62,13 @@ export default function FacultyDashLeft() {
             if (currentFacultyId) {
                 setFacultyId(currentFacultyId);
 
-                
+
                 const { data: subjectData } = await supabase
                     .from("faculty_sections")
                     .select("college_subjects(subjectName)")
                     .eq("facultyId", currentFacultyId)
                     .is("deletedAt", null);
-                
+
                 if (subjectData && subjectData.length > 0) {
                     const subjectsArray = subjectData
                         .map((s: any) => s.college_subjects?.subjectName)
@@ -78,7 +78,7 @@ export default function FacultyDashLeft() {
                     setFacultySubject(`(${subjects})`);
                 }
 
-                
+
                 const [classesData, statsData] = await Promise.all([
                     getUpcomingClasses(userId),
                     getFacultyDashboardStats(currentFacultyId),
@@ -163,19 +163,19 @@ export default function FacultyDashLeft() {
             user: user?.fullName ?? "User",
             studentsTaskPercentage: 0,
             facultySubject: facultySubject || "(Faculty)",
-            image: gender === "Female" 
-                ? require("../../../../../assets/female-faculty.png") 
+            image: gender === "Female"
+                ? require("../../../../../assets/female-faculty.png")
                 : require("../../../../../assets/male-faculty.png"),
         },
     ];
 
     return (
-        <ScrollView 
+        <ScrollView
             className="w-full flex-1"
             contentContainerStyle={{ paddingTop: headerHeight + 16, paddingHorizontal: 16, paddingBottom: 160 }}
         >
             <UserInfoCard cardProps={card} loading={isLoadingClasses} />
-            
+
             <View className="mt-4 flex-row flex-wrap justify-between">
                 {cardData.map((item, index) => (
                     <View key={index} className="w-[48%] mb-4">
@@ -204,13 +204,12 @@ export default function FacultyDashLeft() {
                 />
             </View>
 
-            <ClassActionModal 
-
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                lesson={selectedLesson} 
-                onAccept={handleAcceptClass} 
-                onCancelClass={handleCancelClass} 
+            <ClassActionModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                lesson={selectedLesson}
+                onAccept={handleAcceptClass}
+                onCancelClass={handleCancelClass}
             />
         </ScrollView>
     );

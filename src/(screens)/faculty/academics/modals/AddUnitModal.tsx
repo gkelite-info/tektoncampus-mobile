@@ -205,9 +205,9 @@ export default function AddUnitModal({ visible, onClose, onSave, subjectDetails 
       await saveAcademicUnit({
         collegeId: subjectDetails.collegeId,
         collegeEducationId: subjectDetails.collegeEducationId,
-        collegeBranchId: isSchool ? null : (subjectDetails.collegeBranchId || null),
+        collegeBranchId: isSchool ? 0 : (subjectDetails.collegeBranchId || 0),
         collegeAcademicYearId: subjectDetails.collegeAcademicYearId,
-        collegeSemesterId: isSchool ? null : (selectedSemesterId || subjectDetails.collegeSemesterId || null),
+        collegeSemesterId: isSchool ? 0 : (selectedSemesterId || subjectDetails.collegeSemesterId || 0),
         collegeSubjectId: subjectDetails.collegeSubjectId,
         collegeSectionId: subjectDetails.collegeSectionId,
         collegeSubjectUnitId: unitId,

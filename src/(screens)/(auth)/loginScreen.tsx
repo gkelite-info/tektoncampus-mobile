@@ -18,6 +18,7 @@ import { BlurView } from 'expo-blur';
 import { loginUser } from '@/services/auth/login';
 import Toast from 'react-native-toast-message';
 import { useAuthStore } from '@/store/authStore';
+import { useUser } from '@/utils/context/UserContext';
 
 
 const { width: SW, height: SH } = Dimensions.get('window');
@@ -160,6 +161,7 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
 
   const floatAnim = useRef(new Animated.Value(0)).current;
   const floatLoopRef = useRef<Animated.CompositeAnimation | null>(null);
+  const { collegeEducationType } = useUser();
 
   useEffect(() => {
     if (position === 'center') {

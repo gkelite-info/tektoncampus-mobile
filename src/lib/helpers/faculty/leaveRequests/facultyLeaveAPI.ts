@@ -163,22 +163,34 @@ export async function updateStudentLeaveStatus(
 }
 
 export async function fetchFacultyLeaveCounts(facultyId: number) {
-  const { data, error } = await supabase
-    .from("faculty_leaves")
-    .select(`status`)
-    .eq("facultyId", facultyId)
-    .is("deletedAt", null);
+  try {
+    const { data: faculty, error: facError } = await supabase
+      .from("faculty")
+      .select("userId")
+      .eq("facultyId", facultyId)
+      .single();
 
-  if (error) return { all: 0, approved: 0, pending: 0, rejected: 0 };
+    if (facError || !faculty) return { all: 0, approved: 0, pending: 0, rejected: 0 };
 
-  const counts = { all: data.length, approved: 0, pending: 0, rejected: 0 };
-  data.forEach((d) => {
-    const s = d.status?.toLowerCase();
-    if (s === "approved") counts.approved++;
-    if (s === "pending") counts.pending++;
-    if (s === "rejected") counts.rejected++;
-  });
-  return counts;
+    const { data, error } = await supabase
+      .from("employee_leave_requests")
+      .select(`status`)
+      .eq("userId", faculty.userId)
+      .eq("is_deleted", false);
+
+    if (error) return { all: 0, approved: 0, pending: 0, rejected: 0 };
+
+    const counts = { all: data.length, approved: 0, pending: 0, rejected: 0 };
+    data.forEach((d) => {
+      const s = d.status?.toLowerCase();
+      if (s === "approved") counts.approved++;
+      if (s === "pending") counts.pending++;
+      if (s === "rejected") counts.rejected++;
+    });
+    return counts;
+  } catch {
+    return { all: 0, approved: 0, pending: 0, rejected: 0 };
+  }
 }
 
 export async function fetchFacultyLeaves(
@@ -188,55 +200,61 @@ export async function fetchFacultyLeaves(
   statusFilter: string,
   searchQuery: string,
 ) {
-  let query = supabase
-    .from("faculty_leaves")
-    .select("*", { count: "exact" })
-    .eq("facultyId", facultyId)
-    .is("deletedAt", null);
+  try {
+    const { data: faculty, error: facError } = await supabase
+      .from("faculty")
+      .select("userId")
+      .eq("facultyId", facultyId)
+      .single();
 
-  if (statusFilter !== "all") {
-    query = query.eq(
-      "status",
-      statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1),
-    );
-  }
+    if (facError || !faculty) return { data: [], totalCount: 0 };
 
-  if (searchQuery.trim() !== "") {
-    query = query.ilike("description", `%${searchQuery.trim()}%`);
-  }
+    let query = supabase
+      .from("employee_leave_requests")
+      .select("*", { count: "exact" })
+      .eq("userId", faculty.userId)
+      .eq("is_deleted", false);
 
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
-  query = query.order("createdAt", { ascending: false }).range(from, to);
+    if (statusFilter !== "all") {
+      query = query.eq(
+        "status",
+        statusFilter.toLowerCase(),
+      );
+    }
 
-  const { data, error, count } = await query;
+    if (searchQuery.trim() !== "") {
+      query = query.ilike("description", `%${searchQuery.trim()}%`);
+    }
 
-  if (error) {
-    console.warn(
-      "faculty_leaves table might not exist yet, returning empty.",
-      error,
-    );
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+    query = query.order("createdAt", { ascending: false }).range(from, to);
+
+    const { data, error, count } = await query;
+    if (error) throw error;
+
+    const mappedData = (data || []).map((l: any) => {
+      const sDate = new Date(l.leaveFromDate);
+      const eDate = new Date(l.leaveToDate);
+      const diffTime = Math.abs(eDate.getTime() - sDate.getTime());
+      const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+      return {
+        id: l.employeeLeaveRequestId,
+        fromDate: sDate.toLocaleDateString("en-GB"),
+        toDate: eDate.toLocaleDateString("en-GB"),
+        days: String(days).padStart(2, "0"),
+        leaveType: l.leaveType ? (l.leaveType.charAt(0).toUpperCase() + l.leaveType.slice(1)) : "Personal",
+        description: l.description?.trim() || "",
+        status: l.status ? l.status.toLowerCase() : "pending",
+      };
+    });
+
+    return { data: mappedData, totalCount: count || 0 };
+  } catch (error) {
+    console.error("fetchFacultyLeaves error:", error);
     return { data: [], totalCount: 0 };
   }
-
-  const mappedData = (data || []).map((l: any) => {
-    const sDate = new Date(l.startDate);
-    const eDate = new Date(l.endDate);
-    const diffTime = Math.abs(eDate.getTime() - sDate.getTime());
-    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-    return {
-      id: l.facultyLeaveId,
-      fromDate: sDate.toLocaleDateString("en-GB"),
-      toDate: eDate.toLocaleDateString("en-GB"),
-      days: String(days).padStart(2, "0"),
-      leaveType: l.leaveType || "Personal",
-      description: l.description?.trim() || "",
-      status: l.status ? l.status.toLowerCase() : "pending",
-    };
-  });
-
-  return { data: mappedData, totalCount: count || 0 };
 }
 
 export async function submitFacultyLeaveRequest(
@@ -246,15 +264,43 @@ export async function submitFacultyLeaveRequest(
   const { startDate, endDate, leaveType, description, taggedFacultyIds } = payload;
   const now = new Date().toISOString();
 
+  const { data: faculty, error: facultyError } = await supabase
+    .from("faculty")
+    .select("userId, collegeId, role")
+    .eq("facultyId", facultyId)
+    .single();
+
+  if (facultyError) throw facultyError;
+
+  const { data: emp, error: empError } = await supabase
+    .from("employee_ids")
+    .select("employeeIdPk")
+    .eq("userId", faculty.userId)
+    .single();
+
+  if (empError) throw empError;
+
+  let typeMapped = leaveType.toLowerCase();
+  if (typeMapped === 'function') {
+    typeMapped = 'others';
+  } else if (!['casual', 'sick', 'personal', 'emergency', 'travel', 'medical', 'others'].includes(typeMapped)) {
+    typeMapped = 'others';
+  }
+
   const { data, error } = await supabase
-    .from("faculty_leaves")
+    .from("employee_leave_requests")
     .insert({
-      facultyId,
-      startDate,
-      endDate,
-      leaveType,
+      userId: faculty.userId,
+      employeeId: emp.employeeIdPk,
+      collegeId: faculty.collegeId,
+      role: faculty.role || 'Faculty',
+      leaveType: typeMapped,
+      leaveFromDate: startDate,
+      leaveToDate: endDate,
       description,
-      status: "Pending",
+      status: "pending",
+      isActive: true,
+      is_deleted: false,
       createdAt: now,
       updatedAt: now,
     })
@@ -263,27 +309,37 @@ export async function submitFacultyLeaveRequest(
 
   if (error) throw error;
 
-  
-  if (taggedFacultyIds && taggedFacultyIds.length > 0 && data?.facultyLeaveId) {
-    const tagsToInsert = taggedFacultyIds.map((id: number) => ({
-      facultyLeaveId: data.facultyLeaveId,
-      facultyId: id,
-    }));
-    
-    const { error: tagError } = await supabase
-      .from("faculty_leave_faculties")
-      .insert(tagsToInsert);
+  if (taggedFacultyIds && taggedFacultyIds.length > 0 && data?.employeeLeaveRequestId) {
+    const { data: taggedFaculties, error: taggedError } = await supabase
+      .from("faculty")
+      .select("facultyId, userId")
+      .in("facultyId", taggedFacultyIds);
+
+    if (taggedError) {
+      console.warn("Failed to fetch tagged faculties userIds:", taggedError);
+    } else {
+      const tagsToInsert = taggedFaculties.map((f: any) => ({
+        employeeLeaveRequestId: data.employeeLeaveRequestId,
+        taggedUserId: f.userId,
+        taggedRole: 'Faculty',
+        createdAt: now,
+        updatedAt: now
+      }));
       
-    if (tagError) {
-      console.warn("Failed to tag faculties:", tagError);
-      
+      const { error: tagError } = await supabase
+        .from("employee_leave_request_tags")
+        .insert(tagsToInsert);
+        
+      if (tagError) {
+        console.warn("Failed to tag faculties:", tagError);
+      }
     }
   }
 
   return data;
 }
 
-export async function fetchAllFaculties(currentFacultyId: number) {
+export async function fetchAllFaculties(currentFacultyId: number, collegeId: number, collegeEducationId: number) {
   try {
     const { data, error } = await supabase
       .from("faculty")
@@ -291,6 +347,8 @@ export async function fetchAllFaculties(currentFacultyId: number) {
         facultyId,
         users:userId ( fullName, user_profile(profileUrl) )
       `)
+      .eq("collegeId", collegeId)
+      .eq("collegeEducationId", collegeEducationId)
       .neq("facultyId", currentFacultyId)
       .eq("isActive", true)
       .is("deletedAt", null);
@@ -314,11 +372,19 @@ export async function fetchAllFaculties(currentFacultyId: number) {
 
 export async function fetchTaggedLeaveCounts(facultyId: number) {
   try {
+    const { data: faculty, error: facError } = await supabase
+      .from("faculty")
+      .select("userId")
+      .eq("facultyId", facultyId)
+      .single();
+
+    if (facError || !faculty) return { all: 0, approved: 0, pending: 0, rejected: 0 };
+
     const { data, error } = await supabase
-      .from("faculty_leaves")
-      .select(`status, faculty_leave_faculties!inner(facultyId)`)
-      .eq("faculty_leave_faculties.facultyId", facultyId)
-      .is("deletedAt", null);
+      .from("employee_leave_requests")
+      .select(`status, employee_leave_request_tags!inner(taggedUserId)`)
+      .eq("employee_leave_request_tags.taggedUserId", faculty.userId)
+      .eq("is_deleted", false);
 
     if (error) return { all: 0, approved: 0, pending: 0, rejected: 0 };
 
@@ -343,22 +409,31 @@ export async function fetchTaggedLeaves(
   searchQuery: string,
 ) {
   try {
+    const { data: faculty, error: facError } = await supabase
+      .from("faculty")
+      .select("userId")
+      .eq("facultyId", facultyId)
+      .single();
+
+    if (facError || !faculty) return { data: [], totalCount: 0 };
+
     let query = supabase
-      .from("faculty_leaves")
+      .from("employee_leave_requests")
       .select(`
         *,
-        faculty_leave_faculties!inner(facultyId),
-        faculty:facultyId (
-          users:userId ( fullName, user_profile(profileUrl) )
+        employee_leave_request_tags!inner(taggedUserId),
+        users:userId (
+          fullName,
+          user_profile(profileUrl)
         )
       `, { count: "exact" })
-      .eq("faculty_leave_faculties.facultyId", facultyId)
-      .is("deletedAt", null);
+      .eq("employee_leave_request_tags.taggedUserId", faculty.userId)
+      .eq("is_deleted", false);
 
     if (statusFilter !== "all") {
       query = query.eq(
         "status",
-        statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1),
+        statusFilter.toLowerCase(),
       );
     }
 
@@ -374,21 +449,20 @@ export async function fetchTaggedLeaves(
     if (error) throw error;
 
     const mappedData = (data || []).map((l: any) => {
-      const sDate = new Date(l.startDate);
-      const eDate = new Date(l.endDate);
+      const sDate = new Date(l.leaveFromDate);
+      const eDate = new Date(l.leaveToDate);
       const diffTime = Math.abs(eDate.getTime() - sDate.getTime());
       const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-      const fac = Array.isArray(l.faculty) ? l.faculty[0] : l.faculty;
-      const user = Array.isArray(fac?.users) ? fac?.users[0] : fac?.users;
+      const user = Array.isArray(l.users) ? l.users[0] : l.users;
       const profile = Array.isArray(user?.user_profile) ? user?.user_profile[0] : user?.user_profile;
 
       return {
-        id: l.facultyLeaveId,
+        id: l.employeeLeaveRequestId,
         fromDate: sDate.toLocaleDateString("en-GB"),
         toDate: eDate.toLocaleDateString("en-GB"),
         days: String(days).padStart(2, "0"),
-        leaveType: l.leaveType || "Personal",
+        leaveType: l.leaveType ? (l.leaveType.charAt(0).toUpperCase() + l.leaveType.slice(1)) : "Personal",
         description: l.description?.trim() || "",
         status: l.status ? l.status.toLowerCase() : "pending",
         requesterName: user?.fullName || "Unknown Faculty",
@@ -398,8 +472,7 @@ export async function fetchTaggedLeaves(
 
     return { data: mappedData, totalCount: count || 0 };
   } catch (error) {
-    console.warn("fetchTaggedLeaves failed (table might not exist)", error);
+    console.error("fetchTaggedLeaves failed:", error);
     return { data: [], totalCount: 0 };
   }
 }
-

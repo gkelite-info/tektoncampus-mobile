@@ -256,7 +256,6 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             value={form.quizTitle}
             onChangeText={(val) => setForm({ ...form, quizTitle: val })}
             placeholder={t("Auto.Attr.egUnit1Assessme", "e.g. Unit 1 Assessment")}
-            style={{ fontFamily: fonts.medium }}
             className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-black" />
 
         </View>
@@ -267,12 +266,10 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
           <View className="border border-gray-200 rounded-md bg-white overflow-hidden">
             <Picker
               selectedValue={form.selectedSubjectId}
-              onValueChange={(val) => setForm({ ...form, selectedSubjectId: val, selectedTopicId: '', selectedYearId: '', selectedSectionId: '' })}
-              style={{ fontFamily: fonts.medium }}
-              itemStyle={{ fontFamily: fonts.medium }}>
+              onValueChange={(val) => setForm({ ...form, selectedSubjectId: val, selectedTopicId: '', selectedYearId: '', selectedSectionId: '' })}>
 
               <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" />
-              {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={String(s.id)} />)}
+              {uniqueSubjects.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
             </Picker>
           </View>
         </View>
@@ -284,12 +281,10 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
             <Picker
               selectedValue={form.selectedTopicId}
               onValueChange={(val) => setForm({ ...form, selectedTopicId: val })}
-              enabled={!!form.selectedSubjectId}
-              style={{ fontFamily: fonts.medium }}
-              itemStyle={{ fontFamily: fonts.medium }}>
+              enabled={!!form.selectedSubjectId}>
 
               <Picker.Item label={t("Auto.Attr.SelectTopic", "Select Topic")} value="" color="#9CA3AF" />
-              {topics.map((t, idx) => <Picker.Item key={idx} label={t.topicTitle} value={String(t.collegeSubjectUnitTopicId)} />)}
+              {topics.map((t, idx) => <Picker.Item key={idx} label={t.topicTitle} value={t.collegeSubjectUnitTopicId} />)}
             </Picker>
           </View>
         </View>
@@ -302,12 +297,10 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               <Picker
                 selectedValue={form.selectedYearId}
                 onValueChange={(val) => setForm({ ...form, selectedYearId: val, selectedSectionId: '' })}
-                enabled={!!form.selectedSubjectId}
-                style={{ fontFamily: fonts.medium }}
-                itemStyle={{ fontFamily: fonts.medium }}>
+                enabled={!!form.selectedSubjectId}>
 
                 <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" />
-                {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={String(y.id)} />)}
+                {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} />)}
               </Picker>
             </View>
           </View>
@@ -317,12 +310,10 @@ export default function FacultyQuizForm({ quizId, isEditMode, onCancel, onSaved 
               <Picker
                 selectedValue={form.selectedSectionId}
                 onValueChange={(val) => setForm({ ...form, selectedSectionId: val })}
-                enabled={!!form.selectedYearId}
-                style={{ fontFamily: fonts.medium }}
-                itemStyle={{ fontFamily: fonts.medium }}>
+                enabled={!!form.selectedYearId}>
 
                 <Picker.Item label={t("Auto.Attr.SelectSection", "Select Section")} value="" color="#9CA3AF" />
-                {availableSections.map((s) => <Picker.Item key={s.id} label={s.name} value={String(s.id)} />)}
+                {availableSections.map((s) => <Picker.Item key={s.id} label={s.name} value={s.id} />)}
               </Picker>
             </View>
           </View>

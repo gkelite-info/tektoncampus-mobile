@@ -7,10 +7,10 @@ export type FacultyWeightageConfigRow = {
 
     collegeId: number;
     collegeEducationId: number;
-    collegeBranchId: number;
+    collegeBranchId: number | null;
     collegeSubjectId: number;
     collegeSectionsId: number;
-    collegeSemesterId: number;
+    collegeSemesterId: number | null;
 
     totalPercentage: number;
 
@@ -22,16 +22,21 @@ export type FacultyWeightageConfigRow = {
 export async function fetchExistingFacultyWeightageConfig(
     collegeSubjectId: number,
     collegeSectionsId: number,
-    collegeSemesterId: number,
+    collegeSemesterId: number | null | undefined,
 ) {
-    const { data, error } = await supabase
+    let query = supabase
         .from("faculty_weightage_configs")
         .select("facultyWeightageConfigId")
         .eq("collegeSubjectId", collegeSubjectId)
-        .eq("collegeSectionsId", collegeSectionsId)
-        .eq("collegeSemesterId", collegeSemesterId)
-        .is("deletedAt", null)
-        .single();
+        .eq("collegeSectionsId", collegeSectionsId);
+
+    if (collegeSemesterId === null || collegeSemesterId === undefined) {
+        query = query.is("collegeSemesterId", null);
+    } else {
+        query = query.eq("collegeSemesterId", collegeSemesterId);
+    }
+
+    const { data, error } = await query.is("deletedAt", null).single();
 
     if (error) {
         if (error.code === "PGRST116") {
@@ -46,9 +51,9 @@ export async function fetchExistingFacultyWeightageConfig(
 export async function fetchFacultyWeightageConfigs(
     collegeSubjectId: number,
     collegeSectionsId: number,
-    collegeSemesterId: number,
+    collegeSemesterId: number | null | undefined,
 ) {
-    const { data, error } = await supabase
+    let query = supabase
         .from("faculty_weightage_configs")
         .select(`
       facultyWeightageConfigId,
@@ -66,8 +71,15 @@ export async function fetchFacultyWeightageConfigs(
       deletedAt
     `)
         .eq("collegeSubjectId", collegeSubjectId)
-        .eq("collegeSectionsId", collegeSectionsId)
-        .eq("collegeSemesterId", collegeSemesterId)
+        .eq("collegeSectionsId", collegeSectionsId);
+
+    if (collegeSemesterId === null || collegeSemesterId === undefined) {
+        query = query.is("collegeSemesterId", null);
+    } else {
+        query = query.eq("collegeSemesterId", collegeSemesterId);
+    }
+
+    const { data, error } = await query
         .is("deletedAt", null)
         .order("createdAt", { ascending: false });
 
@@ -84,10 +96,10 @@ export async function saveFacultyWeightageConfig(
         facultyWeightageConfigId?: number;
         collegeId: number;
         collegeEducationId: number;
-        collegeBranchId: number;
+        collegeBranchId: number | null;
         collegeSubjectId: number;
         collegeSectionsId: number;
-        collegeSemesterId: number;
+        collegeSemesterId: number | null;
         totalPercentage: number;
     },
     actor: {

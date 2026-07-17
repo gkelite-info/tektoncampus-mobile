@@ -11,6 +11,8 @@ import AddProjectForm from "./components/AddProjectForm";
 import StudentSubmissions from "./components/StudentSubmissions";
 import { MotiView } from "moti";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useUser } from '@/utils/context/UserContext';
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 
 type ViewState = "list" | "add_project" | "submissions";
 
@@ -24,6 +26,8 @@ export default function FacultyProjects() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<ProjectCardProps | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { collegeEducationType } = useUser();
+  const isSchool = isSchoolEducation(collegeEducationType);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -42,7 +46,7 @@ export default function FacultyProjects() {
             title: p.title,
             description: p.description ?? "",
             duration: p.duration,
-            techStack: p.domain.join(", "),
+            techStack: p.domain?.join(", ") ?? "",
             mentors: p.mentors,
             teamMembers: p.teamMembers,
             marks: p.marks ?? 0,
@@ -97,7 +101,7 @@ export default function FacultyProjects() {
         <View style={tw`flex-row justify-between items-start mb-6`}>
           <View style={tw`flex-1 pr-4`}>
             <Text style={[{ fontFamily: fonts.bold }, tw`text-2xl text-black`]}>{t("Auto.Common.Projects", "Projects -")}
-              {college_branch ?? "..."} {collegeAcademicYear}
+              {isSchool ? "" : ` ${college_branch ?? "..."} `} {collegeAcademicYear}
             </Text>
             <Text style={[{ fontFamily: fonts.regular }, tw`text-sm text-gray-500 mt-1`]}>{t("Auto.Common.Createmanageand", "Create, manage, and track student projects effortlessly.")}
 

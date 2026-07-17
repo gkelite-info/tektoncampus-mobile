@@ -272,7 +272,6 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
               onValueChange={(val) => setForm({ ...form, subjectId: val, branchId: '', sectionIds: [], yearId: '' })}
               enabled={uniqueSubjects.length > 1}
               style={{ fontFamily: fonts.regular }}
-              itemStyle={{ fontFamily: fonts.regular }}
             >
 
               <Picker.Item label={t("Auto.Attr.SelectSubject", "Select Subject")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
@@ -317,12 +316,10 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
               <Picker
                 selectedValue={form.branchId}
                 onValueChange={(val) => setForm({ ...form, branchId: val, sectionIds: [], yearId: '' })}
-                enabled={!!form.subjectId && availableBranches.length > 1}
-                style={{ fontFamily: fonts.regular }}
-                itemStyle={{ fontFamily: fonts.regular }}>
+                enabled={!!form.subjectId && availableBranches.length > 1}>
 
-                <Picker.Item label={t("Auto.Attr.SelectBranch", "Select Branch")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
-                {availableBranches.map((b) => <Picker.Item key={b.id} label={b.name} value={b.id} style={{ fontFamily: fonts.regular }} />)}
+                <Picker.Item label={t("Auto.Attr.SelectBranch", "Select Branch")} value="" color="#9CA3AF" fontFamily={fonts.regular} />
+                {availableBranches.map((b) => <Picker.Item key={b.id} label={b.name} value={b.id} fontFamily={fonts.regular} />)}
               </Picker>
             </View>
           </View>
@@ -335,12 +332,10 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
             <Picker
               selectedValue={form.yearId}
               onValueChange={(val) => setForm({ ...form, yearId: val, sectionIds: [] })}
-              enabled={isSchoolEducation(collegeEducationType) ? !!form.subjectId : !!form.branchId}
-              style={{ fontFamily: fonts.regular }}
-              itemStyle={{ fontFamily: fonts.regular }}>
+              enabled={isSchoolEducation(collegeEducationType) ? !!form.subjectId : !!form.branchId}>
 
-              <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
-              {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} style={{ fontFamily: fonts.regular }} />)}
+              <Picker.Item label={t("Auto.Attr.SelectYear", "Select Year")} value="" color="#9CA3AF" fontFamily={fonts.regular} />
+              {availableYears.map((y) => <Picker.Item key={y.id} label={y.name} value={y.id} fontFamily={fonts.regular} />)}
             </Picker>
           </View>
         </View>
@@ -369,13 +364,11 @@ export default function AssignmentForm({ initialData, onSave, onCancel }: Props)
                   }
                   setSectionSelect('');
                 }}
-                enabled={!!form.yearId}
-                style={{ fontFamily: fonts.regular }}
-                itemStyle={{ fontFamily: fonts.regular }}>
+                enabled={!!form.yearId}>
 
-                <Picker.Item label={form.yearId ? "Select section" : "Select year first"} value="" color="#9CA3AF" style={{ fontFamily: fonts.regular }} />
+                <Picker.Item label={form.yearId ? "Select section" : "Select year first"} value="" color="#9CA3AF" fontFamily={fonts.regular} />
                 {availableSections.filter((s) => !form.sectionIds.includes(String(s.id))).map((s) =>
-                  <Picker.Item key={s.id} label={s.name} value={s.id} style={{ fontFamily: fonts.regular }} />
+                  <Picker.Item key={s.id} label={s.name} value={s.id} fontFamily={fonts.regular} />
                 )}
               </Picker>
             </View>

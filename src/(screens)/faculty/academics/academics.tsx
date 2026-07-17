@@ -28,8 +28,9 @@ export default function AcademicsScreen() {
   const [facultyCtx, setFacultyCtx] = useState<any>(null);
 
   const [subjectId, setSubjectId] = useState<number | null>(null);
+  const [yearId, setYearId] = useState<number | null>(null);
   const [sectionId, setSectionId] = useState<number | null>(null);
-  const [dropdownType, setDropdownType] = useState<'subject' | 'section' | null>(null);
+  const [dropdownType, setDropdownType] = useState<'subject' | 'year' | 'section' | null>(null);
 
   const hasLoadedOnce = useRef(false);
 
@@ -100,8 +101,10 @@ export default function AcademicsScreen() {
   const filteredCards = subjects.filter((card: any) => {
     const cardSubId = card.collegeSubjectId;
     const cardSecId = card.collegeSectionId;
+    const cardYearId = card.collegeAcademicYearId;
 
     if (subjectId !== null && Number(cardSubId) !== Number(subjectId)) return false;
+    if (yearId !== null && Number(cardYearId) !== Number(yearId)) return false;
     if (sectionId !== null && Number(cardSecId) !== Number(sectionId)) return false;
 
     return true;
@@ -121,24 +124,34 @@ export default function AcademicsScreen() {
         <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Trackprogressad", "Track progress, add lessons and manage course content")}</Text>
       </View>
 
-      <View className="px-4 mb-4 flex-row items-center justify-between">
-        <View className="flex-row items-center gap-2 flex-1">
-          <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Subject", "Subject:")}</Text>
-          <TouchableOpacity onPress={() => setDropdownType('subject')} className="bg-[#DCEAE2] px-3 py-1 rounded-full flex-row items-center flex-1">
-            <Text className="text-[#43C17A] text-xs flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+      <View className="px-4 mb-4 flex-row items-center justify-between gap-2">
+        <View className="flex-row items-center gap-1 flex-1">
+          <Text className="text-[#525252] text-[10px]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Subject", "Subject:")}</Text>
+          <TouchableOpacity onPress={() => setDropdownType('subject')} className="bg-[#DCEAE2] px-2 py-1 rounded-full flex-row items-center flex-1">
+            <Text className="text-[#43C17A] text-[10px] flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
               {subjectId ? subjects.find((s) => s.collegeSubjectId === subjectId)?.subjectTitle : "All"}
             </Text>
-            <CaretDown size={12} color="#43C17A" weight="bold" />
+            <CaretDown size={10} color="#43C17A" weight="bold" />
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row items-center gap-2 flex-1 ml-4">
-          <Text className="text-[#525252] text-xs" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Section", "Section:")}</Text>
-          <TouchableOpacity onPress={() => setDropdownType('section')} className="bg-[#DCEAE2] px-3 py-1 rounded-full flex-row items-center flex-1">
-            <Text className="text-[#43C17A] text-xs flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+        <View className="flex-row items-center gap-1 flex-1">
+          <Text className="text-[#525252] text-[10px]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Year", "Year:")}</Text>
+          <TouchableOpacity onPress={() => setDropdownType('year')} className="bg-[#DCEAE2] px-2 py-1 rounded-full flex-row items-center flex-1">
+            <Text className="text-[#43C17A] text-[10px] flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
+              {yearId ? facultyCtx?.collegeAcademicYears?.find((y: any) => y.collegeAcademicYearId === yearId)?.collegeAcademicYear : "All"}
+            </Text>
+            <CaretDown size={10} color="#43C17A" weight="bold" />
+          </TouchableOpacity>
+        </View>
+
+        <View className="flex-row items-center gap-1 flex-1">
+          <Text className="text-[#525252] text-[10px]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Section", "Section:")}</Text>
+          <TouchableOpacity onPress={() => setDropdownType('section')} className="bg-[#DCEAE2] px-2 py-1 rounded-full flex-row items-center flex-1">
+            <Text className="text-[#43C17A] text-[10px] flex-1" numberOfLines={1} style={{ fontFamily: fonts.bold }}>
               {sectionId ? filteredSections.find((s: any) => s.collegeSectionsId === sectionId)?.college_sections?.collegeSections : "All"}
             </Text>
-            <CaretDown size={12} color="#43C17A" weight="bold" />
+            <CaretDown size={10} color="#43C17A" weight="bold" />
           </TouchableOpacity>
         </View>
       </View>
@@ -164,11 +177,13 @@ export default function AcademicsScreen() {
         <TouchableOpacity activeOpacity={1} onPress={() => setDropdownType(null)} className="flex-1 bg-black/50 justify-center items-center px-4">
           <View className="bg-white w-full max-h-[60%] rounded-xl overflow-hidden p-4">
             <Text className="text-lg text-[#282828] mb-4" style={{ fontFamily: fonts.bold }}>
-              {dropdownType === 'subject' ? 'Select Subject' : 'Select Section'}
+              {dropdownType === 'subject' ? 'Select Subject' : dropdownType === 'year' ? 'Select Year' : 'Select Section'}
             </Text>
             <FlatList
               data={dropdownType === 'subject' ?
                 [{ id: null, title: 'All' }, ...Array.from(new Map(subjects.map(s => [s.collegeSubjectId, s])).values()).map(s => ({ id: s.collegeSubjectId, title: s.subjectTitle }))]
+                : dropdownType === 'year' ?
+                [{ id: null, title: 'All' }, ...(facultyCtx?.collegeAcademicYears?.map((y: any) => ({ id: y.collegeAcademicYearId, title: y.collegeAcademicYear })) || [])]
                 :
                 [{ id: null, title: 'All' }, ...Array.from(new Map(filteredSections.map((s: any) => [s.collegeSectionsId, s])).values()).map((s: any) => ({ id: s.collegeSectionsId, title: s.college_sections?.collegeSections }))]
               }
@@ -180,6 +195,8 @@ export default function AcademicsScreen() {
                     if (dropdownType === 'subject') {
                       setSubjectId(item.id as number | null);
                       if (item.id !== subjectId) setSectionId(null);
+                    } else if (dropdownType === 'year') {
+                      setYearId(item.id as number | null);
                     } else {
                       setSectionId(item.id as number | null);
                     }
@@ -187,7 +204,7 @@ export default function AcademicsScreen() {
                   }}
                 >
                   <Text className="text-[#525252] text-sm" style={{ fontFamily: fonts.regular }}>{item.title}</Text>
-                  {((dropdownType === 'subject' && subjectId === item.id) || (dropdownType === 'section' && sectionId === item.id)) && (
+                  {((dropdownType === 'subject' && subjectId === item.id) || (dropdownType === 'year' && yearId === item.id) || (dropdownType === 'section' && sectionId === item.id)) && (
                     <View className="w-2 h-2 rounded-full bg-[#43C17A]" />
                   )}
                 </TouchableOpacity>

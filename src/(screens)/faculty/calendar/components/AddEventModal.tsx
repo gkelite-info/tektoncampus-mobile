@@ -40,8 +40,8 @@ export default function AddEventModal({
 
   const [endHour, setEndHour] = useState("10");
   const [endMinute, setEndMinute] = useState("00");
-  const [endPeriod, setEndPeriod] = useState<"AM"|"PM">("AM");
-  
+  const [endPeriod, setEndPeriod] = useState<"AM" | "PM">("AM");
+
   const [collegeRoomId, setCollegeRoomId] = useState<number | null>(null);
   const [rooms, setRooms] = useState<any[]>([]);
   const [topicId, setTopicId] = useState<number | null>(null);
@@ -120,19 +120,19 @@ export default function AddEventModal({
         if (filteredSecs.length === 1) setSectionIds([filteredSecs[0].collegeSectionsId]);
 
         const { data: subjectRows } = await supabase.
-        from("college_subjects").
-        select("collegeSubjectId, subjectName").
-        eq("collegeId", collegeId).
-        eq("collegeEducationId", facultyCtx.collegeEducationId).
-        eq("collegeBranchId", facultyCtx.collegeBranchId).
-        eq("collegeAcademicYearId", facultyCtx.academicYearIds?.[0]).
-        in("collegeSubjectId", facultyCtx.subjectIds).
-        eq("isActive", true).
-        is("deletedAt", null);
+          from("college_subjects").
+          select("collegeSubjectId, subjectName").
+          eq("collegeId", collegeId).
+          eq("collegeEducationId", facultyCtx.collegeEducationId).
+          eq("collegeBranchId", facultyCtx.collegeBranchId).
+          eq("collegeAcademicYearId", facultyCtx.academicYearIds?.[0]).
+          in("collegeSubjectId", facultyCtx.subjectIds).
+          eq("isActive", true).
+          is("deletedAt", null);
 
         setSubjects(subjectRows || []);
         if (subjectRows?.length === 1) setSubjectId(subjectRows[0].collegeSubjectId);
-      } catch (err) {}
+      } catch (err) { }
     };
     loadData();
   }, [collegeId, facultyCtx, isOpen]);
@@ -153,20 +153,20 @@ export default function AddEventModal({
   useEffect(() => {
     if (!subjectId || !isOpen) return;
     supabase.
-    from("college_subject_unit_topics").
-    select("collegeSubjectUnitTopicId, topicTitle").
-    eq("collegeSubjectId", subjectId).
-    eq("collegeId", collegeId).
-    then(({ data }) => setTopics(data || []));
+      from("college_subject_unit_topics").
+      select("collegeSubjectUnitTopicId, topicTitle").
+      eq("collegeSubjectId", subjectId).
+      eq("collegeId", collegeId).
+      then(({ data }) => setTopics(data || []));
 
     supabase.
-    from("college_subjects").
-    select("collegeSemesterId").
-    eq("collegeSubjectId", subjectId).
-    single().
-    then(({ data }) => {
-      if (data?.collegeSemesterId) setSemester(data.collegeSemesterId);
-    });
+      from("college_subjects").
+      select("collegeSemesterId").
+      eq("collegeSubjectId", subjectId).
+      single().
+      then(({ data }) => {
+        if (data?.collegeSemesterId) setSemester(data.collegeSemesterId);
+      });
   }, [subjectId, isOpen]);
 
   useEffect(() => {
@@ -200,15 +200,15 @@ export default function AddEventModal({
   };
 
   const handleSave = async () => {
-    if (!semester) {Toast.show({ type: 'error', text1: t("Calendar.faculty.selectSemesterPlz", "Please select semester") });return;}
-    if (!sectionIds.length) {Toast.show({ type: 'error', text1: t("Calendar.faculty.selectSectionsPlz", "Please select sections") });return;}
-    if (!topicId) {Toast.show({ type: 'error', text1: t("Calendar.faculty.selectTopicPlz", "Please select a topic") });return;}
-    if (selectedType === "meeting" && !title.trim()) {Toast.show({ type: 'error', text1: t("Calendar.faculty.enterMeetingTitle", "Please enter meeting title") });return;}
+    if (!semester) { Toast.show({ type: 'error', text1: t("Calendar.faculty.selectSemesterPlz", "Please select semester") }); return; }
+    if (!sectionIds.length) { Toast.show({ type: 'error', text1: t("Calendar.faculty.selectSectionsPlz", "Please select sections") }); return; }
+    if (!topicId) { Toast.show({ type: 'error', text1: t("Calendar.faculty.selectTopicPlz", "Please select a topic") }); return; }
+    if (selectedType === "meeting" && !title.trim()) { Toast.show({ type: 'error', text1: t("Calendar.faculty.enterMeetingTitle", "Please enter meeting title") }); return; }
 
     const startTime = to24Hour(startHour, startMinute, startPeriod);
     const endTime = to24Hour(endHour, endMinute, endPeriod);
 
-    if (startTime >= endTime) {Toast.show({ type: 'error', text1: t("Calendar.faculty.endAfterStart", "End time must be after start time") });return;}
+    if (startTime >= endTime) { Toast.show({ type: 'error', text1: t("Calendar.faculty.endAfterStart", "End time must be after start time") }); return; }
 
     const payload = {
       facultyId: userId!,
@@ -257,21 +257,20 @@ export default function AddEventModal({
           </View>
 
           <ScrollView className="flex-1 p-5" contentContainerStyle={{ paddingBottom: 40 }}>
-            
+
             <Text className="text-sm font-medium text-gray-700 mb-2">{t("Auto.Common.Type", "Type")}</Text>
             <View className="flex-row gap-2 mb-4">
               {["class", "meeting", "exam"].map((t_type) =>
                 <TouchableOpacity
                   key={t_type}
                   onPress={() => setSelectedType(t_type)}
-                  className={`flex-1 py-2.5 rounded-lg border items-center ${
-                  selectedType === t_type ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"}`
+                  className={`flex-1 py-2.5 rounded-lg border items-center ${selectedType === t_type ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"}`
                   }>
                   <Text className={`text-sm font-medium ${selectedType === t_type ? "text-white" : "text-gray-700"}`}>
-                    {t_type === "class" ? t("Calendar.faculty.class", "Class") : 
-                     t_type === "meeting" ? t("Calendar.faculty.meeting", "Meeting") : 
-                     t_type === "exam" ? t("Calendar.faculty.exam", "Exam") :
-                     t_type.charAt(0).toUpperCase() + t_type.slice(1)}
+                    {t_type === "class" ? t("Calendar.faculty.class", "Class") :
+                      t_type === "meeting" ? t("Calendar.faculty.meeting", "Meeting") :
+                        t_type === "exam" ? t("Calendar.faculty.exam", "Exam") :
+                          t_type.charAt(0).toUpperCase() + t_type.slice(1)}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -279,9 +278,9 @@ export default function AddEventModal({
 
             <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Subject", "Subject")}</Text>
             <View className="mb-4">
-              <AppPicker 
-                selectedValue={subjectId} 
-                onValueChange={(val) => {setSubjectId(val);setTopicId(null);}}
+              <AppPicker
+                selectedValue={subjectId}
+                onValueChange={(val) => { setSubjectId(val); setTopicId(null); }}
                 placeholder={t("Auto.Attr.SelectSubject", "Select Subject")}
                 items={subjects.map((s) => ({ label: s.subjectName, value: s.collegeSubjectId }))}
               />
@@ -289,8 +288,8 @@ export default function AddEventModal({
 
             <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Topic", "Topic")}</Text>
             <View className="mb-4">
-              <AppPicker 
-                selectedValue={topicId} 
+              <AppPicker
+                selectedValue={topicId}
                 onValueChange={setTopicId}
                 placeholder={t("Auto.Attr.SelectTopic", "Select Topic")}
                 items={topics.map((t) => ({ label: t.topicTitle, value: t.collegeSubjectUnitTopicId }))}
@@ -305,9 +304,8 @@ export default function AddEventModal({
                     <TouchableOpacity
                       key={plat}
                       onPress={() => setMeetingPlatform(plat as any)}
-                      className={`flex-1 py-2 rounded-lg border items-center ${
-                        meetingPlatform === plat ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"
-                      }`}
+                      className={`flex-1 py-2 rounded-lg border items-center ${meetingPlatform === plat ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300"
+                        }`}
                     >
                       <Text className={`text-sm font-medium ${meetingPlatform === plat ? "text-white" : "text-gray-700"}`}>
                         {plat === "meet" ? t("Calendar.faculty.meet", "Meet") : plat === "zoom" ? t("Calendar.faculty.zoom", "Zoom") : t("Calendar.faculty.others", "Others")}
@@ -321,7 +319,7 @@ export default function AddEventModal({
                   value={title}
                   onChangeText={setTitle}
                   placeholder={t("Auto.Attr.egParentMeeting", "e.g. Parent Meeting")}
-                  className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" 
+                  className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
                 />
 
                 {meetingPlatform === "zoom" ? (
@@ -331,14 +329,14 @@ export default function AddEventModal({
                       value={meetingId}
                       onChangeText={setMeetingId}
                       placeholder={t("Calendar.faculty.enterMeetingId", "Enter Meeting ID")}
-                      className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" 
+                      className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
                     />
                     <Text className="text-sm font-medium text-gray-700 mb-1">{t("Calendar.faculty.meetingPassword", "Meeting Password")}</Text>
                     <TextInput
                       value={meetingPassword}
                       onChangeText={setMeetingPassword}
                       placeholder={t("Calendar.faculty.enterMeetingPassword", "Enter Password")}
-                      className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" 
+                      className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
                     />
                   </>
                 ) : (
@@ -348,7 +346,7 @@ export default function AddEventModal({
                       value={meetingLink}
                       onChangeText={setMeetingLink}
                       placeholder={t("Auto.Attr.https", "https://...")}
-                      className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800" 
+                      className="border border-gray-300 rounded-lg px-4 py-3 mb-4 text-gray-800"
                     />
                   </>
                 )}
@@ -364,30 +362,30 @@ export default function AddEventModal({
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
-              onConfirm={(d) => {setDate(d);setDatePickerVisibility(false);}}
+              onConfirm={(d) => { setDate(d); setDatePickerVisibility(false); }}
               onCancel={() => setDatePickerVisibility(false)}
-              date={date} 
+              date={date}
             />
-            
+
             <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.StartTime", "Start Time")}</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1">
-                <AppPicker 
-                  selectedValue={startHour} 
+                <AppPicker
+                  selectedValue={startHour}
                   onValueChange={setStartHour}
                   items={Array.from({ length: 12 }, (_, i) => { const h = String(i + 1).padStart(2, '0'); return { label: h, value: h } })}
                 />
               </View>
               <View className="flex-1">
-                <AppPicker 
-                  selectedValue={startMinute} 
+                <AppPicker
+                  selectedValue={startMinute}
                   onValueChange={setStartMinute}
                   items={Array.from({ length: 12 }, (_, i) => { const m = String(i * 5).padStart(2, '0'); return { label: m, value: m } })}
                 />
               </View>
               <View className="flex-1">
-                <AppPicker 
-                  selectedValue={startPeriod} 
+                <AppPicker
+                  selectedValue={startPeriod}
                   onValueChange={setStartPeriod}
                   items={[{ label: t("Auto.Attr.AM", "AM"), value: "AM" }, { label: t("Auto.Attr.PM", "PM"), value: "PM" }]}
                 />
@@ -397,22 +395,22 @@ export default function AddEventModal({
             <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.EndTime", "End Time")}</Text>
             <View className="flex-row gap-2 mb-4">
               <View className="flex-1">
-                <AppPicker 
-                  selectedValue={endHour} 
+                <AppPicker
+                  selectedValue={endHour}
                   onValueChange={setEndHour}
                   items={Array.from({ length: 12 }, (_, i) => { const h = String(i + 1).padStart(2, '0'); return { label: h, value: h } })}
                 />
               </View>
               <View className="flex-1">
-                <AppPicker 
-                  selectedValue={endMinute} 
+                <AppPicker
+                  selectedValue={endMinute}
                   onValueChange={setEndMinute}
                   items={Array.from({ length: 12 }, (_, i) => { const m = String(i * 5).padStart(2, '0'); return { label: m, value: m } })}
                 />
               </View>
               <View className="flex-1">
-                <AppPicker 
-                  selectedValue={endPeriod} 
+                <AppPicker
+                  selectedValue={endPeriod}
                   onValueChange={setEndPeriod}
                   items={[{ label: t("Auto.Attr.AM", "AM"), value: "AM" }, { label: t("Auto.Attr.PM", "PM"), value: "PM" }]}
                 />
@@ -421,8 +419,8 @@ export default function AddEventModal({
 
             <Text className="text-sm font-medium text-gray-700 mb-1">{t("Calendar.faculty.roomNo", "Room No.")}</Text>
             <View className="mb-4">
-              <AppPicker 
-                selectedValue={collegeRoomId} 
+              <AppPicker
+                selectedValue={collegeRoomId}
                 onValueChange={setCollegeRoomId}
                 placeholder={t("Calendar.faculty.selectRoom", "Select Room")}
                 items={rooms.map(r => ({ label: r.roomNo, value: r.collegeRoomId }))}
@@ -433,8 +431,8 @@ export default function AddEventModal({
               <>
                 <Text className="text-sm font-medium text-gray-700 mb-1">{t("Calendar.faculty.degree", "Degree")}</Text>
                 <View className="mb-4">
-                  <AppPicker 
-                    selectedValue={degree} 
+                  <AppPicker
+                    selectedValue={degree}
                     onValueChange={(val) => { setDegree(val); setSelectedDepartment(""); setYear(""); }}
                     placeholder={t("Calendar.faculty.selectDegree", "Select Degree")}
                     items={degreeOptions.map((d: any) => ({ label: d.degreeType, value: d.degreeType }))}
@@ -443,8 +441,8 @@ export default function AddEventModal({
 
                 <Text className="text-sm font-medium text-gray-700 mb-1">{t("Calendar.faculty.department", "Department")}</Text>
                 <View className="mb-4">
-                  <AppPicker 
-                    selectedValue={selectedDepartment} 
+                  <AppPicker
+                    selectedValue={selectedDepartment}
                     onValueChange={setSelectedDepartment}
                     placeholder={t("Calendar.faculty.selectDepartment", "Select Department")}
                     items={departmentOptions.map((d: string) => ({ label: d, value: d }))}
@@ -453,8 +451,8 @@ export default function AddEventModal({
 
                 <Text className="text-sm font-medium text-gray-700 mb-1">{t("Calendar.faculty.year", "Year")}</Text>
                 <View className="mb-4">
-                  <AppPicker 
-                    selectedValue={year} 
+                  <AppPicker
+                    selectedValue={year}
                     onValueChange={setYear}
                     placeholder={t("Calendar.faculty.selectYear", "Select Year")}
                     items={yearOptions.map((y: any) => ({ label: y.label, value: y.label }))}
@@ -471,8 +469,8 @@ export default function AddEventModal({
 
             <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Semester", "Semester")}</Text>
             <View className="mb-4">
-              <AppPicker 
-                selectedValue={semester} 
+              <AppPicker
+                selectedValue={semester}
                 onValueChange={setSemester}
                 placeholder={t("Auto.Attr.SelectSemester", "Select Semester")}
                 items={semesters.map((s) => ({ label: `Semester ${s.collegeSemester}`, value: s.collegeSemesterId }))}

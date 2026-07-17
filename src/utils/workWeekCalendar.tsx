@@ -96,7 +96,7 @@ export default function WorkWeekCalendar({
     );
 
     return (
-        <View className={`max-w-sm p-4 bg-white rounded-xl shadow-md flex flex-col justify-center gap-4 h-[170px] ${style}`}>
+        <View className={`w-full p-4 bg-white rounded-xl shadow-md flex flex-col justify-center gap-4 h-[170px] ${style}`}>
             <View className="flex-row justify-between items-center relative z-20">
                 <View className="flex-row items-center gap-1">
                     <TouchableOpacity

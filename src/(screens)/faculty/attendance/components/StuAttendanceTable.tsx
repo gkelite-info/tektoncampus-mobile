@@ -17,12 +17,13 @@ interface Props {
   sections?: SectionOption[];
   selectedClass?: string;
   selectedSection?: string;
-  onFilterChange?: (type: "class" | "section" | "calendarType", value: string) => void;
+  onFilterChange?: (type: "class" | "section" | "calendarType" | "sort", value: string) => void;
   loadingFilters?: boolean;
   onCancelEditClick?: () => void;
   onMarkCancelClick?: () => void;
   isCancellingMode?: boolean;
   calendarType?: "Single" | "Bulk";
+  sort: string;
 }
 function AttendanceToggle({
   value,
@@ -87,19 +88,17 @@ export default function StuAttendanceTable({
   onCancelEditClick,
   onMarkCancelClick,
   isCancellingMode,
-  calendarType = "Single"
+  calendarType = "Single",
+  sort
 }: Props) {
   const {
     t
   } = useTranslation();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
-  // Custom simple filters
   const [showCalendarTypeFilter, setShowCalendarTypeFilter] = useState(false);
   const [showClassFilter, setShowClassFilter] = useState(false);
   const [showSectionFilter, setShowSectionFilter] = useState(false);
   const [showSortFilter, setShowSortFilter] = useState(false);
-  const [sort, setSort] = useState("All");
 
   const visibleClasses = classes.filter(c => calendarType === "Bulk" ? c.id.startsWith("bulk-") : !c.id.startsWith("bulk-"));
   const filtered = students.filter(s => sort === "All" || s.attendance === sort);
@@ -136,7 +135,6 @@ export default function StuAttendanceTable({
   const shouldShowReasonInput = (status: string) => ["Absent", "Leave", "Class Cancel"].includes(status);
   return <View className="flex-1 w-full flex-col space-y-4">
       <View className="flex-col gap-4 mb-2">
-        {}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-3 py-1">
           {!isTopicMode && onFilterChange && (
             <>
@@ -156,16 +154,16 @@ export default function StuAttendanceTable({
             </>
           )}
 
-          {!isTopicMode && onFilterChange && <TouchableOpacity onPress={() => setShowSectionFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
-            
+          {!isTopicMode && onFilterChange && (
+            <TouchableOpacity onPress={() => setShowSectionFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
               <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>
                 {sections.find(s => s.id === selectedSection)?.name ? `Section ${sections.find(s => s.id === selectedSection)?.name}` : "All Sections"}
               </Text>
               <CaretDown size={14} color="#43C17A" weight="bold" />
-            </TouchableOpacity>}
+            </TouchableOpacity>
+          )}
           
           <TouchableOpacity onPress={() => setShowSortFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-2">
-            
             <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Sort", "Sort:")}{sort}</Text>
             <CaretDown size={14} color="#43C17A" weight="bold" />
           </TouchableOpacity>
@@ -249,7 +247,7 @@ export default function StuAttendanceTable({
               <View className="flex-row items-center">
                 {s.attendance === "Class Cancel" ? <View className="rounded-lg bg-gray-100 py-1.5 px-3 items-center">
                     <Text className="text-gray-600 text-xs" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Cancelled", "Cancelled")}</Text>
-                  </View> : <AttendanceToggle value={s.attendance} onChange={val => updateAttendance(s.id, val as any)} disabled={!isEditing} />}
+                  </View> : <AttendanceToggle value={s.attendance} onChange={(val: string) => updateAttendance(s.id, val as any)} disabled={!isEditing} />}
               </View>
 
             </View>
@@ -272,7 +270,6 @@ export default function StuAttendanceTable({
           </View>}
       </View>
 
-      {}
       <Modal visible={showCalendarTypeFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[250px]">
@@ -311,24 +308,19 @@ export default function StuAttendanceTable({
         </View>
       </Modal>
 
-      {}
       <Modal visible={showSectionFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
             <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Attr.SelectSection", "Select Section")}</Text>
             <ScrollView>
-              {sections.map(s => {
-              const {
-                t
-              } = useTranslation();
-              return <TouchableOpacity key={s.id} onPress={() => {
-                onFilterChange && onFilterChange("section", s.id);
-                setShowSectionFilter(false);
-              }} className="py-3 border-b border-gray-100">
-                
+              {sections.map(s => (
+                <TouchableOpacity key={s.id} onPress={() => {
+                  onFilterChange && onFilterChange("section", s.id);
+                  setShowSectionFilter(false);
+                }} className="py-3 border-b border-gray-100">
                   <Text className={`text-base ${selectedSection === s.id ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Section", "Section")}{s.name}</Text>
-                </TouchableOpacity>;
-            })}
+                </TouchableOpacity>
+              ))}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowSectionFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
               <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Close", "Close")}</Text>
@@ -337,17 +329,15 @@ export default function StuAttendanceTable({
         </View>
       </Modal>
       
-      {}
       <Modal visible={showSortFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
             <Text className="text-lg mb-4" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.SortBy", "Sort By")}</Text>
             <ScrollView>
               {["All", "Present", "Absent", "Leave", "Class Cancel"].map(s => <TouchableOpacity key={s} onPress={() => {
-              setSort(s);
+              onFilterChange && onFilterChange("sort", s);
               setShowSortFilter(false);
             }} className="py-3 border-b border-gray-100">
-                
                   <Text className={`text-base ${sort === s ?'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{s}</Text>
                 </TouchableOpacity>)}
             </ScrollView>

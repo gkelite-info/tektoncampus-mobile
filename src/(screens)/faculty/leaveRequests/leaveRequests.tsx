@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, FlatList, TouchableOpacity, TextInput, ActivityIndicator, StyleSheet, Platform, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -116,36 +117,36 @@ export default function LeaveRequestsScreen() {
       setActiveTab(id as any);
       setPage(1);
     }} className={`flex-1 min-w-[80px] p-3 rounded-xl border border-white/50 ${isActive ? activeBg : faintBg}`}>
-        
-        <View className="flex-row items-center justify-between mb-2">
-           <View className={`p-1.5 rounded-full ${iconBg}`}>
-              {icon(iconColor)}
-           </View>
+
+      <View className="flex-row items-center justify-between mb-2">
+        <View className={`p-1.5 rounded-full ${iconBg}`}>
+          {icon(iconColor)}
         </View>
-        <Text className={`text-[10px] font-medium mb-0.5 ${textColor}`}>{label}</Text>
-        <Text className={`text-xl font-bold ${valueColor}`}>
-          {String(value).padStart(2, '0')}
-        </Text>
-      </TouchableOpacity>;
+      </View>
+      <Text style={[{ fontFamily: fonts.medium }]} className={`text-[10px] mb-0.5 ${textColor}`}>{label}</Text>
+      <Text style={[{ fontFamily: fonts.bold }]} className={`text-xl ${valueColor}`}>
+        {String(value).padStart(2, '0')}
+      </Text>
+    </TouchableOpacity>;
   };
   const renderStudentLeaveCard = ({
     item
   }: {
     item: any;
   }) => {
-    
+
     return <View className="bg-white rounded-xl p-4 mb-3 border border-gray-100 flex-col">
       <View className="flex-row justify-between items-start mb-3">
         <View className="flex-row gap-3 flex-1">
-           <Avatar src={item.photo} size={40} />
-           <View className="flex-1">
-              <Text className="text-[#282828] font-bold text-sm">{item.name}</Text>
-              <Text className="text-gray-500 text-xs">{t("Auto.Common.ID", "ID:")}<Text className="font-semibold text-gray-700">{item.rollNo}</Text> • {item.branch}</Text>
-              <Text className="text-gray-500 text-xs">{item.semester}</Text>
-           </View>
+          <Avatar src={item.photo} size={40} />
+          <View className="flex-1">
+            <Text style={[{ fontFamily: fonts.bold }]} className="text-[#282828] text-sm">{item.name}</Text>
+            <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-500 text-xs">{t("Auto.Common.ID", "ID:")}<Text style={[{ fontFamily: fonts.semiBold }]} className=" text-gray-700">{item.rollNo}</Text> • {item.branch}</Text>
+            <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-500 text-xs">{item.semester}</Text>
+          </View>
         </View>
         <View className={`px-2.5 py-1 rounded-full ${item.status === 'approved' ? 'bg-[#E7F8EE]' : item.status === 'rejected' ? 'bg-[#FFE5E5]' : 'bg-[#FFF4EB]'}`}>
-          <Text className={`text-[10px] font-bold ${item.status === 'approved' ? 'text-[#43C17A]' : item.status === 'rejected' ? 'text-[#FF4B4B]' : 'text-[#FFB874]'}`}>
+          <Text style={[{ fontFamily: fonts.bold }]} className={`text-[10px] ${item.status === 'approved' ? 'text-[#43C17A]' : item.status === 'rejected' ? 'text-[#FF4B4B]' : 'text-[#FFB874]'}`}>
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
           </Text>
         </View>
@@ -153,62 +154,62 @@ export default function LeaveRequestsScreen() {
 
       <View className="bg-gray-50 p-3 rounded-lg flex-row justify-between mb-3 border border-gray-100">
         <View>
-          <Text className="text-xs text-gray-500 mb-0.5">{t("Auto.Common.DateRange", "Date Range")}</Text>
-          <Text className="text-xs text-[#282828] font-semibold">{item.fromDate} - {item.toDate}</Text>
+          <Text style={[{ fontFamily: fonts.regular }]} className="text-xs text-gray-500 mb-0.5">{t("Auto.Common.DateRange", "Date Range")}</Text>
+          <Text style={[{ fontFamily: fonts.semiBold }]} className="text-xs text-[#282828] ">{item.fromDate} - {item.toDate}</Text>
         </View>
         <View className="items-end">
-          <Text className="text-xs text-gray-500 mb-0.5">{t("Auto.Common.Days", "Days")}</Text>
-          <Text className="text-xs text-[#282828] font-semibold">{item.days}{t("Auto.Common.Days", "Day(s)")}</Text>
+          <Text style={[{ fontFamily: fonts.regular }]} className="text-xs text-gray-500 mb-0.5">{t("Auto.Common.Days", "Days")}</Text>
+          <Text style={[{ fontFamily: fonts.semiBold }]} className="text-xs text-[#282828] ">{item.days}{t("Auto.Common.Days", "Day(s)")}</Text>
         </View>
       </View>
 
-      <Text className="text-xs text-gray-700 mb-3" numberOfLines={2}>
-        <Text className="font-bold">{t("Auto.Common.Reason", "Reason:")}</Text>
+      <Text style={[{ fontFamily: fonts.regular }]} className="text-xs text-gray-700 mb-3" numberOfLines={2}>
+        <Text style={[{ fontFamily: fonts.bold }]} className="">{t("Auto.Common.Reason", "Reason:")}</Text>
         {item.description}
       </Text>
 
       {item.attachments && item.attachments.length > 0 && <View className="flex-row gap-2 mb-3">
-          {item.attachments.map((url: string, idx: number) => {
-          
+        {item.attachments.map((url: string, idx: number) => {
+
           return <TouchableOpacity key={idx} onPress={() => Linking.openURL(url)} className="flex-row items-center bg-blue-50 px-2 py-1 rounded-md border border-blue-100">
-                <Paperclip size={12} color="#2563EB" />
-                <Text className="text-[10px] text-blue-600 font-medium ml-1">{t("Auto.Common.Attach", "Attach")}{idx + 1}</Text>
-             </TouchableOpacity>;
+            <Paperclip size={12} color="#2563EB" />
+            <Text style={[{ fontFamily: fonts.medium }]} className="text-[10px] text-blue-600 ml-1">{t("Auto.Common.Attach", "Attach")}{idx + 1}</Text>
+          </TouchableOpacity>;
         })}
-        </View>}
+      </View>}
 
       <View className="flex-row items-center justify-between border-t border-gray-100 pt-3">
-         <TouchableOpacity onPress={() => {
+        <TouchableOpacity onPress={() => {
           setSelectedLeaveData(item);
           setIsDetailsModalOpen(true);
         }} className="px-2">
-        
-           <Text className="text-blue-600 text-xs font-bold">{t("Auto.Common.ViewDetails", "View Details")}</Text>
-         </TouchableOpacity>
-         
-         {item.status === 'pending' ? <View className="flex-row gap-2">
-             <TouchableOpacity onPress={() => setConfirmModal({
+
+          <Text style={[{ fontFamily: fonts.bold }]} className="text-blue-600 text-xs ">{t("Auto.Common.ViewDetails", "View Details")}</Text>
+        </TouchableOpacity>
+
+        {item.status === 'pending' ? <View className="flex-row gap-2">
+          <TouchableOpacity onPress={() => setConfirmModal({
             isOpen: true,
             leaveId: item.id,
             action: "Rejected"
           })} className="bg-[#FFE5E5] px-3 py-1.5 rounded-full">
-               <Text className="text-[#FF4B4B] text-[10px] font-bold">{t("Auto.Common.Reject", "Reject")}</Text>
-             </TouchableOpacity>
-             <TouchableOpacity onPress={() => setConfirmModal({
+            <Text style={[{ fontFamily: fonts.bold }]} className="text-[#FF4B4B] text-[10px] ">{t("Auto.Common.Reject", "Reject")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setConfirmModal({
             isOpen: true,
             leaveId: item.id,
             action: "Approved"
           })} className="bg-[#E7F8EE] px-3 py-1.5 rounded-full">
-               <Text className="text-[#43C17A] text-[10px] font-bold">{t("Auto.Common.Approve", "Approve")}</Text>
-             </TouchableOpacity>
-           </View> : <TouchableOpacity onPress={() => setConfirmModal({
+            <Text style={[{ fontFamily: fonts.bold }]} className="text-[#43C17A] text-[10px] ">{t("Auto.Common.Approve", "Approve")}</Text>
+          </TouchableOpacity>
+        </View> : <TouchableOpacity onPress={() => setConfirmModal({
           isOpen: true,
           leaveId: item.id,
           action: item.status === 'approved' ? "Rejected" : "Approved"
         })} className="flex-row items-center bg-gray-100 px-2 py-1.5 rounded-full border border-gray-200">
-             <PencilSimple size={12} color="#6B7280" />
-             <Text className="text-gray-600 text-[10px] font-bold ml-1">{t("Auto.Common.ChangeStatus", "Change Status")}</Text>
-           </TouchableOpacity>}
+          <PencilSimple size={12} color="#6B7280" />
+          <Text style={[{ fontFamily: fonts.bold }]} className="text-gray-600 text-[10px] ml-1">{t("Auto.Common.ChangeStatus", "Change Status")}</Text>
+        </TouchableOpacity>}
       </View>
     </View>;
   };
@@ -217,40 +218,40 @@ export default function LeaveRequestsScreen() {
   }: {
     item: any;
   }) => {
-    
+
     return <View className="bg-white rounded-xl p-4 mb-3 border border-gray-100 flex-col">
-       <View className="flex-row justify-between items-start mb-2">
-         <View className="flex-row gap-2 items-center">
-           <View className="bg-blue-50 px-2 py-1 rounded-md border border-blue-100">
-             <Text className="text-[10px] text-blue-600 font-bold uppercase">{item.leaveType}</Text>
-           </View>
-         </View>
-         <View className={`px-2.5 py-1 rounded-full ${item.status === 'approved' ? 'bg-[#E7F8EE]' : item.status === 'rejected' ? 'bg-[#FFE5E5]' : 'bg-[#FFF4EB]'}`}>
-          <Text className={`text-[10px] font-bold ${item.status === 'approved' ? 'text-[#43C17A]' : item.status === 'rejected' ? 'text-[#FF4B4B]' : 'text-[#FFB874]'}`}>
+      <View className="flex-row justify-between items-start mb-2">
+        <View className="flex-row gap-2 items-center">
+          <View className="bg-blue-50 px-2 py-1 rounded-md border border-blue-100">
+            <Text style={[{ fontFamily: fonts.bold }]} className="text-[10px] text-blue-600 uppercase">{item.leaveType}</Text>
+          </View>
+        </View>
+        <View className={`px-2.5 py-1 rounded-full ${item.status === 'approved' ? 'bg-[#E7F8EE]' : item.status === 'rejected' ? 'bg-[#FFE5E5]' : 'bg-[#FFF4EB]'}`}>
+          <Text style={[{ fontFamily: fonts.bold }]} className={`text-[10px] ${item.status === 'approved' ? 'text-[#43C17A]' : item.status === 'rejected' ? 'text-[#FF4B4B]' : 'text-[#FFB874]'}`}>
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
           </Text>
         </View>
-       </View>
-       
-       <View className="flex-row justify-between my-2">
+      </View>
+
+      <View className="flex-row justify-between my-2">
         <View>
-          <Text className="text-[10px] text-gray-400 font-medium">{t("Auto.Common.From", "From")}</Text>
-          <Text className="text-xs text-gray-700 font-bold">{item.fromDate}</Text>
+          <Text style={[{ fontFamily: fonts.medium }]} className="text-[10px] text-gray-400 ">{t("Auto.Common.From", "From")}</Text>
+          <Text style={[{ fontFamily: fonts.bold }]} className="text-xs text-gray-700 ">{item.fromDate}</Text>
         </View>
         <View className="items-end">
-          <Text className="text-[10px] text-gray-400 font-medium">{t("Auto.Common.To", "To")}</Text>
-          <Text className="text-xs text-gray-700 font-bold">{item.toDate}</Text>
+          <Text style={[{ fontFamily: fonts.medium }]} className="text-[10px] text-gray-400 ">{t("Auto.Common.To", "To")}</Text>
+          <Text style={[{ fontFamily: fonts.bold }]} className="text-xs text-gray-700 ">{item.toDate}</Text>
         </View>
-       </View>
+      </View>
 
-       <View className="bg-gray-50 p-2.5 rounded-lg border border-gray-100 mb-2">
-         <Text className="text-[10px] text-gray-400 font-medium mb-1">{t("Auto.Common.Reason", "Reason")}</Text>
-         <Text className="text-xs text-[#282828] font-medium" numberOfLines={2}>{item.description}</Text>
-       </View>
-       <View className="flex-row justify-between items-center mt-1">
-         <Text className="text-gray-400 text-[10px]">{t("Auto.Common.TotalDays", "Total Days:")}</Text>
-         <Text className="text-[#282828] text-xs font-bold">{item.days}</Text>
-       </View>
+      <View className="bg-gray-50 p-2.5 rounded-lg border border-gray-100 mb-2">
+        <Text style={[{ fontFamily: fonts.medium }]} className="text-[10px] text-gray-400 mb-1">{t("Auto.Common.Reason", "Reason")}</Text>
+        <Text style={[{ fontFamily: fonts.medium }]} className="text-xs text-[#282828] " numberOfLines={2}>{item.description}</Text>
+      </View>
+      <View className="flex-row justify-between items-center mt-1">
+        <Text style={[{ fontFamily: fonts.regular }]} className="text-gray-400 text-[10px]">{t("Auto.Common.TotalDays", "Total Days:")}</Text>
+        <Text style={[{ fontFamily: fonts.bold }]} className="text-[#282828] text-xs ">{item.days}</Text>
+      </View>
     </View>;
   };
   const renderTaggedLeaveCard = ({
@@ -258,54 +259,54 @@ export default function LeaveRequestsScreen() {
   }: {
     item: any;
   }) => {
-    
-    return <View className="bg-white rounded-xl p-4 mb-3 border border-gray-100 flex-col">
-       <View className="flex-row justify-between items-start mb-3">
-         <View className="flex-row gap-3 flex-1 items-center">
-            <Avatar src={item.requesterPhoto} size={40} />
-            <View>
-              <Text className="text-sm font-bold text-[#282828]">{item.requesterName}</Text>
-              <Text className="text-xs text-blue-600 font-medium">{item.leaveType}</Text>
-            </View>
-         </View>
-         <View className={`px-2 py-1 rounded border ${item.status === 'approved' ? 'bg-[#E7F8EE] border-[#43C17A]' : item.status === 'rejected' ? 'bg-[#FFE5E5] border-[#FF4B4B]' : 'bg-[#FFF4EB] border-[#FFB874]'}`}>
-           <Text className={`text-[10px] font-bold ${item.status === 'approved' ? 'text-[#43C17A]' : item.status === 'rejected' ? 'text-[#FF4B4B]' : 'text-[#FFB874]'}`}>{item.status.toUpperCase()}</Text>
-         </View>
-       </View>
 
-       <View className="bg-[#F5F7FA] rounded-lg p-3 mb-3">
-         <View className="flex-row justify-between mb-2">
-            <Text className="text-[11px] text-gray-500 font-medium">{t("Auto.Common.Duration", "Duration")}</Text>
-            <Text className="text-[11px] font-bold text-[#282828]">{item.fromDate} - {item.toDate}</Text>
-         </View>
-         <View className="flex-row justify-between">
-            <Text className="text-[11px] text-gray-500 font-medium">{t("Auto.Common.TotalDays", "Total Days")}</Text>
-            <Text className="text-[11px] font-bold text-[#43C17A]">{item.days}{t("Auto.Common.Days", "Days")}</Text>
-         </View>
-       </View>
-       
-       <Text className="text-xs text-gray-600 italic mb-2" numberOfLines={2}>"{item.description}"</Text>
+    return <View className="bg-white rounded-xl p-4 mb-3 border border-gray-100 flex-col">
+      <View className="flex-row justify-between items-start mb-3">
+        <View className="flex-row gap-3 flex-1 items-center">
+          <Avatar src={item.requesterPhoto} size={40} />
+          <View>
+            <Text style={[{ fontFamily: fonts.bold }]} className="text-sm text-[#282828]">{item.requesterName}</Text>
+            <Text style={[{ fontFamily: fonts.medium }]} className="text-xs text-blue-600 ">{item.leaveType}</Text>
+          </View>
+        </View>
+        <View className={`px-2 py-1 rounded border ${item.status === 'approved' ? 'bg-[#E7F8EE] border-[#43C17A]' : item.status === 'rejected' ? 'bg-[#FFE5E5] border-[#FF4B4B]' : 'bg-[#FFF4EB] border-[#FFB874]'}`}>
+          <Text style={[{ fontFamily: fonts.bold }]} className={`text-[10px] ${item.status === 'approved' ? 'text-[#43C17A]' : item.status === 'rejected' ? 'text-[#FF4B4B]' : 'text-[#FFB874]'}`}>{item.status.toUpperCase()}</Text>
+        </View>
+      </View>
+
+      <View className="bg-[#F5F7FA] rounded-lg p-3 mb-3">
+        <View className="flex-row justify-between mb-2">
+          <Text style={[{ fontFamily: fonts.medium }]} className="text-[11px] text-gray-500 ">{t("Auto.Common.Duration", "Duration")}</Text>
+          <Text style={[{ fontFamily: fonts.bold }]} className="text-[11px] text-[#282828]">{item.fromDate} - {item.toDate}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text style={[{ fontFamily: fonts.medium }]} className="text-[11px] text-gray-500 ">{t("Auto.Common.TotalDays", "Total Days")}</Text>
+          <Text style={[{ fontFamily: fonts.bold }]} className="text-[11px] text-[#43C17A]">{item.days}{t("Auto.Common.Days", "Days")}</Text>
+        </View>
+      </View>
+
+      <Text style={[{ fontFamily: fonts.italic }]} className="text-xs text-gray-600 mb-2" numberOfLines={2}>"{item.description}"</Text>
     </View>;
   };
   return <View className="flex-1 bg-[#F5F7FA]" style={{
     paddingTop: insets.top + 120
   }}>
-      <View className="px-4 pt-2 pb-2">
-        <View className="mb-4">
-          <Text className="text-[#282828] font-bold text-2xl mb-1">
-            {mainTab === 'students' ? 'Student Leaves' : mainTab === 'tagged' ? 'Tagged Leaves' : 'My Leaves'}
-          </Text>
-          <Text className="text-[#525252] text-xs">
-            {mainTab === 'students' ? 'Manage and track leave requests from your students' : mainTab === 'tagged' ? 'Leave requests where you have been tagged by peers' : 'Track and manage your own leave requests'}
-          </Text>
-        </View>
+    <View className="px-4 pt-2 pb-2">
+      <View className="mb-4">
+        <Text style={[{ fontFamily: fonts.bold }]} className="text-[#282828] text-2xl mb-1">
+          {mainTab === 'students' ? 'Student Leaves' : mainTab === 'tagged' ? 'Tagged Leaves' : 'My Leaves'}
+        </Text>
+        <Text style={[{ fontFamily: fonts.regular }]} className="text-[#525252] text-xs">
+          {mainTab === 'students' ? 'Manage and track leave requests from your students' : mainTab === 'tagged' ? 'Leave requests where you have been tagged by peers' : 'Track and manage your own leave requests'}
+        </Text>
+      </View>
 
-        <View className="flex-row bg-gray-100 rounded-full p-1 mb-4 relative">
-          <View style={[StyleSheet.absoluteFill, {
+      <View className="flex-row bg-gray-100 rounded-full p-1 mb-4 relative">
+        <View style={[StyleSheet.absoluteFill, {
           padding: 4,
           zIndex: 0
         }]}>
-            <MotiView style={{
+          <MotiView style={{
             width: '33.33%',
             height: '100%',
             backgroundColor: '#43C17A',
@@ -317,58 +318,58 @@ export default function LeaveRequestsScreen() {
             damping: 75,
             stiffness: 800
           }} />
-            
-          </View>
 
-          <TouchableOpacity onPress={() => setMainTab('students')} className="flex-1 py-2 rounded-full items-center z-10">
-            
-            <Text className={`text-[10px] sm:text-xs font-bold ${mainTab === 'students' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.Students", "Students")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setMainTab('tagged')} className="flex-1 py-2 rounded-full items-center z-10">
-            
-            <Text className={`text-[10px] sm:text-xs font-bold ${mainTab === 'tagged' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.Tagged", "Tagged")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setMainTab('my_leaves')} className="flex-1 py-2 rounded-full items-center z-10">
-            
-            <Text className={`text-[10px] sm:text-xs font-bold ${mainTab === 'my_leaves' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.MyLeaves", "My Leaves")}</Text>
-          </TouchableOpacity>
         </View>
 
-        {mainTab === 'my_leaves' && <TouchableOpacity onPress={() => setIsRequestModalOpen(true)} className="bg-[#16284F] w-full py-3 rounded-lg items-center justify-center mb-4">
-          
-              <Text className="text-white text-sm font-bold">{t("Auto.Common.RequestLeave", "Request Leave")}</Text>
-           </TouchableOpacity>}
+        <TouchableOpacity onPress={() => setMainTab('students')} className="flex-1 py-2 rounded-full items-center z-10">
 
-        <View className="flex-row gap-2 mb-4 w-full">
-           {renderStatsCard('all', 'Total', counts.all, (c: string) => <Users size={16} color={c} weight="fill" />, 'bg-[#5C98FF]', 'bg-[#EFF5FF]')}
-           {renderStatsCard('approved', 'Approved', counts.approved, (c: string) => <User size={16} color={c} weight="fill" />, 'bg-[#48C37C]', 'bg-[#E7F8EE]')}
-           {renderStatsCard('pending', 'Pending', counts.pending, (c: string) => <User size={16} color={c} weight="fill" />, 'bg-[#FFB874]', 'bg-[#FFF4EB]')}
-           {renderStatsCard('rejected', 'Rejected', counts.rejected, (c: string) => <User size={16} color={c} weight="fill" />, 'bg-[#FF4242]', 'bg-[#FFE5E5]')}
-        </View>
+          <Text style={[{ fontFamily: fonts.bold }]} className={`text-[10px] sm:text-xs ${mainTab === 'students' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.Students", "Students")}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setMainTab('tagged')} className="flex-1 py-2 rounded-full items-center z-10">
 
-        <View className="flex-row items-center bg-white rounded-full px-4 h-[42px] border border-gray-200">
-          <MagnifyingGlass size={18} color="#9CA3AF" />
-          <TextInput className="flex-1 ml-2 text-sm text-[#282828]" placeholder={t("Auto.Attr.Searchbydescrip", "Search by description...")} placeholderTextColor="#9CA3AF" value={searchQuery} onChangeText={setSearchQuery} />
-          
-        </View>
+          <Text style={[{ fontFamily: fonts.bold }]} className={`text-[10px] sm:text-xs ${mainTab === 'tagged' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.Tagged", "Tagged")}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setMainTab('my_leaves')} className="flex-1 py-2 rounded-full items-center z-10">
+
+          <Text style={[{ fontFamily: fonts.bold }]} className={`text-[10px] sm:text-xs ${mainTab === 'my_leaves' ? 'text-white' : 'text-gray-500'}`}>{t("Auto.Common.MyLeaves", "My Leaves")}</Text>
+        </TouchableOpacity>
       </View>
 
-      {isLoading && page === 1 ? <View className="flex-1 items-center justify-center">
-           <ActivityIndicator size="large" color="#43C17A" />
-        </View> : <FlatList data={tableData} keyExtractor={(item, index) => `${item.id}-${index}`} renderItem={mainTab === 'students' ? renderStudentLeaveCard : mainTab === 'my_leaves' ? renderMyLeaveCard : renderTaggedLeaveCard} contentContainerStyle={{
+      {mainTab === 'my_leaves' && <TouchableOpacity onPress={() => setIsRequestModalOpen(true)} className="bg-[#16284F] w-full py-3 rounded-lg items-center justify-center mb-4">
+
+        <Text style={[{ fontFamily: fonts.bold }]} className="text-white text-sm ">{t("Auto.Common.RequestLeave", "Request Leave")}</Text>
+      </TouchableOpacity>}
+
+      <View className="flex-row gap-2 mb-4 w-full">
+        {renderStatsCard('all', 'Total', counts.all, (c: string) => <Users size={16} color={c} weight="fill" />, 'bg-[#5C98FF]', 'bg-[#EFF5FF]')}
+        {renderStatsCard('approved', 'Approved', counts.approved, (c: string) => <User size={16} color={c} weight="fill" />, 'bg-[#48C37C]', 'bg-[#E7F8EE]')}
+        {renderStatsCard('pending', 'Pending', counts.pending, (c: string) => <User size={16} color={c} weight="fill" />, 'bg-[#FFB874]', 'bg-[#FFF4EB]')}
+        {renderStatsCard('rejected', 'Rejected', counts.rejected, (c: string) => <User size={16} color={c} weight="fill" />, 'bg-[#FF4242]', 'bg-[#FFE5E5]')}
+      </View>
+
+      <View className="flex-row items-center bg-white rounded-full px-4 h-[42px] border border-gray-200">
+        <MagnifyingGlass size={18} color="#9CA3AF" />
+        <TextInput className="flex-1 ml-2 text-sm text-[#282828]" placeholder={t("Auto.Attr.Searchbydescrip", "Search by description...")} placeholderTextColor="#9CA3AF" value={searchQuery} onChangeText={setSearchQuery} />
+
+      </View>
+    </View>
+
+    {isLoading && page === 1 ? <View className="flex-1 items-center justify-center">
+      <ActivityIndicator size="large" color="#43C17A" />
+    </View> : <FlatList data={tableData} keyExtractor={(item, index) => `${item.id}-${index}`} renderItem={mainTab === 'students' ? renderStudentLeaveCard : mainTab === 'my_leaves' ? renderMyLeaveCard : renderTaggedLeaveCard} contentContainerStyle={{
       padding: 16,
       paddingBottom: 100
     }} showsVerticalScrollIndicator={false} onRefresh={handleRefresh} refreshing={isRefreshing} onEndReached={handleLoadMore} onEndReachedThreshold={0.5} ListEmptyComponent={<View className="items-center justify-center pt-10">
-              <CalendarBlank size={48} color="#D1D5DB" />
-              <Text className="text-gray-500 mt-4 font-medium text-sm">{t("Auto.Common.Noleaverequests", "No leave requests found.")}</Text>
-            </View>} />}
+      <CalendarBlank size={48} color="#D1D5DB" />
+      <Text style={[{ fontFamily: fonts.medium }]} className="text-gray-500 mt-4 text-sm">{t("Auto.Common.Noleaverequests", "No leave requests found.")}</Text>
+    </View>} />}
 
-      {isRequestModalOpen && <RequestLeaveModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} facultyId={facultyId!} onSuccess={() => {
+    {isRequestModalOpen && <RequestLeaveModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} facultyId={facultyId!} onSuccess={() => {
       setIsRequestModalOpen(false);
       handleRefresh();
     }} />}
 
-      {confirmModal.isOpen && <ConfirmStatusModal isOpen={confirmModal.isOpen} action={confirmModal.action!} leaveId={confirmModal.leaveId!} onClose={() => setConfirmModal({
+    {confirmModal.isOpen && <ConfirmStatusModal isOpen={confirmModal.isOpen} action={confirmModal.action!} leaveId={confirmModal.leaveId!} onClose={() => setConfirmModal({
       isOpen: false,
       leaveId: null,
       action: null
@@ -381,7 +382,7 @@ export default function LeaveRequestsScreen() {
       loadData(false);
     }} />}
 
-      {isDetailsModalOpen && selectedLeaveData && <FacultyLeaveDetailsModal isOpen={isDetailsModalOpen} onClose={() => setIsDetailsModalOpen(false)} leaveData={selectedLeaveData} facultyId={facultyId!} />}
+    {isDetailsModalOpen && selectedLeaveData && <FacultyLeaveDetailsModal isOpen={isDetailsModalOpen} onClose={() => setIsDetailsModalOpen(false)} leaveData={selectedLeaveData} facultyId={facultyId!} />}
 
-    </View>;
+  </View>;
 }

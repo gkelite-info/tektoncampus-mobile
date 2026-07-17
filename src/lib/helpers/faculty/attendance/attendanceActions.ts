@@ -35,7 +35,7 @@ export async function getFacultyClasses(
   const targetDate = dateStr || new Date().toISOString().split("T")[0];
 
   const { data: events, error } = await supabase
-    .from("calendar_event")
+    .from("calendar_events")
     .select(
       `
       calendarEventId, date, fromTime, toTime,
@@ -49,7 +49,7 @@ export async function getFacultyClasses(
     .order("fromTime", { ascending: true });
 
   const { data: bulkEvents } = await supabase
-    .from("bulk_calendar_events")
+    .from("bulk_calendar_event")
     .select(
       `
       bulkCalendarEventId, fromDate, toDate, fromTime, toTime,
@@ -139,7 +139,7 @@ export async function getClassSections(
   const isBulk = classId.startsWith("bulk-");
   const eventId = isBulk ? parseInt(classId.split("-")[1]) : parseInt(classId);
 
-  const table = isBulk ? "bulk_calendar_event_sections" : "calendar_event_section";
+  const table = isBulk ? "bulk_calendar_event_sections" : "calendar_event_sections";
   const column = isBulk ? "bulkCalendarEventId" : "calendarEventId";
 
   const { data: sections, error } = await supabase
@@ -196,7 +196,7 @@ export async function getStudentsForClass(
        }
     } else {
       const { data: eventSections } = await supabase
-        .from("calendar_event_section")
+        .from("calendar_event_sections")
         .select("collegeSectionId, college_sections!inner(collegeSections)")
         .eq("calendarEventId", eventId)
         .eq("college_sections.collegeSections", sectionNameFilter);
@@ -211,7 +211,7 @@ export async function getStudentsForClass(
        targetSectionIds = eventSections?.map((s) => s.collegeSectionId) || [];
     } else {
       const { data: eventSections } = await supabase
-        .from("calendar_event_section")
+        .from("calendar_event_sections")
         .select("collegeSectionId")
         .eq("calendarEventId", eventId);
       targetSectionIds = eventSections?.map((s) => s.collegeSectionId) || [];
@@ -230,7 +230,7 @@ export async function getStudentsForClass(
   if (ids.length === 0) return [];
 
   const { data: eventData } = await supabase
-    .from(isBulk ? "bulk_calendar_events" : "calendar_event")
+    .from(isBulk ? "bulk_calendar_event" : "calendar_events")
     .select(isBulk ? "subject, fromDate" : "subject, date")
     .eq(isBulk ? "bulkCalendarEventId" : "calendarEventId", eventId)
     .single();
@@ -245,7 +245,7 @@ export async function getStudentsForClass(
   if (subjectId) {
     const { data: allRecords } = await supabase
       .from("attendance_record")
-      .select(`studentId, status, event:calendar_event(subject), bulk_event:bulk_calendar_events(subject)`)
+      .select(`studentId, status, event:calendar_events(subject), bulk_event:bulk_calendar_event(subject)`)
       .in("studentId", ids);
       
     allRecords?.forEach((r: any) => {
@@ -328,7 +328,7 @@ export async function saveAttendance(classId: string, payload: any[]) {
   const eventId = parseInt(isBulk ? classId.split("-")[1].split("_")[0] : classId.split("-")[0]);
 
   const { data } = await supabase
-    .from(isBulk ? "bulk_calendar_events" : "calendar_event")
+    .from(isBulk ? "bulk_calendar_event" : "calendar_events")
     .select(isBulk ? "fromDate" : "date")
     .eq(isBulk ? "bulkCalendarEventId" : "calendarEventId", eventId)
     .single();
@@ -487,7 +487,7 @@ export async function handleMissionClassStatus(
 
   if (status === "Cancel") {
     const { data: eventData } = await supabase
-      .from(isBulk ? "bulk_calendar_events" : "calendar_event")
+      .from(isBulk ? "bulk_calendar_event" : "calendar_events")
       .select(isBulk ? "fromDate" : "date")
       .eq(isBulk ? "bulkCalendarEventId" : "calendarEventId", eventId)
       .single();
@@ -495,7 +495,7 @@ export async function handleMissionClassStatus(
     const eventDate = isBulk ? (eventData as any)?.fromDate : (eventData as any)?.date;
 
     const { data: sections } = await supabase
-      .from(isBulk ? "bulk_calendar_event_sections" : "calendar_event_section")
+      .from(isBulk ? "bulk_calendar_event_sections" : "calendar_event_sections")
       .select("collegeSectionId")
       .eq(isBulk ? "bulkCalendarEventId" : "calendarEventId", eventId);
 

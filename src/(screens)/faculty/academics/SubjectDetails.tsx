@@ -111,13 +111,7 @@ function UnitCard({
 
         </View>
 
-        <View className="flex-row items-center justify-between mt-1 mb-2">
-          <View className="flex-row items-center gap-1.5">
-            <Clock size={12} weight="fill" color={colors.solidEnd} />
-            <Text className={`text-[10px] ${colors.title}`} style={{ fontFamily: fonts.semiBold }}>
-              {unit.dateRange || "01-01-1970 - 03-17-2026"}
-            </Text>
-          </View>
+        <View className="flex-row items-center justify-end mt-1 mb-2">
           <Text className={`text-base ${colors.title}`} style={{ fontFamily: fonts.bold }}>
             {percentage}%
           </Text>
@@ -441,7 +435,6 @@ export default function SubjectDetailsScreen() {
                 onDeleteTopic={handleDeleteTopic}
                 onDeleteUnit={handleDeleteUnit}
                 onOpenTopicPdf={handleOpenTopicPdf} />
-
             )
         }
       </ScrollView>
@@ -477,7 +470,6 @@ export default function SubjectDetailsScreen() {
           visible={addWeightageVisible}
           onClose={() => setAddWeightageVisible(false)}
           subjectDetails={details} />
-
       }
 
       {deleteTarget &&
@@ -492,8 +484,6 @@ export default function SubjectDetailsScreen() {
               "Are you sure you want to permanently delete this unit and all its topics?" :
               "Are you sure you want to permanently delete this topic?"
           } />
-
       }
     </View>);
-
 }

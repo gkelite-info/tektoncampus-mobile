@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import CustomHeader from "./components/CustomHeader";
 import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
 import { StudentCustomTabBar } from "@/tabs/StudentTabs";
+import { useStudent } from "@/utils/context/student/useStudent";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 import StudentHome from "@/(screens)/student/student";
 import StudentAttendance from "@/(screens)/student/attendance/attendance";
 import ProfileContainer from "@/(screens)/Profile/ProfileContainer";
@@ -55,26 +57,36 @@ const getActiveRouteName = (state: any): string => {
 
 export default function StudentDrawerNavigator() {
     const { t } = useTranslation();
+    const { collegeEducationType } = useStudent();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigationRef = useRef<any>(null);
 
-    const menuItems: RoleSideMenuItem[] = useMemo(() => [
-        { name: "Home", label: t("Navbars.Home", "Home") },
-        { name: "Calendar", label: t("Navbars.Calendar", "Calendar") },
-        { name: "Attendance", label: t("Navbars.Attendance", "Attendance") },
-        { name: "Assignments", label: t("Navbars.Assignments", "Assignments") },
-        { name: "Academics", label: t("Navbars.Academics", "Academics") },
-        { name: "StudentProgress", label: t("Navbars.Student Progress", "Student Progress") },
-        { name: "Projects", label: t("Navbars.Projects", "Projects") },
-        { name: "Placements", label: t("Navbars.Placements", "Placements") },
-        { name: "LeaveRequests", label: t("Navbars.Leave Requests", "Leave Requests") },
-        { name: "Club", label: t("Navbars.Club", "Club") },
-        { name: "Drive", label: t("Navbars.Drive", "Drive") },
-        { name: "Meetings", label: t("Navbars.Meetings", "Meetings") },
-        { name: "Wellbeing", label: t("Navbars.Wellbeing", "Wellbeing") },
-        { name: "Payments", label: t("Navbars.Payments", "Payments") },
-        { name: "Settings", label: t("Navbars.Settings", "Settings") },
-    ], [t]);
+    const isSchool = isSchoolEducation(collegeEducationType);
+
+    const menuItems: RoleSideMenuItem[] = useMemo(() => {
+        const items = [
+            { name: "Home", label: t("Navbars.Home", "Home") },
+            { name: "Calendar", label: t("Navbars.Calendar", "Calendar") },
+            { name: "Attendance", label: t("Navbars.Attendance", "Attendance") },
+            { name: "Assignments", label: t("Navbars.Assignments", "Assignments") },
+            { name: "Academics", label: t("Navbars.Academics", "Academics") },
+            { name: "StudentProgress", label: t("Navbars.Student Progress", "Student Progress") },
+            { name: "Projects", label: t("Navbars.Projects", "Projects") },
+            { name: "Placements", label: t("Navbars.Placements", "Placements") },
+            { name: "LeaveRequests", label: t("Navbars.Leave Requests", "Leave Requests") },
+            { name: "Club", label: t("Navbars.Club", "Club") },
+            { name: "Drive", label: t("Navbars.Drive", "Drive") },
+            { name: "Meetings", label: t("Navbars.Meetings", "Meetings") },
+            { name: "Wellbeing", label: t("Navbars.Wellbeing", "Wellbeing") },
+            { name: "Payments", label: t("Navbars.Payments", "Payments") },
+            { name: "Settings", label: t("Navbars.Settings", "Settings") },
+        ];
+
+        if (isSchool) {
+            return items.filter((item: RoleSideMenuItem) => item.name !== "Placements" && item.name !== "Club");
+        }
+        return items;
+    }, [t, isSchool]);
 
     let activeRouteName: keyof StudentDrawerParamList = "Home";
     if (isMenuOpen && navigationRef.current) {

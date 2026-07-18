@@ -177,8 +177,7 @@ const LessonCard = ({
                 <Text className="text-[#1e2952] text-[11px] leading-tight mt-1" style={{ fontFamily: fonts.bold }}>
                     {lesson.degree}{" "}
                     {!isSchool && lesson.department?.length > 0 && `${lesson.department.map((item: any) => item.name).join(", ")} `}
-                    {t("Auto.Common.Year", "- Year")}{" "}
-                    {lesson.year} {lesson.section && ` - Section ${lesson.section}`}
+                    {isSchool ? ` - ${lesson.year}` : ` ${t("Auto.Common.Year", "- Year")} ${lesson.year}`} {lesson.section && ` - Section ${lesson.section}`}
                 </Text>
                 <Text className="text-gray-600 text-[12px] mt-1 leading-snug" style={{ fontFamily: fonts.regular }} numberOfLines={2}>
                     {lesson.description}

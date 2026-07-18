@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { fonts } from '@/constants/fonts'; import { Text } from '@/components/AppText';
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 import React, { useEffect, useState, useContext } from "react";
 import { View, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, TextInput, Modal } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -39,7 +40,8 @@ export default function FacultyAttendance() {
   const headerHeight = useContext(HeaderHeightContext) ?? 0;
   const urlClassId = route.params?.classId;
 
-  const { facultyId, loading: contextLoading } = useUser();
+  const { facultyId, collegeEducationType, loading: contextLoading } = useUser();
+  const isSchool = isSchoolEducation(collegeEducationType);
 
   const [classData, setClassData] = useState<UpcomingLesson | null>(null);
   const [initialized, setInitialized] = useState(false);
@@ -368,7 +370,9 @@ export default function FacultyAttendance() {
             <View className="bg-[#1E2952] px-4 py-4 rounded-xl shadow-sm mb-4">
               <Text className="text-white text-sm" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.ClassTime", "Class Time :")}<Text className="text-gray-200" style={{ fontFamily: fonts.regular }}>{classTime}</Text></Text>
               <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{classData.department?.map((item: any) => item.name).join(", ")}</Text>
-              <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Year", "Year")}{classData.year} - {classData.degree}</Text>
+              <Text className="text-white text-sm mt-1" style={{ fontFamily: fonts.regular }}>
+                {isSchool ? `${classData.year} - ` : `${t("Auto.Common.Year", "Year")}${classData.year} - `}{classData.degree}
+              </Text>
             </View>
           }
         </View>
@@ -469,7 +473,7 @@ export default function FacultyAttendance() {
               </TouchableOpacity>
             </>
           )}
-          
+
           <TouchableOpacity onPress={() => setShowSortFilter(true)} className="flex-row items-center bg-[#43C17A1C] px-4 py-2 rounded-full mr-4">
             <Text className="text-[#43C17A] text-sm mr-2" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Sort", "Sort:")} {sort}</Text>
             <CaretDown size={14} color="#43C17A" weight="bold" />
@@ -486,8 +490,8 @@ export default function FacultyAttendance() {
                 handleFilterChange("calendarType", t);
                 setShowCalendarTypeFilter(false);
               }} className="py-3 border-b border-gray-100">
-                  <Text className={`text-base ${selectedCalendarType === t ? 'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{t}</Text>
-                </TouchableOpacity>)}
+                <Text className={`text-base ${selectedCalendarType === t ? 'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{t}</Text>
+              </TouchableOpacity>)}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowCalendarTypeFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
               <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>Close</Text>
@@ -505,8 +509,8 @@ export default function FacultyAttendance() {
                 handleFilterChange("class", c.id);
                 setShowClassFilter(false);
               }} className="py-3 border-b border-gray-100">
-                  <Text className={`text-base ${selectedClassId === c.id ? 'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{c.label}</Text>
-                </TouchableOpacity>)}
+                <Text className={`text-base ${selectedClassId === c.id ? 'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{c.label}</Text>
+              </TouchableOpacity>)}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowClassFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
               <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Close", "Close")}</Text>
@@ -535,7 +539,7 @@ export default function FacultyAttendance() {
           </View>
         </View>
       </Modal>
-      
+
       <Modal visible={showSortFilter} transparent animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-white rounded-t-3xl p-6 min-h-[300px]">
@@ -545,8 +549,8 @@ export default function FacultyAttendance() {
                 setSort(s);
                 setShowSortFilter(false);
               }} className="py-3 border-b border-gray-100">
-                  <Text className={`text-base ${sort === s ? 'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{s}</Text>
-                </TouchableOpacity>)}
+                <Text className={`text-base ${sort === s ? 'text-[#43C17A] ' : 'text-gray-700'}`} style={{ fontFamily: fonts.bold }}>{s}</Text>
+              </TouchableOpacity>)}
             </ScrollView>
             <TouchableOpacity onPress={() => setShowSortFilter(false)} className="mt-4 bg-gray-100 py-3 rounded-xl items-center">
               <Text className="text-gray-700" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Close", "Close")}</Text>

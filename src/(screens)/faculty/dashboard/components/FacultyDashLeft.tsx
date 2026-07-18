@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, ScrollView, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 import Toast from 'react-native-toast-message';
 import { BookOpen, Chalkboard, ClockAfternoon, UsersThree } from "phosphor-react-native";
 import { useAuthStore } from "@/store/authStore";
@@ -31,6 +31,7 @@ export default function FacultyDashLeft() {
 
     const [upcomingClasses, setUpcomingClasses] = useState<UpcomingLesson[]>([]);
     const [isLoadingClasses, setIsLoadingClasses] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [facultyId, setFacultyId] = useState<number | null>(null);
     const [gender, setGender] = useState<string | null>(null);
     const [facultySubject, setFacultySubject] = useState<string>("");
@@ -46,10 +47,10 @@ export default function FacultyDashLeft() {
         completedLessons: 0,
     });
 
-    const loadData = async () => {
+    const loadData = async (isRefresh = false) => {
         if (!userId) return;
         try {
-            setIsLoadingClasses(true);
+            if (!isRefresh) setIsLoadingClasses(true);
 
             const [userRes, facultyRes] = await Promise.all([
                 supabase.from("users").select("gender").eq("userId", userId).single(),
@@ -90,13 +91,19 @@ export default function FacultyDashLeft() {
         } catch (error) {
             console.error("Failed to load dashboard dynamic data", error);
         } finally {
-            setIsLoadingClasses(false);
+            if (!isRefresh) setIsLoadingClasses(false);
         }
     };
 
     useEffect(() => {
         loadData();
     }, [userId]);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await loadData(true);
+        setRefreshing(false);
+    };
 
     const handleLessonPress = (lesson: UpcomingLesson) => {
         setSelectedLesson(lesson);
@@ -173,6 +180,9 @@ export default function FacultyDashLeft() {
         <ScrollView
             className="w-full flex-1"
             contentContainerStyle={{ paddingTop: headerHeight + 16, paddingHorizontal: 16, paddingBottom: 160 }}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
         >
             <UserInfoCard cardProps={card} loading={isLoadingClasses} />
 

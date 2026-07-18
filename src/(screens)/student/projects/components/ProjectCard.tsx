@@ -67,7 +67,7 @@ export const ProjectCard = ({ data, onViewDetails }: ProjectCardListProps) => {
       {data.map((project, index) => (
         <View
           key={index}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 py-4 mb-4"
+          className="bg-white rounded-2xl border border-gray-100 px-4 py-4 mb-4"
         >
           {/* Header */}
           <View className="flex-row justify-between items-start mb-3 gap-3">

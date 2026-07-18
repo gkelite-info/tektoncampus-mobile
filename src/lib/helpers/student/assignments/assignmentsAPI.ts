@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
 type AssignmentFilters = {
-    collegeBranchId: number;
+    collegeBranchId: number | null;
     collegeAcademicYearId: number;
     collegeSectionsId: number;
 };
@@ -46,8 +46,15 @@ export const fetchAssignmentsForStudent = async (
         )
       `,
                 { count: "exact" }
-            )
-            .eq("collegeBranchId", collegeBranchId)
+            );
+
+        if (collegeBranchId === null) {
+            query = query.is("collegeBranchId", null);
+        } else {
+            query = query.eq("collegeBranchId", collegeBranchId);
+        }
+
+        query = query
             .eq("collegeAcademicYearId", collegeAcademicYearId)
             .eq("collegeSectionsId", collegeSectionsId)
             .eq("is_deleted", false);

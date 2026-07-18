@@ -10,13 +10,15 @@ interface SemesterAttendanceCardProps {
   absentPercent?: number;
   leavePercent?: number;
   overallPercent?: number;
+  isSchool?: boolean;
 }
 
 export default function SemesterAttendanceCard({
   presentPercent = 0,
   absentPercent = 0,
   leavePercent = 0,
-  overallPercent = 0
+  overallPercent = 0,
+  isSchool = false
 }: SemesterAttendanceCardProps) {
   const t = useTranslations("Attendance_module.student");
 
@@ -53,7 +55,7 @@ export default function SemesterAttendanceCard({
               <CalendarCheck size={24} color="#EFEFEF" weight="fill" />
             </View>
             <Text className="text-[#282828] font-semibold" style={{ fontFamily: fonts.bold }}>
-              {t("Semester Attendance")}
+              {isSchool ? t("Attendance") : t("Semester Attendance")}
             </Text>
           </View>
           <Text className="text-[#43C17A] text-2xl font-bold" style={{ fontFamily: fonts.bold }}>{overallPercent}%</Text>
@@ -101,8 +103,8 @@ export default function SemesterAttendanceCard({
           <View className="bg-[#43C17A] w-10 h-10 rounded-full items-center justify-center">
             <CalendarCheck size={20} color="#FFFFFF" weight="fill" />
           </View>
-          <Text className="text-[#282828] text-[15px]" style={{ fontFamily: fonts.bold }}>{t("Semester Attendance")}
-
+          <Text className="text-[#282828] text-[15px]" style={{ fontFamily: fonts.bold }}>
+            {isSchool ? t("Attendance") : t("Semester Attendance")}
           </Text>
         </View>
         <Text className="text-[#43C17A] text-[20px]" style={{ fontFamily: fonts.bold }}>

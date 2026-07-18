@@ -8,6 +8,9 @@ import TaskModal from "./TaskModal";
 import { deactivateFacultyTask, fetchFacultyTasksForStudent } from "@/lib/helpers/faculty/facultyTasks";
 import { deactivateStudentTask, fetchStudentTasksForLoggedInStudent } from "@/lib/helpers/student/studentTaskAPI";
 import { useUser } from "@/utils/context/UserContext";
+import { useStudent } from "@/utils/context/student/useStudent";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
+
 export type Task = {
   facultyTaskId: number;
   title: string;
@@ -57,6 +60,8 @@ export default function TaskPanelModal({
     collegeAcademicYearId,
     collegeSemesterId
   } = useUser();
+  const { collegeEducationType } = useStudent();
+  const isSchool = isSchoolEducation(collegeEducationType);
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [activeView, setActiveView] = useState<"student" | "faculty">("faculty");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -66,9 +71,9 @@ export default function TaskPanelModal({
   const [openCreateTaskModal, setOpenCreateTaskModal] = useState(false);
   useEffect(() => {
     if (open && role === "student") {
-      setActiveView("student");
+      setActiveView(isSchool ? "faculty" : "student");
     }
-  }, [open, role]);
+  }, [open, role, isSchool]);
   const loadStudentTasks = async () => {
     if (!studentId || !open) return;
     try {
@@ -181,7 +186,7 @@ export default function TaskPanelModal({
                                 <CheckCircle size={22} weight="fill" color="#43C17A" />
                             </View>
                             <Text className="text-[#16284F] font-semibold text-lg">
-                                {t("My Tasks")}
+                                {role === "student" && isSchool ? t("Homeworks") : t("My Tasks")}
                             </Text>
                         </View>
 
@@ -201,7 +206,7 @@ export default function TaskPanelModal({
                         <View className="bg-white rounded-2xl shadow-sm p-4 flex-1">
                             <View className="flex-row justify-between items-center mb-4">
                                 <View className="flex-row items-center">
-                                    {role === "student" && <View className="flex-row items-center">
+                                    {role === "student" && !isSchool && <View className="flex-row items-center">
                                             <TouchableOpacity onPress={() => setActiveView("faculty")}>
                                                 <Text className={`text-sm font-semibold ${activeView === "faculty" ? "text-[#16284F]" : "text-gray-400"}`}>
                                                     {t("Faculty Tasks")}
@@ -214,6 +219,9 @@ export default function TaskPanelModal({
                                                 </Text>
                                             </TouchableOpacity>
                                         </View>}
+                                    {role === "student" && isSchool && <Text className="text-[#282828] font-bold">
+                                            {t("Homeworks")}
+                                        </Text>}
 
                                     {role === "faculty" && <Text className="text-[#282828] font-bold">
                                             {t("My Tasks")}

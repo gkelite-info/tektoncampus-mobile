@@ -7,6 +7,8 @@ import { useStudent } from "./context/student/useStudent";
 import Text from "@/components/Text";
 import { fonts } from "@/constants/fonts";
 
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
+
 export default function UserInfoCard() {
     const {
         fullName,
@@ -40,8 +42,10 @@ export default function UserInfoCard() {
                 <View style={tw`w-auto p-1 overflow-y-auto flex-col flex-wrap justify-center gap-1.5`}>
                     <View style={tw`flex-row flex-wrap gap-1 items-center`}>
                         <Text style={[tw`text-[#714EF2] text-[12px]`, { fontFamily: fonts.medium }]}>
-                            {collegeEducationType && collegeBranchCode
-                                ? `${collegeEducationType} ${collegeBranchCode}`
+                            {collegeEducationType
+                                ? isSchoolEducation(collegeEducationType) 
+                                    ? collegeEducationType
+                                    : collegeBranchCode ? `${collegeEducationType} ${collegeBranchCode}` : collegeEducationType
                                 : "—"}{" "}
                             - {collegeAcademicYear ? `${collegeAcademicYear}` : "—"}
                         </Text>

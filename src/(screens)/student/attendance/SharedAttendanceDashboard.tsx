@@ -12,6 +12,7 @@ import SubjectAttendance from "./subject-attendance/subjectAttedance";
 import SubjectAttendanceDetailsClient from "./subject-attendance-details/SubjectAttendanceDetails";
 import AiAttendanceNotificationBanner from "@/utils/AiAttendanceNotificationBanner";
 import { useTargetStudentDetails } from "@/lib/helpers/shared/useTargetStudentDetails";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 import { DashboardSkeleton, TableSkeleton } from "./shimmer/attendanceDashSkeleton";
 import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studentAttendanceActions";
 import { useTranslations } from "@/utils/useTranslations";
@@ -183,12 +184,12 @@ export default function SharedAttendanceDashboard({ targetUserId }: { targetUser
               <CardComponent style="bg-[#FFEDDA] flex-1 h-[95px] rounded-xl" icon={<UsersThree size={28} color="#FFFFFF" weight="fill" />} value={dashboardData ? `${dashboardData.todayStats.attended}/${dashboardData.todayStats.total}` : "0/0"} label={t("Today Total Classes")} iconBgColor="#FFBB70" iconColor="#FFFFFF" />
 
 
-              <CardComponent style="bg-[#CEE6FF] flex-1 h-[95px] rounded-xl" icon={<Chalkboard size={28} color="#FFFFFF" weight="fill" />} value={dashboardData ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}` : "0/0"} label={t("Sem Attendance")} iconBgColor="#7764FF" iconColor="#FFFFFF" totalPercentage={dashboardData ? `${dashboardData.cards.percentage}%` : "0%"} onClick={() => handleCardClick(2)} />
+              <CardComponent style="bg-[#CEE6FF] flex-1 h-[95px] rounded-xl" icon={<Chalkboard size={28} color="#FFFFFF" weight="fill" />} value={dashboardData ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}` : "0/0"} label={isSchoolEducation(collegeEducationType) ? t("Attendance") : t("Sem Attendance")} iconBgColor="#7764FF" iconColor="#FFFFFF" totalPercentage={dashboardData ? `${dashboardData.cards.percentage}%` : "0%"} onClick={() => handleCardClick(2)} />
 
             </View>
 
             <View className="w-full">
-              <SemesterAttendanceCard presentPercent={dashboardData?.semesterStats.present || 0} absentPercent={dashboardData?.semesterStats.absent || 0} leavePercent={dashboardData?.semesterStats.leave || 0} overallPercent={dashboardData?.cards.percentage || 0} />
+              <SemesterAttendanceCard presentPercent={dashboardData?.semesterStats.present || 0} absentPercent={dashboardData?.semesterStats.absent || 0} leavePercent={dashboardData?.semesterStats.leave || 0} overallPercent={dashboardData?.cards.percentage || 0} isSchool={isSchoolEducation(collegeEducationType)} />
 
             </View>
           </View>}

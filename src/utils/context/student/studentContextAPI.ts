@@ -49,7 +49,7 @@ export async function fetchStudentContext(userId: number) {
         collegeEducationType
       ),
 
-      college_branch:collegeBranchId!inner (
+      college_branch:collegeBranchId (
         collegeBranchCode
       )
     `)

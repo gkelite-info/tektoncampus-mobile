@@ -21,6 +21,7 @@ import { getStudentDashboardData } from "@/lib/helpers/student/attendance/studen
 import { BookOpenIcon, CaretRightIcon, Chalkboard, ClockIcon, UsersIcon } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
 import { useUpcomingClasses } from "@/features/student/hooks/useUpcomingClasses";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 const nativeToast = {
   error: (msg: string) => console.log(`Toast Error: ${msg}`)
 };
@@ -66,7 +67,7 @@ export default function StudentHome() {
   const loadSubjects = useCallback(async () => {
     try {
       setSubjectsLoading(true);
-      if (!collegeEducationId || !collegeBranchId || !collegeAcademicYearId) {
+      if (!collegeEducationId || (!isSchoolEducation(collegeEducationType) && !collegeBranchId) || !collegeAcademicYearId) {
         setSubjects([]);
         return;
       }
@@ -78,7 +79,11 @@ export default function StudentHome() {
             completionPercentage,
             createdBy
           )
-        `).eq('collegeBranchId', collegeBranchId).eq('collegeEducationId', collegeEducationId).eq('collegeAcademicYearId', collegeAcademicYearId).eq('isActive', true).is('deletedAt', null);
+        `).eq('collegeEducationId', collegeEducationId).eq('collegeAcademicYearId', collegeAcademicYearId).eq('isActive', true).is('deletedAt', null);
+      
+      if (!isSchoolEducation(collegeEducationType)) {
+          query = query.eq('collegeBranchId', collegeBranchId);
+      }
       const {
         data: subjectData
       } = await query;
@@ -171,12 +176,12 @@ export default function StudentHome() {
   }, [collegeEducationType, studentUserId]);
   const loadAssignmentCount = useCallback(async () => {
     try {
-      if (!collegeBranchId || !collegeAcademicYearId || !collegeSectionsId) {
+      if ((!isSchoolEducation(collegeEducationType) && !collegeBranchId) || !collegeAcademicYearId || !collegeSectionsId) {
         setDueAssignmentsCount(0);
         return;
       }
       const res = await fetchAssignmentsForStudent({
-        collegeBranchId,
+        collegeBranchId: isSchoolEducation(collegeEducationType) ? null : collegeBranchId,
         collegeAcademicYearId,
         collegeSectionsId
       }, 1, 1, 'active');

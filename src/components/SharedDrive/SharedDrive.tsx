@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, Alert } from 'react-native';
+import { View, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, Alert, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { supabase } from "@/lib/supabaseClient";
@@ -98,37 +98,52 @@ export default function SharedDrive() {
       });
   }, [collegeId]);
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadData = async () => {
+    if (!collegeId || !userId) return;
+    
+    try {
+      const [folderData, stats, filesResult] = await Promise.all([
+        fetchRootDriveFolders(collegeId, userId),
+        fetchFolderStats(collegeId, userId),
+        fetchRecentDriveFiles(collegeId, 1, 20, userId)
+      ]);
+
+      setFolders(
+        (folderData as DriveFolderRow[]).map((f) => ({
+          driveFolderId: f.driveFolderId,
+          name: f.folderName,
+          color: f.color ?? "#0096A6",
+          filesCount: stats[f.driveFolderId]?.totalFiles ?? 0,
+          sizeLabel: formatSize(stats[f.driveFolderId]?.totalSizeBytes ?? 0)
+        }))
+      );
+
+      const { data } = filesResult as unknown as { data: DriveFileRow[]; };
+      setRecentFiles(data);
+    } catch (error) {
+      Toast.show({ type: "error", text1: "Failed to load data" });
+    }
+  };
+
   useEffect(() => {
     if (!collegeId || !userId) return;
 
     setLoadingFolders(true);
     setLoadingFiles(true);
 
-    Promise.all([
-      fetchRootDriveFolders(collegeId, userId),
-      fetchFolderStats(collegeId, userId),
-      fetchRecentDriveFiles(collegeId, 1, 20, userId)]
-    ).
-      then(([folderData, stats, filesResult]) => {
-        setFolders(
-          (folderData as DriveFolderRow[]).map((f) => ({
-            driveFolderId: f.driveFolderId,
-            name: f.folderName,
-            color: f.color ?? "#0096A6",
-            filesCount: stats[f.driveFolderId]?.totalFiles ?? 0,
-            sizeLabel: formatSize(stats[f.driveFolderId]?.totalSizeBytes ?? 0)
-          }))
-        );
-
-        const { data } = filesResult as unknown as { data: DriveFileRow[]; };
-        setRecentFiles(data);
-      }).
-      catch(() => Toast.show({ type: "error", text1: "Failed to load data" })).
-      finally(() => {
-        setLoadingFolders(false);
-        setLoadingFiles(false);
-      });
+    loadData().finally(() => {
+      setLoadingFolders(false);
+      setLoadingFiles(false);
+    });
   }, [collegeId, userId]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  };
 
   function formatSize(bytes: number | null): string {
     if (!bytes || bytes === 0) return "0 KB";
@@ -455,7 +470,13 @@ export default function SharedDrive() {
         loading={isDeletingFile} />
 
 
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView 
+        className="flex-1" 
+        contentContainerStyle={{ paddingBottom: 100 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#43C17A"]} tintColor="#43C17A" />
+        }
+      >
         <View className="px-4 pt-4 pb-2 flex-row justify-between items-center">
           <View>
             <Text className="text-2xl text-[#282828] mb-1" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.Drive", "Drive")}

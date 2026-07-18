@@ -46,9 +46,9 @@ export function AppPicker({ selectedValue, onValueChange, items, placeholder, di
         className={`border border-gray-300 rounded-lg px-4 py-3.5 bg-gray-50 flex-row justify-between items-center ${disabled ? 'opacity-50' : ''}`}
       >
         <View className="flex-1 mr-2">
-           <Text className={selectedItem ? "text-gray-800" : "text-gray-500"} numberOfLines={1}>
-             {displayLabel}
-           </Text>
+          <Text className={selectedItem ? "text-gray-800" : "text-gray-500"} numberOfLines={1}>
+            {displayLabel}
+          </Text>
         </View>
         <CaretDown size={16} color="#6b7280" />
       </TouchableOpacity>

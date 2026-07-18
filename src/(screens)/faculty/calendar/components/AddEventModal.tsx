@@ -136,13 +136,13 @@ export default function AddEventModal({
           in("collegeSubjectId", facultyCtx.subjectIds).
           eq("isActive", true).
           is("deletedAt", null);
-          
+
         if (facultyCtx.collegeBranchId) {
-            subjectQuery = subjectQuery.eq("collegeBranchId", facultyCtx.collegeBranchId);
+          subjectQuery = subjectQuery.eq("collegeBranchId", facultyCtx.collegeBranchId);
         } else {
-            subjectQuery = subjectQuery.is("collegeBranchId", null);
+          subjectQuery = subjectQuery.is("collegeBranchId", null);
         }
-        
+
         const { data: subjectRows } = await subjectQuery;
 
         setSubjects(subjectRows || []);
@@ -266,7 +266,7 @@ export default function AddEventModal({
       <View className="flex-1 bg-black/50 justify-end">
         <View className="bg-white h-[90%] rounded-t-3xl overflow-hidden">
           <View className="flex-row items-center justify-between p-5 border-b border-gray-100">
-            <Text className="text-xl font-bold text-gray-800">
+            <Text className="text-xl text-gray-800" style={{ fontFamily: fonts.bold }}>
               {mode === "edit" ? t("Calendar.faculty.editCalendarEvent", "Edit Calendar Event") : t("Calendar.faculty.newCalendarEvent", "New Calendar Event")}
             </Text>
             <TouchableOpacity onPress={onClose} className="p-2 -mr-2 bg-gray-50 rounded-full">
@@ -313,7 +313,7 @@ export default function AddEventModal({
               )}
             </View>
 
-            <Text className="text-sm font-medium text-gray-700 mb-1">{t("Auto.Common.Subject", "Subject")} <Text className="text-red-500">*</Text></Text>
+            <Text className="text-sm text-gray-700 mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Subject", "Subject")} <Text className="text-red-500">*</Text></Text>
             <View className="mb-4">
               <AppPicker
                 selectedValue={subjectId}
@@ -580,9 +580,9 @@ export default function AddEventModal({
             <TouchableOpacity
               disabled={isSubmitting}
               onPress={handleSave}
-              className="bg-[#14234B] rounded-lg py-4 items-center justify-center flex-row shadow-sm">
+              className="bg-[#43C17A] rounded-lg py-4 items-center justify-center flex-row shadow-sm">
               {isSubmitting ? <ActivityIndicator color="#fff" className="mr-2" /> : null}
-              <Text className="text-white font-bold text-[15px]">
+              <Text className="text-white text-[15px]" style={{ fontFamily: fonts.bold }}>
                 {mode === "edit" ? t("Calendar.faculty.updateEvent", "Update Event") : t("Calendar.faculty.saveEvent", "Save Event")}
               </Text>
             </TouchableOpacity>

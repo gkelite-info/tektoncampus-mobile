@@ -240,16 +240,16 @@ export function StudentAssignmentUploadModal({
             </Text>
                         <View className="flex-col gap-2">
                             <Text className="text-base text-gray-600" style={{ fontFamily: fonts.regular }}>
-                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Subject", "Subject :")}</Text>
-                                {assignment?.subjectName || "—"}
+                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Subject", "Subject")} :</Text>
+                                {" "}{assignment?.subjectName || "—"}
                             </Text>
                             <Text className="text-base text-gray-600" style={{ fontFamily: fonts.regular }}>
-                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Topic", "Topic :")}</Text>
-                                {assignment?.title || "—"}
+                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Topic", "Topic")} :</Text>
+                                {" "}{assignment?.title || "—"}
                             </Text>
                             <Text className="text-base text-gray-600" style={{ fontFamily: fonts.regular }}>
-                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Faculty", "Faculty :")}</Text>
-                                {assignment?.professor || "—"}
+                                <Text style={{ fontFamily: fonts.medium }}>{t("Assignment.student.Faculty", "Faculty")} :</Text>
+                                {" "}{assignment?.professor || "—"}
                             </Text>
                         </View>
                     </View>

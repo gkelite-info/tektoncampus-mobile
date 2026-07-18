@@ -5,6 +5,7 @@ import { Laptop, PencilSimple, Trash, X } from "phosphor-react-native";
 import PillTag from "./PillTag";
 import { Avatar } from "@/components/Avatar";
 import { useTranslations } from "@/utils/useTranslations";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 const formatToAMPM = (timeStr: string) => {
   if (!timeStr) return "";
@@ -31,6 +32,7 @@ export default function MeetingCard({
   const [fromTime, toTime] = data.timeRange.split(" - ");
   const formattedTimeRange = `${formatToAMPM(fromTime)} - ${formatToAMPM(toTime)}`;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isSchool = isSchoolEducation(data.educationType);
 
   const isEditable = ["Wellbeing Manager", "Finance"].includes(role || "");
 
@@ -183,7 +185,7 @@ export default function MeetingCard({
                 <Text className="text-[#303030] font-medium text-sm">
                   {t("SharedMeetings.details.role", "Role :")}
                 </Text>
-                <PillTag label={t("SharedMeetings.category." + (data as any).category, (data as any).category) || t("SharedMeetings.details.na", "N/A")} />
+                <PillTag label={(t("SharedMeetings.category." + (data as any).category, (data as any).category) as string) || (t("SharedMeetings.details.na", "N/A") as string)} />
               </View>
 
               <View className="flex-row items-center justify-between">
@@ -204,13 +206,13 @@ export default function MeetingCard({
               <>
                   <View className="flex-row items-center justify-between">
                     <Text className="text-[#303030] font-medium text-sm">
-                      {t("SharedMeetings.details.branch", "Branch :")}
+                      {isSchool ? t("SharedMeetings.details.school", "School :") : t("SharedMeetings.details.branch", "Branch :")}
                     </Text>
                     <PillTag label={data.branch || t("SharedMeetings.details.na", "N/A")} />
                   </View>
                   <View className="flex-row items-center justify-between">
                     <Text className="text-[#303030] font-medium text-sm">
-                      {t("SharedMeetings.details.year", "Year :")}
+                      {isSchool ? t("SharedMeetings.details.class", "Class :") : t("SharedMeetings.details.year", "Year :")}
                     </Text>
                     <PillTag label={data.year || t("SharedMeetings.details.na", "N/A")} />
                   </View>

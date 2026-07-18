@@ -5,6 +5,8 @@ import { View, TouchableOpacity, ScrollView, ActivityIndicator, useWindowDimensi
 import { CaretLeft, Chalkboard, CaretDown } from "phosphor-react-native";
 import { fonts } from "@/constants/fonts";
 import { useTranslations } from "@/utils/useTranslations";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
+import { useTargetStudentDetails } from "@/lib/helpers/shared/useTargetStudentDetails";
 const useNavigate = () => {
   return {
     navigate: (screen: string, params?: any) => console.log(`Navigating to ${screen}`, params),
@@ -75,14 +77,15 @@ const CourseScheduleCard = ({
   return <View className={`bg-gray-100 p-4 rounded-xl ${style}`}><Text>{t("Auto.Common.ScheduleCard", "Schedule Card")}</Text></View>;
 };
 const SemesterAttendanceCard = ({
-  presentPercent
+  presentPercent,
+  isSchool
 }: any) => {
   const {
     t
   } = useTranslation();
   return <View className="bg-emerald-50 p-4 rounded-xl"><Text style={{
       fontFamily: fonts.semiBold
-    }} className="text-base">{t("Auto.Common.SemesterStats", "Semester Stats:")}{presentPercent}%</Text></View>;
+    }} className="text-base">{isSchool ? t("Auto.Common.AttendanceStats", "Attendance Stats:") : t("Auto.Common.SemesterStats", "Semester Stats:")}{presentPercent}%</Text></View>;
 };
 const WorkWeekCalendar = ({
   style
@@ -131,6 +134,8 @@ export default function SubjectAttendance({
     userId,
     loading: userLoading
   } = useUser();
+  const { collegeEducationType } = useTargetStudentDetails(userId);
+  const isSchool = isSchoolEducation(collegeEducationType);
   const [dashboardData, setDashboardData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -161,7 +166,7 @@ export default function SubjectAttendance({
     id: 2,
     icon: <Chalkboard size={28} color="#282828" />,
     value: dashboardData ? `${dashboardData.cards.attended}/${dashboardData.cards.totalClasses}` : "0/0",
-    label: t("Semester Attendance"),
+    label: isSchool ? t("Attendance") : t("Semester Attendance"),
     style: "bg-[#FFEDDA]",
     totalPercentage: dashboardData ? `${dashboardData.cards.percentage}%` : "0%"
   }];
@@ -199,8 +204,9 @@ export default function SubjectAttendance({
                 </View>
 
                 <View className={isDesktopView ? "flex-1" : "w-full"}>
-                    <SemesterAttendanceCard presentPercent={dashboardData?.semesterStats.present || 0} absentPercent={dashboardData?.semesterStats.absent || 0} leavePercent={dashboardData?.semesterStats.leave || 0} overallPercent={dashboardData?.cards.percentage || 0} />
-          
+                    <View className="mb-3">
+                        <SemesterAttendanceCard presentPercent={dashboardData?.semesterStats.present || 0} absentPercent={dashboardData?.semesterStats.absent || 0} leavePercent={dashboardData?.semesterStats.leave || 0} overallPercent={dashboardData?.cards.percentage || 0} isSchool={isSchool} />
+                    </View>
                 </View>
 
                 {isDesktopView && <WorkWeekCalendar style="w-[325px]" />}

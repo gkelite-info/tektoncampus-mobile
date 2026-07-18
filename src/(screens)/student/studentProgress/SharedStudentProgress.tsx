@@ -13,6 +13,7 @@ import CourseScheduleCard from "@/utils/CourseScheduleCard";
 import { getStudentProgressData } from "@/lib/helpers/student/studentProgress/getStudentProgressData";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useTargetStudentDetails } from "@/lib/helpers/shared/useTargetStudentDetails";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 
 
 export default function SharedStudentProgress({ targetUserId }: { targetUserId: number }) {
@@ -38,9 +39,12 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
     studentLoading
   } = useTargetStudentDetails(targetUserId);
 
-  const semesterLabel = collegeSemester ?
-  `${t("Dashboard.student.Semester", "Semester")} ${collegeSemester}` :
-  `${t("Dashboard.student.Semester", "Semester")} ${t("Dashboard.student.N/A", "N/A")}`;
+  const isSchool = isSchoolEducation(collegeEducationType);
+  const semesterLabel = isSchool 
+    ? `${t("Dashboard.student.Year", "Year")} ${collegeAcademicYear ?? t("Dashboard.student.N/A", "N/A")}`
+    : collegeSemester 
+      ? `${t("Dashboard.student.Semester", "Semester")} ${collegeSemester}` 
+      : `${t("Dashboard.student.Semester", "Semester")} ${t("Dashboard.student.N/A", "N/A")}`;
 
   const isLoading = userLoading || studentLoading || progressLoading;
 
@@ -98,7 +102,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
               showsHorizontalScrollIndicator={false}
               className="flex-row gap-2 pb-1">
               
-                            <View className="flex-row items-center">
+                            {!isSchool && <View className="flex-row items-center">
                                 <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.medium }}>
                                     {collegeEducationType === "Inter" ? t("Dashboard.student.GroupLabel", "Group:") : t("Dashboard.student.BranchLabel", "Branch:")}
                                 </Text>
@@ -107,9 +111,9 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                                         {collegeBranchCode ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
-                            </View>
+                            </View>}
 
-                            <View className="flex-row items-center">
+                            {!isSchool && <View className="flex-row items-center">
                                 <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.YearLabel", "Year:")}
                 </Text>
                                 <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
@@ -117,7 +121,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                                         {collegeAcademicYear ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
-                            </View>
+                            </View>}
 
                             <View className="flex-row items-center">
                                 <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.SectionLabel", "Section:")}
@@ -129,7 +133,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                                 </View>
                             </View>
 
-                            <View className="flex-row items-center">
+                            {!isSchool && <View className="flex-row items-center">
                                 <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.SemesterLabel", "Semester:")}
                 </Text>
                                 <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
@@ -137,7 +141,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                                         {collegeSemester ?? t("Dashboard.student.N/A", "N/A")}
                                     </Text>
                                 </View>
-                            </View>
+                            </View>}
                         </ScrollView>
                     </View>
 
@@ -160,7 +164,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                     <View className="bg-white rounded-2xl shadow-sm">
                         <ProfileCard
               name={fullName ?? t("Dashboard.student.Student", "Student")}
-              department={collegeBranchCode ?? t("Dashboard.student.N/A", "N/A")}
+              department={isSchool ? collegeAcademicYear : collegeBranchCode}
               studentId={identifierId ?? t("Dashboard.student.N/A", "N/A")}
               avatarUrl={profilePhoto}
               attendancePercentage={progressData?.overallAttendancePercentage ?? 0}

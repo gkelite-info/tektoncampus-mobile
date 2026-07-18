@@ -7,6 +7,7 @@ import { SubjectDetailsCard } from "./subjectDetails";
 import { Avatar } from "@/utils/Avatar";
 import { useStudent } from "@/utils/context/student/useStudent";
 import { fonts } from "@/constants/fonts";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 const useTranslations = (namespace: string) => {
   return (key: string, variables?: any) => {
     if (variables?.subject) return `No subjects found for ${variables.subject}`;
@@ -104,7 +105,7 @@ export default function SubjectCard({
           </TouchableOpacity>
         </View>
 
-        {!(collegeEducationType === "Inter") && <View className="flex-row items-center gap-2 mr-4">
+        {!(collegeEducationType === "Inter") && !isSchoolEducation(collegeEducationType) && <View className="flex-row items-center gap-2 mr-4">
           <Text className="text-[#525252] text-base font-medium">
             {t("Academics.student.Semester", "Semester :")}
           </Text>
@@ -115,7 +116,7 @@ export default function SubjectCard({
           </View>
         </View>}
 
-        <View className="flex-row items-center gap-2 mr-4">
+        {!isSchoolEducation(collegeEducationType) && <View className="flex-row items-center gap-2 mr-4">
           <Text className="text-[#525252] text-base font-medium">
             {t("Academics.student.Year", "Year :")}
           </Text>
@@ -124,7 +125,7 @@ export default function SubjectCard({
               {subjectProps[0]?.academicYear || t("Academics.student.N/A", "N/A")}
             </Text>
           </View>
-        </View>
+        </View>}
       </ScrollView>
     </View>
 

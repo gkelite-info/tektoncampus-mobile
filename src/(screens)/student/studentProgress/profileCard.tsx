@@ -7,7 +7,7 @@ import { fonts } from "@/constants/fonts";
 
 export type ProfileCardProps = {
   name: string;
-  department: string;
+  department?: string | null;
   studentId: string;
   avatarUrl: string | null;
   attendancePercentage: number;
@@ -42,17 +42,21 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                         {name}
                     </Text>
 
-                    <View className="bg-green-100 px-2 py-0.5 rounded-full">
-                        <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>
-                            {department}
-                        </Text>
-                    </View>
+                    {department && department !== "N/A" && department !== "—" && (
+                        <View className="bg-green-100 px-2 py-0.5 rounded-full">
+                            <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>
+                                {department}
+                            </Text>
+                        </View>
+                    )}
 
-                    <View className="bg-green-100 px-2 py-0.5 rounded-full">
-                        <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>
-                            {studentId}
-                        </Text>
-                    </View>
+                    {studentId && studentId !== "N/A" && studentId !== "—" && (
+                        <View className="bg-green-100 px-2 py-0.5 rounded-full">
+                            <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>
+                                {studentId}
+                            </Text>
+                        </View>
+                    )}
                 </View>
             </View>
 

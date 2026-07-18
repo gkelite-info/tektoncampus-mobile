@@ -4,6 +4,7 @@ import { View, Image } from 'react-native';
 import { User, IdentificationCard, Buildings, Phone, Envelope, CalendarBlank, Briefcase } from "phosphor-react-native";
 import { FacultyProfile } from "../types";
 import { fonts } from "@/constants/fonts";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 interface Props {
   profile: FacultyProfile;
@@ -32,6 +33,7 @@ const InfoRow = ({ icon: Icon, label, value, fullWidth = false }: {icon: any;lab
 
 const FacultyInfoCard: FC<Props> = ({ profile, loading }) => {const { t } = useTranslation();
   const isInter = profile.collegeEducationType === "Inter";
+  const isSchool = isSchoolEducation(profile.collegeEducationType);
 
   return (
     <View className="w-full md:flex-1 md:w-auto bg-white rounded-2xl mb-4 shadow-sm border border-gray-100 overflow-hidden">
@@ -62,7 +64,7 @@ const FacultyInfoCard: FC<Props> = ({ profile, loading }) => {const { t } = useT
 
         <View className="flex-row flex-wrap w-full justify-between">
           <InfoRow icon={IdentificationCard} label={t("Auto.Attr.FacultyID", "Faculty ID")} value={!loading ? profile.facultyId : "..."} />
-          <InfoRow icon={Buildings} label={isInter ? "Group" : "Branch"} value={profile.branch} />
+          {!isSchool && <InfoRow icon={Buildings} label={isInter ? "Group" : "Branch"} value={profile.branch} />}
           <InfoRow icon={Phone} label={t("Auto.Attr.Mobile", "Mobile")} value={profile.mobile} />
           <InfoRow icon={Briefcase} label={t("Auto.Attr.Experience", "Experience")} value={profile.experience} />
           <InfoRow icon={CalendarBlank} label={t("Auto.Attr.DateofJoining", "Date of Joining")} value={profile.joiningDate} />

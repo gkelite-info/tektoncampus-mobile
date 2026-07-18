@@ -87,7 +87,7 @@ export default function FacultyDrawerNavigator() {
     const isSchool = isSchoolEducation(collegeEducationType);
 
     const filteredMenuItems = menuItems.filter((item) => {
-        if (isSchool && (item.name === "Placements" || item.name === "Club")) {
+        if (isSchool && (item.name === "Placements" || item.name === "Club" || item.name === "Wellbeing")) {
             return false;
         }
         return true;
@@ -131,7 +131,7 @@ export default function FacultyDrawerNavigator() {
                 <Tab.Screen name="Drive" component={DriveScreen} />
                 <Tab.Screen name="Meetings" component={FacultyMeetingsPage} />
                 <Tab.Screen name="MyAttendance" component={MyAttendanceScreen} />
-                <Tab.Screen name="Wellbeing" component={WellbeingScreen} />
+                {!isSchool && <Tab.Screen name="Wellbeing" component={WellbeingScreen} />}
                 <Tab.Screen name="Settings" component={SettingsStackNavigator} />
                 <Tab.Screen name="AssignmentSubmissions" component={AssignmentSubmissions} options={{ headerShown: false }} />
                 <Tab.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />

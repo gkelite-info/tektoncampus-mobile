@@ -2,6 +2,7 @@ import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
 import { Modal, View, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useTranslation } from "react-i18next";
+import { fonts } from '@/constants/fonts';
 type NewFolderModalProps = {
   open: boolean;
   onCancel: () => void;
@@ -33,9 +34,6 @@ export default function NewFolderModal({
   }, [open]);
   if (!open) return null;
   const handleSave = () => {
-    const {
-      t
-    } = useTranslation();
     const trimmedName = name.trim();
     if (!trimmedName) {
       setError(t("Drive_module.student.Folder name is required") || "Folder name is required");
@@ -72,39 +70,36 @@ export default function NewFolderModal({
     });
   };
   return <Modal visible={open} transparent={true} animationType="fade" onRequestClose={loading ? undefined : onCancel}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 justify-center items-center bg-black/40 px-4">
-        <View className="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
-          <Text className="mb-4 text-lg font-semibold text-gray-900">
-            {t("Drive_module.student.New Folder") || "New Folder"}
-          </Text>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 justify-center items-center bg-black/40 px-4">
+      <View className="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
+        <Text className="mb-4 text-lg font-semibold text-gray-900">
+          {t("Drive_module.student.New Folder") || "New Folder"}
+        </Text>
 
-          <View className="mb-4">
-            <Text className="mb-1 text-sm font-medium text-gray-900">
-              {t("Drive_module.student.Folder Name") || "Folder Name"}
-            </Text>
-            <TextInput value={name} onChangeText={text => {
-            const {
-              t
-            } = useTranslation();
+        <View className="mb-4">
+          <Text className="mb-1 text-sm font-medium text-gray-900">
+            {t("Drive_module.student.Folder Name") || "Folder Name"}
+          </Text>
+          <TextInput value={name} onChangeText={text => {
             if (/^[a-zA-Z0-9 _-]*$/.test(text)) {
               setName(text);
               setError("");
             } else {
               setError(t("Drive_module.student.Only letters, numbers, spaces, - and _ are allowed") || "Only letters, numbers, spaces, - and _ are allowed");
             }
-          }} placeholder={t("Drive_module.student.Enter folder name") || "Enter folder name"} editable={!loading} className={`w-full rounded border px-3 py-2 text-sm text-black ${error ? "border-red-500" : "border-gray-300 focus:border-[#43C17A]"} ${loading ? "opacity-50" : ""}`} />
-            <Text className="mt-1 text-xs text-gray-500">
-              {t("Drive_module.student.Only letters, numbers, spaces, - and _") || "Only letters, numbers, spaces, - and _"}
-            </Text>
-            {!!error && <Text className="mt-1 text-xs text-red-500">{error}</Text>}
-          </View>
+          }} placeholder={t("Drive_module.student.Enter folder name") || "Enter folder name"} editable={!loading} className={`w-full rounded border px-3 py-2 text-sm text-black ${error ? "border-red-500" : "border-gray-300 focus:border-[#43C17A]"} ${loading ? "opacity-50" : ""}`} style={{ fontFamily: fonts.regular }} />
+          <Text className="mt-1 text-xs text-gray-500" style={{ fontFamily: fonts.regular }}>
+            {t("Drive_module.student.Only letters, numbers, spaces, - and _") || "Only letters, numbers, spaces, - and _"}
+          </Text>
+          {!!error && <Text className="mt-1 text-xs text-red-500">{error}</Text>}
+        </View>
 
-          <View className="mb-5">
-            <Text className="mb-2 text-sm font-medium text-gray-900">
-              {t("Drive_module.student.Choose Folder Color") || "Choose Folder Color"}
-            </Text>
-            <View className="flex-row gap-3 rounded border border-gray-200 bg-white p-3">
-              {FOLDER_COLORS.map(c => <TouchableOpacity key={c} onPress={() => setColor(c)} disabled={loading} className={`h-9 w-9 rounded ${color === c ? "border-2 border-white" : ""} ${loading ? "opacity-50" : ""}`} style={{
+        <View className="mb-5">
+          <Text className="mb-2 text-sm font-medium text-gray-900">
+            {t("Drive_module.student.Choose Folder Color") || "Choose Folder Color"}
+          </Text>
+          <View className="flex-row gap-3 rounded border border-gray-200 bg-white p-3">
+            {FOLDER_COLORS.map(c => <TouchableOpacity key={c} onPress={() => setColor(c)} disabled={loading} className={`h-9 w-9 rounded ${color === c ? "border-2 border-white" : ""} ${loading ? "opacity-50" : ""}`} style={{
               backgroundColor: c,
               shadowColor: color === c ? c : "transparent",
               shadowOffset: {
@@ -115,24 +110,24 @@ export default function NewFolderModal({
               shadowRadius: 5,
               elevation: color === c ? 5 : 0
             }} />)}
-            </View>
-          </View>
-
-          <View className="flex-row gap-3">
-            <TouchableOpacity onPress={handleSave} disabled={loading} className={`flex-1 rounded py-3 flex-row items-center justify-center gap-2 ${loading ? "bg-[#43C17A]/70" : "bg-[#43C17A]"}`}>
-              {loading && <ActivityIndicator size="small" color="#FFF" />}
-              <Text className="text-sm font-semibold text-white">
-                {loading ? t("Drive_module.student.Saving") || "Saving..." : t("Drive_module.student.Save Folder") || "Save Folder"}
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={onCancel} disabled={loading} className={`flex-1 rounded border border-gray-300 py-3 items-center justify-center ${loading ? "opacity-50" : ""}`}>
-              <Text className="text-sm font-semibold text-gray-900">
-                {t("Drive_module.student.Cancel") || "Cancel"}
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAvoidingView>
-    </Modal>;
+
+        <View className="flex-row gap-3">
+          <TouchableOpacity onPress={handleSave} disabled={loading} className={`flex-1 rounded py-3 flex-row items-center justify-center gap-2 ${loading ? "bg-[#43C17A]/70" : "bg-[#43C17A]"}`}>
+            {loading && <ActivityIndicator size="small" color="#FFF" />}
+            <Text className="text-sm font-semibold text-white">
+              {loading ? t("Drive_module.student.Saving") || "Saving..." : t("Drive_module.student.Save Folder") || "Save Folder"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={onCancel} disabled={loading} className={`flex-1 rounded border border-gray-300 py-3 items-center justify-center ${loading ? "opacity-50" : ""}`}>
+            <Text className="text-sm font-semibold text-gray-900">
+              {t("Drive_module.student.Cancel") || "Cancel"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  </Modal>;
 }

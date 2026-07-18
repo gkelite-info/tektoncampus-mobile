@@ -42,11 +42,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                         {name}
                     </Text>
 
-                    <View className="bg-green-100 px-2 py-0.5 rounded-full">
-                        <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>
-                            {department}
-                        </Text>
-                    </View>
+                    {department && department !== "N/A" && (
+                        <View className="bg-green-100 px-2 py-0.5 rounded-full">
+                            <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>
+                                {department}
+                            </Text>
+                        </View>
+                    )}
 
                     <View className="bg-green-100 px-2 py-0.5 rounded-full">
                         <Text className="text-green-600 text-[9px]" style={{ fontFamily: fonts.semiBold }}>

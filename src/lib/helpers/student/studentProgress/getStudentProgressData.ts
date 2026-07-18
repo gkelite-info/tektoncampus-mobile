@@ -7,14 +7,16 @@ const CONDUCTED_STATUSES = ["PRESENT", "ABSENT", "LATE", "LEAVE"] as const;
 const CANCELLED_STATUSES = ["CLASS_CANCEL", "CANCEL_CLASS"] as const;
 
 type AttendanceRecordRow = {
-    calendarEventId: number;
+    calendarEventId?: number | null;
+    bulkCalendarEventId?: number | null;
     status: string;
     calendar_event: {
-        calendarEventId: number;
+        calendarEventId?: number;
+        bulkCalendarEventId?: number;
         subject: number | null;
         facultyId: number | null;
         type: string;
-        date: string;
+        date?: string;
         is_deleted: boolean | null;
     } | null;
 };
@@ -212,8 +214,15 @@ export async function getStudentProgressData(userId: number) {
     let subjectsQuery = supabase
         .from("college_subjects")
         .select("collegeSubjectId, subjectName, subjectKey")
-        .eq("collegeId", studentContext.collegeId)
-        .eq("collegeBranchId", studentContext.collegeBranchId)
+        .eq("collegeId", studentContext.collegeId);
+
+    if (studentContext.collegeBranchId !== null && studentContext.collegeBranchId !== undefined) {
+        subjectsQuery = subjectsQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+    } else {
+        subjectsQuery = subjectsQuery.is("collegeBranchId", null);
+    }
+
+    subjectsQuery = subjectsQuery
         .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
         .eq("isActive", true)
         .is("deletedAt", null);
@@ -222,11 +231,18 @@ export async function getStudentProgressData(userId: number) {
     let semesterSubjectsError = null;
 
     if (studentContext.collegeSemesterId !== null) {
-        const res = await supabase
+        let semQuery = supabase
             .from("college_subjects")
             .select("collegeSubjectId, subjectName, subjectKey")
-            .eq("collegeId", studentContext.collegeId)
-            .eq("collegeBranchId", studentContext.collegeBranchId)
+            .eq("collegeId", studentContext.collegeId);
+
+        if (studentContext.collegeBranchId !== null && studentContext.collegeBranchId !== undefined) {
+            semQuery = semQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+        } else {
+            semQuery = semQuery.is("collegeBranchId", null);
+        }
+
+        const res = await semQuery
             .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
             .eq("collegeSemesterId", studentContext.collegeSemesterId)
             .eq("isActive", true)
@@ -235,11 +251,18 @@ export async function getStudentProgressData(userId: number) {
         semesterSubjects = res.data;
         semesterSubjectsError = res.error;
     } else {
-        const res = await supabase
+        let semQuery = supabase
             .from("college_subjects")
             .select("collegeSubjectId, subjectName, subjectKey")
-            .eq("collegeId", studentContext.collegeId)
-            .eq("collegeBranchId", studentContext.collegeBranchId)
+            .eq("collegeId", studentContext.collegeId);
+
+        if (studentContext.collegeBranchId !== null && studentContext.collegeBranchId !== undefined) {
+            semQuery = semQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+        } else {
+            semQuery = semQuery.is("collegeBranchId", null);
+        }
+
+        const res = await semQuery
             .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
             .is("collegeSemesterId", null)
             .eq("isActive", true)
@@ -305,7 +328,7 @@ export async function getStudentProgressData(userId: number) {
 
     const { data: attendanceRecordsRaw, error: attendanceError } = await supabase
         .from("attendance_record")
-        .select("calendarEventId, status")
+        .select("calendarEventId, bulkCalendarEventId, status, markedAt")
         .eq("studentId", studentContext.studentId)
         .is("deletedAt", null)
         .lte("markedAt", today);
@@ -313,22 +336,55 @@ export async function getStudentProgressData(userId: number) {
     if (attendanceError) throw attendanceError;
 
     const attendanceEventIds = Array.from(new Set((attendanceRecordsRaw ?? []).map(r => r.calendarEventId))).filter(Boolean);
-    let calendarEventsData: any[] = [];
-    if (attendanceEventIds.length > 0) {
-        const { data: events, error: eventsError } = await supabase
-            .from("calendar_event")
-            .select("calendarEventId, subject, facultyId, type, date, is_deleted")
-            .in("calendarEventId", attendanceEventIds);
-        if (!eventsError && events) {
-            calendarEventsData = events;
-        }
-    }
+    const attendanceBulkEventIds = Array.from(new Set((attendanceRecordsRaw ?? []).map(r => r.bulkCalendarEventId))).filter(Boolean);
 
-    const calendarEventsMap = new Map(calendarEventsData.map(e => [e.calendarEventId, e]));
-    const attendanceRecords = (attendanceRecordsRaw ?? []).map(r => ({
-        ...r,
-        calendar_event: calendarEventsMap.get(r.calendarEventId) || null
-    })) as AttendanceRecordRow[];
+    const [eventsResult, bulkEventsResult] = await Promise.all([
+        attendanceEventIds.length > 0
+            ? supabase
+                .from("calendar_event")
+                .select("calendarEventId, subject, facultyId, type, date, is_deleted")
+                .in("calendarEventId", attendanceEventIds)
+            : Promise.resolve({ data: [], error: null }),
+        attendanceBulkEventIds.length > 0
+            ? supabase
+                .from("bulk_calendar_events")
+                .select("bulkCalendarEventId, subject, facultyId, type, is_deleted")
+                .in("bulkCalendarEventId", attendanceBulkEventIds)
+            : Promise.resolve({ data: [], error: null })
+    ]);
+
+    if (eventsResult.error) throw eventsResult.error;
+    if (bulkEventsResult.error) throw bulkEventsResult.error;
+
+    const calendarEventsMap = new Map(
+        (eventsResult.data ?? []).map(e => [e.calendarEventId, e])
+    );
+    const bulkCalendarEventsMap = new Map(
+        (bulkEventsResult.data ?? []).map(e => [e.bulkCalendarEventId, e])
+    );
+
+    const attendanceRecords = (attendanceRecordsRaw ?? []).map(r => {
+        const calendarEvent = calendarEventsMap.get(r.calendarEventId) || null;
+        const bulkEvent = bulkCalendarEventsMap.get(r.bulkCalendarEventId) || null;
+        let mergedEvent = null;
+        if (calendarEvent) {
+            mergedEvent = calendarEvent;
+        } else if (bulkEvent) {
+            mergedEvent = {
+                calendarEventId: undefined,
+                bulkCalendarEventId: bulkEvent.bulkCalendarEventId,
+                subject: bulkEvent.subject,
+                facultyId: bulkEvent.facultyId,
+                type: bulkEvent.type,
+                date: r.markedAt,
+                is_deleted: bulkEvent.is_deleted ?? false
+            };
+        }
+        return {
+            ...r,
+            calendar_event: mergedEvent
+        };
+    }) as AttendanceRecordRow[];
 
     if (attendanceError) throw attendanceError;
 
@@ -339,7 +395,7 @@ export async function getStudentProgressData(userId: number) {
             !!event &&
             event.type === "class" &&
             event.is_deleted === false &&
-            event.date <= today &&
+            (event.date || "") <= today &&
             !!event.subject &&
             semesterSubjectIds.includes(event.subject) &&
             !isCancelledStatus(record.status)
@@ -351,7 +407,7 @@ export async function getStudentProgressData(userId: number) {
 
         return (
             !!event &&
-            event.date <= today &&
+            (event.date || "") <= today &&
             !!event.subject &&
             !isCancelledStatus(record.status)
         );
@@ -460,8 +516,15 @@ export async function getStudentProgressData(userId: number) {
       dateAssignedInt,
       status
     `,
-        )
-        .eq("collegeBranchId", studentContext.collegeBranchId)
+        );
+
+    if (studentContext.collegeBranchId !== null && studentContext.collegeBranchId !== undefined) {
+        assignmentQuery = assignmentQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+    } else {
+        assignmentQuery = assignmentQuery.is("collegeBranchId", null);
+    }
+
+    assignmentQuery = assignmentQuery
         .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
         .eq("collegeSectionsId", studentContext.collegeSectionsId)
         .eq("is_deleted", false)
@@ -591,63 +654,7 @@ export async function getStudentProgressData(userId: number) {
     let weightageConfigsError = null;
 
     if (semesterSubjectIds.length > 0) {
-        if (studentContext.collegeSemesterId === null) {
-            const res = await supabase
-                .from("faculty_weightage_configs")
-                .select(
-                    `
-              collegeSubjectId,
-              collegeSectionsId,
-              collegeSemesterId,
-              faculty_weightage_items (
-                label,
-                percentage
-              )
-            `,
-                )
-                .eq("collegeId", studentContext.collegeId)
-                .eq("collegeEducationId", studentContext.collegeEducationId)
-                .eq("collegeBranchId", studentContext.collegeBranchId)
-                .eq("collegeSectionsId", studentContext.collegeSectionsId)
-                .in("collegeSubjectId", semesterSubjectIds)
-                .is("collegeSemesterId", null)
-                .is("deletedAt", null)
-                .returns<WeightageConfigRow[]>();
-            weightageConfigs = res.data;
-            weightageConfigsError = res.error;
-        } else {
-            const res = await supabase
-                .from("faculty_weightage_configs")
-                .select(
-                    `
-              collegeSubjectId,
-              collegeSectionsId,
-              collegeSemesterId,
-              faculty_weightage_items (
-                label,
-                percentage
-              )
-            `,
-                )
-                .eq("collegeId", studentContext.collegeId)
-                .eq("collegeEducationId", studentContext.collegeEducationId)
-                .eq("collegeBranchId", studentContext.collegeBranchId)
-                .eq("collegeSectionsId", studentContext.collegeSectionsId)
-                .in("collegeSubjectId", semesterSubjectIds)
-                .eq("collegeSemesterId", studentContext.collegeSemesterId)
-                .is("deletedAt", null)
-                .returns<WeightageConfigRow[]>();
-            weightageConfigs = res.data;
-            weightageConfigsError = res.error;
-        }
-    } else {
-        weightageConfigs = [];
-    }
-
-    if (weightageConfigsError) throw weightageConfigsError;
-
-    if (semesterSubjectIds.length > 0 && (!weightageConfigs || weightageConfigs.length === 0)) {
-        const { data: fallbackConfigs, error: fallbackError } = await supabase
+        let baseConfigsQuery = supabase
             .from("faculty_weightage_configs")
             .select(
                 `
@@ -661,8 +668,62 @@ export async function getStudentProgressData(userId: number) {
         `,
             )
             .eq("collegeId", studentContext.collegeId)
-            .eq("collegeEducationId", studentContext.collegeEducationId)
-            .eq("collegeBranchId", studentContext.collegeBranchId)
+            .eq("collegeEducationId", studentContext.collegeEducationId);
+
+        if (studentContext.collegeBranchId !== null && studentContext.collegeBranchId !== undefined) {
+            baseConfigsQuery = baseConfigsQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+        } else {
+            baseConfigsQuery = baseConfigsQuery.is("collegeBranchId", null);
+        }
+
+        baseConfigsQuery = baseConfigsQuery
+            .eq("collegeSectionsId", studentContext.collegeSectionsId)
+            .in("collegeSubjectId", semesterSubjectIds)
+            .is("deletedAt", null);
+
+        if (studentContext.collegeSemesterId === null) {
+            const res = await baseConfigsQuery
+                .is("collegeSemesterId", null)
+                .returns<WeightageConfigRow[]>();
+            weightageConfigs = res.data;
+            weightageConfigsError = res.error;
+        } else {
+            const res = await baseConfigsQuery
+                .eq("collegeSemesterId", studentContext.collegeSemesterId)
+                .returns<WeightageConfigRow[]>();
+            weightageConfigs = res.data;
+            weightageConfigsError = res.error;
+        }
+    } else {
+        weightageConfigs = [];
+    }
+
+    if (weightageConfigsError) throw weightageConfigsError;
+
+    if (semesterSubjectIds.length > 0 && (!weightageConfigs || weightageConfigs.length === 0)) {
+        let fallbackQuery = supabase
+            .from("faculty_weightage_configs")
+            .select(
+                `
+          collegeSubjectId,
+          collegeSectionsId,
+          collegeSemesterId,
+          faculty_weightage_items (
+            label,
+            percentage
+          )
+        `,
+            )
+            .eq("collegeId", studentContext.collegeId)
+            .eq("collegeEducationId", studentContext.collegeEducationId);
+
+        if (studentContext.collegeBranchId !== null && studentContext.collegeBranchId !== undefined) {
+            fallbackQuery = fallbackQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+        } else {
+            fallbackQuery = fallbackQuery.is("collegeBranchId", null);
+        }
+
+        const { data: fallbackConfigs, error: fallbackError } = await fallbackQuery
             .eq("collegeSectionsId", studentContext.collegeSectionsId)
             .in("collegeSubjectId", semesterSubjectIds)
             .is("deletedAt", null)

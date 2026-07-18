@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 import { View, ScrollView, TouchableOpacity, ActivityIndicator, SafeAreaView, StatusBar, Platform, Modal } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -143,18 +144,20 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
               style={tw`flex-row pb-1`}
               contentContainerStyle={tw`gap-2`}>
               
-              <View style={tw`flex-row items-center`}>
-                <Text style={[tw`text-gray-600 text-[13px]`, { fontFamily: fonts.medium }]}>
-                  {studentInfo.collegeEducationType === "Inter"
-                    ? t("StudentProgress.faculty.group", "Group")
-                    : t("StudentProgress.faculty.branch", "Branch")} :
-                </Text>
-                <View style={tw`bg-[#43C17A]/10 px-2 py-0.5 rounded-full ml-1`}>
-                  <Text style={[tw`text-[#43C17A] text-[11px] tracking-wide`, { fontFamily: fonts.semiBold }]}>
-                    {studentInfo.collegeBranchCode ?? "N/A"}
+              {!isSchoolEducation(studentInfo.collegeEducationType) && (
+                <View style={tw`flex-row items-center`}>
+                  <Text style={[tw`text-gray-600 text-[13px]`, { fontFamily: fonts.medium }]}>
+                    {studentInfo.collegeEducationType === "Inter"
+                      ? t("StudentProgress.faculty.group", "Group")
+                      : t("StudentProgress.faculty.branch", "Branch")} :
                   </Text>
+                  <View style={tw`bg-[#43C17A]/10 px-2 py-0.5 rounded-full ml-1`}>
+                    <Text style={[tw`text-[#43C17A] text-[11px] tracking-wide`, { fontFamily: fonts.semiBold }]}>
+                      {studentInfo.collegeBranchCode ?? "N/A"}
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              )}
 
               <View style={tw`flex-row items-center`}>
                 <Text style={[tw`text-gray-600 text-[13px] ml-1`, { fontFamily: fonts.medium }]}>{t("Auto.Common.Year", "Year :")}

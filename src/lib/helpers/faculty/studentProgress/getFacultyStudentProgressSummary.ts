@@ -618,14 +618,21 @@ async function resolveFacultyStudentProgressScope(
     return calendarScope;
   }
 
-  const { data: studentRows, error: studentError } = await supabase
+  let studentQuery = supabase
     .from("students")
     .select("studentId")
     .eq("collegeId", scope.collegeId)
     .eq("collegeEducationId", scope.collegeEducationId)
-    .eq("collegeBranchId", scope.collegeBranchId)
     .eq("isActive", true)
     .is("deletedAt", null);
+
+  if (scope.collegeBranchId !== null && scope.collegeBranchId !== undefined) {
+    studentQuery = studentQuery.eq("collegeBranchId", scope.collegeBranchId);
+  } else {
+    studentQuery = studentQuery.is("collegeBranchId", null);
+  }
+
+  const { data: studentRows, error: studentError } = await studentQuery;
 
   if (studentError) throw studentError;
 
@@ -757,15 +764,22 @@ export async function getFacultyStudentProgressSummary(
     return buildEmptySummary(scope, historyLabels);
   }
 
-  const { data: studentRows, error: studentError } = await supabase
+  let validStudentsQuery = supabase
     .from("students")
     .select("studentId, userId")
     .in("studentId", candidateStudentIds)
     .eq("collegeId", scope.collegeId)
     .eq("collegeEducationId", scope.collegeEducationId)
-    .eq("collegeBranchId", scope.collegeBranchId)
     .eq("isActive", true)
     .is("deletedAt", null);
+
+  if (scope.collegeBranchId !== null && scope.collegeBranchId !== undefined) {
+    validStudentsQuery = validStudentsQuery.eq("collegeBranchId", scope.collegeBranchId);
+  } else {
+    validStudentsQuery = validStudentsQuery.is("collegeBranchId", null);
+  }
+
+  const { data: studentRows, error: studentError } = await validStudentsQuery;
 
   if (studentError) throw studentError;
 
@@ -785,7 +799,7 @@ export async function getFacultyStudentProgressSummary(
 
   const { data: todayRowsRaw, error: todayError } = await supabase
     .from("attendance_record")
-    .select("studentId, status, markedAt, calendarEventId")
+    .select("studentId, status, markedAt, calendarEventId, bulkCalendarEventId")
     .in("studentId", studentIds)
     .eq("markedAt", today)
     .is("deletedAt", null);
@@ -794,7 +808,7 @@ export async function getFacultyStudentProgressSummary(
 
   const { data: allAttendanceRowsRaw, error: allAttendanceError } = await supabase
     .from("attendance_record")
-    .select("studentId, status, markedAt, calendarEventId")
+    .select("studentId, status, markedAt, calendarEventId, bulkCalendarEventId")
     .in("studentId", studentIds)
     .is("deletedAt", null);
 
@@ -805,30 +819,98 @@ export async function getFacultyStudentProgressSummary(
     ...(allAttendanceRowsRaw ?? []).map(r => r.calendarEventId),
   ])).filter(Boolean);
 
-  let calendarEventsData: any[] = [];
-  if (allCalendarEventIds.length > 0) {
-    const { data: events, error: eventsError } = await supabase
-      .from("calendar_event")
-      .select("calendarEventId, facultyId, subject")
-      .in("calendarEventId", allCalendarEventIds);
-    if (!eventsError && events) {
-      calendarEventsData = events;
-    }
-  }
+  const allBulkCalendarEventIds = Array.from(new Set([
+    ...(todayRowsRaw ?? []).map(r => r.bulkCalendarEventId),
+    ...(allAttendanceRowsRaw ?? []).map(r => r.bulkCalendarEventId),
+  ])).filter(Boolean);
+
+  const [eventsResult, bulkEventsResult] = await Promise.all([
+    allCalendarEventIds.length > 0
+      ? supabase
+          .from("calendar_event")
+          .select("calendarEventId, facultyId, subject")
+          .in("calendarEventId", allCalendarEventIds)
+      : Promise.resolve({ data: [], error: null }),
+    allBulkCalendarEventIds.length > 0
+      ? supabase
+          .from("bulk_calendar_events")
+          .select("bulkCalendarEventId, facultyId, subject")
+          .in("bulkCalendarEventId", allBulkCalendarEventIds)
+      : Promise.resolve({ data: [], error: null })
+  ]);
+
+  if (eventsResult.error) throw eventsResult.error;
+  if (bulkEventsResult.error) throw bulkEventsResult.error;
 
   const calendarEventsMap = new Map(
-    calendarEventsData.map(e => [e.calendarEventId, e])
+    (eventsResult.data ?? []).map(e => [e.calendarEventId, e])
   );
 
-  const todayRows = (todayRowsRaw ?? []).map(r => ({
-    ...r,
-    calendar_event: calendarEventsMap.get(r.calendarEventId) || null
-  }));
+  const bulkCalendarEventsMap = new Map(
+    (bulkEventsResult.data ?? []).map(e => [e.bulkCalendarEventId, e])
+  );
 
-  const allAttendanceRows = (allAttendanceRowsRaw ?? []).map(r => ({
-    ...r,
-    calendar_event: calendarEventsMap.get(r.calendarEventId) || null
-  }));
+  const todayRows = (todayRowsRaw ?? []).map(r => {
+    const calendarEvent = calendarEventsMap.get(r.calendarEventId) || null;
+    const bulkEvent = bulkCalendarEventsMap.get(r.bulkCalendarEventId) || null;
+    return {
+      ...r,
+      calendar_event: calendarEvent || bulkEvent
+    };
+  });
+
+  const allAttendanceRows = (allAttendanceRowsRaw ?? []).map(r => {
+    const calendarEvent = calendarEventsMap.get(r.calendarEventId) || null;
+    const bulkEvent = bulkCalendarEventsMap.get(r.bulkCalendarEventId) || null;
+    return {
+      ...r,
+      calendar_event: calendarEvent || bulkEvent
+    };
+  });
+
+  let assignmentQuery = supabase
+    .from("assignments")
+    .select("assignmentId, collegeSectionsId, collegeAcademicYearId, submissionDeadlineInt")
+    .eq("createdBy", scope.facultyId)
+    .in("subjectId", scope.subjectIds)
+    .in("collegeAcademicYearId", scope.academicYearIds)
+    .in("collegeSectionsId", scope.sectionIds)
+    .eq("is_deleted", false)
+    .neq("status", "Cancelled");
+
+  if (scope.collegeBranchId !== null && scope.collegeBranchId !== undefined) {
+    assignmentQuery = assignmentQuery.eq("collegeBranchId", scope.collegeBranchId);
+  } else {
+    assignmentQuery = assignmentQuery.is("collegeBranchId", null);
+  }
+
+  let weightageConfigsQuery = supabase
+    .from("faculty_weightage_configs")
+    .select(
+      `
+      facultyWeightageConfigId,
+      collegeSubjectId,
+      collegeSectionsId,
+      collegeSemesterId,
+      totalPercentage,
+      faculty_weightage_items (
+        label,
+        percentage
+      )
+    `,
+    )
+    .eq("facultyId", scope.facultyId)
+    .eq("collegeId", scope.collegeId)
+    .eq("collegeEducationId", scope.collegeEducationId)
+    .in("collegeSubjectId", scope.subjectIds)
+    .in("collegeSectionsId", scope.sectionIds)
+    .is("deletedAt", null);
+
+  if (scope.collegeBranchId !== null && scope.collegeBranchId !== undefined) {
+    weightageConfigsQuery = weightageConfigsQuery.eq("collegeBranchId", scope.collegeBranchId);
+  } else {
+    weightageConfigsQuery = weightageConfigsQuery.is("collegeBranchId", null);
+  }
 
   const [
     usersResult,
@@ -858,16 +940,7 @@ export async function getFacultyStudentProgressSummary(
         .eq("isActive", true)
         .is("deletedAt", null)
       : Promise.resolve({ data: [], error: null }),
-    supabase
-      .from("assignments")
-      .select("assignmentId, collegeSectionsId, collegeAcademicYearId, submissionDeadlineInt")
-      .eq("createdBy", scope.facultyId)
-      .eq("collegeBranchId", scope.collegeBranchId)
-      .in("subjectId", scope.subjectIds)
-      .in("collegeAcademicYearId", scope.academicYearIds)
-      .in("collegeSectionsId", scope.sectionIds)
-      .eq("is_deleted", false)
-      .neq("status", "Cancelled"),
+    assignmentQuery,
     supabase
       .from("discussion_forum")
       .select("discussionId, deadline")
@@ -883,28 +956,7 @@ export async function getFacultyStudentProgressSummary(
       .in("collegeSectionsId", scope.sectionIds)
       .eq("isActive", true)
       .is("deletedAt", null),
-    supabase
-      .from("faculty_weightage_configs")
-      .select(
-        `
-        facultyWeightageConfigId,
-        collegeSubjectId,
-        collegeSectionsId,
-        collegeSemesterId,
-        totalPercentage,
-        faculty_weightage_items (
-          label,
-          percentage
-        )
-      `,
-      )
-      .eq("facultyId", scope.facultyId)
-      .eq("collegeId", scope.collegeId)
-      .eq("collegeEducationId", scope.collegeEducationId)
-      .eq("collegeBranchId", scope.collegeBranchId)
-      .in("collegeSubjectId", scope.subjectIds)
-      .in("collegeSectionsId", scope.sectionIds)
-      .is("deletedAt", null),
+    weightageConfigsQuery,
   ]);
 
   if (usersResult.error) throw usersResult.error;
@@ -1472,7 +1524,7 @@ export async function getFacultyStudentProgressSummary(
   );
 
   const lowAttendance = studentProgressRows.filter(
-    (student) => student.conductedClasses > 0 && student.attendancePercentage < 70,
+    (student) => student.conductedClasses > 0 && student.attendancePercentage < 75,
   ).length;
 
   return {

@@ -8,6 +8,7 @@ import { ChartLineDown, UserCircle, UsersThree } from "phosphor-react-native";
 import { AppPicker } from "@/components/AppPicker";
 import { useFaculty } from "@/utils/context/faculty/useFaculty";
 import { getFacultyStudentProgressSummary } from "@/lib/helpers/faculty/studentProgress/getFacultyStudentProgressSummary";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 
 import CardComponent from "./components/stuPerfCards";
 import PerformanceTrendChart from "./components/performanceTrendChart";
@@ -49,8 +50,11 @@ export default function FacultyStudentProgressScreen() {
     sections,
     collegeAcademicYear,
     collegeAcademicYears,
-    facultyId
+    facultyId,
+    faculty_edu_type
   } = useFaculty();
+
+  const isSchool = isSchoolEducation(faculty_edu_type);
 
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [summary, setSummary] = useState<StudentProgressSummary>(defaultSummary);
@@ -107,7 +111,7 @@ export default function FacultyStudentProgressScreen() {
   useEffect(() => {
     if (facultyLoading) return;
 
-    if (!collegeId || !facultyId || !collegeEducationId || !collegeBranchId) {
+    if (!collegeId || !facultyId || !collegeEducationId || (!isSchool && !collegeBranchId)) {
       setSummary(defaultSummary);
       setSummaryLoading(false);
       return;
@@ -119,8 +123,37 @@ export default function FacultyStudentProgressScreen() {
       setSummaryLoading(true);
       setDebugError(null);
 
-      const resolvedSectionIds = selectedSectionId === "all" ? sectionIds : [selectedSectionId as number];
-      const resolvedYearIds = selectedYearId === "all" ? academicYearIds : [selectedYearId as number];
+      let resolvedSectionIds: number[];
+      if (selectedSectionId !== "all") {
+        resolvedSectionIds = [selectedSectionId as number];
+      } else {
+        resolvedSectionIds = sections
+          .filter((s) =>
+            (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId) &&
+            (selectedYearId === "all" || s.collegeAcademicYearId === selectedYearId)
+          )
+          .map((s) => s.collegeSectionsId);
+
+        if (resolvedSectionIds.length === 0) {
+          resolvedSectionIds = sectionIds;
+        }
+      }
+
+      let resolvedYearIds: number[];
+      if (selectedYearId !== "all") {
+        resolvedYearIds = [selectedYearId as number];
+      } else {
+        resolvedYearIds = sections
+          .filter((s) =>
+            (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId)
+          )
+          .map((s) => s.collegeAcademicYearId);
+
+        if (resolvedYearIds.length === 0) {
+          resolvedYearIds = academicYearIds;
+        }
+      }
+
       const resolvedSubjectIds = selectedSubjectId === "all" ? subjectIds : [selectedSubjectId as number];
 
       const subjectLabel = faculty_subject.map((s) => s.subjectName).join(", ") || "N/A";

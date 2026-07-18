@@ -88,8 +88,8 @@ export default function FacultyStudentProgressScreen() {
     const map = new Map<number, string>();
     sections.forEach((s) => {
       if (
-         (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId) &&
-         (selectedYearId === "all" || s.collegeAcademicYearId === selectedYearId)
+        (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId) &&
+        (selectedYearId === "all" || s.collegeAcademicYearId === selectedYearId)
       ) {
         if (s.college_sections?.collegeSections) {
           map.set(s.collegeSectionsId, s.college_sections.collegeSections);
@@ -175,18 +175,6 @@ export default function FacultyStudentProgressScreen() {
         });
 
         if (mounted) {
-          console.log("[StudentProgress] data received:", {
-            totalStudents: data.totalStudents,
-            studentRowsCount: data.studentRows.length,
-            tableTotalCount: data.tableTotalCount,
-            topPerformerCount: data.topPerformerRows.length,
-            resolvedSectionIds,
-            resolvedYearIds,
-            resolvedSubjectIds,
-            sectionIds,
-            subjectIds,
-            academicYearIds,
-          });
           setSummary(data);
         }
       } catch (error: any) {

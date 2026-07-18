@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 type StudentJoin = {
     studentId: number;
     collegeId: number;
-    collegeBranchId: number;
+    collegeBranchId: number | null;
     collegeEducationId: number;
     entryType: string;
     status: string;
@@ -14,7 +14,7 @@ type StudentJoin = {
 
     college_branch: {
         collegeBranchCode: string;
-    };
+    } | null;
 };
 
 type AcademicJoin = {
@@ -49,7 +49,7 @@ export async function fetchStudentContext(userId: number) {
         collegeEducationType
       ),
 
-      college_branch:collegeBranchId!inner (
+      college_branch:collegeBranchId (
         collegeBranchCode
       )
     `)

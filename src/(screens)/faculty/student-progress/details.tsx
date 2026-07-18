@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
 import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 import { View, ScrollView, TouchableOpacity, ActivityIndicator, SafeAreaView, StatusBar, Platform, Modal } from 'react-native';
@@ -28,7 +28,8 @@ type ParamList = {
   };
 };
 
-export default function StudentProgressDetailsScreen() {const { t } = useTranslation();
+export default function StudentProgressDetailsScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, "StudentProgressDetails">>();
   const studentId = route.params?.studentId;
@@ -43,7 +44,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
   let headerHeight = 0;
   try {
     headerHeight = useHeaderHeight();
-  } catch (e) {}
+  } catch (e) { }
 
   const insets = useSafeAreaInsets();
 
@@ -61,18 +62,18 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
       setErrorMsg(null);
       try {
         const { data: studentData, error: studentErr } = await supabase.
-        from("students").
-        select("userId, batch").
-        eq("studentId", studentId!).
-        single();
+          from("students").
+          select("userId, batch").
+          eq("studentId", studentId!).
+          single();
 
         if (studentErr || !studentData) throw studentErr || new Error("Student not found for studentId: " + studentId);
 
         const [context, userRow, userProfile, progress] = await Promise.all([
-        fetchStudentContext(studentData.userId),
-        supabase.from("users").select("fullName").eq("userId", studentData.userId).single(),
-        supabase.from("user_profile").select("profileUrl").eq("userId", studentData.userId).maybeSingle(),
-        getStudentProgressData(studentData.userId)]
+          fetchStudentContext(studentData.userId),
+          supabase.from("users").select("fullName").eq("userId", studentData.userId).single(),
+          supabase.from("user_profile").select("profileUrl").eq("userId", studentData.userId).maybeSingle(),
+          getStudentProgressData(studentData.userId)]
         );
 
         if (mounted) {
@@ -123,7 +124,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
   return (
     <SafeAreaView style={[tw`flex-1 bg-[#f4f5f6]`, { paddingTop: Math.max(headerHeight + 16, insets.top + 16) }]}>
       <StatusBar barStyle="dark-content" />
-      
+
       <View style={tw`px-4 pb-2 flex-row items-center`}>
         <TouchableOpacity onPress={() => (navigation as any).navigate("StudentProgress")} style={tw`mr-3 bg-white p-2 rounded-full shadow-sm`}>
           <CaretLeft size={20} color="#374151" weight="bold" />
@@ -133,9 +134,9 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
 
       <ScrollView
         style={tw`flex-1 px-2`}
-        contentContainerStyle={{ paddingBottom: 60 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}>
-        
+
         <View style={tw`flex-row p-1 gap-2 items-center justify-between w-full mb-2`}>
           <View style={tw`flex-1 max-w-5xl mr-2`}>
             <ScrollView
@@ -143,7 +144,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
               showsHorizontalScrollIndicator={false}
               style={tw`flex-row pb-1`}
               contentContainerStyle={tw`gap-2`}>
-              
+
               {!isSchoolEducation(studentInfo.collegeEducationType) && (
                 <View style={tw`flex-row items-center`}>
                   <Text style={[tw`text-gray-600 text-[13px]`, { fontFamily: fonts.medium }]}>
@@ -181,16 +182,17 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
                 </View>
               </View>
 
-              <View style={tw`flex-row items-center`}>
-                <Text style={[tw`text-gray-600 text-[13px] ml-1`, { fontFamily: fonts.medium }]}>{t("Auto.Common.Semester", "Semester:")}
-
-                </Text>
-                <View style={tw`bg-[#43C17A]/10 px-2 py-0.5 rounded-full ml-1`}>
-                  <Text style={[tw`text-[#43C17A] text-[11px]`, { fontFamily: fonts.semiBold }]}>
-                    {studentInfo.collegeSemester ?? "N/A"}
+              {!isSchoolEducation(studentInfo.collegeEducationType) && (
+                <View style={tw`flex-row items-center`}>
+                  <Text style={[tw`text-gray-600 text-[13px] ml-1`, { fontFamily: fonts.medium }]}>{t("Auto.Common.Semester", "Semester:")}
                   </Text>
+                  <View style={tw`bg-[#43C17A]/10 px-2 py-0.5 rounded-full ml-1`}>
+                    <Text style={[tw`text-[#43C17A] text-[11px]`, { fontFamily: fonts.semiBold }]}>
+                      {studentInfo.collegeSemester ?? "N/A"}
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              )}
             </ScrollView>
           </View>
 
@@ -198,13 +200,13 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
             activeOpacity={0.7}
             style={tw`w-8 h-8 rounded-full bg-[#43C17A]/10 items-center justify-center`}
             onPress={() => setOpen(true)}>
-            
+
             <List size={18} weight="bold" color="#374151" />
           </TouchableOpacity>
         </View>
 
         {Platform.OS === 'web' &&
-        <View style={tw`hidden lg:flex justify-end w-[32%] mb-4`}>
+          <View style={tw`hidden lg:flex justify-end w-[32%] mb-4`}>
             <CourseScheduleCard style="w-[320px]" />
           </View>
         }
@@ -220,7 +222,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
               attendanceCount={progressData?.attendedCount ?? 0}
               absentCount={progressData?.absentCount ?? 0}
               leaveCount={progressData?.leaveCount ?? 0} />
-            
+
           </View>
 
           <View style={tw`bg-white rounded-2xl shadow-sm p-3`}>
@@ -228,7 +230,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
               percentage={progressData?.overallAttendancePercentage ?? 0}
               attendedCount={progressData?.attendedCount ?? 0}
               conductedCount={progressData?.conductedCount ?? 0} />
-            
+
           </View>
 
           <AcademicPerformance studentId={studentId!} />
@@ -240,8 +242,9 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
           <View style={tw`bg-transparent`}>
             <AssignmentsSummaryTable
               rows={progressData?.subjectProgressRows ?? []}
-              semesterLabel={semesterLabel} />
-            
+              semesterLabel={semesterLabel}
+              isSchool={isSchoolEducation(studentInfo.collegeEducationType)} />
+
           </View>
         </View>
       </ScrollView>
@@ -251,12 +254,12 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
         transparent={true}
         animationType="fade"
         onRequestClose={() => setOpen(false)}>
-        
+
         <TouchableOpacity
           activeOpacity={1}
           style={tw`flex-1 bg-black/20 justify-center items-center`}
           onPress={() => setOpen(false)}>
-          
+
           <View style={tw`bg-white rounded-xl shadow-lg w-[260px] border border-gray-200 overflow-hidden`}>
             <View style={tw`flex-row items-center justify-between px-4 py-3 border-b border-gray-100`}>
               <Text style={[tw`text-sm text-gray-800`, { fontFamily: fonts.semiBold }]}>{t("Auto.Common.PreviousSemMark", "Previous Sem Marks")}
@@ -270,7 +273,7 @@ export default function StudentProgressDetailsScreen() {const { t } = useTransla
             <TouchableOpacity
               style={tw`w-full px-4 py-3 active:bg-gray-50`}
               onPress={() => setOpen(false)}>
-              
+
               <Text style={[tw`text-sm text-gray-700`, { fontFamily: fonts.regular }]}>{t("Auto.Common.Enrollment", "Enrollment")}</Text>
             </TouchableOpacity>
           </View>

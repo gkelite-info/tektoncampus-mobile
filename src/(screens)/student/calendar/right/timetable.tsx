@@ -69,7 +69,7 @@ export default function CalendarTimeTable({
         const rawData = await fetchStudentTimetableByDate({
           date: selectedDate,
           collegeEducationId: studentContext.collegeEducationId,
-          collegeBranchId: studentContext.collegeBranchId,
+          collegeBranchId: studentContext.collegeBranchId ?? 0,
           collegeAcademicYearId: studentContext.collegeAcademicYearId,
           collegeSemesterId: studentContext.collegeSemesterId,
           collegeSectionId: studentContext.collegeSectionsId,

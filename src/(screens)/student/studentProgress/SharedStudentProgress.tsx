@@ -13,6 +13,7 @@ import CourseScheduleCard from "@/utils/CourseScheduleCard";
 import { getStudentProgressData } from "@/lib/helpers/student/studentProgress/getStudentProgressData";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useTargetStudentDetails } from "@/lib/helpers/shared/useTargetStudentDetails";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 
 export default function SharedStudentProgress({ targetUserId }: { targetUserId: number }) {
@@ -37,6 +38,8 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
     userLoading,
     studentLoading
   } = useTargetStudentDetails(targetUserId);
+
+  const isSchool = isSchoolEducation(collegeEducationType);
 
   const semesterLabel = collegeSemester ?
   `${t("Dashboard.student.Semester", "Semester")} ${collegeSemester}` :
@@ -88,7 +91,7 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
             <StatusBar barStyle="dark-content" />
             <ScrollView
         className="flex-1 p-2"
-        contentContainerStyle={{ paddingBottom: 60 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}>
         
                 <View className="flex-row p-1 gap-2 items-center justify-between w-full mb-2">
@@ -98,16 +101,18 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
               showsHorizontalScrollIndicator={false}
               className="flex-row gap-2 pb-1">
               
-                            <View className="flex-row items-center">
-                                <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.medium }}>
-                                    {collegeEducationType === "Inter" ? t("Dashboard.student.GroupLabel", "Group:") : t("Dashboard.student.BranchLabel", "Branch:")}
-                                </Text>
-                                <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
-                                    <Text className="text-[#43C17A] text-[11px] tracking-wide" style={{ fontFamily: fonts.semiBold }}>
-                                        {collegeBranchCode ?? t("Dashboard.student.N/A", "N/A")}
-                                    </Text>
-                                </View>
-                            </View>
+                            {!isSchool && (
+                              <View className="flex-row items-center">
+                                  <Text className="text-gray-600 text-[13px]" style={{ fontFamily: fonts.medium }}>
+                                      {collegeEducationType === "Inter" ? t("Dashboard.student.GroupLabel", "Group:") : t("Dashboard.student.BranchLabel", "Branch:")}
+                                  </Text>
+                                  <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
+                                      <Text className="text-[#43C17A] text-[11px] tracking-wide" style={{ fontFamily: fonts.semiBold }}>
+                                          {collegeBranchCode ?? t("Dashboard.student.N/A", "N/A")}
+                                      </Text>
+                                  </View>
+                              </View>
+                            )}
 
                             <View className="flex-row items-center">
                                 <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.YearLabel", "Year:")}
@@ -129,15 +134,17 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                                 </View>
                             </View>
 
-                            <View className="flex-row items-center">
-                                <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.SemesterLabel", "Semester:")}
-                </Text>
-                                <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
-                                    <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.semiBold }}>
-                                        {collegeSemester ?? t("Dashboard.student.N/A", "N/A")}
-                                    </Text>
-                                </View>
-                            </View>
+                            {!isSchool && (
+                              <View className="flex-row items-center">
+                                  <Text className="text-gray-600 text-[13px] ml-1" style={{ fontFamily: fonts.medium }}>{t("Dashboard.student.SemesterLabel", "Semester:")}
+                  </Text>
+                                  <View className="bg-[#43C17A1C] px-2 py-0.5 rounded-full ml-1">
+                                      <Text className="text-[#43C17A] text-[11px]" style={{ fontFamily: fonts.semiBold }}>
+                                          {collegeSemester ?? t("Dashboard.student.N/A", "N/A")}
+                                      </Text>
+                                  </View>
+                              </View>
+                            )}
                         </ScrollView>
                     </View>
 
@@ -194,7 +201,8 @@ export default function SharedStudentProgress({ targetUserId }: { targetUserId: 
                     <View className="bg-transparent">
                         <AssignmentsSummaryTable
               rows={progressData?.subjectProgressRows ?? []}
-              semesterLabel={semesterLabel} />
+              semesterLabel={semesterLabel}
+              isSchool={isSchool} />
             
                     </View>
                 </View>

@@ -16,9 +16,9 @@ export async function checkSectionConflict(params: {
   fromTime: string;
   toTime: string;
   collegeEducationId: number;
-  collegeBranchId: number;
+  collegeBranchId: number | null;
   collegeAcademicYearId: number;
-  collegeSemesterId: number;
+  collegeSemesterId: number | null;
   sectionIds: number[];
   ignoreEventId?: number;
 }): Promise<ConflictingSection[]> {

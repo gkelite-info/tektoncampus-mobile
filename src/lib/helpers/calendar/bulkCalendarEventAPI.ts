@@ -84,9 +84,9 @@ export async function saveBulkCalendarEventSections(
   bulkCalendarEventId: number,
   payload: {
     collegeEducationId: number;
-    collegeBranchId: number;
+    collegeBranchId: number | null;
     collegeAcademicYearId: number;
-    collegeSemesterId: number;
+    collegeSemesterId: number | null;
     sectionIds: number[];
   }
 ) {

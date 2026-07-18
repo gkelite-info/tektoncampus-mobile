@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { fonts } from '@/constants/fonts'; import { Text } from '@/components/AppText';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, TextInput, Modal } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { useHeaderHeight } from "@react-navigation/elements";
+import { HeaderHeightContext } from "@react-navigation/elements";
 import { CaretLeft, CaretDown, Check, Prohibit, X, UsersThree, UserCircle, ChartLineDown } from "phosphor-react-native";
 import { useUser } from "@/utils/context/UserContext";
 import CardComponent, { CardProps } from "./components/StuAttendanceCard";
@@ -36,7 +36,7 @@ export default function FacultyAttendance() {
   const { t } = useTranslation();
   const route = useRoute<RouteProp<ParamList, 'Attendance'>>();
   const navigation = useNavigation<any>();
-  const headerHeight = useHeaderHeight();
+  const headerHeight = useContext(HeaderHeightContext) ?? 0;
   const urlClassId = route.params?.classId;
 
   const { facultyId, loading: contextLoading } = useUser();

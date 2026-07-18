@@ -1,8 +1,8 @@
 import { Text } from '@/components/AppText';
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import { View, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useHeaderHeight } from "@react-navigation/elements";
+import { HeaderHeightContext } from "@react-navigation/elements";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabaseClient";
 import { useStudent } from "@/utils/context/student/useStudent";
@@ -136,7 +136,7 @@ export default function StudentCalendar() {
     } = useTranslation();
     const t = useCallback((key: string) => originalT(`Calendar.student.${key}`, key), [originalT]);
     const locale = i18n.language;
-    const headerHeight = useHeaderHeight();
+    const headerHeight = useContext(HeaderHeightContext) ?? 0;
     const week = useMemo(() => getWeekDays(locale), [locale]);
     const {
         collegeEducationType

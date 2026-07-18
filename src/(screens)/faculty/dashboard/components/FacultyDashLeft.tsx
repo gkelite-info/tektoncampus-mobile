@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, ScrollView, ActivityIndicator } from "react-native";
 import Toast from 'react-native-toast-message';
 import { BookOpen, Chalkboard, ClockAfternoon, UsersThree } from "phosphor-react-native";
 import { useAuthStore } from "@/store/authStore";
-import { useHeaderHeight } from '@react-navigation/elements';
+import { HeaderHeightContext } from '@react-navigation/elements';
 import { supabase } from "@/lib/supabaseServer";
 
 import { STUDENT_DATA } from "./data";
@@ -23,7 +23,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function FacultyDashLeft() {
     const user = useAuthStore((state) => state.user);
     const userId = user?.userId;
-    const headerHeight = useHeaderHeight();
+    const headerHeight = useContext(HeaderHeightContext) ?? 0;
     const navigation = useNavigation<any>();
 
     const [selectedLesson, setSelectedLesson] = useState<UpcomingLesson | null>(null);

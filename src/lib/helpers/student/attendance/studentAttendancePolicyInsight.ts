@@ -4,7 +4,7 @@ import { AttendancePolicyMessageResult, buildAttendancePolicyMessage } from "../
 
 type StudentAttendanceContext = {
     collegeEducationId: number;
-    collegeBranchId: number;
+    collegeBranchId: number | null;
     collegeAcademicYearId: number;
     collegeSemesterId: number | null;
 };
@@ -31,17 +31,25 @@ async function fetchStudentName(userId: number) {
 async function fetchMinAttendance(context: StudentAttendanceContext) {
     if (!context.collegeSemesterId) return null;
 
-    const { data, error } = await supabase
+    let query = supabase
         .from("college_attendance_policies")
         .select("minAttendance")
-        .eq("collegeEducationId", context.collegeEducationId)
-        .eq("collegeBranchId", context.collegeBranchId)
+        .eq("collegeEducationId", context.collegeEducationId);
+
+    if (context.collegeBranchId === null) {
+        query = query.is("collegeBranchId", null);
+    } else {
+        query = query.eq("collegeBranchId", context.collegeBranchId);
+    }
+
+    query = query
         .eq("collegeAcademicYearId", context.collegeAcademicYearId)
         .eq("collegeSemesterId", context.collegeSemesterId)
         .eq("isActive", true)
         .eq("is_deleted", false)
-        .is("deletedAt", null)
-        .maybeSingle();
+        .is("deletedAt", null);
+
+    const { data, error } = await query.maybeSingle();
 
     if (error) {
         console.error("Student attendance policy fetch error:", error);

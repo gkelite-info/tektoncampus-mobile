@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomHeader from "./components/CustomHeader";
 import RoleSideMenu, { RoleSideMenuItem } from "./components/RoleSideMenu";
+import { useUser } from "@/utils/context/UserContext";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 import { FacultyCustomTabBar } from "@/tabs/FacultyTabs";
 import FacultyDashboard from "@/(screens)/faculty/faculty";
@@ -81,6 +83,16 @@ export default function FacultyDrawerNavigator() {
     const [activeRouteName, setActiveRouteName] = useState<keyof FacultyDrawerParamList>("Dashboard");
     const navigationRef = useRef<any>(null);
 
+    const { collegeEducationType } = useUser();
+    const isSchool = isSchoolEducation(collegeEducationType);
+
+    const filteredMenuItems = menuItems.filter((item) => {
+        if (isSchool && (item.name === "Placements" || item.name === "Club" || item.name === "Wellbeing")) {
+            return false;
+        }
+        return true;
+    });
+
     return (
         <>
             <Tab.Navigator
@@ -113,13 +125,13 @@ export default function FacultyDrawerNavigator() {
                 <Tab.Screen name="Calendar" component={CalendarScreen} />
                 <Tab.Screen name="StudentProgress" component={StudentProgressScreen} />
                 <Tab.Screen name="Projects" component={ProjectsScreen} />
-                <Tab.Screen name="Placements" component={FacultyPlacementsScreen} />
+                {!isSchool && <Tab.Screen name="Placements" component={FacultyPlacementsScreen} />}
                 <Tab.Screen name="LeaveRequests" component={LeaveRequestsScreen} />
-                <Tab.Screen name="Club" component={FacultyClubScreen} />
+                {!isSchool && <Tab.Screen name="Club" component={FacultyClubScreen} />}
                 <Tab.Screen name="Drive" component={DriveScreen} />
                 <Tab.Screen name="Meetings" component={FacultyMeetingsPage} />
                 <Tab.Screen name="MyAttendance" component={MyAttendanceScreen} />
-                <Tab.Screen name="Wellbeing" component={WellbeingScreen} />
+                {!isSchool && <Tab.Screen name="Wellbeing" component={WellbeingScreen} />}
                 <Tab.Screen name="Settings" component={SettingsStackNavigator} />
                 <Tab.Screen name="AssignmentSubmissions" component={AssignmentSubmissions} options={{ headerShown: false }} />
                 <Tab.Screen name="QuizSubmissions" component={QuizSubmissions} options={{ headerShown: false }} />
@@ -132,7 +144,7 @@ export default function FacultyDrawerNavigator() {
                 visible={isMenuOpen}
                 activeRouteName={activeRouteName}
                 homeRouteName="Dashboard"
-                items={menuItems}
+                items={filteredMenuItems}
                 onClose={() => setIsMenuOpen(false)}
                 onNavigate={(routeName) => {
                     setIsMenuOpen(false);

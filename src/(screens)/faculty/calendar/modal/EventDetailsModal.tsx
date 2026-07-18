@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
+import { Text } from '@/components/AppText';
 import React from "react";
+import { useUser } from "@/utils/context/UserContext";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 import { View, TouchableOpacity, Modal, Linking } from 'react-native';
 import { CalendarBlank, X } from "phosphor-react-native";
 import { CalendarEvent } from "../types";
@@ -11,7 +14,11 @@ type Props = {
   onClose: () => void;
 };
 
-export default function EventDetailsModal({ open, event, onClose }: Props) {const { t } = useTranslation();
+export default function EventDetailsModal({ open, event, onClose }: Props) {
+  const { t } = useTranslation();
+  const { collegeEducationType } = useUser();
+  const isSchool = isSchoolEducation(collegeEducationType);
+
   if (!open || !event) return null;
 
   const start = new Date(event.startTime);
@@ -103,7 +110,9 @@ export default function EventDetailsModal({ open, event, onClose }: Props) {cons
             }
 
             <View className="mt-3 pt-3 border-t border-gray-200 gap-y-2">
-              <DetailRow label={t("Auto.Common.Branch", "Branch")} value={event.branch} />
+              {!isSchool && (
+                <DetailRow label={t("Auto.Common.Branch", "Branch")} value={event.branch} />
+              )}
               <DetailRow label={t("Auto.Common.Year", "Year")} value={event.year} />
               <DetailRow label={t("Auto.Common.Section", "Section")} value={event.section} />
             </View>

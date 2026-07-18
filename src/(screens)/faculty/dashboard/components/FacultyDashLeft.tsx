@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { View, ScrollView, ActivityIndicator } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 import Toast from 'react-native-toast-message';
 import { BookOpen, Chalkboard, ClockAfternoon, UsersThree } from "phosphor-react-native";
 import { useAuthStore } from "@/store/authStore";
-import { useHeaderHeight } from '@react-navigation/elements';
+import { HeaderHeightContext } from '@react-navigation/elements';
 import { supabase } from "@/lib/supabaseServer";
 
 import { STUDENT_DATA } from "./data";
-import { 
-    UserInfoCard, 
-    CardComponent, 
-    StudentPerformanceCard, 
-    UpcomingClasses 
+import {
+    UserInfoCard,
+    CardComponent,
+    StudentPerformanceCard,
+    UpcomingClasses
 } from "@/utils/dashboardCards";
 
 import { getUpcomingClasses, UpcomingLesson } from "@/lib/helpers/faculty/attendance/getClasses";
@@ -23,7 +23,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function FacultyDashLeft() {
     const user = useAuthStore((state) => state.user);
     const userId = user?.userId;
-    const headerHeight = useHeaderHeight();
+    const headerHeight = useContext(HeaderHeightContext) ?? 0;
     const navigation = useNavigation<any>();
 
     const [selectedLesson, setSelectedLesson] = useState<UpcomingLesson | null>(null);
@@ -31,6 +31,7 @@ export default function FacultyDashLeft() {
 
     const [upcomingClasses, setUpcomingClasses] = useState<UpcomingLesson[]>([]);
     const [isLoadingClasses, setIsLoadingClasses] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [facultyId, setFacultyId] = useState<number | null>(null);
     const [gender, setGender] = useState<string | null>(null);
     const [facultySubject, setFacultySubject] = useState<string>("");
@@ -46,10 +47,10 @@ export default function FacultyDashLeft() {
         completedLessons: 0,
     });
 
-    const loadData = async () => {
+    const loadData = async (isRefresh = false) => {
         if (!userId) return;
         try {
-            setIsLoadingClasses(true);
+            if (!isRefresh) setIsLoadingClasses(true);
 
             const [userRes, facultyRes] = await Promise.all([
                 supabase.from("users").select("gender").eq("userId", userId).single(),
@@ -62,13 +63,13 @@ export default function FacultyDashLeft() {
             if (currentFacultyId) {
                 setFacultyId(currentFacultyId);
 
-                
+
                 const { data: subjectData } = await supabase
                     .from("faculty_sections")
                     .select("college_subjects(subjectName)")
                     .eq("facultyId", currentFacultyId)
                     .is("deletedAt", null);
-                
+
                 if (subjectData && subjectData.length > 0) {
                     const subjectsArray = subjectData
                         .map((s: any) => s.college_subjects?.subjectName)
@@ -78,7 +79,7 @@ export default function FacultyDashLeft() {
                     setFacultySubject(`(${subjects})`);
                 }
 
-                
+
                 const [classesData, statsData] = await Promise.all([
                     getUpcomingClasses(userId),
                     getFacultyDashboardStats(currentFacultyId),
@@ -90,13 +91,19 @@ export default function FacultyDashLeft() {
         } catch (error) {
             console.error("Failed to load dashboard dynamic data", error);
         } finally {
-            setIsLoadingClasses(false);
+            if (!isRefresh) setIsLoadingClasses(false);
         }
     };
 
     useEffect(() => {
         loadData();
     }, [userId]);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await loadData(true);
+        setRefreshing(false);
+    };
 
     const handleLessonPress = (lesson: UpcomingLesson) => {
         setSelectedLesson(lesson);
@@ -163,19 +170,22 @@ export default function FacultyDashLeft() {
             user: user?.fullName ?? "User",
             studentsTaskPercentage: 0,
             facultySubject: facultySubject || "(Faculty)",
-            image: gender === "Female" 
-                ? require("../../../../../assets/female-faculty.png") 
+            image: gender === "Female"
+                ? require("../../../../../assets/female-faculty.png")
                 : require("../../../../../assets/male-faculty.png"),
         },
     ];
 
     return (
-        <ScrollView 
+        <ScrollView
             className="w-full flex-1"
             contentContainerStyle={{ paddingTop: headerHeight + 16, paddingHorizontal: 16, paddingBottom: 160 }}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
         >
             <UserInfoCard cardProps={card} loading={isLoadingClasses} />
-            
+
             <View className="mt-4 flex-row flex-wrap justify-between">
                 {cardData.map((item, index) => (
                     <View key={index} className="w-[48%] mb-4">
@@ -204,13 +214,12 @@ export default function FacultyDashLeft() {
                 />
             </View>
 
-            <ClassActionModal 
-
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                lesson={selectedLesson} 
-                onAccept={handleAcceptClass} 
-                onCancelClass={handleCancelClass} 
+            <ClassActionModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                lesson={selectedLesson}
+                onAccept={handleAcceptClass}
+                onCancelClass={handleCancelClass}
             />
         </ScrollView>
     );

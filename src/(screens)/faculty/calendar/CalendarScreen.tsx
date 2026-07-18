@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from "@/lib/supabaseClient";
 import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { View, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,7 +17,7 @@ import { CalendarEvent } from "./types";
 import { getWeekDays } from "./utils";
 
 import { useUser } from "@/utils/context/UserContext";
-import { useHeaderHeight } from '@react-navigation/elements';
+import { HeaderHeightContext } from '@react-navigation/elements';
 import {
   deleteCalendarEvent,
   fetchCalendarEvents,
@@ -35,6 +35,7 @@ import { checkSectionConflict, ConflictingSection } from "@/lib/helpers/calendar
 import HolidayCalendar from "./components/HolidayCalendar";
 import HolidayCalendarShimmer from "./components/HolidayCalendarShimmer";
 import { fetchCollegeHolidays, CollegeHoliday } from "@/lib/helpers/Hr/holidays/holidayAPI";
+import { saveBulkCalendarEvent, saveBulkCalendarEventSections } from "@/lib/helpers/calendar/bulkCalendarEventAPI";
 
 export type CalendarEventPayload = {
   facultyId: number;
@@ -43,6 +44,9 @@ export type CalendarEventPayload = {
   eventTopic: number | null;
   type: "class" | "meeting" | "exam" | "quiz";
   date: string;
+  isBulk?: boolean;
+  fromDate?: string;
+  toDate?: string;
   fromTime: string;
   toTime: string;
   roomNo: string;
@@ -51,9 +55,9 @@ export type CalendarEventPayload = {
   meetingId?: string | null;
   meetingPassword?: string | null;
   collegeEducationId: number;
-  collegeBranchId: number;
+  collegeBranchId: number | null;
   collegeAcademicYearId: number;
-  collegeSemesterId: number;
+  collegeSemesterId: number | null;
   sectionIds: number[];
 };
 
@@ -102,7 +106,7 @@ export default function CalendarScreen() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [showDetails, setShowDetails] = useState(false);
 
-  const headerHeight = useHeaderHeight();
+  const headerHeight = useContext(HeaderHeightContext) ?? 0;
 
   useEffect(() => {
     if (!userId || role !== "Faculty") return;
@@ -228,6 +232,81 @@ export default function CalendarScreen() {
           });
         });
       });
+
+      const { data: bulkEvents, error: bulkError } = await supabase
+        .from("bulk_calendar_events")
+        .select(`
+          bulkCalendarEventId,
+          fromDate,
+          toDate,
+          fromTime,
+          toTime,
+          collegeRoomId,
+          type,
+          college_rooms (roomNo),
+          college_subjects (subjectName, subjectKey),
+          bulk_calendar_event_sections (
+            collegeSectionId,
+            college_sections (collegeSections),
+            collegeBranchId,
+            college_branch (collegeBranchCode),
+            collegeAcademicYearId,
+            college_academic_year (collegeAcademicYear)
+          )
+        `)
+        .eq("facultyId", facultyId)
+        .lte("fromDate", endStr)
+        .gte("toDate", startStr)
+        .is("deletedAt", null);
+
+      if (!bulkError && bulkEvents && bulkEvents.length > 0) {
+        bulkEvents.forEach((event: any) => {
+          const sections = event.bulk_calendar_event_sections || [];
+          
+          const partsFrom = event.fromDate.split("-");
+          const evFrom = new Date(Number(partsFrom[0]), Number(partsFrom[1])-1, Number(partsFrom[2]));
+          const partsTo = event.toDate.split("-");
+          const evTo = new Date(Number(partsTo[0]), Number(partsTo[1])-1, Number(partsTo[2]));
+          const sParts = startStr.split("-");
+          const sDate = new Date(Number(sParts[0]), Number(sParts[1])-1, Number(sParts[2]));
+          const eParts = endStr.split("-");
+          const eDate = new Date(Number(eParts[0]), Number(eParts[1])-1, Number(eParts[2]));
+
+          const eventStart = new Date(Math.max(evFrom.getTime(), sDate.getTime()));
+          const eventEnd = new Date(Math.min(evTo.getTime(), eDate.getTime()));
+          
+          for (let d = new Date(eventStart); d <= eventEnd; d.setDate(d.getDate() + 1)) {
+            if (d.getDay() === 0) continue; // skip sunday
+            
+            const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            const startTime = `${dateStr}T${event.fromTime}`;
+            const endTime = `${dateStr}T${event.toTime}`;
+            const dayName = [t("Calendar.faculty.sun", "SUN"), t("Calendar.faculty.mon", "MON"), t("Calendar.faculty.tue", "TUE"), t("Calendar.faculty.wed", "WED"), t("Calendar.faculty.thu", "THU"), t("Calendar.faculty.fri", "FRI"), t("Calendar.faculty.sat", "SAT")][d.getDay()];
+            
+            sections.forEach((sec: any) => {
+              expandedEvents.push({
+                id: `bulk-${event.bulkCalendarEventId}-${sec.collegeSectionId}-${dateStr}`,
+                title: event.college_subjects?.subjectName ?? t("Calendar.faculty.meeting", "Meeting"),
+                type: event.type,
+                subjectName: event.college_subjects?.subjectName ?? "-",
+                subjectKey: event.college_subjects?.subjectKey ?? "",
+                day: dayName,
+                startTime,
+                endTime,
+                branch: sec.college_branch?.collegeBranchCode ?? "",
+                year: sec.college_academic_year?.collegeAcademicYear ?? "",
+                section: sec.college_sections?.collegeSections ?? "",
+                calendarEventId: event.bulkCalendarEventId,
+                sectionId: sec.collegeSectionId,
+                rawFormData: {
+                  roomNo: event.college_rooms?.roomNo ?? "",
+                }
+              });
+            });
+          }
+        });
+      }
+
       setEvents(expandedEvents);
     } catch (error) {
       console.error("Failed to load calendar events", error);
@@ -278,40 +357,70 @@ export default function CalendarScreen() {
 
     setIsSaving(true);
     try {
-      const eventRes = await saveCalendarEvent({
-        calendarEventId: editingEventId ? Number(editingEventId) : undefined,
-        facultyId,
-        subjectId: payload.subjectId ?? null,
-        eventTopic: payload.eventTopic,
-        eventTitle: payload.eventTitle,
-        type: payload.type,
-        date: payload.date,
-        collegeRoomId: payload.collegeRoomId ?? 0,
-        fromTime: payload.fromTime,
-        toTime: payload.toTime,
-        meetingLink: payload.meetingLink ?? null,
-        meetingId: payload.meetingId ?? null,
-        meetingPassword: payload.meetingPassword ?? null
-      });
-      if (!eventRes.success) {
-        Toast.show({ type: 'error', text1: t("Calendar.faculty.failedToSaveEvent", "Failed to save event") });
-        return { success: false };
+      if (payload.isBulk) {
+        const eventRes = await saveBulkCalendarEvent({
+          bulkCalendarEventId: editingEventId ? Number(editingEventId) : undefined,
+          facultyId,
+          subjectId: payload.subjectId ?? null,
+          eventTitle: payload.eventTitle,
+          type: payload.type as any,
+          fromDate: payload.fromDate!,
+          toDate: payload.toDate!,
+          collegeRoomId: payload.collegeRoomId ?? null,
+          fromTime: payload.fromTime,
+          toTime: payload.toTime,
+          meetingLink: payload.meetingLink ?? null,
+          meetingId: payload.meetingId ?? null,
+          meetingPassword: payload.meetingPassword ?? null
+        });
+        if (!eventRes.success) {
+          Toast.show({ type: 'error', text1: t("Calendar.faculty.failedToSaveEvent", "Failed to save event") });
+          return { success: false };
+        }
+        await saveBulkCalendarEventSections(eventRes.bulkCalendarEventId!, {
+          collegeEducationId: payload.collegeEducationId,
+          collegeBranchId: payload.collegeBranchId,
+          collegeAcademicYearId: payload.collegeAcademicYearId,
+          collegeSemesterId: payload.collegeSemesterId,
+          sectionIds: payload.sectionIds
+        });
+      } else {
+        const eventRes = await saveCalendarEvent({
+          calendarEventId: editingEventId ? Number(editingEventId) : undefined,
+          facultyId,
+          subjectId: payload.subjectId ?? null,
+          eventTopic: payload.eventTopic,
+          eventTitle: payload.eventTitle,
+          type: payload.type,
+          date: payload.date,
+          collegeRoomId: payload.collegeRoomId ?? 0,
+          fromTime: payload.fromTime,
+          toTime: payload.toTime,
+          meetingLink: payload.meetingLink ?? null,
+          meetingId: payload.meetingId ?? null,
+          meetingPassword: payload.meetingPassword ?? null
+        });
+        if (!eventRes.success) {
+          Toast.show({ type: 'error', text1: t("Calendar.faculty.failedToSaveEvent", "Failed to save event") });
+          return { success: false };
+        }
+        const calendarEventId = eventRes.calendarEventId;
+        if (editingEventId) {
+          const existingSections = await fetchCalendarEventSections(calendarEventId);
+          await Promise.all((existingSections ?? []).map((s: any) => softDeleteCalendarEventSection(calendarEventId, s.collegeSectionId)));
+        }
+        await saveCalendarEventSections(calendarEventId, {
+          collegeEducationId: payload.collegeEducationId,
+          collegeBranchId: payload.collegeBranchId,
+          collegeAcademicYearId: payload.collegeAcademicYearId,
+          collegeSemesterId: payload.collegeSemesterId,
+          sectionIds: payload.sectionIds
+        });
+        if (!editingEventId) {
+          await notifyStudentsOfEvent(calendarEventId, payload as any);
+        }
       }
-      const calendarEventId = eventRes.calendarEventId;
-      if (editingEventId) {
-        const existingSections = await fetchCalendarEventSections(calendarEventId);
-        await Promise.all((existingSections ?? []).map((s: any) => softDeleteCalendarEventSection(calendarEventId, s.collegeSectionId)));
-      }
-      await saveCalendarEventSections(calendarEventId, {
-        collegeEducationId: payload.collegeEducationId,
-        collegeBranchId: payload.collegeBranchId,
-        collegeAcademicYearId: payload.collegeAcademicYearId,
-        collegeSemesterId: payload.collegeSemesterId,
-        sectionIds: payload.sectionIds
-      });
-      if (!editingEventId) {
-        await notifyStudentsOfEvent(calendarEventId, payload as any);
-      }
+
       setIsModalOpen(false);
       setEditingEventId(null);
       setEventForm(null);
@@ -336,37 +445,66 @@ export default function CalendarScreen() {
     setShowConflictModal(false);
     setIsSaving(true);
     try {
-      const eventRes = await saveCalendarEvent({
-        calendarEventId: editingEventId ? Number(editingEventId) : undefined,
-        facultyId,
-        subjectId: pendingEvent.subjectId ?? null,
-        eventTopic: pendingEvent.eventTopic,
-        eventTitle: pendingEvent.eventTitle,
-        type: pendingEvent.type,
-        date: pendingEvent.date,
-        collegeRoomId: pendingEvent.collegeRoomId ?? 0,
-        fromTime: pendingEvent.fromTime,
-        toTime: pendingEvent.toTime,
-        meetingLink: pendingEvent.meetingLink ?? null,
-        meetingId: pendingEvent.meetingId ?? null,
-        meetingPassword: pendingEvent.meetingPassword ?? null
-      });
-      if (!eventRes.success) {
-        Toast.show({ type: 'error', text1: t("Calendar.faculty.failedToSaveEvent", "Failed to save event") });
-        return;
+      if (pendingEvent.isBulk) {
+        const eventRes = await saveBulkCalendarEvent({
+          bulkCalendarEventId: editingEventId ? Number(editingEventId) : undefined,
+          facultyId,
+          subjectId: pendingEvent.subjectId ?? null,
+          eventTitle: pendingEvent.eventTitle,
+          type: pendingEvent.type as any,
+          fromDate: pendingEvent.fromDate!,
+          toDate: pendingEvent.toDate!,
+          collegeRoomId: pendingEvent.collegeRoomId ?? null,
+          fromTime: pendingEvent.fromTime,
+          toTime: pendingEvent.toTime,
+          meetingLink: pendingEvent.meetingLink ?? null,
+          meetingId: pendingEvent.meetingId ?? null,
+          meetingPassword: pendingEvent.meetingPassword ?? null
+        });
+        if (!eventRes.success) {
+          Toast.show({ type: 'error', text1: t("Calendar.faculty.failedToSaveEvent", "Failed to save event") });
+          return;
+        }
+        await saveBulkCalendarEventSections(eventRes.bulkCalendarEventId!, {
+          collegeEducationId: pendingEvent.collegeEducationId,
+          collegeBranchId: pendingEvent.collegeBranchId,
+          collegeAcademicYearId: pendingEvent.collegeAcademicYearId,
+          collegeSemesterId: pendingEvent.collegeSemesterId,
+          sectionIds: pendingEvent.sectionIds
+        });
+      } else {
+        const eventRes = await saveCalendarEvent({
+          calendarEventId: editingEventId ? Number(editingEventId) : undefined,
+          facultyId,
+          subjectId: pendingEvent.subjectId ?? null,
+          eventTopic: pendingEvent.eventTopic,
+          eventTitle: pendingEvent.eventTitle,
+          type: pendingEvent.type,
+          date: pendingEvent.date,
+          collegeRoomId: pendingEvent.collegeRoomId ?? 0,
+          fromTime: pendingEvent.fromTime,
+          toTime: pendingEvent.toTime,
+          meetingLink: pendingEvent.meetingLink ?? null,
+          meetingId: pendingEvent.meetingId ?? null,
+          meetingPassword: pendingEvent.meetingPassword ?? null
+        });
+        if (!eventRes.success) {
+          Toast.show({ type: 'error', text1: t("Calendar.faculty.failedToSaveEvent", "Failed to save event") });
+          return;
+        }
+        const calendarEventId = eventRes.calendarEventId;
+        if (editingEventId) {
+          const existingSections = await fetchCalendarEventSections(calendarEventId);
+          await Promise.all((existingSections ?? []).map((s: any) => softDeleteCalendarEventSection(calendarEventId, s.collegeSectionId)));
+        }
+        await saveCalendarEventSections(calendarEventId, {
+          collegeEducationId: pendingEvent.collegeEducationId,
+          collegeBranchId: pendingEvent.collegeBranchId,
+          collegeAcademicYearId: pendingEvent.collegeAcademicYearId,
+          collegeSemesterId: pendingEvent.collegeSemesterId,
+          sectionIds: pendingEvent.sectionIds
+        });
       }
-      const calendarEventId = eventRes.calendarEventId;
-      if (editingEventId) {
-        const existingSections = await fetchCalendarEventSections(calendarEventId);
-        await Promise.all((existingSections ?? []).map((s: any) => softDeleteCalendarEventSection(calendarEventId, s.collegeSectionId)));
-      }
-      await saveCalendarEventSections(calendarEventId, {
-        collegeEducationId: pendingEvent.collegeEducationId,
-        collegeBranchId: pendingEvent.collegeBranchId,
-        collegeAcademicYearId: pendingEvent.collegeAcademicYearId,
-        collegeSemesterId: pendingEvent.collegeSemesterId,
-        sectionIds: pendingEvent.sectionIds
-      });
       Toast.show({ type: 'success', text1: t("Calendar.faculty.eventSavedConflict", "Event saved despite conflict") });
       setPendingEvent(null);
       setIsModalOpen(false);

@@ -8,6 +8,7 @@ import { ChartLineDown, UserCircle, UsersThree } from "phosphor-react-native";
 import { AppPicker } from "@/components/AppPicker";
 import { useFaculty } from "@/utils/context/faculty/useFaculty";
 import { getFacultyStudentProgressSummary } from "@/lib/helpers/faculty/studentProgress/getFacultyStudentProgressSummary";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 
 import CardComponent from "./components/stuPerfCards";
 import PerformanceTrendChart from "./components/performanceTrendChart";
@@ -48,27 +49,55 @@ export default function FacultyStudentProgressScreen() {
     faculty_subject,
     sections,
     collegeAcademicYear,
-    facultyId
+    collegeAcademicYears,
+    facultyId,
+    faculty_edu_type
   } = useFaculty();
+
+  const isSchool = isSchoolEducation(faculty_edu_type);
 
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [summary, setSummary] = useState<StudentProgressSummary>(defaultSummary);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number | "all">("all");
+  const [selectedYearId, setSelectedYearId] = useState<number | "all">("all");
   const [selectedSectionId, setSelectedSectionId] = useState<number | "all">("all");
   const [debugError, setDebugError] = useState<string | null>(null);
   const rowsPerPage = 10;
 
-  const uniqueSections = useMemo(() => {
+  const uniqueSubjects = useMemo(() => {
     const map = new Map<number, string>();
     sections.forEach((s) => {
-      if (s.college_sections?.collegeSections) {
-        map.set(s.collegeSectionsId, s.college_sections.collegeSections);
+      if (s.faculty_subject?.subjectName) {
+        map.set(s.collegeSubjectId, s.faculty_subject.subjectName);
       }
     });
     return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
   }, [sections]);
+
+  const uniqueYears = useMemo(() => {
+    return collegeAcademicYears.map((y) => ({
+      id: y.collegeAcademicYearId,
+      name: y.collegeAcademicYear
+    }));
+  }, [collegeAcademicYears]);
+
+  const uniqueSections = useMemo(() => {
+    const map = new Map<number, string>();
+    sections.forEach((s) => {
+      if (
+        (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId) &&
+        (selectedYearId === "all" || s.collegeAcademicYearId === selectedYearId)
+      ) {
+        if (s.college_sections?.collegeSections) {
+          map.set(s.collegeSectionsId, s.college_sections.collegeSections);
+        }
+      }
+    });
+    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+  }, [sections, selectedSubjectId, selectedYearId]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -82,7 +111,7 @@ export default function FacultyStudentProgressScreen() {
   useEffect(() => {
     if (facultyLoading) return;
 
-    if (!collegeId || !facultyId || !collegeEducationId || !collegeBranchId) {
+    if (!collegeId || !facultyId || !collegeEducationId || (!isSchool && !collegeBranchId)) {
       setSummary(defaultSummary);
       setSummaryLoading(false);
       return;
@@ -94,8 +123,40 @@ export default function FacultyStudentProgressScreen() {
       setSummaryLoading(true);
       setDebugError(null);
 
-      const resolvedSectionIds = selectedSectionId === "all" ? sectionIds : [selectedSectionId];
-      const subjectName = faculty_subject && faculty_subject.length > 0 ? faculty_subject[0].subjectName : "N/A";
+      let resolvedSectionIds: number[];
+      if (selectedSectionId !== "all") {
+        resolvedSectionIds = [selectedSectionId as number];
+      } else {
+        resolvedSectionIds = sections
+          .filter((s) =>
+            (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId) &&
+            (selectedYearId === "all" || s.collegeAcademicYearId === selectedYearId)
+          )
+          .map((s) => s.collegeSectionsId);
+
+        if (resolvedSectionIds.length === 0) {
+          resolvedSectionIds = sectionIds;
+        }
+      }
+
+      let resolvedYearIds: number[];
+      if (selectedYearId !== "all") {
+        resolvedYearIds = [selectedYearId as number];
+      } else {
+        resolvedYearIds = sections
+          .filter((s) =>
+            (selectedSubjectId === "all" || s.collegeSubjectId === selectedSubjectId)
+          )
+          .map((s) => s.collegeAcademicYearId);
+
+        if (resolvedYearIds.length === 0) {
+          resolvedYearIds = academicYearIds;
+        }
+      }
+
+      const resolvedSubjectIds = selectedSubjectId === "all" ? subjectIds : [selectedSubjectId as number];
+
+      const subjectLabel = faculty_subject.map((s) => s.subjectName).join(", ") || "N/A";
 
       try {
         const data = await getFacultyStudentProgressSummary({
@@ -103,11 +164,11 @@ export default function FacultyStudentProgressScreen() {
           collegeId,
           collegeEducationId,
           collegeBranchId,
-          academicYearIds,
+          academicYearIds: resolvedYearIds,
           sectionIds: resolvedSectionIds,
-          subjectIds,
+          subjectIds: resolvedSubjectIds,
           departmentLabel: college_branch,
-          subjectLabel: subjectName,
+          subjectLabel: subjectLabel,
           page: currentPage,
           pageSize: rowsPerPage,
           searchQuery: debouncedSearchQuery
@@ -148,11 +209,11 @@ export default function FacultyStudentProgressScreen() {
     currentPage,
     rowsPerPage,
     debouncedSearchQuery,
-    selectedSectionId]
-  );
-
-  const subjectNameUI = faculty_subject && faculty_subject.length > 0 ? faculty_subject[0].subjectName : "N/A";
-  const yearNameUI = collegeAcademicYear || "N/A";
+    selectedSectionId,
+    selectedSubjectId,
+    selectedYearId,
+    uniqueSubjects
+  ]);
 
   const subtitle = t("StudentProgress.faculty.monitorSubtitle", "Monitor and compare overall student performance");
 
@@ -234,22 +295,32 @@ export default function FacultyStudentProgressScreen() {
 
         { }
         <View style={tw`mb-4 flex-row flex-wrap items-center gap-4`}>
-          <View style={tw`flex-col gap-1 w-[45%]`}>
-            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Subject", "Subject")}</Text>
-            <View style={tw`bg-[#43C17A]/10 px-3 rounded-xl justify-center h-[46px]`}>
-              <Text style={tw`text-[#43C17A] text-xs font-bold`} numberOfLines={1}>{subjectNameUI}</Text>
-            </View>
+          <View style={tw`flex-col gap-1 w-[40%]`}>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Subject", "Subject")}</Text>
+            <AppPicker
+              selectedValue={selectedSubjectId}
+              onValueChange={(itemValue) => setSelectedSubjectId(itemValue)}
+              items={[
+                { label: t("Auto.Attr.All", "All"), value: "all" },
+                ...uniqueSubjects.map((sub) => ({ label: sub.name, value: sub.id }))
+              ]}
+            />
           </View>
 
-          <View style={tw`flex-col gap-1 w-[25%]`}>
-            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Year", "Year")}</Text>
-            <View style={tw`bg-[#43C17A]/10 px-3 rounded-xl justify-center h-[46px]`}>
-              <Text style={tw`text-[#43C17A] text-xs font-bold`} numberOfLines={1}>{yearNameUI}</Text>
-            </View>
+          <View style={tw`flex-col gap-1 w-[28%]`}>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Year", "Year")}</Text>
+            <AppPicker
+              selectedValue={selectedYearId}
+              onValueChange={(itemValue) => setSelectedYearId(itemValue)}
+              items={[
+                { label: t("Auto.Attr.All", "All"), value: "all" },
+                ...uniqueYears.map((y) => ({ label: y.name, value: y.id }))
+              ]}
+            />
           </View>
 
           <View style={tw`flex-col gap-1 flex-1`}>
-            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Sec", "Sec")}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Sec", "Sec")}</Text>
             <AppPicker
               selectedValue={selectedSectionId}
               onValueChange={(itemValue) => setSelectedSectionId(itemValue)}

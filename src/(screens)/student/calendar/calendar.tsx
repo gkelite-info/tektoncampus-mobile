@@ -1,8 +1,8 @@
 import { Text } from '@/components/AppText';
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import { View, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useHeaderHeight } from "@react-navigation/elements";
+import { HeaderHeightContext } from "@react-navigation/elements";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabaseClient";
 import { useStudent } from "@/utils/context/student/useStudent";
@@ -136,7 +136,7 @@ export default function StudentCalendar() {
     } = useTranslation();
     const t = useCallback((key: string) => originalT(`Calendar.student.${key}`, key), [originalT]);
     const locale = i18n.language;
-    const headerHeight = useHeaderHeight();
+    const headerHeight = useContext(HeaderHeightContext) ?? 0;
     const week = useMemo(() => getWeekDays(locale), [locale]);
     const {
         collegeEducationType
@@ -170,7 +170,23 @@ export default function StudentCalendar() {
             const resultsMap: Record<string, DayData> = {};
             const currentDate = new Date();
             const todayInt = Number(`${currentDate.getFullYear()}${String(currentDate.getMonth() + 1).padStart(2, "0")}${String(currentDate.getDate()).padStart(2, "0")}`);
-            const assignmentRes = await supabase.from("assignments").select("*").eq("collegeBranchId", studentContext.collegeBranchId).eq("collegeAcademicYearId", studentContext.collegeAcademicYearId).eq("collegeSectionsId", studentContext.collegeSectionsId).eq("status", "Active").eq("is_deleted", false).is("deletedAt", null).gte("submissionDeadlineInt", todayInt);
+            let assignmentQuery = supabase
+                .from("assignments")
+                .select("*")
+                .eq("collegeAcademicYearId", studentContext.collegeAcademicYearId)
+                .eq("collegeSectionsId", studentContext.collegeSectionsId)
+                .eq("status", "Active")
+                .eq("is_deleted", false)
+                .is("deletedAt", null)
+                .gte("submissionDeadlineInt", todayInt);
+
+            if (studentContext.collegeBranchId === null) {
+                assignmentQuery = assignmentQuery.is("collegeBranchId", null);
+            } else {
+                assignmentQuery = assignmentQuery.eq("collegeBranchId", studentContext.collegeBranchId);
+            }
+
+            const assignmentRes = await assignmentQuery;
             if (assignmentRes.error) {
                 console.error("Assignments query error:", assignmentRes.error);
             }
@@ -178,7 +194,7 @@ export default function StudentCalendar() {
                 const [classes, quizRes, discRes, facultyTasks] = await Promise.all([fetchStudentTimetableByDate({
                     date: day.fullDate,
                     collegeEducationId: studentContext.collegeEducationId,
-                    collegeBranchId: studentContext.collegeBranchId,
+                    collegeBranchId: studentContext.collegeBranchId ?? 0,
                     collegeAcademicYearId: studentContext.collegeAcademicYearId,
                     collegeSemesterId: studentContext.collegeSemesterId,
                     collegeSectionId: studentContext.collegeSectionsId,
@@ -186,7 +202,7 @@ export default function StudentCalendar() {
                 }), supabase.from("quizzes").select("*").eq("collegeSectionsId", studentContext.collegeSectionsId).eq("isActive", true).gte("startDate", `${day.fullDate}T00:00:00`).lte("startDate", `${day.fullDate}T23:59:59`), supabase.from("discussion_forum_sections").select("discussionSectionId, discussion_forum!inner(deadline, title)").eq("collegeSectionsId", studentContext.collegeSectionsId).eq("is_deleted", false).gte("discussion_forum.deadline", `${day.fullDate}T00:00:00`).lte("discussion_forum.deadline", `${day.fullDate}T23:59:59`), fetchFacultyTasksForStudent({
                     date: day.fullDate,
                     collegeId: studentContext.collegeId,
-                    collegeBranchId: studentContext.collegeBranchId,
+                    collegeBranchId: studentContext.collegeBranchId ?? 0,
                     collegeAcademicYearId: studentContext.collegeAcademicYearId,
                     collegeSemesterId: studentContext.collegeSemesterId
                 })]);

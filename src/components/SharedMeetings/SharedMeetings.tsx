@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React, { useEffect, useState, useCallback } from "react";
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,15 +7,19 @@ import MeetingCard from "./components/MeetingCard";
 import MeetingCardShimmer from "@/utils/shimmers/MeetingCardShimmer";
 import { CaretLeft, CaretRight } from "phosphor-react-native";
 import Toast from "react-native-toast-message";
+import { fonts } from '@/constants/fonts';
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 type MeetingType = "upcoming" | "previous";
 
 interface SharedMeetingsProps {
   mode: "Faculty" | "Student" | "Parent";
   fetchParams: any;
+  collegeEducationType?: string | null;
 }
 
-export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProps) {const { t } = useTranslation();
+export default function SharedMeetings({ mode, fetchParams, collegeEducationType }: SharedMeetingsProps) {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -40,9 +44,9 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
     });
   };
 
-  const typeTabs: {id: MeetingType;label: string;}[] = [
-  { id: "upcoming", label: "Upcoming Meetings" },
-  { id: "previous", label: "Previous Meetings" }];
+  const typeTabs: { id: MeetingType; label: string; }[] = [
+    { id: "upcoming", label: "Upcoming Meetings" },
+    { id: "previous", label: "Previous Meetings" }];
 
 
   const loadMeetings = useCallback(async () => {
@@ -72,7 +76,8 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
           limit: 10
         });
       } else {
-        if (!fetchParams.collegeBranchCode || !fetchParams.collegeSectionsId) return;
+        const isSchool = isSchoolEducation(collegeEducationType);
+        if ((!isSchool && !fetchParams.collegeBranchCode) || !fetchParams.collegeSectionsId) return;
         res = await fetchStudentFinanceMeetings({
           ...fetchParams,
           type: currentType,
@@ -93,8 +98,8 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
       Toast.show({
         type: "error",
         text1: t("SharedMeetings.toast.error", "Error"),
-        text2: currentType === "upcoming" 
-          ? t("SharedMeetings.toast.failedToFetchUpcoming", "Failed to fetch upcoming meetings") 
+        text2: currentType === "upcoming"
+          ? t("SharedMeetings.toast.failedToFetchUpcoming", "Failed to fetch upcoming meetings")
           : t("SharedMeetings.toast.failedToFetchPrevious", "Failed to fetch previous meetings")
       });
     } finally {
@@ -111,8 +116,8 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
       <View className="flex-1 px-4 py-2 bg-white">
         <View className="flex-row justify-between items-start mb-6 mt-2">
           <View className="flex-1">
-            <Text className="text-2xl font-bold text-[#282828]">{t("Auto.Common.Meetings", "Meetings")}</Text>
-            <Text className="text-[#282828] text-sm mt-1">{t("Auto.Common.Viewandjoinsche", "View and join scheduled meetings.")}
+            <Text className="text-2xl text-[#282828]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Meetings", "Meetings")}</Text>
+            <Text className="text-[#282828] text-sm mt-1" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Viewandjoinsche", "View and join scheduled meetings.")}
 
             </Text>
           </View>
@@ -126,15 +131,13 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
                 <TouchableOpacity
                   key={tab.id}
                   onPress={() => updateFilter(tab.id)}
-                  className={`px-5 py-2 rounded-full ${
-                  isActive ? "bg-[#43C17A]" : "bg-transparent"}`
+                  className={`px-5 py-2 rounded-full ${isActive ? "bg-[#43C17A]" : "bg-transparent"}`
                   }>
-                  
+
                   <Text
-                    className={`text-sm font-medium ${
-                    isActive ? "text-[#E9E9E9]" : "text-[#414141]"}`
+                    className={`text-sm font-medium ${isActive ? "text-[#E9E9E9]" : "text-[#414141]"}`
                     }>
-                    
+
                     {tab.id === "upcoming" ? t("SharedMeetings.tabs.upcoming", "Upcoming Meetings") : t("SharedMeetings.tabs.previous", "Previous Meetings")}
                   </Text>
                 </TouchableOpacity>);
@@ -145,74 +148,70 @@ export default function SharedMeetings({ mode, fetchParams }: SharedMeetingsProp
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           {isLoading ?
-          <MeetingCardShimmer
-            role={mode}
-            category={mode}
-            type={currentType}
-            count={5} /> :
+            <MeetingCardShimmer
+              role={mode}
+              category={mode}
+              type={currentType}
+              count={5} /> :
 
-          meetings.length > 0 ?
-          <View className="pb-10">
-              {meetings.map((meeting) =>
-            <MeetingCard key={meeting.id} data={meeting} role={mode} />
-            )}
-            </View> :
+            meetings.length > 0 ?
+              <View className="pb-10">
+                {meetings.map((meeting) =>
+                  <MeetingCard key={meeting.id} data={meeting} role={mode} />
+                )}
+              </View> :
 
-          <View className="py-20 items-center justify-center bg-white rounded-xl border border-dashed border-gray-300">
-              <Text className="text-lg text-gray-500 text-center">
-                {currentType === "upcoming" 
-                  ? t("SharedMeetings.noUpcomingMeetings", "No upcoming meetings found.") 
-                  : t("SharedMeetings.noPreviousMeetings", "No previous meetings found.")}
-              </Text>
-            </View>
+              <View className="py-20 items-center justify-center bg-white rounded-xl border border-dashed border-gray-300">
+                <Text className="text-lg text-gray-500 text-center" style={{ fontFamily: fonts.regular }}>
+                  {currentType === "upcoming"
+                    ? t("SharedMeetings.noUpcomingMeetings", "No upcoming meetings found.")
+                    : t("SharedMeetings.noPreviousMeetings", "No previous meetings found.")}
+                </Text>
+              </View>
           }
 
           {totalPages > 1 &&
-          <View className="flex-row justify-center pb-8 mt-4 gap-2 items-center">
+            <View className="flex-row justify-center pb-8 mt-4 gap-2 items-center">
               <TouchableOpacity
-              onPress={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className={`p-2 rounded-md ${
-              page === 1 ? "bg-gray-100" : "bg-gray-200"}`
-              }>
-              
+                onPress={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className={`p-2 rounded-md ${page === 1 ? "bg-gray-100" : "bg-gray-200"}`
+                }>
+
                 <CaretLeft
-                size={16}
-                weight="bold"
-                color={page === 1 ? "#9ca3af" : "#374151"} />
-              
+                  size={16}
+                  weight="bold"
+                  color={page === 1 ? "#9ca3af" : "#374151"} />
+
               </TouchableOpacity>
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) =>
-            <TouchableOpacity
-              key={p}
-              onPress={() => setPage(p)}
-              className={`px-3 py-1.5 rounded-md ${
-              page === p ? "bg-[#16284F]" : "bg-gray-200"}`
-              }>
-              
+                <TouchableOpacity
+                  key={p}
+                  onPress={() => setPage(p)}
+                  className={`px-3 py-1.5 rounded-md ${page === p ? "bg-[#16284F]" : "bg-gray-200"}`
+                  }>
+
                   <Text
-                className={`text-sm font-medium ${
-                page === p ? "text-white" : "text-[#374151]"}`
-                }>
-                
+                    className={`text-sm font-medium ${page === p ? "text-white" : "text-[#374151]"}`
+                    }>
+
                     {p}
                   </Text>
                 </TouchableOpacity>
-            )}
+              )}
 
               <TouchableOpacity
-              onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className={`p-2 rounded-md ${
-              page === totalPages ? "bg-gray-100" : "bg-gray-200"}`
-              }>
-              
+                onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className={`p-2 rounded-md ${page === totalPages ? "bg-gray-100" : "bg-gray-200"}`
+                }>
+
                 <CaretRight
-                size={16}
-                weight="bold"
-                color={page === totalPages ? "#9ca3af" : "#374151"} />
-              
+                  size={16}
+                  weight="bold"
+                  color={page === totalPages ? "#9ca3af" : "#374151"} />
+
               </TouchableOpacity>
             </View>
           }

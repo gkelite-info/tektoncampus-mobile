@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { fonts } from '@/constants/fonts';
 import { Text } from '@/components/AppText';
+import { fonts } from '@/constants/fonts';
 import React, { useRef, useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, ScrollView, Image, FlatList } from 'react-native';
 import { MagnifyingGlass, X, CaretLeft, CaretRight } from "phosphor-react-native";
@@ -33,10 +33,7 @@ export const ReactNativeProgressCircle: React.FC<{
       }]} />
 
       <View style={tw`absolute items-center justify-center`}>
-        <Text style={[{ fontFamily: fonts.bold }, tw``, {
-          color,
-          fontSize: 8
-        }]}>{progress}%</Text>
+        <Text style={[{ fontFamily: fonts.bold, color, fontSize: 8 }]}>{progress}%</Text>
       </View>
     </View>;
   };
@@ -101,8 +98,8 @@ export function StudentDataTable({
         } : require("../../../../../assets/maleuser.png")} defaultSource={require("../../../../../assets/maleuser.png")} style={tw`h-8 w-8 rounded-full`} />
 
       </View>
-      <Text style={[{ fontFamily: fonts.medium }, tw`w-28 px-3 text-sm  text-gray-700`]} numberOfLines={1}>{student.rollNo}</Text>
-      <Text style={[{ fontFamily: fonts.medium }, tw`w-32 px-3 text-sm  text-gray-700`]} numberOfLines={1}>{student.studentName}</Text>
+      <Text style={[{ fontFamily: fonts.medium }, tw`w-28 px-3 text-sm text-gray-700`]} numberOfLines={1}>{student.rollNo}</Text>
+      <Text style={[{ fontFamily: fonts.medium }, tw`w-32 px-3 text-sm text-gray-700`]} numberOfLines={1}>{student.studentName}</Text>
       <Text style={[{ fontFamily: fonts.regular }, tw`w-28 px-3 text-sm text-gray-600`]}>{student.conductedClasses > 0 ? `${student.attendancePercentage}%` : "-"}</Text>
       <Text style={[{ fontFamily: fonts.regular }, tw`w-36 px-3 text-sm text-gray-600`]}>{student.totalAssignments > 0 ? `${student.assignmentsDoneCount}/${student.totalAssignments}` : "-"}</Text>
       <Text style={[{ fontFamily: fonts.regular }, tw`w-20 px-3 text-sm text-gray-600`]}>{formatScore(student.quizMarksObtained, student.totalQuizMarks)}</Text>
@@ -123,7 +120,7 @@ export function StudentDataTable({
   };
   return <View style={tw`w-full`}>
     <View style={tw`mb-2 flex-row items-center justify-between`}>
-      <Text style={[{ fontFamily: fonts.bold }, tw` text-[#282828] text-base`]}>{t("Auto.Common.ClassProgressOv", "Class Progress Overview")}</Text>
+      <Text style={[{ fontFamily: fonts.bold }, tw`text-[#282828] text-base`]}>{t("Auto.Common.ClassProgressOv", "Class Progress Overview")}</Text>
     </View>
 
     <View style={tw`rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden`}>
@@ -136,14 +133,14 @@ export function StudentDataTable({
                 {isSearchOpen ? <X size={16} color="white" weight="bold" /> : <MagnifyingGlass size={16} color="white" weight="bold" />}
               </TouchableOpacity>
             </View>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-28 px-3 text-sm  text-[#282828]`]}>{tableHeaders[0]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-32 px-3 text-sm  text-[#282828]`]}>{tableHeaders[1]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-28 px-3 text-sm  text-[#282828]`]}>{tableHeaders[2]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-36 px-3 text-sm  text-[#282828]`]}>{tableHeaders[3]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-20 px-3 text-sm  text-[#282828]`]}>{tableHeaders[4]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-36 px-3 text-sm  text-[#282828]`]}>{tableHeaders[5]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-24 px-3 text-sm  text-[#282828]`]}>{tableHeaders[6]}</Text>
-            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-24 px-3 text-sm  text-[#282828]`]}>{tableHeaders[7]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-28 px-3 text-sm text-[#282828]`]}>{tableHeaders[0]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-32 px-3 text-sm text-[#282828]`]}>{tableHeaders[1]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-28 px-3 text-sm text-[#282828]`]}>{tableHeaders[2]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-36 px-3 text-sm text-[#282828]`]}>{tableHeaders[3]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-20 px-3 text-sm text-[#282828]`]}>{tableHeaders[4]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-36 px-3 text-sm text-[#282828]`]}>{tableHeaders[5]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-24 px-3 text-sm text-[#282828]`]}>{tableHeaders[6]}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`w-24 px-3 text-sm text-[#282828]`]}>{tableHeaders[7]}</Text>
           </View>
 
           {isSearchOpen && <View style={tw`flex-row bg-[#F1F3F2] py-2 px-2 items-center border-t border-gray-200`}>
@@ -180,7 +177,7 @@ export function StudentDataTable({
               length: totalPages
             }, (_, i) => i + 1).map(page => <TouchableOpacity key={page} onPress={() => onPageChange(page)} style={tw`h-8 min-w-8 items-center justify-center rounded-lg mx-1 px-2 ${currentPage === page ? "bg-[#16284F]" : "border border-gray-300 bg-white"}`}>
 
-              <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm  ${currentPage === page ? "text-white" : "text-gray-600"}`]}>{page}</Text>
+              <Text style={[{ fontFamily: fonts.semiBold }, tw`text-sm ${currentPage === page ? "text-white" : "text-gray-600"}`]}>{page}</Text>
             </TouchableOpacity>)}
           </ScrollView>
 

@@ -4,6 +4,7 @@ import { View, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { useUser } from "@/utils/context/UserContext";
 import { fetchStaffOnboardingSummary } from "@/lib/helpers/faculty/myAttendance/payroll/onboardingSummaryAPI";
 import { fonts } from "@/constants/fonts";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 const InfoRow = ({ label, value }: {label: string;value: string | number | null;}) =>
 <View className="flex-row items-start py-2 w-full">
@@ -54,6 +55,7 @@ export default function SummaryPage() {const { t } = useTranslation();
     role,
     fullName,
     collegeBranchCode,
+    collegeEducationType,
     mobile,
     email
   } = useUser();
@@ -87,6 +89,7 @@ export default function SummaryPage() {const { t } = useTranslation();
   };
 
   const isInter = ["Inter"].includes(role);
+  const isSchool = isSchoolEducation(collegeEducationType);
   const systemId = identifierId ? `ID-${identifierId}` : `ID-${userId}`;
 
   return (
@@ -115,7 +118,7 @@ export default function SummaryPage() {const { t } = useTranslation();
         
         <View className="flex-col">
           <InfoRow label={`${role} ID`} value={systemId} />
-          <InfoRow label={isInter ? "Group" : "Branch"} value={collegeBranchCode} />
+          {!isSchool && <InfoRow label={isInter ? "Group" : "Branch"} value={collegeBranchCode} />}
           <InfoRow label={t("Auto.Attr.Mobile", "Mobile")} value={mobile} />
           <InfoRow label={t("Auto.Common.Email", "Email")} value={email} />
           <InfoRow label={t("Auto.Attr.DateofJoining", "Date of Joining")} value={formatDate(dateOfJoining)} />

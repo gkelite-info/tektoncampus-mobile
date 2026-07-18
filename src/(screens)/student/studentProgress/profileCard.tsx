@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';import { Text } from '@/components/AppText';
+import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React from "react";
 import { View } from 'react-native';
 import { User } from "phosphor-react-native";
@@ -6,36 +6,37 @@ import { Avatar } from "@/utils/Avatar";
 import { fonts } from "@/constants/fonts";
 
 export type ProfileCardProps = {
-  name: string;
-  department?: string | null;
-  studentId: string;
-  avatarUrl: string | null;
-  attendancePercentage: number;
-  attendanceCount: number;
-  absentCount: number;
-  leaveCount: number;
+    name: string;
+    department?: string | null;
+    studentId: string;
+    avatarUrl: string | null;
+    attendancePercentage: number;
+    attendanceCount: number;
+    absentCount: number;
+    leaveCount: number;
 };
 
 export const ProfileCard: React.FC<ProfileCardProps> = ({
-  name,
-  department,
-  studentId,
-  avatarUrl,
-  attendancePercentage,
-  attendanceCount,
-  absentCount,
-  leaveCount
-}) => {const { t } = useTranslation();
+    name,
+    department,
+    studentId,
+    avatarUrl,
+    attendancePercentage,
+    attendanceCount,
+    absentCount,
+    leaveCount
+}) => {
+    const { t } = useTranslation();
 
-  return (
-    <View className="bg-white w-full rounded-2xl p-3">
+    return (
+        <View className="bg-white w-full rounded-2xl p-3">
 
             <View className="flex-row items-center mb-4 gap-3">
                 <Avatar
-          src={avatarUrl}
-          size={48}
-          alt={name} />
-        
+                    src={avatarUrl}
+                    size={48}
+                    alt={name} />
+
 
                 <View className="flex-1 flex-row flex-wrap items-center gap-1.5">
                     <Text className="text-[15px] text-gray-800 w-full" style={{ fontFamily: fonts.bold }}>
@@ -68,8 +69,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     <View className="flex-1 justify-center">
                         <View className="flex-row items-center flex-wrap gap-1">
                             <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
-                            {attendanceCount} {t("Dashboard.student.Present", "Present")}
-              </Text>
+                                {attendanceCount} {t("Dashboard.student.Present", "Present")}
+                            </Text>
                             <Text className="text-[10px] text-[#43C17A] leading-tight" style={{ fontFamily: fonts.semiBold }}>
                                 {attendancePercentage}%
                             </Text>
@@ -87,7 +88,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     <View className="flex-1 justify-center">
                         <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
                             {absentCount} {t("Dashboard.student.Absent", "Absent")}
-            </Text>
+                        </Text>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
                             {t("Dashboard.student.Total Absent", "Total Absent")}
                         </Text>
@@ -101,7 +102,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     <View className="flex-1 justify-center">
                         <Text className="text-[11px] text-gray-800 leading-tight" style={{ fontFamily: fonts.bold }}>
                             {leaveCount} {t("Dashboard.student.Leave", "Leave")}
-            </Text>
+                        </Text>
                         <Text className="text-gray-600 text-[8px] leading-tight mt-0.5" style={{ fontFamily: fonts.medium }}>
                             {t("Dashboard.student.Total Leave", "Total Leave")}
                         </Text>

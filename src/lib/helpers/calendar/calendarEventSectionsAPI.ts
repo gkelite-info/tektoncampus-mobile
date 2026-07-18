@@ -3,9 +3,9 @@ import { supabase } from "@/lib/supabaseClient";
 export type CalendarEventSectionRow = {
     calendarEventId: number;
     collegeEducationId: number;
-    collegeBranchId: number;
+    collegeBranchId: number | null;
     collegeAcademicYearId: number;
-    collegeSemesterId: number;
+    collegeSemesterId: number | null;
     collegeSectionId: number;
     createdAt: string;
 };
@@ -41,9 +41,9 @@ export async function saveCalendarEventSections(
     calendarEventId: number,
     payload: {
         collegeEducationId: number;
-        collegeBranchId: number;
+        collegeBranchId: number | null;
         collegeAcademicYearId: number;
-        collegeSemesterId: number;
+        collegeSemesterId: number | null;
         sectionIds: number[];
     }
 ) {

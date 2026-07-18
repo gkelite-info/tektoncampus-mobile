@@ -17,6 +17,7 @@ export type SubjectProgressRow = {
 type SubjectProgressTableProps = {
   rows: SubjectProgressRow[];
   semesterLabel: string;
+  isSchool?: boolean;
 };
 const useTranslations = (namespace: string) => {
   return (key: string) => key;
@@ -69,7 +70,8 @@ function ProgressRing({
 }
 export function AssignmentsSummaryTable({
   rows,
-  semesterLabel
+  semesterLabel,
+  isSchool
 }: SubjectProgressTableProps) {
   const {
     t
@@ -82,14 +84,16 @@ export function AssignmentsSummaryTable({
         }}>
                         {t("Dashboard.student.Class Progress Overview", "Class Progress Overview")}
                     </Text>
-                    <TouchableOpacity activeOpacity={0.7} className="flex-row items-center gap-1.5 rounded-md bg-[#43C17A] px-3 py-1.5 shadow-sm">
-                        <Text className="text-xs text-white" style={{
-            fontFamily: fonts.medium
-          }}>
-                            {semesterLabel}
-                        </Text>
-                        <CaretDown size={14} weight="bold" color="white" />
-                    </TouchableOpacity>
+                    {!isSchool && (
+                      <TouchableOpacity activeOpacity={0.7} className="flex-row items-center gap-1.5 rounded-md bg-[#43C17A] px-3 py-1.5 shadow-sm">
+                          <Text className="text-xs text-white" style={{
+              fontFamily: fonts.medium
+            }}>
+                              {semesterLabel}
+                          </Text>
+                          <CaretDown size={14} weight="bold" color="white" />
+                      </TouchableOpacity>
+                    )}
                 </View>
             </View>
 

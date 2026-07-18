@@ -246,7 +246,7 @@ export async function getUpcomingClasses(
         "collegeAcademicYear",
         "",
       );
-      const year = yearString ? (parseInt(yearString) || yearString) : "";
+      const year = yearString;
       const subjectName = safeGet(
         event.subjectData,
         "subjectName",
@@ -255,14 +255,14 @@ export async function getUpcomingClasses(
       const topicTitle = safeGet(event.topicData, "topicTitle");
 
       return {
-        id: `${event.calendarEventId}-${sectionRow.section?.collegeSections ?? sectionIndex}-${sectionIndex}`,
+        id: `${event.calendarEventId}-${safeGet(sectionRow.section, "collegeSections") || sectionIndex}-${sectionIndex}`,
         title: subjectName,
         description: topicTitle || "Class",
         fromTime: convertTo12HourFormat(event.fromTime),
         toTime: convertTo12HourFormat(event.toTime),
         date: formatDate(event.date),
         roomNo: safeGet(event.college_rooms, "roomNo"),
-        section: sectionRow.section?.collegeSections,
+        section: safeGet(sectionRow.section, "collegeSections"),
         semester: [semester],
         department: [{ name: department }],
         degree,
@@ -288,7 +288,7 @@ export async function getUpcomingClasses(
       const semester = `Sem ${safeGet(sectionRow.semester, "collegeSemester", "?")}`;
       const degree = safeGet(sectionRow.education, "collegeEducationType", "");
       const yearString = safeGet(sectionRow.yearData, "collegeAcademicYear", "");
-      const year = yearString ? (parseInt(yearString) || yearString) : "";
+      const year = yearString;
       const sectionName = safeGet(sectionRow.section, "collegeSections", undefined);
 
       const subjectName = safeGet(
@@ -434,7 +434,7 @@ export async function getClassDetails(
     const firstSection = enrichedSections[0];
     const degree = firstSection?.education || "";
     const yearString = firstSection?.year || "";
-    const year = yearString ? (parseInt(yearString) || yearString) : "";
+    const year = yearString;
 
     const subjectName = safeGet(
       event.subjectData,
@@ -527,7 +527,7 @@ export async function getClassDetails(
     "",
   );
   const yearString = safeGet(firstSection?.yearData, "collegeAcademicYear", "");
-  const year = yearString ? (parseInt(yearString) || yearString) : "";
+  const year = yearString;
 
   const subjectName = safeGet(
     event.subjectData,

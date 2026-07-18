@@ -107,131 +107,133 @@ export async function getFacultySubjects(params: {
     topicsBySubject.set(t.collegeSubjectId, arr);
   }
 
-  const result: CardProps[] = await Promise.all(
-    (subjects ?? []).map(async (s: any) => {
-      const subjectUnits = (units ?? []).filter(
-        (u) => u.collegeSubjectId === s.collegeSubjectId,
+  const cardPromises = (facultySections ?? []).map(async (fs: any) => {
+    const s = (subjects ?? []).find((sub) => sub.collegeSubjectId === fs.collegeSubjectId);
+    if (!s) return null;
+
+    const subjectUnits = (units ?? []).filter(
+      (u) => u.collegeSubjectId === s.collegeSubjectId,
+    );
+
+    const branchCode = Array.isArray(s.college_branch)
+      ? (s.college_branch[0] as any)?.collegeBranchCode
+      : (s.college_branch as any)?.collegeBranchCode;
+
+    const collegeSectionId = fs.collegeSectionsId ?? null;
+
+    const sectionName =
+      fs.college_sections?.collegeSections ??
+      fs.college_sections?.[0]?.collegeSections ??
+      "-";
+
+    const joinedYear = Array.isArray(s.college_academic_year)
+      ? s.college_academic_year[0]
+      : s.college_academic_year;
+
+    const yearName =
+      joinedYear?.collegeAcademicYear || `Year ${s.collegeAcademicYearId}`;
+
+    const unitsCount = subjectUnits.length;
+    const subjectTopics = topicsBySubject.get(s.collegeSubjectId) ?? [];
+
+    const topicsCovered = subjectTopics.filter(
+      (t) => t.isCompleted === true,
+    ).length;
+
+    let nextLesson = "-";
+    const sortedUnits = [...subjectUnits].sort(
+      (a, b) => a.unitNumber - b.unitNumber,
+    );
+
+    for (const unit of sortedUnits) {
+      const unitTopics = subjectTopics
+        .filter((t) => t.collegeSubjectUnitId === unit.collegeSubjectUnitId)
+        .sort((a, b) => a.displayOrder - b.displayOrder);
+
+      const firstIncompleteTopic = unitTopics.find(
+        (t) => t.isCompleted === false,
       );
 
-      const branchCode = Array.isArray(s.college_branch)
-        ? s.college_branch[0]?.collegeBranchCode
-        : s.college_branch?.collegeBranchCode;
-
-      const sectionRow = facultySections?.find(
-        (fs) => fs.collegeSubjectId === s.collegeSubjectId,
-      );
-
-      const collegeSectionId = sectionRow?.collegeSectionsId ?? null;
-
-      const sectionName =
-        sectionRow?.college_sections?.[0]?.collegeSections ?? "-";
-
-      const unitsCount = subjectUnits.length;
-      const subjectTopics = topicsBySubject.get(s.collegeSubjectId) ?? [];
-
-      const topicsCovered = subjectTopics.filter(
-        (t) => t.isCompleted === true,
-      ).length;
-
-      let nextLesson = "-";
-      const sortedUnits = [...subjectUnits].sort(
-        (a, b) => a.unitNumber - b.unitNumber,
-      );
-
-      for (const unit of sortedUnits) {
-        const unitTopics = subjectTopics
-          .filter((t) => t.collegeSubjectUnitId === unit.collegeSubjectUnitId)
-          .sort((a, b) => a.displayOrder - b.displayOrder);
-
-        const firstIncompleteTopic = unitTopics.find(
-          (t) => t.isCompleted === false,
-        );
-
-        if (firstIncompleteTopic) {
-          nextLesson = firstIncompleteTopic.topicTitle;
-          break;
-        }
+      if (firstIncompleteTopic) {
+        nextLesson = firstIncompleteTopic.topicTitle;
+        break;
       }
+    }
 
-      if (nextLesson === "-") nextLesson = "Completed";
+    if (nextLesson === "-") nextLesson = "Completed";
 
-      const subjectUnitDates = subjectUnits.filter(
-        (u) => u.startDate && u.endDate,
-      );
+    const subjectUnitDates = subjectUnits.filter(
+      (u) => u.startDate && u.endDate,
+    );
 
-      const fromDate =
-        subjectUnitDates.length > 0
-          ? new Date(
-            Math.min(
-              ...subjectUnitDates.map((u) => new Date(u.startDate).getTime()),
-            ),
-          ).toLocaleDateString("en-GB")
-          : "-";
-
-      const toDate =
-        subjectUnitDates.length > 0
-          ? new Date(
-            Math.max(
-              ...subjectUnitDates.map((u) => new Date(u.endDate).getTime()),
-            ),
-          ).toLocaleDateString("en-GB")
-          : "-";
-
-      const subjectPercentage =
-        subjectUnits.length === 0
-          ? 0
-          : Math.round(
-            subjectUnits.reduce(
-              (sum, u) => sum + (u.completionPercentage ?? 0),
-              0,
-            ) / subjectUnits.length,
-          );
-
-      const joinedYear = Array.isArray(s.college_academic_year)
-        ? s.college_academic_year[0]
-        : s.college_academic_year;
-
-      const yearName =
-        joinedYear?.collegeAcademicYear || `Year ${s.collegeAcademicYearId}`;
-
-      const semData = Array.isArray(s.college_semester)
-        ? s.college_semester[0]
-        : s.college_semester;
-
-      const semesterDisplay = semData?.collegeSemester
-        ? `Sem ${semData.collegeSemester}`
+    const fromDate =
+      subjectUnitDates.length > 0
+        ? new Date(
+          Math.min(
+            ...subjectUnitDates.map((u) => new Date(u.startDate).getTime()),
+          ),
+        ).toLocaleDateString("en-GB")
         : "-";
 
-      const students = await getStudentCountForAcademics({
-        collegeId: collegeId,
-        collegeAcademicYearId: s.collegeAcademicYearId,
-        collegeSemesterId: s.collegeSemesterId,
-      });
+    const toDate =
+      subjectUnitDates.length > 0
+        ? new Date(
+          Math.max(
+            ...subjectUnitDates.map((u) => new Date(u.endDate).getTime()),
+          ),
+        ).toLocaleDateString("en-GB")
+        : "-";
 
-      return {
-        collegeId,
-        collegeEducationId: s.collegeEducationId,
-        collegeBranchId: s.collegeBranchId,
-        branchCode: branchCode || "-",
-        collegeAcademicYearId: s.collegeAcademicYearId,
-        collegeSemesterId: s.collegeSemesterId,
-        collegeSubjectId: s.collegeSubjectId,
-        collegeSectionId,
-        sectionName,
-        subjectTitle: s.subjectName,
-        semester: semesterDisplay,
-        year: yearName,
-        units: unitsCount,
-        topicsCovered,
-        topicsTotal: subjectTopics.length,
-        nextLesson,
-        students,
-        percentage: subjectPercentage,
-        fromDate,
-        toDate,
-      };
-    }),
-  );
+    const subjectPercentage =
+      subjectUnits.length === 0
+        ? 0
+        : Math.round(
+          subjectUnits.reduce(
+            (sum, u) => sum + (u.completionPercentage ?? 0),
+            0,
+          ) / subjectUnits.length,
+        );
+
+    const semData = Array.isArray(s.college_semester)
+      ? s.college_semester[0]
+      : s.college_semester;
+
+    const semesterDisplay = semData?.collegeSemester
+      ? `Sem ${semData.collegeSemester}`
+      : "-";
+
+    const students = await getStudentCountForAcademics({
+      collegeId: collegeId,
+      collegeAcademicYearId: s.collegeAcademicYearId,
+      collegeSemesterId: s.collegeSemesterId,
+    });
+
+    return {
+      collegeId,
+      collegeEducationId: s.collegeEducationId,
+      collegeBranchId: s.collegeBranchId,
+      branchCode: branchCode || "-",
+      collegeAcademicYearId: s.collegeAcademicYearId,
+      collegeSemesterId: s.collegeSemesterId,
+      collegeSubjectId: s.collegeSubjectId,
+      collegeSectionId,
+      sectionName,
+      subjectTitle: s.subjectName,
+      semester: semesterDisplay,
+      year: yearName,
+      units: unitsCount,
+      topicsCovered,
+      topicsTotal: subjectTopics.length,
+      nextLesson,
+      students,
+      percentage: subjectPercentage,
+      fromDate,
+      toDate,
+    };
+  });
+
+  const cards = await Promise.all(cardPromises);
+  const result = cards.filter((c) => c !== null) as CardProps[];
 
   return result;
 }

@@ -1,12 +1,17 @@
 import { supabase } from "@/lib/supabaseClient";
+import * as FileSystem from 'expo-file-system';
+import { Buffer } from 'buffer';
 
 export type SaveTopicResourceParams = {
-    pdfBuffer: ArrayBuffer;
+    fileUri?: string;
+    pdfBuffer?: ArrayBuffer;
     topicTitle: string;
     collegeSubjectUnitTopicId: number;
     collegeId: number;
     createdBy: number;
     isAdmin: number;
+    contentType?: string;
+    originalFileName?: string;
 };
 
 export type SavedResource = {
@@ -42,26 +47,47 @@ export async function saveTopicResource(
     params: SaveTopicResourceParams
 ): Promise<SavedResource> {
     const {
+        fileUri,
         pdfBuffer,
         topicTitle,
         collegeSubjectUnitTopicId,
         collegeId,
         createdBy,
         isAdmin,
+        contentType,
+        originalFileName,
     } = params;
+
+    let fileBuffer: Buffer;
+    let ext = 'pdf';
+    const mime = contentType || "application/pdf";
+
+    if (pdfBuffer) {
+        fileBuffer = Buffer.from(pdfBuffer);
+        ext = originalFileName ? (originalFileName.split('.').pop() || 'pdf') : 'pdf';
+    } else if (fileUri) {
+        // Read the file as base64 and convert it to a Buffer
+        const base64 = await FileSystem.readAsStringAsync(fileUri, {
+            encoding: 'base64',
+        });
+        fileBuffer = Buffer.from(base64, 'base64');
+        ext = originalFileName ? (originalFileName.split('.').pop() || 'pdf') : 'pdf';
+    } else {
+        throw new Error("Either fileUri or pdfBuffer must be provided");
+    }
 
     const slug = topicTitle
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
     const timestamp = Date.now();
-    const fileName = `${slug}-${timestamp}.pdf`;
+    const fileName = `${slug}-${timestamp}.${ext}`;
     const storagePath = `college-${collegeId}/topic-${collegeSubjectUnitTopicId}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
         .from("topic-resources")
-        .upload(storagePath, pdfBuffer, {
-            contentType: "application/pdf",
+        .upload(storagePath, fileBuffer, {
+            contentType: mime,
             upsert: false,
         });
 
@@ -72,14 +98,14 @@ export async function saveTopicResource(
         .getPublicUrl(storagePath);
 
     const resourceUrl = urlData.publicUrl;
-    const resourceName = `${topicTitle}.pdf`;
     const now = new Date().toISOString();
+    const resourceType = ext.toLowerCase() === 'pdf' ? 'PDF' : 'VIDEO';
 
     const { data, error: dbError } = await supabase
         .from("college_subject_unit_topic_resources")
         .insert({
-            resourceType: "PDF",
-            resourceName,
+            resourceType,
+            resourceName: originalFileName || `${topicTitle}.pdf`,
             resourceUrl,
             collegeSubjectUnitTopicId,
             collegeId,

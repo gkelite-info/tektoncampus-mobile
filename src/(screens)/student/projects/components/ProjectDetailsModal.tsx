@@ -314,7 +314,7 @@ export const ProjectDetailsModal = ({
                 <Text className="text-slate-500 text-xs text-center mt-2 mb-4" style={{ fontFamily: fonts.regular }}>
                   {t("Projects.student.Drag & Drop Your File here or")}
                 </Text>
-                <View className="bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm">
+                <View className="bg-white border border-slate-200 px-4 py-2 rounded-lg">
                   <Text className="text-slate-700 text-xs font-semibold" style={{ fontFamily: fonts.medium }}>
                     {t("Projects.student.Browse Files")}
                   </Text>
@@ -323,7 +323,7 @@ export const ProjectDetailsModal = ({
 
               {/* Selected File Details */}
               {selectedFile && (
-                <View className="mt-4 flex-row items-center justify-between bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+                <View className="mt-4 flex-row items-center justify-between bg-white border border-slate-200 p-3 rounded-xl">
                   <View className="flex-1 flex-row items-center gap-2 overflow-hidden mr-2">
                     <View className="w-8 h-8 bg-emerald-100 rounded items-center justify-center">
                       <Text className="text-emerald-700 text-[10px] font-bold uppercase">
@@ -345,7 +345,7 @@ export const ProjectDetailsModal = ({
                 <TouchableOpacity
                   onPress={handleFinalSubmit}
                   disabled={isUploading}
-                  className={`mt-4 w-full h-11 rounded-xl items-center justify-center shadow-md ${
+                  className={`mt-4 w-full h-11 rounded-xl items-center justify-center ${
                     isUploading ? "bg-slate-400" : "bg-[#16a34a]"
                   }`}
                 >

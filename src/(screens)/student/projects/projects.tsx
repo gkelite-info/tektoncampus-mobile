@@ -15,13 +15,14 @@ import { fonts } from "@/constants/fonts";
 import { useStudent } from "@/utils/context/student/useStudent";
 import { useUser } from "@/utils/context/UserContext";
 import { fetchEnrichedProjectsByStudent } from "@/lib/helpers/projects/project";
+import { isSchoolEducation } from '@/lib/helpers/admin/academicSetup/schoolHelper';
 import { ProjectCard, ProjectCardProps } from "./components/ProjectCard";
 import { ProjectDetailsModal } from "./components/ProjectDetailsModal";
 import Shimmer from "@/components/ui/Shimmer";
 
 const ShimmerCard = () => {
   return (
-    <View className="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 py-4 mb-4">
+    <View className="bg-white rounded-2xl border border-gray-100 px-4 py-4 mb-4">
       <View className="flex-row justify-between items-start mb-3 gap-3">
         <View className="flex-1">
           <Shimmer width="75%" height={22} borderRadius={4} className="mb-2" />
@@ -102,6 +103,7 @@ export default function ProjectsScreen() {
     subjects: studentSubjects,
     collegeBranchCode,
     collegeAcademicYear,
+    collegeEducationType,
   } = useStudent();
 
   const [projects, setProjects] = useState<ProjectCardProps[]>([]);
@@ -184,8 +186,7 @@ export default function ProjectsScreen() {
             className="text-2xl text-[#1E293B] font-bold"
             style={{ fontFamily: fonts.bold }}
           >
-            {t("Projects.student.Projects")} - {collegeBranchCode ?? "..."}{" "}
-            {collegeAcademicYear ?? ""}
+            {t("Projects.student.Projects")}{!isSchoolEducation(collegeEducationType) && ` - ${collegeBranchCode ?? "..."}`} {collegeAcademicYear ?? ""}
           </Text>
           <Text
             className="text-sm text-gray-500 mt-1"
@@ -204,7 +205,7 @@ export default function ProjectsScreen() {
                 setCurrentPage(1);
               }}
               className={`flex-1 items-center justify-center py-2.5 rounded-lg ${
-                statusFilter === tab ? "bg-white shadow-sm" : ""
+                statusFilter === tab ? "bg-white" : ""
               }`}
             >
               <Text
@@ -288,7 +289,7 @@ export default function ProjectsScreen() {
             ))}
           </View>
         ) : filteredProjects.length === 0 ? (
-          <View className="items-center justify-center py-16 px-4 bg-white border border-slate-100 rounded-2xl shadow-sm">
+          <View className="items-center justify-center py-16 px-4 bg-white border border-slate-100 rounded-2xl">
             <Kanban size={48} color="#94A3B8" />
             <Text
               className="text-slate-700 text-sm font-semibold mt-4 text-center"
@@ -329,7 +330,7 @@ export default function ProjectsScreen() {
           <View>
             <ProjectCard
               data={paginatedProjects}
-              onViewDetails={(proj) => setSelectedProject(proj)}
+              onViewDetails={(project) => setSelectedProject(project)}
             />
             {totalPages > 1 && (
               <View className="flex-row justify-between items-center mt-4 mb-8">

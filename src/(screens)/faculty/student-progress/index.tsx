@@ -308,7 +308,7 @@ export default function FacultyStudentProgressScreen() {
         { }
         <View style={tw`mb-4 flex-row flex-wrap items-center gap-4`}>
           <View style={tw`flex-col gap-1 w-[40%]`}>
-            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Subject", "Subject")}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Subject", "Subject")}</Text>
             <AppPicker
               selectedValue={selectedSubjectId}
               onValueChange={(itemValue) => setSelectedSubjectId(itemValue)}
@@ -320,7 +320,7 @@ export default function FacultyStudentProgressScreen() {
           </View>
 
           <View style={tw`flex-col gap-1 w-[28%]`}>
-            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Year", "Year")}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Year", "Year")}</Text>
             <AppPicker
               selectedValue={selectedYearId}
               onValueChange={(itemValue) => setSelectedYearId(itemValue)}
@@ -332,7 +332,7 @@ export default function FacultyStudentProgressScreen() {
           </View>
 
           <View style={tw`flex-col gap-1 flex-1`}>
-            <Text style={tw`text-xs font-semibold text-gray-500 uppercase tracking-wide`}>{t("Auto.Common.Sec", "Sec")}</Text>
+            <Text style={[{ fontFamily: fonts.semiBold }, tw`text-xs text-gray-500 uppercase tracking-wide`]}>{t("Auto.Common.Sec", "Sec")}</Text>
             <AppPicker
               selectedValue={selectedSectionId}
               onValueChange={(itemValue) => setSelectedSectionId(itemValue)}

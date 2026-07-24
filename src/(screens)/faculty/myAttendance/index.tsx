@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/AppText';
 import React, { useState } from "react";
 import { View, ScrollView, TouchableOpacity, LayoutChangeEvent } from 'react-native';
@@ -12,14 +13,15 @@ import { MotiView } from "moti";
 type MainTab = "attendance" | "payroll" | "analytics";
 
 export default function MyAttendanceScreen() {
+  const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("attendance");
   const [tabWidth, setTabWidth] = useState(0);
 
   const mainTabs = [
-    { id: "attendance", label: "Attendance" },
-    { id: "payroll", label: "Payroll" },
-    { id: "analytics", label: "Analytics" },
+    { id: "attendance", label: t("Auto.Common.Attendance", "Attendance") },
+    { id: "payroll", label: t("Auto.Common.Payroll", "Payroll") },
+    { id: "analytics", label: t("Auto.Common.Analytics", "Analytics") },
   ];
 
   const getTranslateX = (tab: MainTab, width: number) => {

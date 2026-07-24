@@ -8,10 +8,10 @@ export default function ManageTaxPage() {const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"declaration" | "forms" | "taxFiling" | "taxSaving">("declaration");
 
   const tabs = [
-  { id: "declaration", label: "Declaration" },
-  { id: "forms", label: "Forms" },
-  { id: "taxFiling", label: "Tax Filing" },
-  { id: "taxSaving", label: "Tax Saving Investment" }];
+  { id: "declaration", label: t("Auto.Common.Declaration", "Declaration") },
+  { id: "forms", label: t("Auto.Common.Forms", "Forms") },
+  { id: "taxFiling", label: t("Auto.Common.TaxFiling", "Tax Filing") },
+  { id: "taxSaving", label: t("Auto.Common.TaxSavingInvestment", "Tax Saving Investment") }];
 
 
   return (
@@ -36,11 +36,11 @@ export default function ManageTaxPage() {const { t } = useTranslation();
         {activeTab === "declaration" &&
         <View className="flex-col relative">
             <View className="absolute inset-0 z-10 bg-white/60 items-center justify-center rounded-xl">
-               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg shadow-sm">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
+               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg ">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
             </View>
             <View className="flex-col md:flex-row gap-4">
               <View className="flex-col gap-4 flex-1">
-                <View className="bg-white rounded-md p-5 shadow-sm border border-gray-100 flex-1">
+                <View className="bg-white rounded-md p-5  border border-gray-100 flex-1">
                   <Text className="text-[#43C17A] text-lg mb-4" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.InvestmentDecla", "Investment Declaration")}</Text>
                   <View className="mb-4">
                     <Text className="text-[#1F2937] text-base" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Currentwindows", "Current windows")}</Text>
@@ -51,24 +51,24 @@ export default function ManageTaxPage() {const { t } = useTranslation();
                     <Text className="text-[#1F2937] text-base" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.1stto25thofever", "1st to 25th of every month till 15th jan 2026")}</Text>
                   </View>
                 </View>
-                <View className="bg-white rounded-md p-5 shadow-sm border border-gray-100 h-[110px] justify-center">
+                <View className="bg-white rounded-md p-5  border border-gray-100 h-[110px] justify-center">
                   <Text className="text-[#333333] text-[15px]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.NetTaxableIncom", "Net Taxable Income")}</Text>
                   <Text className="text-[#43C17A] text-[24px] mt-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.INR0", "INR 0")}</Text>
                 </View>
               </View>
 
               <View className="flex-col gap-4 flex-1">
-                <View className="bg-white rounded-md p-5 shadow-sm border border-gray-100 flex-1">
+                <View className="bg-white rounded-md p-5  border border-gray-100 flex-1">
                   <Text className="text-[#43C17A] text-lg mb-4" style={{ fontFamily: fonts.semiBold }}>{t("Auto.Common.ProofSubmission", "Proof Submission")}</Text>
                   <Text className="text-[#1F2937] text-[14px]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Currentwindows", "Current windows")}</Text>
                   <Text className="text-[#1F2937] text-[13px]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.TillAug252025", "Till Aug 25, 2025")}</Text>
                 </View>
                 <View className="flex-col sm:flex-row gap-4">
-                  <View className="bg-white rounded-md p-5 shadow-sm border border-gray-100 h-[110px] flex-1 justify-center">
+                  <View className="bg-white rounded-md p-5  border border-gray-100 h-[110px] flex-1 justify-center">
                     <Text className="text-[#333333] text-[14px] leading-tight" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Totaltax", "Total tax")}{"\n"}{t("Auto.Common.Payable", "Payable")}</Text>
                     <Text className="text-[#43C17A] text-[24px] mt-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.INR0", "INR 0")}</Text>
                   </View>
-                  <View className="bg-white rounded-md p-5 shadow-sm border border-gray-100 h-[110px] flex-1 justify-center">
+                  <View className="bg-white rounded-md p-5  border border-gray-100 h-[110px] flex-1 justify-center">
                     <Text className="text-[#333333] text-[14px] leading-tight" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Totaltax", "Total tax")}{"\n"}{t("Auto.Common.Payable", "Payable")}</Text>
                     <Text className="text-[#43C17A] text-[24px] mt-1" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.INR0", "INR 0")}</Text>
                   </View>
@@ -81,9 +81,9 @@ export default function ManageTaxPage() {const { t } = useTranslation();
         {activeTab === "forms" &&
         <View className="flex-col gap-4 relative">
              <View className="absolute inset-0 z-10 bg-white/60 items-center justify-center rounded-xl">
-               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg shadow-sm">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
+               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg ">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
             </View>
-            <View className="bg-white rounded-md p-6 max-md:p-4 shadow-sm border border-gray-100">
+            <View className="bg-white rounded-md p-6 max-md:p-4  border border-gray-100">
               <View className="flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-3">
                 <Text className="text-[#43C17A] text-[18px]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Form16", "Form 16")}</Text>
                 <View className="flex-row gap-2">
@@ -107,7 +107,7 @@ export default function ManageTaxPage() {const { t } = useTranslation();
                 <Text className="text-[#1F2937] text-base mb-6 text-center max-w-[320px]" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Form16hasnotbee", "Form 16 has not been released by the admin for the selected financial year.")}
 
               </Text>
-                <TouchableOpacity className="border border-gray-300 px-8 py-2.5 rounded-md bg-white shadow-sm">
+                <TouchableOpacity className="border border-gray-300 px-8 py-2.5 rounded-md bg-white ">
                   <Text className="text-[#1F2937] text-base text-center" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.ReceivedForm16O", "Received Form 16 Outside ? File ITR Using Quicko")}
 
                 </Text>
@@ -115,7 +115,7 @@ export default function ManageTaxPage() {const { t } = useTranslation();
               </View>
             </View>
 
-            <View className="bg-white rounded-md p-6 max-md:p-4 shadow-sm border border-gray-100">
+            <View className="bg-white rounded-md p-6 max-md:p-4  border border-gray-100">
               <View className="flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-3">
                 <Text className="text-[#43C17A] text-[18px]" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Form12BB", "Form 12 BB")}</Text>
                 <View className="flex-row gap-2">
@@ -137,9 +137,9 @@ export default function ManageTaxPage() {const { t } = useTranslation();
         }
 
         {activeTab === "taxFiling" &&
-        <View className="bg-white rounded-lg p-6 max-md:p-4 border border-gray-200 shadow-sm relative">
+        <View className="bg-white rounded-lg p-6 max-md:p-4 border border-gray-200  relative">
              <View className="absolute inset-0 z-10 bg-white/60 items-center justify-center rounded-xl">
-               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg shadow-sm">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
+               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg ">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
             </View>
             <Text className="text-[#43C17A] text-[20px] mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TaxFiling", "Tax Filing")}</Text>
             <Text className="text-[#1F2937] text-base mb-6" style={{ fontFamily: fonts.regular }}>{t("Auto.Common.Efileyourincome", "E-file your income tax returns easily through trusted HRMS Partners.")}
@@ -186,9 +186,9 @@ export default function ManageTaxPage() {const { t } = useTranslation();
         }
 
         {activeTab === "taxSaving" &&
-        <View className="bg-white rounded-lg p-6 max-md:p-4 border border-gray-200 shadow-sm flex-col gap-6 relative">
+        <View className="bg-white rounded-lg p-6 max-md:p-4 border border-gray-200  flex-col gap-6 relative">
              <View className="absolute inset-0 z-10 bg-white/60 items-center justify-center rounded-xl">
-               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg shadow-sm">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
+               <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg ">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
             </View>
             <View>
               <Text className="text-[#43C17A] text-[20px] mb-2" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.TaxSavingInvest", "Tax Saving Investment")}</Text>

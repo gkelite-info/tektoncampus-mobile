@@ -98,16 +98,6 @@ export default function AcademicFees({
         setExpandedYears((prev) => ({ ...prev, [year]: !prev[year] }));
     };
 
-    if (!plan) {
-        return (
-            <View className="p-6 items-center">
-                <Text className="text-gray-500 font-medium">{t("Payments.student.Loading fee details")}</Text>
-            </View>
-        );
-    }
-
-    const isProgramFullyPaid = plan.pendingAmount <= 0;
-    
     const totalSelectedAmount = useMemo(() => {
         let sum = 0;
         unpaidSemesters.forEach(sem => {
@@ -117,6 +107,16 @@ export default function AcademicFees({
         });
         return sum;
     }, [selectedSemesterIds, unpaidSemesters]);
+
+    if (!plan) {
+        return (
+            <View className="p-6 items-center">
+                <Text className="text-gray-500 font-medium">{t("Payments.student.Loading fee details")}</Text>
+            </View>
+        );
+    }
+
+    const isProgramFullyPaid = plan.pendingAmount <= 0;
 
     const renderStatusBadge = (status: string) => {
         switch (status) {

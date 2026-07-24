@@ -6,18 +6,22 @@ import { fetchStaffOnboardingSummary } from "@/lib/helpers/faculty/myAttendance/
 import { fonts } from "@/constants/fonts";
 import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
-const InfoRow = ({ label, value }: {label: string;value: string | number | null;}) =>
-<View className="flex-row items-start py-2 w-full">
-    <Text className="w-[140px] text-[14px] text-[#333333]" style={{ fontFamily: fonts.semiBold }}>
-      {label}
-    </Text>
-    <Text
-    className={`flex-1 text-[14px] ${value && value !== "Not Provided" ? "text-[#666666]" : "text-gray-400 italic"}`}
-    style={{ fontFamily: value && value !== "Not Provided" ? fonts.regular : fonts.italic }}>
-    
-      {value || "Not Provided"}
-    </Text>
-  </View>;
+const InfoRow = ({ label, value }: {label: string;value: string | number | null;}) => {
+  const { t } = useTranslation();
+  return (
+    <View className="flex-row items-start py-2 w-full">
+      <Text className="w-[140px] text-[14px] text-[#333333]" style={{ fontFamily: fonts.semiBold }}>
+        {label}
+      </Text>
+      <Text
+      className={`flex-1 text-[14px] ${value && value !== "Not Provided" && value !== t("Auto.Common.NotProvided", "Not Provided") ? "text-[#666666]" : "text-gray-400 italic"}`}
+      style={{ fontFamily: value && value !== "Not Provided" && value !== t("Auto.Common.NotProvided", "Not Provided") ? fonts.regular : fonts.italic }}>
+      
+        {value || t("Auto.Common.NotProvided", "Not Provided")}
+      </Text>
+    </View>
+  );
+};
 
 
 const SummaryShimmer = () =>
@@ -80,7 +84,7 @@ export default function SummaryPage() {const { t } = useTranslation();
   const { bank, aadhaar, pan } = onboardingData || {};
 
   const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return "Not Provided";
+    if (!dateStr) return t("Auto.Common.NotProvided", "Not Provided");
     return new Date(dateStr).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -124,7 +128,7 @@ export default function SummaryPage() {const { t } = useTranslation();
           <InfoRow label={t("Auto.Attr.DateofJoining", "Date of Joining")} value={formatDate(dateOfJoining)} />
           <InfoRow
             label={t("Auto.Attr.Experience", "Experience")}
-            value={professionalExperienceYears ? `${professionalExperienceYears} Years` : null} />
+            value={professionalExperienceYears ? `${professionalExperienceYears} ${t("Auto.Common.Years", "Years")}` : null} />
           
         </View>
       </View>
@@ -139,7 +143,7 @@ export default function SummaryPage() {const { t } = useTranslation();
         <View className="mb-5">
           <InfoRow
             label={t("Auto.Attr.SalaryPaymentMo", "Salary Payment Mode:")}
-            value={bank ? "Bank Transfer" : "Not Provided"} />
+            value={bank ? t("Auto.Common.BankTransfer", "Bank Transfer") : t("Auto.Common.NotProvided", "Not Provided")} />
           
         </View>
 

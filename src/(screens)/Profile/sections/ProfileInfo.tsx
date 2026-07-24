@@ -5,6 +5,7 @@ import { View, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 're
 import { User, Image as ImageIcon } from "phosphor-react-native";
 import { useUser } from "@/utils/context/UserContext";
 import ImageUploadModal from "@/components/modals/ImageUploadModal";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 type ProfileInfoProps = {
   onNext: () => void;
@@ -26,6 +27,7 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {const { t } =
     setProfilePhoto
   } = useUser();
 
+  const isSchool = isSchoolEducation(collegeEducationType);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
@@ -106,8 +108,8 @@ export default function ProfileInfo({ onNext }: ProfileInfoProps) {const { t } =
                         
                         {isStudentOrFaculty &&
             <>
-                                <ProfileRow label={t("Auto.Common.Branch", "Branch")} value={collegeBranchCode} />
-                                <ProfileRow label={t("Auto.Attr.CurrentYear", "Current Year")} value={collegeAcademicYear} />
+                                {!isSchool && <ProfileRow label={t("Auto.Common.Branch", "Branch")} value={collegeBranchCode} />}
+                                <ProfileRow label={isSchool ? t("Auto.Attr.CurrentClass", "Current Class") : t("Auto.Attr.CurrentYear", "Current Year")} value={collegeAcademicYear} />
                                 <ProfileRow label={t("Auto.Attr.Section", "Section")} value={collegeSection} />
                             </>
             }

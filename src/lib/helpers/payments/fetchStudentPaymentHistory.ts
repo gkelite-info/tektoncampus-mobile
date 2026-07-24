@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import { FeeSummaryItem, StripePaymentStatus } from "../../components/payments/types";
+import { FeeSummaryItem, StripePaymentStatus } from "@/components/payments/types";
 
 export async function fetchStudentPaymentHistory(
   studentFeeObligationId: number,

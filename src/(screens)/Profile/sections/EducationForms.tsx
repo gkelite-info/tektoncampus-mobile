@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Toast from "react-native-toast-message";
 import { Trash } from "phosphor-react-native";
+import { useStudent } from "@/utils/context/student/useStudent";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 interface SharedProps {
   data: any;
@@ -132,6 +134,8 @@ export function SecondaryEducationForm({ data, onSave, onDelete, userId }: Share
 }
 
 export function UndergraduateEducationForm({ data, onSave, onDelete, userId }: SharedProps) {const { t } = useTranslation();
+  const { collegeEducationType } = useStudent();
+  const isSchool = isSchoolEducation(collegeEducationType);
   const [collegeName, setCollegeName] = useState(data?.collegeName || "");
   const [courseName, setCourseName] = useState(data?.courseName || "");
   const [specialization, setSpecialization] = useState(data?.specialization || "");
@@ -174,8 +178,8 @@ export function UndergraduateEducationForm({ data, onSave, onDelete, userId }: S
         }
             </View>
             
-            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CollegeUniversi", "College/University Name*")}</Text>
-            <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={collegeName} onChangeText={setCollegeName} placeholder={t("Auto.Attr.EnterCollegeNam", "Enter College Name")} />
+            <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{isSchool ? t("Auto.Common.SchoolName", "School Name*") : t("Auto.Common.CollegeUniversi", "College/University Name*")}</Text>
+            <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={collegeName} onChangeText={setCollegeName} placeholder={isSchool ? t("Auto.Attr.EnterSchoolNam", "Enter School Name") : t("Auto.Attr.EnterCollegeNam", "Enter College Name")} />
 
             <Text className="text-sm text-[#282828] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.CourseName", "Course Name*")}</Text>
             <TextInput className="border border-[#CCCCCC] rounded-md px-3 py-2 mb-3" value={courseName} onChangeText={setCourseName} placeholder={t("Auto.Attr.egBTechBSc", "e.g. B.Tech, B.Sc")} />

@@ -78,7 +78,7 @@ const AttendanceTable: React.FC<Props> = ({
     <View className="w-full mt-4 flex-1">
       <View className="flex-row justify-between items-center mb-3">
         <Text className="text-[#282828] text-[17px]" style={{ fontFamily: fonts.bold }}>
-          {title || "Attendance Table"}
+          {title || t("Auto.Common.AttendanceTable", "Attendance Table")}
         </Text>
 
         <View className="flex-row items-center bg-[#43C17A] rounded-lg overflow-hidden">
@@ -87,7 +87,7 @@ const AttendanceTable: React.FC<Props> = ({
           </TouchableOpacity>
           <View className="px-3 py-1.5 flex-row items-center">
             <Text className="text-white text-[12px] font-medium" style={{ fontFamily: fonts.medium }}>
-              {months[selectedMonth]} {selectedYear}
+              {t(`Auto.Common.${months[selectedMonth]}`, months[selectedMonth])} {selectedYear}
             </Text>
           </View>
           <TouchableOpacity onPress={handleNextMonth} className="px-2 py-2 border-l border-[#3baf6d]">
@@ -125,7 +125,7 @@ const AttendanceTable: React.FC<Props> = ({
                   <View className="w-20 items-start">
                     <View className={`px-2 py-0.5 rounded ${STATUS_STYLES[row.status] || "bg-gray-100"}`}>
                       <Text className={`text-[11px] ${STATUS_STYLES[row.status] ? "text-white" : "text-gray-600"}`} style={{ fontFamily: fonts.medium }}>
-                        {row.status}
+                        {t(`Auto.Common.${row.status}`, row.status)}
                       </Text>
                     </View>
                   </View>
@@ -148,7 +148,7 @@ const AttendanceTable: React.FC<Props> = ({
             
               <Text className={`text-[12px] ${safeCurrentPage === 1 ? "text-gray-400" : "text-gray-700"}`} style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Prev", "Prev")}</Text>
             </TouchableOpacity>
-            <Text className="text-[12px] text-gray-500" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Page", "Page")}{safeCurrentPage}{t("Auto.Common.of", "of")}{totalPages}</Text>
+            <Text className="text-[12px] text-gray-500" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.Page", "Page")} {safeCurrentPage} {t("Auto.Common.of", "of")} {totalPages}</Text>
             <TouchableOpacity
             disabled={safeCurrentPage === totalPages}
             onPress={() => onPageChange(safeCurrentPage + 1)}

@@ -101,9 +101,6 @@ export default function AddPostModal({
     return publicUrl;
   };
   const handleSubmit = async () => {
-    const {
-      t
-    } = useTranslation();
     setErrorMsg('');
     if (!title.trim() || !description.trim()) {
       setErrorMsg(t("Title and Description are required", "Title and Description are required"));

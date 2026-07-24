@@ -22,15 +22,18 @@ export const PROFILE_STEP_DATA: StepItem[] = [
 type ProfileStepsProps = {
     currentStepId: number;
     onStepChange: (step: StepItem) => void;
+    isSchool?: boolean;
 };
 
-export default function ProfileSteps({ currentStepId, onStepChange }: ProfileStepsProps) {
+export default function ProfileSteps({ currentStepId, onStepChange, isSchool }: ProfileStepsProps) {
     const scrollViewRef = useRef<ScrollView>(null);
     const { width: windowWidth } = Dimensions.get('window');
 
+    const stepsToShow = isSchool ? PROFILE_STEP_DATA.filter(s => s.id !== 3 && s.id !== 4) : PROFILE_STEP_DATA;
+
     useEffect(() => {
         
-        const activeIndex = PROFILE_STEP_DATA.findIndex(s => s.id === currentStepId);
+        const activeIndex = stepsToShow.findIndex(s => s.id === currentStepId);
         if (activeIndex !== -1 && scrollViewRef.current) {
             
             const ITEM_WIDTH = 100;
@@ -49,7 +52,7 @@ export default function ProfileSteps({ currentStepId, onStepChange }: ProfileSte
                 contentContainerStyle={{ paddingHorizontal: 8 }}
             >
                 <View className="flex-row items-center">
-                    {PROFILE_STEP_DATA.map((step, index) => {
+                    {stepsToShow.map((step, index) => {
                         const isCompleted = step.id < currentStepId;
                         const isActive = step.id === currentStepId;
 

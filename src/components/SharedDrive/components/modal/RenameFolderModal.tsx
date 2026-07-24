@@ -29,9 +29,6 @@ export default function RenameFolderModal({
   }, [open, currentName]);
   if (!open) return null;
   const handleSave = () => {
-    const {
-      t
-    } = useTranslation();
     const trimmedName = name.trim();
     if (!trimmedName) {
       setError(t("Drive_module.student.Folder name is required") || "Folder name is required");
@@ -80,9 +77,6 @@ export default function RenameFolderModal({
               {t("Drive_module.student.Folder Name") || "Folder Name"}
             </Text>
             <TextInput value={name} onChangeText={text => {
-            const {
-              t
-            } = useTranslation();
             if (/^[a-zA-Z0-9 _-]*$/.test(text)) {
               setName(text);
               setError("");

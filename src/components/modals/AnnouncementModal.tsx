@@ -78,7 +78,6 @@ export default function AnnouncementModal({
     loadPosts(nextPage, false);
   };
   const confirmDeletePost = (postId: number) => {
-    const { t } = useTranslation();
     Alert.alert(t("CampusBuzz.Delete Post", "Delete Post"), t("CampusBuzz.Are you sure you want to delete this post?", "Are you sure you want to delete this post? This action cannot be undone."), [{
       text: t("CampusBuzz.Cancel", "Cancel"),
       style: "cancel"
@@ -122,7 +121,6 @@ export default function AnnouncementModal({
           gap: 8
         }}>
                     {TABS.map(tab => {
-            const { t } = useTranslation();
             return <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)} className={`px-5 h-[32px] rounded-full items-center justify-center transition-colors border ${activeTab === tab ? "bg-[#43C17A] border-[#43C17A]" : "bg-[#EAF7F1] border-[#EAF7F1]"}`}>
                             <Text className={`text-sm font-medium ${activeTab === tab ? "text-white" : "text-[#43C17A]"}`}>{t(`CampusBuzz.${tab}`, tab)}</Text>
                         </TouchableOpacity>;
@@ -191,7 +189,6 @@ export default function AnnouncementModal({
                                 </View>
                             </View>)}
                     </View> : <FlatList data={filteredPosts} keyExtractor={item => item.campusBuzzPostId.toString()} ListFooterComponent={renderFooter} ListEmptyComponent={() => {
-          const { t } = useTranslation();
           return <View className="flex-1 items-center justify-center pt-20">
                                 <Megaphone size={48} color="#D1D5DB" weight="fill" />
                                 <Text className="text-gray-500 mt-4 text-center px-8">

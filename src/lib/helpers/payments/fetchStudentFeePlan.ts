@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import { FeeComponent, SemesterRoadmapItem, FeePlan } from "../../components/payments/types";
+import { FeeComponent, SemesterRoadmapItem, FeePlan } from "@/components/payments/types";
 
 export interface StudentFeePlanWithIds extends FeePlan {}
 

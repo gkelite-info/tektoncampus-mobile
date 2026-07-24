@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { fonts } from '@/constants/fonts';import { Text } from '@/components/AppText';
 import React, { useEffect, useState } from "react";
-import { View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import Toast from "react-native-toast-message";
 import { useUser } from "@/utils/context/UserContext";
 import {
@@ -68,7 +68,7 @@ export default function ProfileSummary() {const { t } = useTranslation();
   }
 
   return (
-    <View className="bg-white rounded-xl  p-6 mt-4">
+    <ScrollView className="bg-white rounded-xl mt-4" contentContainerStyle={{ padding: 24, paddingBottom: 40 }}>
             <Text className="text-xl text-[#282828] mb-6" style={{ fontFamily: fonts.bold }}>{t("Auto.Common.ProfileSummary", "Profile Summary")}</Text>
 
             <View>
@@ -111,6 +111,6 @@ export default function ProfileSummary() {const { t } = useTranslation();
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>);
+        </ScrollView>);
 
 }

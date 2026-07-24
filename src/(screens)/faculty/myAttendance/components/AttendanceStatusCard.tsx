@@ -33,7 +33,9 @@ const AttendanceStatusCard: FC<Props> = ({ stats }) => {const { t } = useTransla
         <Text className="text-[#282828] text-[13px] mb-1" style={{ fontFamily: fonts.medium }}>{t("Auto.Common.AttendanceStatu", "Attendance Status (Today)")}</Text>
         <View className="flex-row items-center mt-1">
           <CheckSquare size={16} weight="fill" color={iconColor} />
-          <Text className="text-gray-700 text-[13px] ml-1.5" style={{ fontFamily: fonts.regular }}>{stats.todayStatus || "Not marked"}</Text>
+          <Text className="text-gray-700 text-[13px] ml-1.5" style={{ fontFamily: fonts.regular }}>
+            {stats.todayStatus ? t(`Auto.Common.${stats.todayStatus.toUpperCase()}`, stats.todayStatus) : t("Auto.Common.NotMarked", "Not marked")}
+          </Text>
         </View>
       </View>
 

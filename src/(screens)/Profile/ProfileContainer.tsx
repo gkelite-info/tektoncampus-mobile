@@ -8,6 +8,8 @@ import { ArrowLeft } from "phosphor-react-native";
 import ProfileSteps from "./components/ProfileSteps";
 import ResumeSteps from "./components/ResumeSteps";
 import ProfileDashboard from "./ProfileDashboard";
+import { useStudent } from "@/utils/context/student/useStudent";
+import { isSchoolEducation } from "@/lib/helpers/admin/academicSetup/schoolHelper";
 
 
 import ProfileInfo from "./sections/ProfileInfo";
@@ -34,6 +36,8 @@ import ResumeTemplates from "./resume/ResumeTemplates";
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function ProfileContainer() {const { t } = useTranslation();
+  const { collegeEducationType } = useStudent();
+  const isSchool = isSchoolEducation(collegeEducationType);
   const [showDashboard, setShowDashboard] = useState(true);
   const [isProfileMode, setIsProfileMode] = useState(true);
 
@@ -45,7 +49,7 @@ export default function ProfileContainer() {const { t } = useTranslation();
   const resumeScrollRef = useRef<ScrollView>(null);
 
   const insets = useSafeAreaInsets();
-  const headerHeight = insets.top + 60;
+  const headerHeight = insets.top + 70;
 
 
   const handleProfileStepChange = (step: any) => {
@@ -82,18 +86,22 @@ export default function ProfileContainer() {const { t } = useTranslation();
 
             </Text>
                     </TouchableOpacity>
-                    <Text className="text-gray-400 mx-3 text-lg" style={{ fontFamily: fonts.regular }}>/</Text>
-                    <TouchableOpacity onPress={() => handleModeSwitch(false)}>
-                        <Text className={`text-lg ${!isProfileMode ?"text-[#43C17A]" : "text-gray-400"}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Resume", "Resume")}
+                    {!isSchool && (
+                        <>
+                            <Text className="text-gray-400 mx-3 text-lg" style={{ fontFamily: fonts.regular }}>/</Text>
+                            <TouchableOpacity onPress={() => handleModeSwitch(false)}>
+                                <Text className={`text-lg ${!isProfileMode ?"text-[#43C17A]" : "text-gray-400"}`} style={{ fontFamily: fonts.bold }}>{t("Auto.Common.Resume", "Resume")}
 
-            </Text>
-                    </TouchableOpacity>
+                </Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
                 </View>
 
                 {}
                 <View style={{ flex: 1, display: isProfileMode ? 'flex' : 'none' }}>
                     <View className="px-4 z-10">
-                        <ProfileSteps currentStepId={profileStepId} onStepChange={handleProfileStepChange} />
+                        <ProfileSteps currentStepId={profileStepId} onStepChange={handleProfileStepChange} isSchool={isSchool} />
                     </View>
                     <View className="flex-1 mt-2">
                         <ScrollView

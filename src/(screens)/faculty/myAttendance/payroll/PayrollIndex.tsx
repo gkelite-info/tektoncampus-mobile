@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/AppText';
 import React, { useState } from "react";
 import { View, TouchableOpacity } from 'react-native';
@@ -7,12 +8,13 @@ import ManageTaxPage from "./components/ManageTaxPage";
 import { fonts } from "@/constants/fonts";
 
 export default function PayrollIndex() {
+  const { t } = useTranslation();
   const [activePayrollTab, setActivePayrollTab] = useState<"summary" | "myPay" | "manageTax">("summary");
 
   const payrollSubTabs = [
-    { id: "summary", label: "Summary" },
-    { id: "myPay", label: "My Pay" },
-    { id: "manageTax", label: "Manage Tax" },
+    { id: "summary", label: t("Auto.Common.Summary", "Summary") },
+    { id: "myPay", label: t("Auto.Common.MyPay", "My Pay") },
+    { id: "manageTax", label: t("Auto.Common.ManageTax", "Manage Tax") },
   ];
 
   return (

@@ -108,7 +108,7 @@ export default function MyPayPage() {
 
           <View className="flex-col md:flex-row gap-3 mb-6">
             <View className="flex-col md:w-1/3 gap-3">
-              <View className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 justify-center">
+              <View className="bg-white rounded-xl p-4  border border-gray-100 justify-center">
                 {isFetchingPay && <ShimmerBlock />}
                 <Text className="text-[#666666] text-[12px]" style={{
               fontFamily: fonts.semiBold
@@ -138,7 +138,7 @@ export default function MyPayPage() {
                 </View>
               </View>
 
-              <View className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex-col gap-2">
+              <View className="bg-white rounded-xl p-4  border border-gray-100 flex-col gap-2">
                 {isFetchingPay && <ShimmerBlock />}
                 <View className="flex-row justify-between items-center">
                   <Text className="text-[#333333] text-[13px]" style={{
@@ -161,7 +161,7 @@ export default function MyPayPage() {
               </View>
             </View>
 
-            <View className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex-col justify-between flex-1">
+            <View className="bg-white rounded-xl p-5  border border-gray-100 flex-col justify-between flex-1">
               {isFetchingPay && <ShimmerBlock />}
               <View className="flex-row items-center justify-between">
                 <View className="flex-row items-center">
@@ -231,10 +231,7 @@ export default function MyPayPage() {
 
           <View className="flex-col pb-6 gap-4">
             {paySlips.map(slip => {
-          const {
-            t
-          } = useTranslation();
-          return <View key={slip.id} className="bg-white rounded-xl p-5 shadow-sm border border-gray-50 flex-col">
+          return <View key={slip.id} className="bg-white rounded-xl p-5  border border-gray-50 flex-col">
                 <View className="flex-row justify-between items-center mb-5">
                   <Text className="text-[15px] text-[#333333]" style={{
                 fontFamily: fonts.bold
@@ -292,9 +289,9 @@ export default function MyPayPage() {
           </View>
         </View> : <View className="flex-col pb-6 relative">
           <View className="absolute inset-0 z-10 bg-white/60 items-center justify-center rounded-xl">
-             <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg shadow-sm">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
+             <Text className="text-gray-500 font-bold text-lg border border-gray-300 px-4 py-2 bg-white rounded-lg ">{t("Auto.Common.WorkInProgress", "Work In Progress")}</Text>
           </View>
-          <View className="bg-white rounded-xl p-6 shadow-sm border border-gray-50 mb-6 flex-row flex-wrap gap-y-6">
+          <View className="bg-white rounded-xl p-6  border border-gray-50 mb-6 flex-row flex-wrap gap-y-6">
             <View className="w-1/2 md:w-1/3 pr-2">
               <Text className="text-[#333333] text-[14px]" style={{
             fontFamily: fonts.bold
@@ -345,7 +342,7 @@ export default function MyPayPage() {
             </View>
           </View>
           
-          <View className="bg-white rounded-xl shadow-sm border border-gray-50 overflow-hidden">
+          <View className="bg-white rounded-xl  border border-gray-50 overflow-hidden">
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View>
                 <View className="flex-row border-b border-gray-100">

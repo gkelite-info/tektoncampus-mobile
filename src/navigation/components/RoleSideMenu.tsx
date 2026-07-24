@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, ScrollView, TouchableOpacity, View, StyleSheet, Platform, StatusBar } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MotiView, AnimatePresence } from 'moti';
+import { useTranslation } from "react-i18next";
 import {
     Buildings,
     Calendar,
@@ -94,6 +95,7 @@ export default function RoleSideMenu({
     onClose,
     onNavigate,
 }: Props) {
+    const { t } = useTranslation();
     const [modalVisible, setModalVisible] = useState(visible);
 
     useEffect(() => {
@@ -147,7 +149,7 @@ export default function RoleSideMenu({
                                                     className={`text-base font-semibold ${isActive ? "text-[#3fbe73]" : "text-white"
                                                         }`}
                                                 >
-                                                    {item.label}
+                                                    {t(`Navbars.${item.label}`, item.label)}
                                                 </Text>
                                             </TouchableOpacity>
                                         );

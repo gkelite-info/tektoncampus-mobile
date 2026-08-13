@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'; import { Text } from '@/components/AppText';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, Image, ImageBackground, Platform, ScrollView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Easing, Image, ImageBackground, Platform, ScrollView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View, Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   ArrowLeft,
@@ -19,6 +19,8 @@ import { loginUser } from '@/services/auth/login';
 import Toast from 'react-native-toast-message';
 import { useAuthStore } from '@/store/authStore';
 import { useUser } from '@/utils/context/UserContext';
+import { useTenantStore } from '@/store/tenantStore';
+import { useNavigation } from '@react-navigation/native';
 
 
 const { width: SW, height: SH } = Dimensions.get('window');
@@ -226,7 +228,7 @@ const SlideCard = React.memo(({ slide, position, containerWidth }: SlideCardProp
           transform: [{ translateX: tx }, { translateY: ty }, { rotate: rot }, { scale: sc }]
         }]
       }>
-      { }
+
       <Animated.View
         style={[StyleSheet.absoluteFillObject, { transform: [{ translateY: floatAnim }] }]}>
         <Image source={slide.image} style={sCard.image} resizeMode="cover" />
@@ -264,6 +266,8 @@ export default function LoginScreen() {
   const setUser = useAuthStore(
     (state) => state.setUser
   );
+  const { selectedTenant, setTenant } = useTenantStore();
+  const navigation = useNavigation<any>();
 
   const textOpacity = useRef(new Animated.Value(1)).current;
   const textSlideX = useRef(new Animated.Value(0)).current;
@@ -414,7 +418,8 @@ export default function LoginScreen() {
 
       const response = await loginUser(
         email.trim(),
-        password
+        password,
+        selectedTenant?.collegeCode ? `${selectedTenant.collegeCode}.tektoncampus.com` : undefined
       );
 
       if (!response.success) {
@@ -469,6 +474,18 @@ export default function LoginScreen() {
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={s.leftGradient}>
+          
+          <TouchableOpacity 
+            activeOpacity={0.8} 
+            onPress={() => {
+              setTenant(null);
+              navigation.reset({ index: 0, routes: [{ name: 'FindOrganization' }] });
+            }} 
+            style={{ position: 'absolute', top: SAFE_TOP, left: 16, zIndex: 50, padding: 8, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 20 }}
+          >
+            <ArrowLeft size={20} color={C.darkGreen} weight="bold" />
+          </TouchableOpacity>
+
           <View style={s.logoBlock}>
             <Image
               source={require('../../../assets/login-logo.png')}
@@ -484,9 +501,9 @@ export default function LoginScreen() {
                 opacity: textOpacity,
                 transform: [{ translateX: textSlideX }]
               }}>
-              { }
+
               <Text style={s.slideHeading}>{SLIDES[current].heading}</Text>
-              { }
+
               <Text style={s.slidePara}>{SLIDES[current].para}</Text>
             </Animated.View>
           </View>
@@ -504,14 +521,14 @@ export default function LoginScreen() {
             })}
           </View>
 
-          { }
+
           <View style={s.dotsRow}>
             {SLIDES.map((_, i) =>
               <View key={i} style={[s.dot, i === current ? s.dotActive : s.dotInactive]} />
             )}
           </View>
 
-          { }
+
           <Animated.View
             style={[
               s.proceedWrapper,
@@ -534,53 +551,62 @@ export default function LoginScreen() {
           </Animated.View>
         </LinearGradient>
       </Animated.View>
-      { }
 
-      { }
+
+
       <Animated.View
         style={[s.panel, { transform: [{ translateX: rightX }] }]}
         pointerEvents={panelState === 'login' ? 'auto' : 'none'}>
-        { }
+
         <ImageBackground
           source={require('../../../assets/loginpagebg.webp')}
           resizeMode="cover"
+          blurRadius={Platform.OS === 'ios' ? 2.5 : 1.5}
           style={s.rightBg}>
-          { }
+
           <View style={s.rightOverlay} />
 
-          { }
+
           <TouchableOpacity activeOpacity={0.8} onPress={handleBack} style={s.backBtn}>
             <ArrowLeft size={16} color={C.white} weight="bold" />
             <Text style={s.backBtnText}>{t("Auto.Common.Backtoslides", "Back to slides")}</Text>
           </TouchableOpacity>
 
-          { }
+
           <ScrollView
             style={s.formScroll}
             contentContainerStyle={s.formScrollContent}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled">
-            { }
+
             <View style={s.glassCard}>
-              { }
-              <BlurView
-                intensity={35}
-                tint="light"
-                style={StyleSheet.absoluteFillObject} />
+                <BlurView intensity={35} tint="dark" style={StyleSheet.absoluteFillObject} />
 
 
-              { }
+
               <View style={s.iconCircleRow}>
                 <View style={s.iconCircle}>
                   <GraduationCap size={26} color={C.white} weight="fill" />
                 </View>
               </View>
 
-              { }
-              <Text style={s.cardTitle}>{t("Auto.Common.LogintoYourAcco", "Login to Your Account")}</Text>
-              <Text style={s.cardSubtitle}>{t("Auto.Common.Pleaseenteryour", "Please enter your credentials to proceed.")}</Text>
 
-              { }
+              <Text style={s.cardTitle}>{t("Auto.Common.LogintoYourAcco", "Login to Your Account")}</Text>
+              {selectedTenant ? (
+                <View style={{ alignItems: 'center', marginBottom: 12 }}>
+                  <Text style={[s.cardSubtitle, { color: C.green1, fontFamily: F.bold }]}>{selectedTenant.collegeName}</Text>
+                  <TouchableOpacity onPress={() => {
+                      setTenant(null);
+                      navigation.reset({ index: 0, routes: [{ name: 'FindOrganization' }] });
+                    }} style={{ marginTop: 4 }}>
+                    <Text style={{ color: C.white, textDecorationLine: 'underline', fontSize: 12 }}>Change Organization</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <Text style={s.cardSubtitle}>{t("Auto.Common.Pleaseenteryour", "Please enter your credentials to proceed.")}</Text>
+              )}
+
+
               <View>
                 <Text style={s.fieldLabel}>{t("Auto.Common.Email", "Email")}</Text>
                 <View style={s.inputRow}>
@@ -600,7 +626,7 @@ export default function LoginScreen() {
                 </View>
               </View>
 
-              { }
+
               <View style={{ marginTop: T.s5 }}>
                 <Text style={s.fieldLabel}>{t("Auto.Common.Password", "Password")}</Text>
                 <View style={s.inputRow}>
@@ -628,7 +654,7 @@ export default function LoginScreen() {
                 </View>
               </View>
 
-              { }
+
               <View style={s.infoRow}>
                 <TouchableOpacity activeOpacity={0.7} style={s.forgotBtn}>
                   <Text style={s.forgotText}>{t("Auto.Common.ForgotPassword", "Forgot Password?")}</Text>
@@ -636,19 +662,17 @@ export default function LoginScreen() {
 
                 <View style={s.infoBlock}>
                   <Info size={15} color={C.amber300} style={{ marginTop: 2 }} />
-                  <Text style={s.infoText}>{t("Auto.Common.NewaccountVerif", "New account? Verify your email before logging in. Check inbox or spam.")}
-
-                  </Text>
+                  <Text style={s.infoText}>{t("Auto.Common.AccountProvisioned", "Accounts are provisioned by your institution. Please contact your administrator for access.")}</Text>
                 </View>
               </View>
 
-              { }
+
               <LinearGradient
                 colors={['transparent', C.white20, 'transparent']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={s.divider} />
-              { }
+
               <TouchableOpacity
                 activeOpacity={0.8}
                 disabled={loading}
@@ -666,12 +690,21 @@ export default function LoginScreen() {
                 }
               </TouchableOpacity>
             </View>
-            { }
+
+            
+            <TouchableOpacity 
+              activeOpacity={0.7}
+              style={s.supportBtn} 
+              onPress={() => Linking.openURL('https://www.gkeliteinfo.com/contact')}
+            >
+              <Text style={s.supportText}>{t('Auto.Common.NeedHelp', 'Need Help? Contact Support')}</Text>
+            </TouchableOpacity>
+
           </ScrollView>
-          { }
+
         </ImageBackground>
       </Animated.View>
-      { }
+
     </View>);
 }
 
@@ -1036,5 +1069,17 @@ const s = StyleSheet.create({
   loadingRow: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  supportBtn: {
+    alignSelf: 'center',
+    marginTop: 24,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  supportText: {
+    fontFamily: F.medium,
+    color: C.white70,
+    fontSize: 13,
+    textDecorationLine: 'underline',
   }
 });

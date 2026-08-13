@@ -6,6 +6,7 @@
     "ios": "expo run:ios",
     "start": "expo start",
     "prebuild": "expo prebuild",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "web": "expo start --web"
@@ -96,7 +97,7 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react-refresh": "^0.18.0",
     "tailwindcss": "^3.4.19",
-    "typescript": "~5.9.2"
+    "typescript": "^5.3.3"
   },
   "main": "node_modules/expo/AppEntry.js",
   "private": true

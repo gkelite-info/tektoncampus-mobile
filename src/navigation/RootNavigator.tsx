@@ -3,7 +3,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { InitialState, NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "@/(screens)/(auth)/loginScreen";
+import FindOrganizationScreen from "@/(screens)/(auth)/findOrganizationScreen";
 import { useAuthStore } from "@/store/authStore";
+import { useTenantStore } from "@/store/tenantStore";
 import { supabase } from "@/lib/supabaseClient";
 import { StudentProvider } from "@/utils/context/student/useStudent";
 import StudentDrawerNavigator from "./StudentDrawerNavigator";
@@ -56,6 +58,7 @@ async function getUserProfile(authId: string): Promise<AppUser | null> {
 export default function RootNavigator() {
     const user = useAuthStore((state) => state.user);
     const setUser = useAuthStore((state) => state.setUser);
+    const selectedTenant = useTenantStore((state) => state.selectedTenant);
     const [authReady, setAuthReady] = useState(false);
     const [navigationReady, setNavigationReady] = useState(false);
     const [initialState, setInitialState] = useState<InitialState | undefined>();
@@ -177,7 +180,11 @@ export default function RootNavigator() {
                     )} />
                 </AuthStack.Navigator>
             ) : !user ? (
-                <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+                <AuthStack.Navigator 
+                    initialRouteName={selectedTenant ? "Login" : "FindOrganization"} 
+                    screenOptions={{ headerShown: false }}
+                >
+                    <AuthStack.Screen name="FindOrganization" component={FindOrganizationScreen} />
                     <AuthStack.Screen name="Login" component={LoginScreen} />
                 </AuthStack.Navigator>
             ) : roleNormalized.includes("faculty") ? (
@@ -193,7 +200,11 @@ export default function RootNavigator() {
             ) : (roleNormalized.includes("college") && roleNormalized.includes("admin")) ? (
                 <CollegeAdminDrawerNavigator />
             ) : (
-                <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+                <AuthStack.Navigator 
+                    initialRouteName={selectedTenant ? "Login" : "FindOrganization"} 
+                    screenOptions={{ headerShown: false }}
+                >
+                    <AuthStack.Screen name="FindOrganization" component={FindOrganizationScreen} />
                     <AuthStack.Screen name="Login" component={LoginScreen} />
                 </AuthStack.Navigator>
             )}

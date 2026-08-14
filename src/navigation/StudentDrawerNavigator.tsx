@@ -78,7 +78,7 @@ export default function StudentDrawerNavigator() {
             { name: "Drive", label: t("Navbars.Drive", "Drive") },
             { name: "Meetings", label: t("Navbars.Meetings", "Meetings") },
             { name: "Wellbeing", label: t("Navbars.Wellbeing", "Wellbeing") },
-            { name: "Payments", label: t("Navbars.Payments", "Payments") },
+            // { name: "Payments", label: t("Navbars.Payments", "Payments") },
             { name: "Settings", label: t("Navbars.Settings", "Settings") },
         ];
 

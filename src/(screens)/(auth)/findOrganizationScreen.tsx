@@ -241,7 +241,7 @@ export default function FindOrganizationScreen() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000' },
+  root: { flex: 1 },
   rightBg: { flex: 1 },
   rightOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: C.black30 },
   formContainer: {

@@ -466,6 +466,12 @@ export default function LoginScreen() {
   return (
     <View style={s.root}>
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+      <Image
+        source={require('../../../assets/loginpagebg.webp')}
+        resizeMode="cover"
+        blurRadius={Platform.OS === 'ios' ? 2.5 : 1.5}
+        style={[StyleSheet.absoluteFillObject, { width: '100%', height: '100%' }]}
+      />
       <Animated.View
         style={[s.panel, { transform: [{ translateX: leftX }] }]}
         pointerEvents={panelState === 'login' ? 'none' : 'auto'}>
@@ -558,11 +564,7 @@ export default function LoginScreen() {
         style={[s.panel, { transform: [{ translateX: rightX }] }]}
         pointerEvents={panelState === 'login' ? 'auto' : 'none'}>
 
-        <ImageBackground
-          source={require('../../../assets/loginpagebg.webp')}
-          resizeMode="cover"
-          blurRadius={Platform.OS === 'ios' ? 2.5 : 1.5}
-          style={s.rightBg}>
+        <View style={s.rightBg}>
 
           <View style={s.rightOverlay} />
 
@@ -702,7 +704,7 @@ export default function LoginScreen() {
 
           </ScrollView>
 
-        </ImageBackground>
+        </View>
       </Animated.View>
 
     </View>);
@@ -712,7 +714,7 @@ const s = StyleSheet.create({
 
   root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: C.darkGreen,
     overflow: 'hidden'
   },
 
